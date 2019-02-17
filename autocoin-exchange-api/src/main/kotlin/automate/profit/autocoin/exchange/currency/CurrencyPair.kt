@@ -16,9 +16,9 @@ data class CurrencyPair(
         }
     }
 
-    override fun toString(): String {
-        return "$base/$counter"
-    }
+    fun contains(currency: String): Boolean = base == currency || counter == currency
+
+    override fun toString(): String = "$base/$counter"
 
 }
 

@@ -17,6 +17,10 @@ enum class ExchangeOrderStatus {
     NOT_AVAILABLE
 }
 
+/**
+ * Having just orderId is not enough.
+ * Some exchanges require more parameters when canceling the order
+ */
 data class ExchangeCancelOrderParams(
         val orderId: String,
         val orderType: ExchangeOrderType,
@@ -55,6 +59,8 @@ interface ExchangeOrderService {
 
     fun getOpenOrdersForAllExchangeKeys(): List<ExchangeOpenOrders>
 
-    fun isOrderCompleted(exchangeName: String, exchangeUserId: String, order: ExchangeOrder): Boolean
+    fun getOpenOrdersForAllExchangeKeys(currencyPairs: List<CurrencyPair>): List<ExchangeOpenOrders>
+
+    fun isOrderNotOpen(exchangeName: String, exchangeUserId: String, order: ExchangeOrder): Boolean
 
 }

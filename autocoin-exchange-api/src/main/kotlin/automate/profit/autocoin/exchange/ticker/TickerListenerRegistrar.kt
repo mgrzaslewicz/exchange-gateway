@@ -15,8 +15,8 @@ interface TickerListenerRegistrar {
 }
 
 
-class DefaultTickerListenerRegistrar(override val exchangeName: String, private val tickerService
-: ExchangeTickerService) : TickerListenerRegistrar {
+class DefaultTickerListenerRegistrar(override val exchangeName: String, private val userExchangeTickerService
+: UserExchangeTickerService) : TickerListenerRegistrar {
 
     private val logger = KotlinLogging.logger("${DefaultTickerListenerRegistrar::class.java.name}.$exchangeName")
 
@@ -66,7 +66,7 @@ class DefaultTickerListenerRegistrar(override val exchangeName: String, private 
 
     private fun getTickerForCurrencyPair(currencyPair: CurrencyPair): Ticker? {
         return try {
-            tickerService.getTicker(exchangeName, currencyPair)
+            userExchangeTickerService.getTicker(currencyPair)
         } catch (e: Exception) {
             logger.error("Error getting ticker at $exchangeName for currency pair $currencyPair: ${e.message}", e)
             null

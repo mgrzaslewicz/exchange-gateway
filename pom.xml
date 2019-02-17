@@ -17,8 +17,8 @@
 
     <modules>
         <module>autocoin-exchange-api</module>
-        <module>autocoin-exchange-rest-service</module>
-        <module>autocoin-exchange-xchange</module>
+        <module>autocoin-exchange-api-rest</module>
+        <module>autocoin-exchange-api-xchange</module>
     </modules>
 
     <scm>
