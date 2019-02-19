@@ -6,7 +6,6 @@ import mu.KLogging
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.knowm.xchange.dto.meta.CurrencyPairMetaData
 import org.mockito.junit.MockitoJUnitRunner
 import java.math.BigDecimal
 
@@ -22,7 +21,11 @@ class CurrencyPairMetadataApplierTest {
     private val maximum = 10000.toBigDecimal()
     private val priceScale = 5
     private val currencyPair = CurrencyPair("ETH", "BTC")
-    private val currencyPairMetadata = CurrencyPairMetaData(null, minimum, maximum, priceScale, null)
+    private val currencyPairMetadata = CurrencyPairMetadata(
+            scale = priceScale,
+            minimumAmount = minimum,
+            maximumAmount = maximum
+    )
 
     @Test
     fun shouldReturnScaledAmount() {
@@ -81,7 +84,11 @@ class CurrencyPairMetadataApplierTest {
         // given
         val originalAmount = BigDecimal.valueOf(Long.MAX_VALUE)
         val originalPrice = BigDecimal("1.0")
-        val currencyPairMetadata = CurrencyPairMetaData(null, minimum, null, priceScale, null)
+        val currencyPairMetadata = CurrencyPairMetadata(
+                scale = priceScale,
+                minimumAmount = minimum,
+                maximumAmount = null
+        )
         val exchange = SupportedExchange.BITTREX
         // when
         val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
@@ -94,7 +101,11 @@ class CurrencyPairMetadataApplierTest {
         // given
         val originalAmount = BigDecimal("0.00000001")
         val originalPrice = BigDecimal("1.0")
-        val currencyPairMetadata = CurrencyPairMetaData(null, null, maximum, priceScale, null)
+        val currencyPairMetadata = CurrencyPairMetadata(
+                scale = priceScale,
+                minimumAmount = null,
+                maximumAmount = maximum
+        )
         val exchange = SupportedExchange.BITTREX
         // when
         val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
