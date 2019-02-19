@@ -101,7 +101,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
 
     private fun isOrderOnOpenOrdersList(order: ExchangeOrder): Boolean {
         val openOrders = wrapped.getOpenOrders(DefaultOpenOrdersParamCurrencyPair(order.currencyPair.toXchangeCurrencyPair()))
-        logger.info { "Open orders: $openOrders" }
+        logger.info { "$openOrders" }
         val orderIsOnOpenOrderList = openOrders.openOrders.any { order.orderId == it.id }
         logger.info { "${order.type} order ${order.orderId} on open order list: $orderIsOnOpenOrderList" }
         return orderIsOnOpenOrderList
@@ -109,7 +109,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
 
     private fun isOrderOnOpenOrdersList(currencyPair: CurrencyPair, orderId: String): Boolean {
         val openOrders = wrapped.getOpenOrders(DefaultOpenOrdersParamCurrencyPair(currencyPair.toXchangeCurrencyPair()))
-        logger.info { "Open orders: $openOrders" }
+        logger.info { "$openOrders" }
         val openOrderWithGivenId = openOrders.openOrders.find { orderId == it.id }
         val orderCompleted = openOrderWithGivenId == null
         logger.info { "Order $orderId completed: $orderCompleted" }
