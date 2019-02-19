@@ -8,6 +8,7 @@ import automate.profit.autocoin.exchange.metadata.metadataFromExchange
 import automate.profit.autocoin.exchange.ticker.DefaultTickerListenerRegistrar
 import automate.profit.autocoin.exchange.ticker.TickerListenerRegistrar
 import automate.profit.autocoin.exchange.ticker.UserExchangeTickerService
+import automate.profit.autocoin.exchange.toXchangeClass
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -128,7 +129,7 @@ class XchangeMetadataFile {
     }
 
     private fun fetchBittrexMetadata(): XchangeMetadataJson {
-        val exchangeSpec = ExchangeSpecification(SupportedExchange.BITTREX.exchangeClass.java)
+        val exchangeSpec = ExchangeSpecification(SupportedExchange.BITTREX.toXchangeClass().java)
         val mathContext = MathContext(8, RoundingMode.HALF_UP)
         val bittrexExchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
         val bittrexMarketDataService = bittrexExchange.marketDataService as BittrexMarketDataServiceRaw
@@ -176,7 +177,7 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
 
     override fun createMetadataProvider(exchangeName: String): UserExchangeMetadataProvider {
         val supportedExchange = enumFromNameOrThrow(exchangeName)
-        val exchangeSpec = ExchangeSpecification(supportedExchange.exchangeClass.java)
+        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
         return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(getXchange(supportedExchange, exchangeSpec)))
     }
 
@@ -187,7 +188,7 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
 
     override fun createTickerService(exchangeName: String): UserExchangeTickerService {
         val supportedExchange = enumFromNameOrThrow(exchangeName)
-        val exchangeSpec = ExchangeSpecification(supportedExchange.exchangeClass.java)
+        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
         return XchangeUserExchangeTickerService(getXchange(supportedExchange, exchangeSpec).marketDataService)
     }
 
@@ -207,7 +208,7 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
 
     private fun getXchange(exchangeName: String, publicKey: String, secretKey: String, userName: String?): Exchange {
         val supportedExchange = enumFromNameOrThrow(exchangeName)
-        val exchangeSpec = ExchangeSpecification(supportedExchange.exchangeClass.java)
+        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
         assignKeys(supportedExchange, exchangeSpec, publicKey, secretKey, userName)
         return getXchange(supportedExchange, exchangeSpec)
     }
