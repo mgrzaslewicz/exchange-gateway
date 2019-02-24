@@ -1,5 +1,6 @@
 package automate.profit.autocoin.exchange.ticker
 
+import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -11,11 +12,11 @@ interface TickerListenerRegistrar {
     fun fetchTickersAndNotifyListeners()
     fun removeTickerListener(tickerListener: TickerListener): Boolean
     fun <T : TickerListener> getListenersOfClass(`class`: Class<T>): Map<CurrencyPair, Set<T>>
-    val exchangeName: String
+    val exchangeName: SupportedExchange
 }
 
 
-class DefaultTickerListenerRegistrar(override val exchangeName: String, private val userExchangeTickerService
+class DefaultTickerListenerRegistrar(override val exchangeName: SupportedExchange, private val userExchangeTickerService
 : UserExchangeTickerService) : TickerListenerRegistrar {
 
     private val logger = KotlinLogging.logger("${DefaultTickerListenerRegistrar::class.java.name}.$exchangeName")

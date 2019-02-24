@@ -1,18 +1,19 @@
 package automate.profit.autocoin.exchange.ticker
 
+import automate.profit.autocoin.exchange.SupportedExchange
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
 interface TickerListenerRegistrars {
-    fun registerTickerListener(exchangeName: String, tickerListener: TickerListener): Boolean
-    fun removeTickerListener(exchangeName: String, tickerListener: TickerListener): Boolean
+    fun registerTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean
+    fun removeTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean
     fun <T : TickerListener> getListenersOfClassList(`class`: Class<T>): List<T>
     fun fetchTickersAndNotifyListeners()
 }
 
 interface TickerListenerRegistrarProvider {
-    fun createTickerListenerRegistrar(exchangeName: String): TickerListenerRegistrar
+    fun createTickerListenerRegistrar(exchangeName: SupportedExchange): TickerListenerRegistrar
 }
 
 class DefaultTickerListenerRegistrars(
@@ -20,7 +21,7 @@ class DefaultTickerListenerRegistrars(
         private val tickerListenerRegistrarProvider: TickerListenerRegistrarProvider
 ) : TickerListenerRegistrars {
 
-    private val tickerListenerRegistrarMap: MutableMap<String, TickerListenerRegistrar>
+    private val tickerListenerRegistrarMap: MutableMap<SupportedExchange, TickerListenerRegistrar>
 
     override fun fetchTickersAndNotifyListeners() {
         runBlocking {
@@ -41,17 +42,17 @@ class DefaultTickerListenerRegistrars(
         if (duplicates.isNotEmpty()) throw IllegalArgumentException("Configuration is invalid. There are duplicates: $duplicates")
     }
 
-    override fun registerTickerListener(exchangeName: String, tickerListener: TickerListener): Boolean {
+    override fun registerTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean {
         return getTickerListenerRegistrar(exchangeName).registerTickerListener(tickerListener)
     }
 
-    private fun getTickerListenerRegistrar(supportedExchange: String): TickerListenerRegistrar {
+    private fun getTickerListenerRegistrar(supportedExchange: SupportedExchange): TickerListenerRegistrar {
         return tickerListenerRegistrarMap.computeIfAbsent(supportedExchange) {
             tickerListenerRegistrarProvider.createTickerListenerRegistrar(supportedExchange)
         }
     }
 
-    override fun removeTickerListener(exchangeName: String, tickerListener: TickerListener): Boolean {
+    override fun removeTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean {
         return getTickerListenerRegistrar(exchangeName).removeTickerListener(tickerListener)
     }
 
