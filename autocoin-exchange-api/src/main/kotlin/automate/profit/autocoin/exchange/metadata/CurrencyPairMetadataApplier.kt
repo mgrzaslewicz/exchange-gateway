@@ -39,13 +39,8 @@ class CurrencyPairMetadataApplier {
             amount < minAmount -> ZERO.also { logger.warn("Amount $amount below minimum $minAmount. Cutting it down to 0.") }
             amount > currencyPairMetadata.maximumAmount.orMax() -> currencyPairMetadata.maximumAmount.orMax().also { logger.info("Amount $amount above maximum ${currencyPairMetadata.maximumAmount}. Cutting down to ${currencyPairMetadata.maximumAmount}.") }
             else -> amount
-        }.stripTrailingZeros()
-        val scale = when {
-            resultAmount.scale() > currencyPairMetadata.minimumAmount.orMin().stripTrailingZeros().scale() -> currencyPairMetadata.minimumAmount.orMin().stripTrailingZeros().scale()
-            resultAmount.scale() < 0 -> 0 // This one is not a strict requirement, just to avoid numbers like 1e4 instead of 10000 during debugging/logging/testing
-            else -> resultAmount.scale()
         }
-        return applyScale(resultAmount.stripTrailingZeros(), scale)
+        return applyScale(resultAmount, currencyPairMetadata.scale)
     }
 
     fun applyPriceScale(price: BigDecimal, currencyPairMetadata: CurrencyPairMetadata): BigDecimal {

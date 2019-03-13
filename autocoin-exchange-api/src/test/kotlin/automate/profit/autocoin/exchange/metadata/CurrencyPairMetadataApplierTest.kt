@@ -10,7 +10,6 @@ import org.mockito.junit.MockitoJUnitRunner
 import java.math.BigDecimal
 
 
-// TODO move tests calculating amount order here from StrategyExecutorIntegrationTest or add separate test for both amount and price calculation
 @RunWith(MockitoJUnitRunner::class)
 class CurrencyPairMetadataApplierTest {
 
@@ -28,7 +27,7 @@ class CurrencyPairMetadataApplierTest {
     )
 
     @Test
-    fun shouldReturnScaledAmount() {
+    fun shouldReturnScaledDownAmount() {
         // given
         val originalAmount = BigDecimal("45.123456")
         val originalPrice = BigDecimal("1.0")
@@ -36,8 +35,21 @@ class CurrencyPairMetadataApplierTest {
         // when
         val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
         // then
-        assertThat(amount.scale()).isEqualTo(4)
-        assertThat(amount).isEqualTo(BigDecimal("45.1234"))
+        assertThat(amount.scale()).isEqualTo(priceScale)
+        assertThat(amount).isEqualTo(BigDecimal("45.12345"))
+    }
+
+    @Test
+    fun shouldReturnScaledAmountWhenInputHasLowerScaleThanShouldHave() {
+        // given
+        val originalAmount = BigDecimal(45)
+        val originalPrice = BigDecimal("1.0")
+        val exchange = SupportedExchange.BITTREX
+        // when
+        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
+        // then
+        assertThat(amount.scale()).isEqualTo(priceScale)
+        assertThat(amount).isEqualTo(BigDecimal("45.00000"))
     }
 
     @Test
@@ -49,7 +61,7 @@ class CurrencyPairMetadataApplierTest {
         // when
         val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
         // then
-        assertThat(amount).isEqualTo(BigDecimal.ZERO)
+        assertThat(amount).isEqualTo(BigDecimal.ZERO.setScale(priceScale))
     }
 
     /**
@@ -64,7 +76,7 @@ class CurrencyPairMetadataApplierTest {
         // when
         val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
         // then
-        assertThat(amount).isEqualTo(BigDecimal.ZERO)
+        assertThat(amount).isEqualTo(BigDecimal.ZERO.setScale(priceScale))
     }
 
     @Test
@@ -76,7 +88,7 @@ class CurrencyPairMetadataApplierTest {
         // when
         val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
         // then
-        assertThat(amount).isEqualTo(maximum)
+        assertThat(amount).isEqualTo(maximum.setScale(priceScale))
     }
 
     @Test
@@ -93,7 +105,7 @@ class CurrencyPairMetadataApplierTest {
         // when
         val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
         // then
-        assertThat(amount).isEqualTo(originalAmount)
+        assertThat(amount).isEqualTo(originalAmount.setScale(priceScale))
     }
 
     @Test
@@ -110,7 +122,7 @@ class CurrencyPairMetadataApplierTest {
         // when
         val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
         // then
-        assertThat(amount).isEqualTo(originalAmount)
+        assertThat(amount).isEqualTo(BigDecimal("0.00000"))
     }
 
 }
