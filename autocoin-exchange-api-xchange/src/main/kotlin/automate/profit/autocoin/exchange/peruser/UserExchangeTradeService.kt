@@ -9,7 +9,6 @@ import mu.KLogging
 import org.knowm.xchange.binance.service.BinanceCancelOrderParams
 import org.knowm.xchange.dto.Order
 import org.knowm.xchange.dto.trade.LimitOrder
-import org.knowm.xchange.kucoin.service.KucoinCancelOrderParams
 import org.knowm.xchange.service.trade.params.CancelOrderParams
 import org.knowm.xchange.service.trade.params.DefaultCancelOrderParamId
 import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair
@@ -73,8 +72,8 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
     private fun getCancelOrderParams(params: ExchangeCancelOrderParams): CancelOrderParams {
         return when (SupportedExchange.fromExchangeName(exchangeName)) {
             BINANCE -> BinanceCancelOrderParams(params.currencyPair.toXchangeCurrencyPair(), params.orderId)
-            KUCOIN -> KucoinCancelOrderParams(params.currencyPair.toXchangeCurrencyPair(), params.orderId, params.xchangeOrderType())
 
+            KUCOIN,
             BITBAY,
             BITMEX,
             BITSTAMP,
