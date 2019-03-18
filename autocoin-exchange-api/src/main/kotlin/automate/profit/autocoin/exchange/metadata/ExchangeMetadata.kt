@@ -4,8 +4,7 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 
 /**
- * TODO
- * Implement mechanism for providing exchange metadata including cases like
+ * TODO Implement mechanism for providing exchange metadata including cases like
  * BinanceCurrencyPairMetaData -> scale = currencyPairMetadata.minimumAmount.stripTrailingZeros().scale()
  */
 data class CurrencyPairMetadata(

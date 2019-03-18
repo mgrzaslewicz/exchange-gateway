@@ -9,6 +9,7 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.currency.toXchangeCurrencyPair
 import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
 import automate.profit.autocoin.exchange.peruser.UserExchangeTradeService
+import automate.profit.autocoin.exchange.wallet.ExchangeCurrencyPairsInWalletService
 import automate.profit.autocoin.util.toDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,13 +58,10 @@ fun ExchangeOrder.toXchangeLimitOrder(): LimitOrder = LimitOrder.Builder(this.ty
 
 class XchangeOrderService(private val exchangeService: ExchangeService,
                           private val exchangeKeyService: ExchangeKeyService,
-                          private val userExchangeServicesFactory: UserExchangeServicesFactory) : ExchangeOrderService {
+                          private val userExchangeServicesFactory: UserExchangeServicesFactory,
+                          private val exchangeCurrencyPairsInWallet: ExchangeCurrencyPairsInWalletService) : ExchangeOrderService {
 
     private companion object : KLogging()
-
-    override fun getOpenOrdersForAllExchangeKeys(): List<ExchangeOpenOrders> {
-        TODO("not implemented yet. Not providing currency pairs to fetch requires getting currencies in wallet and then iterating each valid currency pair - based on metadata")
-    }
 
     override fun getOpenOrdersForAllExchangeKeys(currencyPairs: List<CurrencyPair>): List<ExchangeOpenOrders> {
         val openOrders = mutableListOf<ExchangeOpenOrders>()
@@ -71,24 +69,28 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             val exchangeKeysGroupedByExchangeId = getExchangeKeysGroupedByExchangeId()
             exchangeKeysGroupedByExchangeId.forEach { exchangeWithKeys ->
                 val exchangeId = exchangeWithKeys.key
+                val exchangeKeysWithTheSameExchange = exchangeWithKeys.value
                 val exchangeName = exchangeService.getExchangeNameById(exchangeId)
-                val exchangeUserKeys = exchangeWithKeys.value.groupBy { it.exchangeUserId }
-                exchangeUserKeys.forEach { exchangeUserId, exchangeKeys ->
+                val exchangeKeysWithTheSameExchangeByUser = exchangeKeysWithTheSameExchange.groupBy { it.exchangeUserId }
+                exchangeKeysWithTheSameExchangeByUser.forEach { exchangeUserId, exchangeKeys ->
                     launch(Dispatchers.IO) {
-                        openOrders += try {
-
-                            val openOrdersAtExchange = getOpenOrdersFromExchange(currencyPairs, exchangeName, exchangeKeys)
-                            logger.info("Orders found $exchangeName: ${openOrdersAtExchange.size}")
-                            ExchangeOpenOrders(exchangeName = exchangeName, openOrders = openOrdersAtExchange, errorMessage = null, exchangeUserId = exchangeUserId)
-                        } catch (e: Exception) {
-                            logger.error("Could not get open orders from exchange $exchangeName and exchangeUserId $exchangeUserId", e)
-                            ExchangeOpenOrders(exchangeName = exchangeName, openOrders = emptyList(), errorMessage = e.message, exchangeUserId = exchangeUserId)
-                        }
+                        openOrders += tryGetOpenOrders(exchangeName, exchangeUserId, currencyPairs, exchangeKeys)
                     }
                 }
             }
         }
         return openOrders
+    }
+
+    private fun tryGetOpenOrders(exchangeName: String, exchangeUserId: String, currencyPairs: List<CurrencyPair>, exchangeKeys: List<ExchangeKeyDto>): ExchangeOpenOrders {
+        return try {
+            val openOrdersAtExchange = getOpenOrdersFromExchange(currencyPairs, exchangeName, exchangeKeys)
+            logger.info("Orders found $exchangeName: ${openOrdersAtExchange.size}")
+            ExchangeOpenOrders(exchangeName = exchangeName, openOrders = openOrdersAtExchange, errorMessage = null, exchangeUserId = exchangeUserId)
+        } catch (e: Exception) {
+            logger.error("Could not get open orders from exchange $exchangeName and exchangeUserId $exchangeUserId", e)
+            ExchangeOpenOrders(exchangeName = exchangeName, openOrders = emptyList(), errorMessage = e.message, exchangeUserId = exchangeUserId)
+        }
     }
 
     private fun getExchangeKeysGroupedByExchangeId(): Map<String, List<ExchangeKeyDto>> {
@@ -111,7 +113,9 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             KUCOIN,
             YOBIT -> { // API allows only requesting open orders per single market
                 logger.debug("Requesting open orders at exchange $exchangeName for ${currencyPairs.size} markets")
-                currencyPairs.flatMap { getOpenOrdersFromExchangeForMarket(exchangeName, tradeService, it) }
+                exchangeCurrencyPairsInWallet
+                        .generateFromWalletIfGivenEmpty(exchangeName, exchangeKey.exchangeUserId, currencyPairs)
+                        .flatMap { getOpenOrdersFromExchangeForMarket(exchangeName, tradeService, it) }
             }
             BITBAY,
             BITMEX,

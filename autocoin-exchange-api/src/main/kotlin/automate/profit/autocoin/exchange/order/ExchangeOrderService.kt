@@ -57,7 +57,7 @@ interface ExchangeOrderService {
 
     fun getOpenOrders(exchangeName: String, exchangeUserId: String): List<ExchangeOrder>
 
-    fun getOpenOrdersForAllExchangeKeys(): List<ExchangeOpenOrders>
+    fun getOpenOrdersForAllExchangeKeys(): List<ExchangeOpenOrders> = getOpenOrdersForAllExchangeKeys(emptyList())
 
     fun getOpenOrdersForAllExchangeKeys(currencyPairs: List<CurrencyPair>): List<ExchangeOpenOrders>
 

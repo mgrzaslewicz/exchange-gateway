@@ -10,6 +10,12 @@ import java.math.BigDecimal
 class XchangeExchangeWalletService(private val exchangeService: ExchangeService,
                                    private val exchangeKeyService: ExchangeKeyService,
                                    private val userExchangeServicesFactory: UserExchangeServicesFactory) : ExchangeWalletService {
+
+    override fun getCurrencyBalances(exchangeName: String, exchangeUserId: String): List<CurrencyBalance> {
+        val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeUserId)
+        return userExchangeWalletService.getCurrencyBalances()
+    }
+
     override fun getCurrencyBalance(exchangeName: String, exchangeUserId: String, currencyCode: String): CurrencyBalance {
         val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeUserId)
         return userExchangeWalletService.getCurrencyBalance(currencyCode)
