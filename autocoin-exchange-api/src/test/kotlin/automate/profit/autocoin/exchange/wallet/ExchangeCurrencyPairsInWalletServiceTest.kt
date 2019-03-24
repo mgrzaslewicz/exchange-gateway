@@ -23,9 +23,13 @@ class ExchangeCurrencyPairsInWalletServiceTest {
 
     private val numberDoesNotMatter = BigDecimal("4.03")
     private val currencyPairMetadataDoesNotMatter = CurrencyPairMetadata(
-            scale = numberDoesNotMatter.scale(),
+            amountScale = numberDoesNotMatter.scale(),
+            priceScale = numberDoesNotMatter.scale(),
             minimumAmount = numberDoesNotMatter,
-            maximumAmount = numberDoesNotMatter
+            maximumAmount = numberDoesNotMatter,
+            minimumOrderValue = numberDoesNotMatter,
+            maximumPriceMultiplierDown = numberDoesNotMatter,
+            maximumPriceMultiplierUp = numberDoesNotMatter
     )
     private val exchangeMetadata = ExchangeMetadata(
             currencyPairMetadata = mapOf(
