@@ -9,7 +9,8 @@ data class CurrencyPairMetadataDto(
         val maximumAmount: Double,
         val minimumOrderValue: Double,
         val maximumPriceMultiplierUp: Double,
-        val maximumPriceMultiplierDown: Double
+        val maximumPriceMultiplierDown: Double,
+        val buyFeeMultiplier: Double
 ) {
     fun toCurrencyPairMetadata() = CurrencyPairMetadata(
             amountScale = amountScale,
@@ -18,7 +19,8 @@ data class CurrencyPairMetadataDto(
             maximumAmount = maximumAmount.toBigDecimal(),
             minimumOrderValue = minimumOrderValue.toBigDecimal(),
             maximumPriceMultiplierUp = maximumPriceMultiplierUp.toBigDecimal(),
-            maximumPriceMultiplierDown = maximumPriceMultiplierDown.toBigDecimal()
+            maximumPriceMultiplierDown = maximumPriceMultiplierDown.toBigDecimal(),
+            buyFeeMultiplier = buyFeeMultiplier.toBigDecimal()
     )
 }
 

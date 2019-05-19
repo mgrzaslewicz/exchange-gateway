@@ -116,7 +116,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
     }
 
     /**
-     * Buy currencyPair.counter for currencyPair.base
+     * Buy currencyPair.base for currencyPair.base
      */
     override fun placeBuyOrder(currencyPair: CurrencyPair, limitPrice: BigDecimal, amount: BigDecimal): ExchangeOrder {
         val limitBuyOrder = LimitOrder.Builder(Order.OrderType.BID, currencyPair.toXchangeCurrencyPair()).orderStatus(Order.OrderStatus.NEW).limitPrice(limitPrice).originalAmount(amount).build()
@@ -139,8 +139,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
     }
 
     /**
-     * Entry currency = currencyPair.base, exit currency = currencyPair.counter
-     * Sell entry currency and gain exit currency
+     * Sell currencyPair.base currency and gain currencyPair.counter
      */
     override fun placeSellOrder(currencyPair: CurrencyPair, limitPrice: BigDecimal, amount: BigDecimal): ExchangeOrder {
         val limitSellOrder = LimitOrder.Builder(Order.OrderType.ASK, currencyPair.toXchangeCurrencyPair()).orderStatus(Order.OrderStatus.NEW).limitPrice(limitPrice).originalAmount(amount).build()

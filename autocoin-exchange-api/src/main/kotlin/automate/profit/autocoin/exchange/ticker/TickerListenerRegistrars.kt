@@ -8,7 +8,7 @@ import kotlinx.coroutines.runBlocking
 interface TickerListenerRegistrars {
     fun registerTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean
     fun removeTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean
-    fun <T : TickerListener> getListenersOfClassList(`class`: Class<T>): List<T>
+    fun <T : TickerListener> getListenersOfClassList(clazz: Class<T>): List<T>
     fun fetchTickersAndNotifyListeners()
 }
 
