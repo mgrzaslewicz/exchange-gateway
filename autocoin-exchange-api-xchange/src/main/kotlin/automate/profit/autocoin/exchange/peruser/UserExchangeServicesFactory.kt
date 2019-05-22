@@ -40,16 +40,16 @@ fun String?.md5(): String {
  */
 interface UserExchangeServicesFactory {
     fun createTickerService(exchangeName: String): UserExchangeTickerService
-    fun createTickerService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeTickerService
+    fun createTickerService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTickerService
 
     fun createTickerListenerRegistrar(exchangeName: String): TickerListenerRegistrar
-    fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?): TickerListenerRegistrar
+    fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): TickerListenerRegistrar
 
-    fun createTradeService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeTradeService
+    fun createTradeService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTradeService
 
-    fun createWalletService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeWalletService
+    fun createWalletService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeWalletService
 
-    fun createMetadataProvider(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeMetadataProvider
+    fun createMetadataProvider(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeMetadataProvider
     fun createMetadataProvider(exchangeName: String): UserExchangeMetadataProvider
 }
 
@@ -129,7 +129,7 @@ class XchangeMetadataFile {
     }
 
     private fun fetchBittrexMetadata(): XchangeMetadataJson {
-        val exchangeSpec = ExchangeSpecification(SupportedExchange.BITTREX.toXchangeClass().java)
+        val exchangeSpec = ExchangeSpecification(BITTREX.toXchangeClass().java)
         val mathContext = MathContext(8, RoundingMode.HALF_UP)
         val bittrexExchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
         val bittrexMarketDataService = bittrexExchange.marketDataService as BittrexMarketDataServiceRaw
@@ -162,19 +162,23 @@ class XchangeMetadataFile {
 
 }
 
-class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFactory, private val xchangeMetadataFile: XchangeMetadataFile) : UserExchangeServicesFactory {
+class XchangeUserExchangeServicesFactory(
+        private val xchangeFactory: XchangeFactory,
+        private val xchangeMetadataFile: XchangeMetadataFile,
+        private val exchangeSpecificationVerifier: ExchangeSpecificationVerifier
+) : UserExchangeServicesFactory {
     private companion object : KLogging()
 
     private val xchangesCache = mutableMapOf<String, Exchange>()
 
-    override fun createTradeService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeTradeService {
+    override fun createTradeService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTradeService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return XchangeUserExchangeTradeService(exchangeName, getXchange(supportedExchange, publicKey, secretKey, userName).tradeService)
+        return XchangeUserExchangeTradeService(exchangeName, getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).tradeService)
     }
 
-    override fun createMetadataProvider(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeMetadataProvider {
+    override fun createMetadataProvider(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeMetadataProvider {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(supportedExchange, getXchange(supportedExchange, publicKey, secretKey, userName)))
+        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(supportedExchange, getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters)))
     }
 
     override fun createMetadataProvider(exchangeName: String): UserExchangeMetadataProvider {
@@ -183,9 +187,9 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
         return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(supportedExchange, getXchange(supportedExchange, exchangeSpec)))
     }
 
-    override fun createWalletService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeWalletService {
+    override fun createWalletService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeWalletService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return XchangeUserExchangeWalletService(supportedExchange, getXchange(supportedExchange, publicKey, secretKey, userName).accountService)
+        return XchangeUserExchangeWalletService(supportedExchange, getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).accountService)
     }
 
     override fun createTickerService(exchangeName: String): UserExchangeTickerService {
@@ -194,14 +198,14 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
         return XchangeUserExchangeTickerService(getXchange(supportedExchange, exchangeSpec).marketDataService)
     }
 
-    override fun createTickerService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeTickerService {
+    override fun createTickerService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTickerService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return XchangeUserExchangeTickerService(getXchange(supportedExchange, publicKey, secretKey, userName).marketDataService)
+        return XchangeUserExchangeTickerService(getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService)
     }
 
-    override fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?): TickerListenerRegistrar {
+    override fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): TickerListenerRegistrar {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return DefaultTickerListenerRegistrar(supportedExchange, createTickerService(exchangeName, publicKey, secretKey, userName))
+        return DefaultTickerListenerRegistrar(supportedExchange, createTickerService(exchangeName, publicKey, secretKey, userName, exchangeSpecificKeyParameters))
     }
 
     override fun createTickerListenerRegistrar(exchangeName: String): TickerListenerRegistrar {
@@ -209,9 +213,9 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
         return DefaultTickerListenerRegistrar(supportedExchange, createTickerService(exchangeName))
     }
 
-    private fun getXchange(exchangeName: SupportedExchange, publicKey: String, secretKey: String, userName: String?): Exchange {
+    private fun getXchange(exchangeName: SupportedExchange, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): Exchange {
         val exchangeSpec = ExchangeSpecification(exchangeName.toXchangeClass().java)
-        assignKeys(exchangeName, exchangeSpec, publicKey, secretKey, userName)
+        assignKeys(exchangeName, exchangeSpec, publicKey, secretKey, userName, exchangeSpecificKeyParameters)
         return getXchange(exchangeName, exchangeSpec)
     }
 
@@ -260,23 +264,17 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
         return xchangesCache[cacheKey]!!
     }
 
-    private fun assignKeys(supportedExchange: SupportedExchange, exchangeSpecification: ExchangeSpecification, publicKey: String, secretKey: String, userName: String?) {
+    private fun assignKeys(supportedExchange: SupportedExchange, exchangeSpecification: ExchangeSpecification, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?) {
         exchangeSpecification.apiKey = publicKey.trim()
         exchangeSpecification.secretKey = secretKey.trim()
         exchangeSpecification.userName = userName
+        exchangeSpecification.exchangeSpecificParameters = exchangeSpecificKeyParameters ?: emptyMap()
 
         if (exchangeSpecification.apiKey != publicKey) logger.warn("$supportedExchange API public key contained whitespaces, trimmed")
         if (exchangeSpecification.secretKey != secretKey) logger.warn("$supportedExchange API secret key contained whitespaces, trimmed")
-        verifyKeys(supportedExchange, exchangeSpecification)
+
+        exchangeSpecificationVerifier.verifyKeys(supportedExchange, exchangeSpecification)
     }
 
-    private fun verifyKeys(supportedExchange: SupportedExchange, exchangeSpecification: ExchangeSpecification) {
-        if (exchangeSpecification.apiKey.isNullOrEmpty()) throw IllegalArgumentException("Exchange api key is not provided")
-        if (exchangeSpecification.secretKey.isNullOrEmpty()) throw IllegalArgumentException("Exchange secret key is not provided")
-        if (exchangeSpecification.apiKey == exchangeSpecification.secretKey) throw IllegalArgumentException("Secret key and api key cannot be the same")
-        if (supportedExchange == BITSTAMP) {
-            if (exchangeSpecification.userName.isNullOrEmpty()) throw IllegalArgumentException("User name for bitstamp is not provided")
-        }
-    }
 
 }

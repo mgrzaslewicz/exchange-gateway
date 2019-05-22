@@ -31,7 +31,7 @@ class XchangeExchangeWalletService(private val exchangeService: ExchangeService,
         val exchangeId = exchangeService.getExchangeIdByName(exchangeName)
         val exchangeKey = exchangeKeyService.getExchangeKey(exchangeUserId, exchangeId)
                 ?: throw IllegalArgumentException("Exchange key for Exchange(name=$exchangeName,id=$exchangeId) and exchangeUserId=$exchangeUserId not found")
-        return userExchangeServicesFactory.createWalletService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName)
+        return userExchangeServicesFactory.createWalletService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName, exchangeKey.exchangeSpecificKeyParameters)
 
     }
 
@@ -56,7 +56,7 @@ class XchangeExchangeWalletService(private val exchangeService: ExchangeService,
 
     private fun getAccountBalancesFor(exchangeName: String, exchangeKeys: List<ExchangeKeyDto>): List<CurrencyBalance> {
         return exchangeKeys.flatMap { exchangeKey ->
-            val accountService = userExchangeServicesFactory.createWalletService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName)
+            val accountService = userExchangeServicesFactory.createWalletService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName, exchangeKey.exchangeSpecificKeyParameters)
             accountService.getCurrencyBalances()
         }
     }

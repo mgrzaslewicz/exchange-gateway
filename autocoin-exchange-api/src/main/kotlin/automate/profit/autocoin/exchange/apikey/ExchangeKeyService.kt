@@ -5,7 +5,8 @@ data class ExchangeKeyDto(
         val secretKey: String,
         val exchangeId: String,
         val exchangeUserId: String,
-        val userName: String? = null
+        val userName: String? = null,
+        val exchangeSpecificKeyParameters: Map<String, String>?
 )
 
 interface ExchangeKeyService {
