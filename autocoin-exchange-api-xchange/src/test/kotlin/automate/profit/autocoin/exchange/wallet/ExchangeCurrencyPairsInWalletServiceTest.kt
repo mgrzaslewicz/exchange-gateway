@@ -55,7 +55,7 @@ class ExchangeCurrencyPairsInWalletServiceTest {
         val exchangeMetadataService = mock<ExchangeMetadataService>().apply {
             whenever(this.getMetadata("binance")).thenReturn(exchangeMetadata)
         }
-        val exchangeWalletService = mock<ExchangeWalletService>().apply {
+        val exchangeWalletService = mock<XchangeExchangeWalletService>().apply {
             whenever(this.getCurrencyBalances("binance", "external-exchange-user-1")).thenReturn(currencyBalancesInWallet)
         }
         val currencyPairsInWalletService = DefaultExchangeCurrencyPairsInWalletService(exchangeMetadataService, exchangeWalletService)

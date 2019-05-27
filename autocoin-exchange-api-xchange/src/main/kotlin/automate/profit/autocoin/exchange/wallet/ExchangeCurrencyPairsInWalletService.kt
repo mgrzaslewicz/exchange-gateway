@@ -1,5 +1,6 @@
 package automate.profit.autocoin.exchange.wallet
 
+import automate.profit.autocoin.exchange.apikey.ExchangeKeyDto
 import automate.profit.autocoin.exchange.currency.CurrencyBalance
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadata
@@ -9,14 +10,29 @@ import kotlinx.coroutines.runBlocking
 
 interface ExchangeCurrencyPairsInWalletService {
     fun generateFromWalletIfGivenEmpty(exchangeName: String, exchangeUserId: String, currencyPairs: List<CurrencyPair>): List<CurrencyPair>
+    fun generateFromWalletIfGivenEmpty(exchangeName: String, exchangeKey: ExchangeKeyDto, currencyPairs: List<CurrencyPair>): List<CurrencyPair>
 }
+
 /**
  * TODO Verify this mechanism is working on production, for now it does not matter as it's not used by most important supported exchanges
  */
 class DefaultExchangeCurrencyPairsInWalletService(
         private val exchangeMetadataService: ExchangeMetadataService,
-        private val exchangeWalletService: ExchangeWalletService
+        private val exchangeWalletService: XchangeExchangeWalletService
 ) : ExchangeCurrencyPairsInWalletService {
+
+    override fun generateFromWalletIfGivenEmpty(exchangeName: String, exchangeKey: ExchangeKeyDto, currencyPairs: List<CurrencyPair>): List<CurrencyPair> {
+        return if (currencyPairs.isNotEmpty()) currencyPairs
+        else
+            runBlocking {
+                val exchangeMetadataCall = async { exchangeMetadataService.getMetadata(exchangeName) }
+                val exchangeWalletCall = async { exchangeWalletService.getCurrencyBalances(exchangeName, exchangeKey) }
+
+                val exchangeMetadata = exchangeMetadataCall.await()
+                val currencyBalances = exchangeWalletCall.await()
+                allPossibleCurrencyPairsFromBalances(exchangeMetadata, currencyBalances)
+            }
+    }
 
     override fun generateFromWalletIfGivenEmpty(exchangeName: String, exchangeUserId: String, currencyPairs: List<CurrencyPair>): List<CurrencyPair> {
         return if (currencyPairs.isNotEmpty()) currencyPairs
