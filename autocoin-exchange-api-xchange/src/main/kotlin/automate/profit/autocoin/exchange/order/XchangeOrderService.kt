@@ -152,10 +152,20 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
         return tradeService.cancelOrder(cancelOrderParams)
     }
 
+    fun cancelOrder(exchangeName: String, exchangeKey: ExchangeKeyDto, cancelOrderParams: ExchangeCancelOrderParams): Boolean {
+        logger.info("Canceling order '${cancelOrderParams.orderId}' at exchange '$exchangeName' for exchangeUser '${exchangeKey.exchangeUserId}'")
+        val tradeService = getTradeService(exchangeName, exchangeKey)
+        return tradeService.cancelOrder(cancelOrderParams)
+    }
+
     private fun getTradeService(exchangeName: String, exchangeUserId: String): UserExchangeTradeService {
         val exchangeId = exchangeService.getExchangeIdByName(exchangeName)
         val exchangeKey = exchangeKeyService.getExchangeKey(exchangeUserId, exchangeId)
                 ?: throw IllegalArgumentException("Exchange key for Exchange(name=$exchangeName,id=$exchangeId) and exchangeUserId=$exchangeUserId not found")
+        return getTradeService(exchangeName, exchangeKey)
+    }
+
+    private fun getTradeService(exchangeName: String, exchangeKey: ExchangeKeyDto): UserExchangeTradeService {
         return userExchangeServicesFactory.createTradeService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName, exchangeKey.exchangeSpecificKeyParameters)
     }
 
@@ -164,13 +174,28 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
         return tradeService.placeBuyOrder(CurrencyPair(baseCurrencyCode, counterCurrencyCode), buyPrice, amount)
     }
 
+    fun placeLimitBuyOrder(exchangeName: String, exchangeKey: ExchangeKeyDto, baseCurrencyCode: String, counterCurrencyCode: String, buyPrice: BigDecimal, amount: BigDecimal): ExchangeOrder {
+        val tradeService = getTradeService(exchangeName, exchangeKey)
+        return tradeService.placeBuyOrder(CurrencyPair(baseCurrencyCode, counterCurrencyCode), buyPrice, amount)
+    }
+
     override fun placeLimitSellOrder(exchangeName: String, exchangeUserId: String, baseCurrencyCode: String, counterCurrencyCode: String, sellPrice: BigDecimal, amount: BigDecimal): ExchangeOrder {
         val tradeService = getTradeService(exchangeName, exchangeUserId)
         return tradeService.placeSellOrder(CurrencyPair(baseCurrencyCode, counterCurrencyCode), sellPrice, amount)
     }
 
+    fun placeLimitSellOrder(exchangeName: String, exchangeKey: ExchangeKeyDto, baseCurrencyCode: String, counterCurrencyCode: String, sellPrice: BigDecimal, amount: BigDecimal): ExchangeOrder {
+        val tradeService = getTradeService(exchangeName, exchangeKey)
+        return tradeService.placeSellOrder(CurrencyPair(baseCurrencyCode, counterCurrencyCode), sellPrice, amount)
+    }
+
     override fun getOpenOrders(exchangeName: String, exchangeUserId: String): List<ExchangeOrder> {
         val tradeService = getTradeService(exchangeName, exchangeUserId)
+        return tradeService.getOpenOrders()
+    }
+
+    fun getOpenOrders(exchangeName: String, exchangeKey: ExchangeKeyDto): List<ExchangeOrder> {
+        val tradeService = getTradeService(exchangeName, exchangeKey)
         return tradeService.getOpenOrders()
     }
 
