@@ -71,13 +71,14 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             it to exchangeService.getExchangeNameById(it)
         }.toMap()
         runBlocking {
-            exchangeKeysGroupedByExchangeId.forEach { exchangeWithKeys ->
-                val exchangeId = exchangeWithKeys.key
-                val exchangeKeysWithTheSameExchange = exchangeWithKeys.value
-                val exchangeName = exchangeId2Name.getValue(exchangeId)
-                val exchangeKeysWithTheSameExchangeByUser = exchangeKeysWithTheSameExchange.groupBy { it.exchangeUserId }
-                exchangeKeysWithTheSameExchangeByUser.forEach { exchangeUserId, exchangeKeys ->
-                    launch(Dispatchers.IO) {
+            exchangeKeysGroupedByExchangeId.forEach { exchangeIdToKeys ->
+                launch(Dispatchers.IO) {
+                    val exchangeId = exchangeIdToKeys.key
+                    val exchangeKeys = exchangeIdToKeys.value
+                    val exchangeName = exchangeId2Name.getValue(exchangeId)
+                    val exchangeKeysGroupedByByUser = exchangeKeys.groupBy { it.exchangeUserId }
+                    exchangeKeysGroupedByByUser.forEach { (exchangeUserId, exchangeKeys) ->
+
                         openOrders += tryGetOpenOrders(exchangeName, exchangeUserId, currencyPairs, exchangeKeys)
                     }
                 }
@@ -101,21 +102,23 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
         return exchangeKeyService.getExchangeKeys().groupBy { it.exchangeId }
     }
 
-    private fun getOpenOrdersFromExchange(currencyPairs: List<CurrencyPair>, exchangeName: String, exchangeKeyDtos: List<ExchangeKeyDto>): List<ExchangeOrder> {
-        val openOrders = mutableListOf<ExchangeOrder>()
-        exchangeKeyDtos.forEach {
+    private fun getOpenOrdersFromExchange(currencyPairs: List<CurrencyPair>, exchangeName: String, exchangeKeys: List<ExchangeKeyDto>): List<ExchangeOrder> {
+        return exchangeKeys.flatMap {
             val tradeService = userExchangeServicesFactory.createTradeService(exchangeName, it.apiKey, it.secretKey, it.userName, it.exchangeSpecificKeyParameters)
-            openOrders += getOpenOrdersFromExchange(it, tradeService, currencyPairs)
+            getOpenOrdersFromExchange(exchangeName, it, tradeService, currencyPairs)
         }
-        return openOrders
     }
 
-    private fun getOpenOrdersFromExchange(exchangeKey: ExchangeKeyDto, tradeService: UserExchangeTradeService, currencyPairs: List<CurrencyPair>): List<ExchangeOrder> {
-        val exchangeName = exchangeService.getExchangeNameById(exchangeKey.exchangeId)
+    private fun getOpenOrdersFromExchange(
+            exchangeName: String,
+            exchangeKey: ExchangeKeyDto,
+            tradeService: UserExchangeTradeService,
+            currencyPairs: List<CurrencyPair>
+    ): List<ExchangeOrder> {
         return when (SupportedExchange.fromExchangeName(exchangeName)) {
             KUCOIN,
             YOBIT -> { // API allows only requesting open orders per single market
-                logger.debug("Requesting open orders at exchange $exchangeName for ${currencyPairs.size} markets")
+                logger.debug("Requesting open orders at exchange $exchangeName for markets:  $currencyPairs")
                 exchangeCurrencyPairsInWallet
                         .generateFromWalletIfGivenEmpty(exchangeName, exchangeKey, currencyPairs)
                         .flatMap { getOpenOrdersFromExchangeForMarket(exchangeName, tradeService, it) }

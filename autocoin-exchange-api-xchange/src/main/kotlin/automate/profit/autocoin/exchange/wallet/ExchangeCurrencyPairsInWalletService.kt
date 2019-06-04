@@ -7,6 +7,8 @@ import automate.profit.autocoin.exchange.metadata.ExchangeMetadata
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadataService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import mu.KLogging
+import mu.KotlinLogging
 
 interface ExchangeCurrencyPairsInWalletService {
     fun generateFromWalletIfGivenEmpty(exchangeName: String, exchangeUserId: String, currencyPairs: List<CurrencyPair>): List<CurrencyPair>
@@ -21,17 +23,20 @@ class DefaultExchangeCurrencyPairsInWalletService(
         private val exchangeWalletService: XchangeExchangeWalletService
 ) : ExchangeCurrencyPairsInWalletService {
 
+    companion object : KLogging()
+
     override fun generateFromWalletIfGivenEmpty(exchangeName: String, exchangeKey: ExchangeKeyDto, currencyPairs: List<CurrencyPair>): List<CurrencyPair> {
         return if (currencyPairs.isNotEmpty()) currencyPairs
-        else
-            runBlocking {
-                val exchangeMetadataCall = async { exchangeMetadataService.getMetadata(exchangeName) }
-                val exchangeWalletCall = async { exchangeWalletService.getCurrencyBalances(exchangeName, exchangeKey) }
+        else runBlocking {
+            val exchangeMetadataCall = async { exchangeMetadataService.getMetadata(exchangeName) }
+            val exchangeWalletCall = async { exchangeWalletService.getCurrencyBalances(exchangeName, exchangeKey) }
 
-                val exchangeMetadata = exchangeMetadataCall.await()
-                val currencyBalances = exchangeWalletCall.await()
-                allPossibleCurrencyPairsFromBalances(exchangeMetadata, currencyBalances)
+            val exchangeMetadata = exchangeMetadataCall.await()
+            val currencyBalances = exchangeWalletCall.await()
+            allPossibleCurrencyPairsFromBalances(exchangeMetadata, currencyBalances).also {
+                logger.info { "Generated possible currency pairs: $it" }
             }
+        }
     }
 
     override fun generateFromWalletIfGivenEmpty(exchangeName: String, exchangeUserId: String, currencyPairs: List<CurrencyPair>): List<CurrencyPair> {
@@ -43,7 +48,9 @@ class DefaultExchangeCurrencyPairsInWalletService(
 
                 val exchangeMetadata = exchangeMetadataCall.await()
                 val currencyBalances = exchangeWalletCall.await()
-                allPossibleCurrencyPairsFromBalances(exchangeMetadata, currencyBalances)
+                allPossibleCurrencyPairsFromBalances(exchangeMetadata, currencyBalances).also {
+                    logger.info { "Generated possible currency pairs: $it" }
+                }
             }
     }
 

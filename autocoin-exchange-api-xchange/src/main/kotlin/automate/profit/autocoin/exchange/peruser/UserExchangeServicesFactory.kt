@@ -2,28 +2,16 @@ package automate.profit.autocoin.exchange.peruser
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.*
-import automate.profit.autocoin.exchange.metadata.DefaultUserExchangeMetadataProvider
-import automate.profit.autocoin.exchange.metadata.UserExchangeMetadataProvider
-import automate.profit.autocoin.exchange.metadata.metadataFromExchange
+import automate.profit.autocoin.exchange.metadata.ExchangeMetadataProvider
 import automate.profit.autocoin.exchange.ticker.DefaultTickerListenerRegistrar
 import automate.profit.autocoin.exchange.ticker.TickerListenerRegistrar
 import automate.profit.autocoin.exchange.ticker.UserExchangeTickerService
 import automate.profit.autocoin.exchange.toXchangeClass
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.PropertyNamingStrategy
-import com.fasterxml.jackson.databind.SerializationFeature
 import mu.KLogging
 import org.knowm.xchange.Exchange
 import org.knowm.xchange.ExchangeFactory
 import org.knowm.xchange.ExchangeSpecification
-import org.knowm.xchange.bittrex.service.BittrexMarketDataServiceRaw
 import org.knowm.xchange.utils.DigestUtils
-import java.io.File
-import java.math.BigDecimal
-import java.math.MathContext
-import java.math.RoundingMode
 import java.security.MessageDigest
 
 fun String?.md5(): String {
@@ -49,8 +37,6 @@ interface UserExchangeServicesFactory {
 
     fun createWalletService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeWalletService
 
-    fun createMetadataProvider(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeMetadataProvider
-    fun createMetadataProvider(exchangeName: String): UserExchangeMetadataProvider
 }
 
 class XchangeFactory { // wrap in class to make it testable as original xchange factory is an enum
@@ -58,113 +44,10 @@ class XchangeFactory { // wrap in class to make it testable as original xchange 
     fun createExchange(exchangeSpecification: ExchangeSpecification) = xchangeFactory.createExchange(exchangeSpecification)
 }
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-data class CurrencyPairJsonNode(
-        @JsonProperty("price_scale")
-        val priceScale: Int,
-        @JsonProperty("min_amount")
-        val minAmount: BigDecimal,
-        val tradingFee: Double? = null
-)
-
-data class CurrencyJsonNode(
-        @JsonProperty("scale")
-        val scale: Int,
-        @JsonProperty("withdrawal_fee")
-        val withdrawalFee: Double
-)
-
-data class PublicRateLimitJson(
-        @JsonProperty("calls")
-        val calls: Int,
-        @JsonProperty("time_span")
-        val timeSpan: Int,
-        @JsonProperty("time_unit")
-        val timeUnit: String
-)
-
-data class XchangeMetadataJson(
-        val currencyPairs: Map<String, CurrencyPairJsonNode>,
-        val currencies: Map<String, CurrencyJsonNode>,
-        val publicRateLimits: List<PublicRateLimitJson>
-)
-
-class XchangeMetadataFile {
-    private var emptyMetadataFile = File("")
-    private val mapper = ObjectMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE)
-            .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true)
-            .writerWithDefaultPrettyPrinter()
-
-    fun write(exchangeName: String, metadataJson: XchangeMetadataJson): File {
-        val content = mapper.writeValueAsString(metadataJson)
-        val currentTimeMs = System.currentTimeMillis()
-        return File.createTempFile("$exchangeName-$currentTimeMs", "json").apply {
-            writeText(content)
-        }
-    }
-
-    fun getEmptyMetadataFile(): File {
-        if (!emptyMetadataFile.exists()) {
-            emptyMetadataFile = File.createTempFile("empty-xchange-metadata", "json")
-            emptyMetadataFile.writeText("""
-{
-  "currency_pairs": {
-  },
-  "currencies": {
-  },
-  "public_rate_limits": [
-    {
-    }
-  ]
-}
-        """.trimIndent())
-        }
-        return emptyMetadataFile
-    }
-
-    fun fetchBittrexMetadataFile(): File {
-        val bittrexMetadata = fetchBittrexMetadata()
-        return write("bittrex", bittrexMetadata)
-    }
-
-    private fun fetchBittrexMetadata(): XchangeMetadataJson {
-        val exchangeSpec = ExchangeSpecification(BITTREX.toXchangeClass().java)
-        val mathContext = MathContext(8, RoundingMode.HALF_UP)
-        val bittrexExchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
-        val bittrexMarketDataService = bittrexExchange.marketDataService as BittrexMarketDataServiceRaw
-
-        val currencyPairs = bittrexMarketDataService.bittrexSymbols.map {
-            "${it.marketCurrency}/${it.baseCurrency}" to CurrencyPairJsonNode(
-                    priceScale = 8,
-                    minAmount = BigDecimal(it.minTradeSize.toDouble(), mathContext)
-            )
-        }.toMap()
-
-        val currencies = bittrexMarketDataService.bittrexCurrencies.map {
-            it.currency to CurrencyJsonNode(
-                    scale = 8,
-                    withdrawalFee = it.txFee.toDouble()
-            )
-        }.toMap()
-
-        val metadataRootNode = XchangeMetadataJson(
-                currencyPairs = currencyPairs,
-                currencies = currencies,
-                publicRateLimits = listOf(PublicRateLimitJson(
-                        calls = 3,
-                        timeSpan = 1,
-                        timeUnit = "SECONDS"
-                ))
-        )
-        return metadataRootNode
-    }
-
-}
 
 class XchangeUserExchangeServicesFactory(
         private val xchangeFactory: XchangeFactory,
-        private val xchangeMetadataFile: XchangeMetadataFile,
+        private val exchangeMetadataProvider: ExchangeMetadataProvider,
         private val exchangeSpecificationVerifier: ExchangeSpecificationVerifier
 ) : UserExchangeServicesFactory {
     private companion object : KLogging()
@@ -174,17 +57,6 @@ class XchangeUserExchangeServicesFactory(
     override fun createTradeService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTradeService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         return XchangeUserExchangeTradeService(exchangeName, getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).tradeService)
-    }
-
-    override fun createMetadataProvider(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeMetadataProvider {
-        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(supportedExchange, getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters)))
-    }
-
-    override fun createMetadataProvider(exchangeName: String): UserExchangeMetadataProvider {
-        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(supportedExchange, getXchange(supportedExchange, exchangeSpec)))
     }
 
     override fun createWalletService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeWalletService {
@@ -220,15 +92,15 @@ class XchangeUserExchangeServicesFactory(
     }
 
     private fun setupMetadataInit(supportedExchange: SupportedExchange, exchangeSpec: ExchangeSpecification) {
+        val xchangeMetadaFile = exchangeMetadataProvider.getAndSaveXchangeMetadataFile(supportedExchange).absolutePath
         when (supportedExchange) {
             // >> providing fresh metadata working
             // run LoadingMetadataManualTest to see which exchanges are able to load fresh metadata
-            BINANCE, BITMEX, CRYPTOPIA, KRAKEN, KUCOIN -> {
-                exchangeSpec.metaDataJsonFileOverride = xchangeMetadataFile.getEmptyMetadataFile().absolutePath
-            }
-            BITTREX -> {
+            BINANCE,
+            BITTREX,
+            KUCOIN -> {
                 exchangeSpec.isShouldLoadRemoteMetaData = false
-                exchangeSpec.metaDataJsonFileOverride = xchangeMetadataFile.fetchBittrexMetadataFile().absolutePath
+                exchangeSpec.metaDataJsonFileOverride = xchangeMetadaFile
             }
             // << providing fresh metadata working
 
