@@ -116,7 +116,6 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             currencyPairs: List<CurrencyPair>
     ): List<ExchangeOrder> {
         return when (SupportedExchange.fromExchangeName(exchangeName)) {
-            KUCOIN,
             YOBIT -> { // API allows only requesting open orders per single market
                 logger.debug("Requesting open orders at exchange $exchangeName for markets:  $currencyPairs")
                 exchangeCurrencyPairsInWallet
@@ -131,6 +130,7 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             CRYPTOPIA,
             GATEIO,
             KRAKEN,
+            KUCOIN,
             POLONIEX -> {
                 logger.debug("Requesting open orders at exchange $exchangeName for all markets")
                 tradeService.getOpenOrders()
