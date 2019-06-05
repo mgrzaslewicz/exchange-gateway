@@ -8,6 +8,7 @@ import automate.profit.autocoin.exchange.toXchangeClass
 import mu.KotlinLogging
 import org.knowm.xchange.ExchangeFactory
 import org.knowm.xchange.ExchangeSpecification
+import org.knowm.xchange.binance.service.BinanceMarketDataService
 import org.knowm.xchange.bittrex.BittrexAdapters
 import org.knowm.xchange.bittrex.service.BittrexMarketDataServiceRaw
 import org.knowm.xchange.currency.Currency
@@ -127,39 +128,74 @@ class BinanceExchangeMetadataFetcher : ExchangeMetadataFetcher {
 
     private val logger = KotlinLogging.logger {}
 
+    private fun numberOfDecimals(value: String): Int {
+        return BigDecimal(value).stripTrailingZeros().scale()
+    }
+
     override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
         preventFromLoadingStaticJsonFile(exchangeSpec)
         val exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
         val xchangeMetadata = exchange.exchangeMetaData
-        val xchangeMetadataJson = xchangeMetadata.toJSONString()
-        val exchangeMetadata = ExchangeMetadata(
-                currencyPairMetadata = xchangeMetadata.currencyPairs
-                        .filter {
-                            if (it.value == null) {
-                                logger.warn { "$supportedExchange-${it.key} no currency pair in metadata, skipping" }
-                            }
-                            it.value != null
+
+        val marketDataService = exchange.marketDataService as BinanceMarketDataService
+        val exchangeInfo = marketDataService.exchangeInfo
+        val symbols = exchangeInfo.symbols
+        val currencyPairsMap = mutableMapOf<CurrencyPair, CurrencyPairMetadata>()
+        val currenciesMap = mutableMapOf<String, CurrencyMetadata>()
+
+        for (price in marketDataService.tickerAllPrices()) {
+            val pair = price.currencyPair
+
+            for (symbol in symbols) {
+                if (symbol.symbol == pair.base.currencyCode + pair.counter.currencyCode) {
+
+                    val basePrecision = Integer.parseInt(symbol.baseAssetPrecision)
+                    val counterPrecision = Integer.parseInt(symbol.quotePrecision)
+                    var pairPrecision = 8
+                    var amountPrecision = 8
+
+                    var minQty: BigDecimal? = null
+                    var maxQty: BigDecimal? = null
+                    var stepSize: BigDecimal? = null
+
+                    val filters = symbol.filters
+
+                    for (filter in filters) {
+                        if (filter.filterType == "PRICE_FILTER") {
+                            pairPrecision = Math.min(pairPrecision, numberOfDecimals(filter.tickSize))
+                        } else if (filter.filterType == "LOT_SIZE") {
+                            amountPrecision = Math.min(amountPrecision, numberOfDecimals(filter.minQty))
+                            minQty = BigDecimal(filter.minQty).stripTrailingZeros()
+                            maxQty = BigDecimal(filter.maxQty).stripTrailingZeros()
+                            stepSize = BigDecimal(filter.stepSize).stripTrailingZeros()
                         }
-                        .map {
-                            val currencyPair = it.key.toCurrencyPair()
-                            currencyPair to CurrencyPairMetadata(
-                                    amountScale = it.value.priceScale,
-                                    priceScale = it.value.priceScale,
-                                    minimumAmount = it.value.minimumAmount.orMin(),
-                                    maximumAmount = it.value.maximumAmount.orMax(),
-                                    minimumOrderValue = getMinimumOrderValue(currencyPair),
-                                    maximumPriceMultiplierUp = 1.2.toBigDecimal(),
-                                    maximumPriceMultiplierDown = 0.8.toBigDecimal(),
-                                    buyFeeMultiplier = BigDecimal.ZERO
-                            )
-                        }.toMap(),
-                currencyMetadata = exchange.exchangeMetaData.currencies.map {
-                    it.key.currencyCode to CurrencyMetadata(
-                            scale = getScaleOrDefault(supportedExchange, it.key, it.value)
+                    }
+                    val currencyPair = price.currencyPair.toCurrencyPair()
+                    currencyPairsMap[currencyPair] = CurrencyPairMetadata(
+                            amountScale = amountPrecision,
+                            priceScale = pairPrecision,
+                            minimumAmount = minQty.orMin(),
+                            maximumAmount = maxQty.orMax(),
+                            minimumOrderValue = getMinimumOrderValue(currencyPair),
+                            maximumPriceMultiplierUp = 1.2.toBigDecimal(),
+                            maximumPriceMultiplierDown = 0.8.toBigDecimal(),
+                            buyFeeMultiplier = BigDecimal.ZERO
                     )
-                }.toMap()
+                    currenciesMap[pair.base.currencyCode] = CurrencyMetadata(
+                            scale = basePrecision
+                    )
+                    currenciesMap[pair.counter.currencyCode] = CurrencyMetadata(
+                            scale = counterPrecision
+                    )
+                }
+            }
+        }
+        val exchangeMetadata = ExchangeMetadata(
+                currencyPairMetadata = currencyPairsMap,
+                currencyMetadata = currenciesMap.toMap()
         )
+        val xchangeMetadataJson = xchangeMetadata.toJSONString()
         return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
     }
 

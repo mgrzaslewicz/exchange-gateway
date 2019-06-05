@@ -2,9 +2,11 @@ package automate.profit.autocoin.exchange.metadata
 
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
+@Ignore
 class ExchangeMetadataFetcherManualTest {
     private val tempFolder = TemporaryFolder()
 
