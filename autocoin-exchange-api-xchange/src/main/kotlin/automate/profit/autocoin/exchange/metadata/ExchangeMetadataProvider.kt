@@ -9,6 +9,13 @@ class ExchangeMetadataProvider(
         exchangeMetadataFetchers: List<ExchangeMetadataFetcher>,
         private val exchangeMetadataRepository: FileExchangeMetadataRepository
 ) : ExchangeMetadataService {
+
+    init {
+        if (exchangeMetadataFetchers.map { it.supportedExchange }.toSet().size < exchangeMetadataFetchers.size) {
+            throw IllegalStateException("Provided fetchers are invalid, there are duplicated ones")
+        }
+    }
+
     companion object : KLogging()
 
     override fun getMetadata(exchangeName: String): ExchangeMetadata {

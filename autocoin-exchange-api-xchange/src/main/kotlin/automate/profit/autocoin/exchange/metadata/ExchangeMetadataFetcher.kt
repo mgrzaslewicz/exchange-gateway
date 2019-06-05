@@ -279,8 +279,57 @@ class KucoinExchangeMetadataFetcher : ExchangeMetadataFetcher {
 
 }
 
+class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedExchange) : ExchangeMetadataFetcher {
+    override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
+        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
+        preventFromLoadingStaticJsonFile(exchangeSpec)
+        val exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
+        val xchangeMetadata = exchange.exchangeMetaData
+        val xchangeMetadataJson = xchangeMetadata.toJSONString()
+        val exchangeMetadata = ExchangeMetadata(
+                currencyPairMetadata = xchangeMetadata.currencyPairs
+                        .filter {
+                            if (it.value == null) {
+                                logger.warn { "$supportedExchange-${it.key} no currency pair in metadata, skipping" }
+                            }
+                            it.value != null
+                        }
+                        .map {
+                            val currencyPair = it.key.toCurrencyPair()
+                            currencyPair to CurrencyPairMetadata(
+                                    amountScale = it.value.priceScale,
+                                    priceScale = it.value.priceScale,
+                                    minimumAmount = it.value.minimumAmount.orMin(),
+                                    maximumAmount = it.value.maximumAmount.orMax(),
+                                    minimumOrderValue = BigDecimal.ZERO,
+                                    maximumPriceMultiplierUp = 10.toBigDecimal(),
+                                    maximumPriceMultiplierDown = 0.1.toBigDecimal(),
+                                    buyFeeMultiplier = BigDecimal.ZERO
+                            )
+                        }.toMap(),
+                currencyMetadata = exchange.exchangeMetaData.currencies.map {
+                    it.key.currencyCode to CurrencyMetadata(
+                            scale = getScaleOrDefault(supportedExchange, it.key, it.value)
+                    )
+                }.toMap()
+        )
+        return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
+    }
+}
+
+val defaultExchangeMetadataFetchers = listOf(
+        DefaultExchangeMetadataFetcher(BITBAY),
+        DefaultExchangeMetadataFetcher(BITMEX),
+        DefaultExchangeMetadataFetcher(BITSTAMP),
+        DefaultExchangeMetadataFetcher(CRYPTOPIA),
+        DefaultExchangeMetadataFetcher(GATEIO),
+        DefaultExchangeMetadataFetcher(KRAKEN),
+        DefaultExchangeMetadataFetcher(POLONIEX),
+        DefaultExchangeMetadataFetcher(YOBIT)
+)
+
 val exchangeMetadataFetchers = listOf(
         BittrexExchangeMetadataFetcher(),
         BinanceExchangeMetadataFetcher(),
         KucoinExchangeMetadataFetcher()
-)
+) + defaultExchangeMetadataFetchers
