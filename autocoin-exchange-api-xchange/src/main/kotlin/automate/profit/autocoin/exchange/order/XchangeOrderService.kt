@@ -28,7 +28,8 @@ fun Order.OrderStatus?.toExchangeOrderStatus() = when (this) {
     Order.OrderStatus.NEW -> ExchangeOrderStatus.NEW
     Order.OrderStatus.PENDING_NEW -> ExchangeOrderStatus.NEW
     Order.OrderStatus.FILLED -> ExchangeOrderStatus.FILLED
-    Order.OrderStatus.PARTIALLY_CANCELED -> ExchangeOrderStatus.PARTIALLY_FILLED
+    Order.OrderStatus.PARTIALLY_CANCELED -> ExchangeOrderStatus.PARTIALLY_CANCELED
+    Order.OrderStatus.PARTIALLY_FILLED -> ExchangeOrderStatus.PARTIALLY_FILLED
     Order.OrderStatus.CANCELED -> ExchangeOrderStatus.CANCELED
     null -> ExchangeOrderStatus.NOT_AVAILABLE
     else -> throw IllegalStateException("Status $this not handled")
@@ -44,6 +45,7 @@ fun ExchangeOrderStatus.toXchangeOrderStatus() = when (this) {
     ExchangeOrderStatus.NEW -> Order.OrderStatus.NEW
     ExchangeOrderStatus.FILLED -> Order.OrderStatus.FILLED
     ExchangeOrderStatus.PARTIALLY_FILLED -> Order.OrderStatus.PARTIALLY_FILLED
+    ExchangeOrderStatus.PARTIALLY_CANCELED -> Order.OrderStatus.PARTIALLY_CANCELED
     ExchangeOrderStatus.CANCELED -> Order.OrderStatus.CANCELED
     ExchangeOrderStatus.NOT_AVAILABLE -> null
 }

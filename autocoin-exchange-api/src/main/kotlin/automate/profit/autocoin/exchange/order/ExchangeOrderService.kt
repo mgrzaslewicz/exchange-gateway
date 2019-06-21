@@ -13,6 +13,7 @@ enum class ExchangeOrderStatus {
     NEW,
     FILLED,
     PARTIALLY_FILLED,
+    PARTIALLY_CANCELED,
     CANCELED,
     NOT_AVAILABLE
 }
