@@ -84,10 +84,11 @@ class FileExchangeMetadataRepositoryTest {
     fun shouldCreateMetadataFileWithProperNameAndContent() {
         // given
         val currentTimeMillis = 19L
+        val currentTimeMillisAsDateTimeString = "19700101010000019"
         val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder.root) { currentTimeMillis }
         exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave, xchangeMetadataJson)
         // when
-        val savedFile = tempFolder.root.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_$currentTimeMillis.json")
+        val savedFile = tempFolder.root.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_$currentTimeMillisAsDateTimeString.json")
         // then
         assertThat(savedFile).exists()
         assertThat(savedFile.readText()).isEqualTo(metadataObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(exchangeMetadataToSave))

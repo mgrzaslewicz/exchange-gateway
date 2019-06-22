@@ -11,6 +11,9 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import mu.KLogging
 import java.io.File
 import java.io.IOException
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 fun ExchangeMetadata.asJson() = metadataObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
 
@@ -38,13 +41,17 @@ class FileExchangeMetadataRepository(
 ) {
     companion object : KLogging()
 
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
+    private fun getCurrentDateTimeAsString() = dateTimeFormatter.format(Instant.ofEpochMilli(currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime())
+
     fun saveExchangeMetadata(supportedExchange: SupportedExchange, exchangeMetadata: ExchangeMetadata, xchangeMetadataJson: XchangeMetadataJson) {
         logger.info { "Saving $supportedExchange metadata" }
         val exchangeDirectory = getOrCreateDirectory(supportedExchange)
-        val currentTimeMillis = currentTimeMillis()
 
-        val newMetadataFileName = "${supportedExchange.exchangeName}_$currentTimeMillis.json"
-        val newXchangeMetadataFileName = "${supportedExchange.exchangeName}-xchange_$currentTimeMillis.json"
+        val currentDateTime = getCurrentDateTimeAsString()
+
+        val newMetadataFileName = "${supportedExchange.exchangeName}_$currentDateTime.json"
+        val newXchangeMetadataFileName = "${supportedExchange.exchangeName}-xchange_$currentDateTime.json"
         val newMetadataFile = exchangeDirectory.resolve(newMetadataFileName)
         val newXchangeMetadataFile = exchangeDirectory.resolve(newXchangeMetadataFileName)
 
@@ -59,7 +66,7 @@ class FileExchangeMetadataRepository(
         val latestMetadataFileName = exchangeDirectory
                 .list()
                 .filter { !it.contains("-xchange") && it.contains(supportedExchange.exchangeName) }
-                .sortedByDescending { getMillisFromName(it) }.firstOrNull()
+                .sortedByDescending { getNumberFromName(it) }.firstOrNull()
         return if (latestMetadataFileName != null) {
             logger.info { "Found $supportedExchange metadata file $latestMetadataFileName" }
             val latestMetadataFile = exchangeDirectory.resolve(latestMetadataFileName)
@@ -72,7 +79,7 @@ class FileExchangeMetadataRepository(
         val latestMetadataFileName = exchangeDirectory
                 .list()
                 .filter { it.contains("${supportedExchange.exchangeName}-xchange") }
-                .sortedByDescending { getMillisFromName(it) }.firstOrNull()
+                .sortedByDescending { getNumberFromName(it) }.firstOrNull()
         return if (latestMetadataFileName != null) {
             logger.info { "Found $supportedExchange xchange metadata file $latestMetadataFileName" }
             exchangeDirectory.resolve(latestMetadataFileName)
@@ -83,9 +90,9 @@ class FileExchangeMetadataRepository(
      * bittrex_12345.json -> 12345
      * bittrex-xchange_12345.json -> 12345
      */
-    private fun getMillisFromName(fileName: String): Long {
-        val exchangeNameAndMillis = fileName.split("_", ".json")
-        return exchangeNameAndMillis[1].toLong()
+    private fun getNumberFromName(fileName: String): Long {
+        val exchangeNameAndDateTime = fileName.split("_", ".json")
+        return exchangeNameAndDateTime[1].toLong()
     }
 
     private fun getOrCreateDirectory(supportedExchange: SupportedExchange): File {
