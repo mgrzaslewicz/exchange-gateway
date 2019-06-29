@@ -243,13 +243,13 @@ class KucoinExchangeMetadataFetcher : ExchangeMetadataFetcher {
         val currenciesMap = mutableMapOf<String, CurrencyMetadata>()
         kucoinSymbols.forEach { symbol ->
 
-            val pair = KucoinAdapters.adaptCurrencyPair(symbol.getSymbol())
+            val pair = KucoinAdapters.adaptCurrencyPair(symbol.symbol)
 
             val minSize = symbol.baseMinSize
             val maxSize = symbol.baseMaxSize
             val priceScale = symbol.priceIncrement.stripTrailingZeros().scale()
 
-            val amountScale = symbol.quoteIncrement.stripTrailingZeros().scale()
+            val amountScale = symbol.baseIncrement.stripTrailingZeros().scale()
             val currencyPair = pair.toCurrencyPair()
 
             currencyPairsMap[currencyPair] = CurrencyPairMetadata(
