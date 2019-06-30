@@ -115,7 +115,7 @@ class BittrexExchangeMetadataFetcher : ExchangeMetadataFetcher {
                                     minimumOrderValue = BigDecimal.ZERO,
                                     maximumPriceMultiplierUp = 10.toBigDecimal(),
                                     maximumPriceMultiplierDown = 0.1.toBigDecimal(),
-                                    buyFeeMultiplier = BigDecimal("0.0025")
+                                    buyFeeMultiplier = BigDecimal("0.0025") // https://bittrex.zendesk.com/hc/en-us/articles/115000199651-What-fees-does-Bittrex-charge-
                             )
                         }.toMap(),
                 currencyMetadata = exchange.exchangeMetaData.currencies.map {
@@ -260,7 +260,7 @@ class KucoinExchangeMetadataFetcher : ExchangeMetadataFetcher {
                     minimumOrderValue = BigDecimal.ZERO, // not present in kucoin api
                     maximumPriceMultiplierUp = 1.2.toBigDecimal(), // not present in kucoin api
                     maximumPriceMultiplierDown = 0.8.toBigDecimal(), // not present in kucoin api
-                    buyFeeMultiplier = BigDecimal.ZERO // not present in kucoin api
+                    buyFeeMultiplier = BigDecimal("0.001") // 0.1% https://www.kucoin.com/news/en-fee
             )
             currenciesMap[pair.base.currencyCode] = CurrencyMetadata(
                     scale = DEFAULT_SCALE
