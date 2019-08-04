@@ -14,6 +14,7 @@ import java.io.IOException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.locks.ReentrantLock
 
 fun ExchangeMetadata.asJson() = metadataObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
 
@@ -41,7 +42,14 @@ class FileExchangeMetadataRepository(
 ) {
     companion object : KLogging()
 
+    /**
+     * Metadata needs 2 files.
+     * Avoid writing only first and not 2nd yet
+     * and reading metadata in other thread expecting to have 2 files
+     */
+    private val updateLock = ReentrantLock()
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
+
     private fun getCurrentDateTimeAsString() = dateTimeFormatter.format(Instant.ofEpochMilli(currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime())
 
     fun saveExchangeMetadata(supportedExchange: SupportedExchange, exchangeMetadata: ExchangeMetadata, xchangeMetadataJson: XchangeMetadataJson) {
@@ -54,19 +62,29 @@ class FileExchangeMetadataRepository(
         val newXchangeMetadataFileName = "${supportedExchange.exchangeName}-xchange_$currentDateTime.json"
         val newMetadataFile = exchangeDirectory.resolve(newMetadataFileName)
         val newXchangeMetadataFile = exchangeDirectory.resolve(newXchangeMetadataFileName)
-
-        logger.info { "Writing $supportedExchange metadata to file ${newMetadataFile.absolutePath}" }
-        newMetadataFile.writeText(exchangeMetadata.asJson())
-        logger.info { "Writing $supportedExchange xchange metadata to file ${newXchangeMetadataFile.absolutePath}" }
-        newXchangeMetadataFile.writeText(xchangeMetadataJson.json)
+        updateLock.lock()
+        try {
+            logger.info { "Writing $supportedExchange metadata to file ${newMetadataFile.absolutePath}" }
+            newMetadataFile.writeText(exchangeMetadata.asJson())
+            logger.info { "Writing $supportedExchange xchange metadata to file ${newXchangeMetadataFile.absolutePath}" }
+            newXchangeMetadataFile.writeText(xchangeMetadataJson.json)
+        } finally {
+            updateLock.unlock()
+        }
     }
 
     fun getLatestExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadata? {
         val exchangeDirectory = getOrCreateDirectory(supportedExchange)
+        updateLock.lock()
         val latestMetadataFileName = exchangeDirectory
                 .list()
-                .filter { !it.contains("-xchange") && it.contains(supportedExchange.exchangeName) }
+                .filter {
+                    !it.contains("-xchange")
+                            && it.contains(supportedExchange.exchangeName)
+                            && it.endsWith(".json")
+                }
                 .sortedByDescending { getNumberFromName(it) }.firstOrNull()
+        updateLock.unlock()
         return if (latestMetadataFileName != null) {
             logger.info { "Found $supportedExchange metadata file $latestMetadataFileName" }
             val latestMetadataFile = exchangeDirectory.resolve(latestMetadataFileName)
