@@ -42,8 +42,8 @@ fun LimitOrder.toExchangeOrder(exchangeName: String) = ExchangeOrder(
 )
 
 fun ExchangeCancelOrderParams.xchangeOrderType(): Order.OrderType = when (this.orderType) {
-    ExchangeOrderType.ASK -> Order.OrderType.ASK
-    ExchangeOrderType.BID -> Order.OrderType.BID
+    ExchangeOrderType.ASK_SELL -> Order.OrderType.ASK
+    ExchangeOrderType.BID_BUY -> Order.OrderType.BID
 }
 
 open class XchangeUserExchangeTradeService(private val exchangeName: String,
@@ -128,7 +128,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
         return ExchangeOrder(
                 exchangeName = exchangeName,
                 orderId = orderId,
-                type = ExchangeOrderType.BID,
+                type = ExchangeOrderType.BID_BUY,
                 orderedAmount = amount,
                 filledAmount = BigDecimal.ZERO,
                 price = limitPrice,
@@ -151,7 +151,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
         return ExchangeOrder(
                 exchangeName = exchangeName,
                 orderId = orderId,
-                type = ExchangeOrderType.ASK,
+                type = ExchangeOrderType.ASK_SELL,
                 orderedAmount = amount,
                 filledAmount = BigDecimal.ZERO,
                 price = limitPrice,

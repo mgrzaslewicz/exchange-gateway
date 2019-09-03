@@ -14,9 +14,10 @@ class ExchangeMetadataProvider(
 ) : ExchangeMetadataService {
 
     init {
-        if (exchangeMetadataFetchers.map { it.supportedExchange }.toSet().size < exchangeMetadataFetchers.size) {
-            throw IllegalStateException("Provided fetchers are invalid, there are duplicated ones")
-        }
+        check(exchangeMetadataFetchers
+                .map { it.supportedExchange }
+                .toSet().size >= exchangeMetadataFetchers.size
+        ) { "Provided fetchers are invalid, there are duplicated ones" }
     }
 
     companion object : KLogging()
