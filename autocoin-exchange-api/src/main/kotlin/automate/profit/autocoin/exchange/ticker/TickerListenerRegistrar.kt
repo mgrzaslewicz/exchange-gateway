@@ -60,8 +60,12 @@ class DefaultTickerListenerRegistrar(override val exchangeName: SupportedExchang
                 logger.info { "New ticker at $exchangeName: $ticker" }
                 notifyAllCurrencyPairListeners(currencyPair, ticker)
             } else {
-                logger.info("No new ticker at $exchangeName for currency pair ${ticker.currencyPair}. Last timestamp: ${lastTicker[ticker.currencyPair]?.timestamp}, ${lastTicker[ticker.currencyPair]?.timestamp?.epochSecond}")
+                logger.info("No new ticker at $exchangeName for currency pair $currencyPair}. Last timestamp: ${lastTicker[ticker.currencyPair]?.timestamp}, ${lastTicker[ticker.currencyPair]?.timestamp?.epochSecond}")
+                notifyAllCurrencyPairListenersNoNewTicker(currencyPair)
             }
+        } else {
+            logger.info("No ticker at $exchangeName for currency pair $currencyPair")
+            notifyAllCurrencyPairListenersNoNewTicker(currencyPair)
         }
     }
 
@@ -78,6 +82,16 @@ class DefaultTickerListenerRegistrar(override val exchangeName: SupportedExchang
         currencyPairListeners[currencyPair]!!.forEach {
             try {
                 it.onTicker(ticker)
+            } catch (e: Exception) {
+                logger.error("Error during notifying $exchangeName-$currencyPair ticker listener: ${e.message}", e)
+            }
+        }
+    }
+
+    private fun notifyAllCurrencyPairListenersNoNewTicker(currencyPair: CurrencyPair) {
+        currencyPairListeners[currencyPair]!!.forEach {
+            try {
+                it.onNoNewTicker()
             } catch (e: Exception) {
                 logger.error("Error during notifying $exchangeName-$currencyPair ticker listener: ${e.message}", e)
             }

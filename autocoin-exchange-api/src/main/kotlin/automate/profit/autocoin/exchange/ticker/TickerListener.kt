@@ -18,6 +18,11 @@ interface TickerListener {
 
     fun onTicker(ticker: Ticker)
 
+    /**
+     * There was no new ticker on exchange but time has passed
+     */
+    fun onNoNewTicker() {}
+
     fun currencyPair(): CurrencyPair
 
 }
