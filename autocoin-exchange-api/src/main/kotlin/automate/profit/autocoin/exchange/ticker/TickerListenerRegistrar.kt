@@ -61,7 +61,7 @@ class DefaultTickerListenerRegistrar(override val exchangeName: SupportedExchang
                 notifyAllCurrencyPairListeners(currencyPair, ticker)
             } else {
                 logger.info("No new ticker at $exchangeName for currency pair $currencyPair}. Last timestamp: ${lastTicker[ticker.currencyPair]?.timestamp}, ${lastTicker[ticker.currencyPair]?.timestamp?.epochSecond}")
-                notifyAllCurrencyPairListenersNoNewTicker(currencyPair)
+                notifyAllCurrencyPairListenersNoNewTicker(currencyPair, ticker)
             }
         } else {
             logger.info("No ticker at $exchangeName for currency pair $currencyPair")
@@ -88,10 +88,10 @@ class DefaultTickerListenerRegistrar(override val exchangeName: SupportedExchang
         }
     }
 
-    private fun notifyAllCurrencyPairListenersNoNewTicker(currencyPair: CurrencyPair) {
+    private fun notifyAllCurrencyPairListenersNoNewTicker(currencyPair: CurrencyPair, ticker: Ticker? = null) {
         currencyPairListeners[currencyPair]!!.forEach {
             try {
-                it.onNoNewTicker()
+                it.onNoNewTicker(ticker)
             } catch (e: Exception) {
                 logger.error("Error during notifying $exchangeName-$currencyPair ticker listener: ${e.message}", e)
             }

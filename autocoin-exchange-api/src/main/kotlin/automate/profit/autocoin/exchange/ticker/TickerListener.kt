@@ -20,8 +20,9 @@ interface TickerListener {
 
     /**
      * There was no new ticker on exchange but time has passed
+     * @param ticker might be the same that was already fetched from exchange or none
      */
-    fun onNoNewTicker() {}
+    fun onNoNewTicker(ticker: Ticker?) {}
 
     fun currencyPair(): CurrencyPair
 
