@@ -6,7 +6,6 @@ import java.time.Instant
 
 data class Ticker(
         val currencyPair: CurrencyPair,
-        val last: BigDecimal,
         val ask: BigDecimal,
         val bid: BigDecimal,
         val timestamp: Instant?
