@@ -175,11 +175,13 @@ class TickerListenerRegistrarTest {
         class A : TickerListener {
             override fun onTicker(ticker: Ticker) {}
             override fun currencyPair(): CurrencyPair = bchBtcCurrencyPair
+            override fun exchange() = BITTREX
         }
 
         class B : TickerListener {
             override fun onTicker(ticker: Ticker) {}
             override fun currencyPair(): CurrencyPair = bchBtcCurrencyPair
+            override fun exchange() = BITTREX
         }
 
         val a = A()

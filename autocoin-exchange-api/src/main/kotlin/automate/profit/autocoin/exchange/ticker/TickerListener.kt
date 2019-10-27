@@ -1,5 +1,6 @@
 package automate.profit.autocoin.exchange.ticker
 
+import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 import java.time.Instant
@@ -25,4 +26,5 @@ interface TickerListener {
 
     fun currencyPair(): CurrencyPair
 
+    fun exchange(): SupportedExchange
 }
