@@ -6,7 +6,7 @@ enum class SupportedExchange(val exchangeName: String) {
     BITMEX("bitmex"),
     BITSTAMP("bitstamp"),
     BITTREX("bittrex"),
-    CRYPTOPIA("cryptopia"),
+    //CRYPTOPIA("cryptopia"), // exchange does not exist anymore
     GATEIO("gateio"),
     KRAKEN("kraken"),
     KUCOIN("kucoin"),

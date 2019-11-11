@@ -327,7 +327,6 @@ val defaultExchangeMetadataFetchers = listOf(
         DefaultExchangeMetadataFetcher(BITBAY),
         DefaultExchangeMetadataFetcher(BITMEX),
         DefaultExchangeMetadataFetcher(BITSTAMP),
-        DefaultExchangeMetadataFetcher(CRYPTOPIA),
         DefaultExchangeMetadataFetcher(GATEIO),
         DefaultExchangeMetadataFetcher(KRAKEN),
         DefaultExchangeMetadataFetcher(POLONIEX),

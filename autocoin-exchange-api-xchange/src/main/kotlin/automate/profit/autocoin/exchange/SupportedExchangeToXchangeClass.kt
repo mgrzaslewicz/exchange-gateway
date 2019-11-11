@@ -7,7 +7,6 @@ import org.knowm.xchange.bitbay.BitbayExchange
 import org.knowm.xchange.bitmex.BitmexExchange
 import org.knowm.xchange.bitstamp.BitstampExchange
 import org.knowm.xchange.bittrex.BittrexExchange
-import org.knowm.xchange.cryptopia.CryptopiaExchange
 import org.knowm.xchange.gateio.GateioExchange
 import org.knowm.xchange.kraken.KrakenExchange
 import org.knowm.xchange.kucoin.KucoinExchange
@@ -22,7 +21,6 @@ fun SupportedExchange.toXchangeClass(): KClass<out Exchange> {
         BITMEX -> BitmexExchange::class
         BITSTAMP -> BitstampExchange::class
         BITTREX -> BittrexExchange::class
-        CRYPTOPIA -> CryptopiaExchange::class
         GATEIO -> GateioExchange::class
         KRAKEN -> KrakenExchange::class
         KUCOIN -> KucoinExchange::class
