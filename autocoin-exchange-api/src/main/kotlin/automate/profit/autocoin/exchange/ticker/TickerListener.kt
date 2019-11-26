@@ -9,6 +9,8 @@ data class Ticker(
         val currencyPair: CurrencyPair,
         val ask: BigDecimal,
         val bid: BigDecimal,
+        val baseCurrency24hVolume: BigDecimal,
+        val counterCurrency24hVolume: BigDecimal,
         val timestamp: Instant?
 ) {
     fun hasTimestamp() = this.timestamp != null

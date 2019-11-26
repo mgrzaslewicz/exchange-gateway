@@ -8,19 +8,25 @@ data class TickerDto(
         val currencyPair: CurrencyPair,
         val ask: Double,
         val bid: Double,
+        val baseCurrency24hVolume: Double,
+        val counterCurrency24hVolume: Double,
         val timestampMillis: Long?
 ) {
     fun toTicker() = Ticker(
             currencyPair = currencyPair,
             ask = ask.toBigDecimal(),
             bid = bid.toBigDecimal(),
+            baseCurrency24hVolume = baseCurrency24hVolume.toBigDecimal(),
+            counterCurrency24hVolume = counterCurrency24hVolume.toBigDecimal(),
             timestamp = if (timestampMillis != null) Instant.ofEpochMilli(timestampMillis) else null
     )
 }
 
 fun Ticker.toDto() = TickerDto(
-        currencyPair = this.currencyPair.toUpperCase(),
-        ask = this.ask.toDouble(),
-        bid = this.bid.toDouble(),
-        timestampMillis = this.timestamp?.toEpochMilli()
+        currencyPair = currencyPair.toUpperCase(),
+        ask = ask.toDouble(),
+        bid = bid.toDouble(),
+        baseCurrency24hVolume = baseCurrency24hVolume.toDouble(),
+        counterCurrency24hVolume = counterCurrency24hVolume.toDouble(),
+        timestampMillis = timestamp?.toEpochMilli()
 )
