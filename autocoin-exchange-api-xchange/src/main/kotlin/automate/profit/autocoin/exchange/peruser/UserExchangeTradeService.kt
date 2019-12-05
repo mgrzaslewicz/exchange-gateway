@@ -41,6 +41,15 @@ fun LimitOrder.toExchangeOrder(exchangeName: String) = ExchangeOrder(
         timestamp = this.timestamp?.toInstant()
 )
 
+fun LimitOrder.toOrderBookExchangeOrder(exchangeName: String) = OrderBookExchangeOrder(
+        exchangeName = exchangeName,
+        type = this.type.toExchangeOrderType(),
+        orderedAmount = this.originalAmount,
+        price = this.averagePrice ?: this.limitPrice,
+        currencyPair = this.currencyPair.toCurrencyPair(),
+        timestamp = this.timestamp?.toInstant()
+)
+
 fun ExchangeCancelOrderParams.xchangeOrderType(): Order.OrderType = when (this.orderType) {
     ExchangeOrderType.ASK_SELL -> Order.OrderType.ASK
     ExchangeOrderType.BID_BUY -> Order.OrderType.BID
@@ -49,11 +58,17 @@ fun ExchangeCancelOrderParams.xchangeOrderType(): Order.OrderType = when (this.o
 open class XchangeUserExchangeTradeService(private val exchangeName: String,
                                            private val wrapped: XchangeTradeService) : UserExchangeTradeService {
 
-    override fun getOpenOrders() = wrapped.getOpenOrders().allOpenOrders.filter { it is LimitOrder }.map { it as LimitOrder }.map { it.toExchangeOrder(exchangeName) }
+    override fun getOpenOrders() = wrapped.getOpenOrders()
+            .allOpenOrders
+            .filterIsInstance<LimitOrder>()
+            .map { it.toExchangeOrder(exchangeName) }
 
     override fun getOpenOrders(currencyPair: CurrencyPair): List<ExchangeOrder> {
         val params = DefaultOpenOrdersParamCurrencyPair(currencyPair.toXchangeCurrencyPair())
-        return wrapped.getOpenOrders(params).allOpenOrders.filter { it is LimitOrder }.map { (it as LimitOrder).toExchangeOrder(exchangeName) }
+        return wrapped.getOpenOrders(params)
+                .allOpenOrders
+                .filterIsInstance<LimitOrder>()
+                .map { it.toExchangeOrder(exchangeName) }
     }
 
     companion object : KLogging()
