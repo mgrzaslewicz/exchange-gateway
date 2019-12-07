@@ -1,7 +1,7 @@
 package automate.profit.autocoin.order
 
 import automate.profit.autocoin.exchange.order.ExchangeOrderType
-import automate.profit.autocoin.exchange.order.OrderBookExchangeOrder
+import automate.profit.autocoin.exchange.orderbook.OrderBookExchangeOrder
 
 data class OrderBookExchangeOrderDto(
         val exchangeName: String,

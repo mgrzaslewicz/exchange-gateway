@@ -1,8 +1,7 @@
-package automate.profit.autocoin.exchange
+package automate.profit.autocoin.exchange.ticker
 
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
-import automate.profit.autocoin.exchange.ticker.*
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat

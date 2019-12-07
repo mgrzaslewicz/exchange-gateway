@@ -2,7 +2,6 @@ package automate.profit.autocoin.exchange.order
 
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
-import java.time.Instant
 
 enum class ExchangeOrderType {
     ASK_SELL,

@@ -1,4 +1,4 @@
-package automate.profit.autocoin.exchange.order
+package automate.profit.autocoin.exchange.orderbook
 
 data class OrderBook(
         val buyOrders: List<OrderBookExchangeOrder>,
