@@ -12,19 +12,19 @@ import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeTradeService
 import com.nhaarman.mockitokotlin2.whenever
 import mu.KLogging
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.knowm.xchange.dto.trade.LimitOrder
 import org.knowm.xchange.dto.trade.OpenOrders
 import org.knowm.xchange.service.trade.TradeService
 import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams
 import org.mockito.Mock
 import org.mockito.Mockito.any
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.jupiter.MockitoExtension
 import java.math.BigDecimal
 
-@RunWith(MockitoJUnitRunner::class)
+@ExtendWith(MockitoExtension::class)
 class XchangeUserExchangeTradeServiceTest {
     companion object : KLogging()
 
@@ -75,7 +75,7 @@ class XchangeUserExchangeTradeServiceTest {
             timestamp = null
     )
 
-    @Before
+    @BeforeEach
     fun setUp() {
         tested = XchangeUserExchangeTradeService(KUCOIN.exchangeName, wrappedTradeService)
     }

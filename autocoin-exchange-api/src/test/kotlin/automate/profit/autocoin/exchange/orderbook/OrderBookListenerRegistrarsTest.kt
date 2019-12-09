@@ -6,10 +6,11 @@ import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.junit.jupiter.MockitoExtension
 
 class TestOrderBookListener(private val currencyPair: CurrencyPair, private val supportedExchange: SupportedExchange) : OrderBookListener {
     override fun onOrderBook(orderBook: OrderBook) {}
@@ -18,7 +19,7 @@ class TestOrderBookListener(private val currencyPair: CurrencyPair, private val 
 }
 
 
-@RunWith(MockitoJUnitRunner::class)
+@ExtendWith(MockitoExtension::class)
 class OrderBookListenerRegistrarsTest {
 
     private lateinit var bittrexListenerRegistrar: OrderBookListenerRegistrar
@@ -28,7 +29,7 @@ class OrderBookListenerRegistrarsTest {
     private lateinit var tickerListenerRegistrars: OrderBookListenerRegistrars
     private val btcLtc = CurrencyPair.of("BTC/LTC")
 
-    @Before
+    @BeforeEach
     fun setup() {
         bittrexListenerRegistrar = spy(DefaultOrderBookListenerRegistrar(BITTREX, mock()))
         bitbayListenerRegistrar = spy(DefaultOrderBookListenerRegistrar(BITBAY, mock()))
@@ -84,9 +85,12 @@ class OrderBookListenerRegistrarsTest {
         verify(bittrexListenerRegistrar).removeOrderBookListener(listener)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun shouldFailWhenAddingExchangeDuplicates() {
-        DefaultOrderBookListenerRegistrars(listOf(bittrexListenerRegistrar, bitbayListenerRegistrar, bitbayListenerRegistrar), mock())
+        assertThrows<IllegalArgumentException> {
+            DefaultOrderBookListenerRegistrars(listOf(bittrexListenerRegistrar, bitbayListenerRegistrar, bitbayListenerRegistrar), mock())
+        }
+
     }
 
 }

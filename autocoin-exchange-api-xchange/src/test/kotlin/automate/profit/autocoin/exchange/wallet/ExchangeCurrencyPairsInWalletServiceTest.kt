@@ -6,16 +6,17 @@ import automate.profit.autocoin.exchange.metadata.CurrencyMetadata
 import automate.profit.autocoin.exchange.metadata.CurrencyPairMetadata
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadata
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadataService
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import mu.KLogging
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.junit.jupiter.MockitoExtension
 import java.math.BigDecimal
 
 
-@RunWith(MockitoJUnitRunner::class)
+@ExtendWith(MockitoExtension::class)
 class ExchangeCurrencyPairsInWalletServiceTest {
 
     private companion object : KLogging()

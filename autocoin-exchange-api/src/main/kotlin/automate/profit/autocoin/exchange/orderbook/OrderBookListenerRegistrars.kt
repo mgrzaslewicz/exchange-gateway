@@ -16,7 +16,7 @@ interface OrderBookListenerRegistrars {
 
 class DefaultOrderBookListenerRegistrars(
         initialTickerListenerRegistrarList: List<OrderBookListenerRegistrar>,
-        private val tickerListenerRegistrarProvider: OrderBookListenerRegistrarProvider
+        private val orderBookListenerRegistrarProvider: OrderBookListenerRegistrarProvider
 ) : OrderBookListenerRegistrars {
 
     private val listenerRegistrarMap: MutableMap<SupportedExchange, OrderBookListenerRegistrar>
@@ -50,7 +50,7 @@ class DefaultOrderBookListenerRegistrars(
 
     private fun getOrderBookListenerRegistrar(supportedExchange: SupportedExchange): OrderBookListenerRegistrar {
         return listenerRegistrarMap.computeIfAbsent(supportedExchange) {
-            tickerListenerRegistrarProvider.createOrderBookListenerRegistrar(supportedExchange)
+            orderBookListenerRegistrarProvider.createOrderBookListenerRegistrar(supportedExchange)
         }
     }
 

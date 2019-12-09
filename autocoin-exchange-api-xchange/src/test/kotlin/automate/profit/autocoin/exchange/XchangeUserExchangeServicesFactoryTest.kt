@@ -9,33 +9,31 @@ import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
 import automate.profit.autocoin.exchange.peruser.XchangeFactory
 import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeServicesFactory
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.io.File
 import kotlin.test.assertFailsWith
 
 class XchangeUserExchangeServicesFactoryTest {
-    private val tempFolder = TemporaryFolder()
+    @TempDir
+    lateinit var tempFolder: File
     private lateinit var userExchangeServicesFactory: UserExchangeServicesFactory
     private lateinit var xchangeFactory: XchangeFactory
 
-    @Before
+    @BeforeEach
     fun setup() {
-        tempFolder.create()
         xchangeFactory = spy(XchangeFactory())
         userExchangeServicesFactory = XchangeUserExchangeServicesFactory(
                 xchangeFactory,
-                ExchangeMetadataProvider(exchangeMetadataFetchers, FileExchangeMetadataRepository(tempFolder.root)),
+                ExchangeMetadataProvider(exchangeMetadataFetchers, FileExchangeMetadataRepository(tempFolder)),
                 ExchangeSpecificationVerifier()
         )
-    }
-
-    @After
-    fun cleanup() {
-        tempFolder.delete()
     }
 
     @Test
