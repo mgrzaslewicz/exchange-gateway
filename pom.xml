@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>automate.profit</groupId>
@@ -10,7 +11,8 @@
     <properties>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEAutocoinExchangesTesncoding>UTF-8</project.reporting.outputEAutocoinExchangesTesncoding>
+        <project.reporting.outputEAutocoinExchangesTesncoding>UTF-8
+        </project.reporting.outputEAutocoinExchangesTesncoding>
         <java.version>12</java.version>
         <junit.version>5.5.2</junit.version>
         <kotlin.version>1.3.61</kotlin.version>
@@ -26,8 +28,8 @@
         <connection>scm:git:git://bitbucket.org:autocointrader/autocoin-exchange-engine.git</connection>
         <developerConnection>scm:git:git@bitbucket.org:autocointrader/autocoin-exchange-engine.git</developerConnection>
         <url>https://bitbucket.org/autocointrader/autocoin-exchange-engine</url>
-      <tag>autocoin-exchange-engine-1.0.0</tag>
-  </scm>
+        <tag>autocoin-exchange-engine-1.0.0</tag>
+    </scm>
 
     <build>
         <plugins>
@@ -59,7 +61,8 @@
                         <artifactId>maven-release-plugin</artifactId>
                         <version>2.5.3</version>
                         <configuration>
-                            <goals>install</goals> <!-- This will call 'install' instead of 'deploy' allowing to use the plugin without aritfact store (e.g. nexus) -->
+                            <goals>install
+                            </goals> <!-- This will call 'install' instead of 'deploy' allowing to use the plugin without aritfact store (e.g. nexus) -->
                         </configuration>
                     </plugin>
                 </plugins>
@@ -119,6 +122,12 @@
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-engine</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
                 <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
