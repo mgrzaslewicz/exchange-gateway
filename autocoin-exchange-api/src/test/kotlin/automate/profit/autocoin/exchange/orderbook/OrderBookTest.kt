@@ -60,35 +60,29 @@ class OrderBookTest {
         }
     }
 
-    @ParameterizedTest(name = "Weighted average price should be {0} for amount {1}")
+    @ParameterizedTest(name = "Weighted average of currencyX price should be {0} for amount {1}")
     @CsvSource(*[
         "1.50000000, 9.0",
         "1.50000000, 10.0",
-        /* 'avg = (10.0 * 1.5 + 5 * 1.45) / 15.0 = 1.48(3)' */
-        "1.48333333, 15.0",
-        /* whole order book */
-        "1.41533333, 75",
-        /* more than in order book */
-        "null, 76"
+        "1.48333333, 15.0", // 'avg = (10.0 * 1.5 + 5 * 1.45) / 15.0 = 1.48(3)'
+        "1.41533333, 75", // whole order book
+        "null, 76" // more than in order book
     ])
     fun shouldCalculateWeightedAveragePrice(@ConvertWith(NullableConverter::class) expectedWeightedAveragePrice: BigDecimal?, amount: BigDecimal) {
-        val orderBook = OrderBook(buyOrders = sampleOrders, sellOrders = sampleOrders)
+        val orderBook = OrderBook(buyOrders = sampleOrders, sellOrders = emptyList())
         assertThat(orderBook.getWeightedAverageBuyPrice(amount)).isEqualTo(expectedWeightedAveragePrice)
-        assertThat(orderBook.getWeightedAverageSellPrice(amount)).isEqualTo(expectedWeightedAveragePrice)
     }
 
-    @ParameterizedTest(name = "Weighted average USD price should be {0} for USD price {1} and amount {2}")
+    @ParameterizedTest(name = "Weighted average of currencyX price should be {0} for USD price {1} and amount {2}")
     @CsvSource(*[
-        "2.00000000, 0.75, 2.0",
-        "1.97481481, 0.75, 15.0",
-        "1.91407408, 0.75, 45.0",
-        "1.89600000, 0.75, 60.0",
-        /* more than in order book */
-        "null, 0.75, 80.0"
+        "1.50000000, 10.0, 90.0", // 90.0 / 10.0 = 9 units of currencyY, value of first order is 15.0 currencyY
+        "1.50000000, 8.0, 120.0", // 15 units of currencyY
+        "1.48341014, 10.0, 222.5", // 22.25 units
+        "1.41533333, 10.0, 1061.49", // 106.149 units, whole order book is 106.15
+        "null, 10.0, 1070.0" // 107 units, more than in order book
     ])
-    fun shouldCalculateWeightedAverageBuyPriceInUsd(@ConvertWith(NullableConverter::class) expectedAverageUsdPrice: BigDecimal?, usdPrice: BigDecimal, usdAmount: BigDecimal) {
-        val orderBook = OrderBook(buyOrders = sampleOrders, sellOrders = sampleOrders)
-        assertThat(orderBook.getWeightedAverageBuyPriceInOtherCurrency(usdAmount, usdPrice)).isEqualTo(expectedAverageUsdPrice)
-        assertThat(orderBook.getWeightedAverageSellPriceInOtherCurrency(usdAmount, usdPrice)).isEqualTo(expectedAverageUsdPrice)
+    fun shouldCalculateWeightedAverageBuyPriceInUsd(@ConvertWith(NullableConverter::class) expectedAveragePrice: BigDecimal?, usdPrice: BigDecimal, usdAmount: BigDecimal) {
+        val orderBook = OrderBook(buyOrders = sampleOrders, sellOrders = emptyList())
+        assertThat(orderBook.getWeightedAverageBuyPrice(usdAmount, usdPrice)).isEqualTo(expectedAveragePrice)
     }
 }

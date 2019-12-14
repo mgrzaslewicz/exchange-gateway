@@ -12,4 +12,6 @@ data class OrderBookExchangeOrder(
         val price: BigDecimal,
         val currencyPair: CurrencyPair,
         val timestamp: Instant?
-)
+) {
+    fun valueInCounterCurrency() = orderedAmount.multiply(price)
+}
