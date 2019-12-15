@@ -17,7 +17,7 @@ interface OrderBookListenerRegistrar {
 }
 
 
-class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExchange, private val userExchagneOrderBookService
+class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExchange, private val userExchangeOrderBookService
 : UserExchangeOrderBookService) : OrderBookListenerRegistrar {
 
     private val logger = KotlinLogging.logger("${DefaultOrderBookListenerRegistrar::class.java.name}.$exchangeName")
@@ -31,13 +31,13 @@ class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExch
         logger.info("Registering listener for $exchangeName-$currencyPair")
         return if (!listeners.contains(currencyPair)) {
             listeners[currencyPair] = mutableSetOf(orderBookListener)
-            logger.info("Registered first listener for $exchangeName-$currencyPair")
+            logger.info { "Registered first listener for $exchangeName-$currencyPair" }
             true
         } else if (listeners[currencyPair]!!.add(orderBookListener)) {
-            logger.info("Registered another listener for $exchangeName-$currencyPair")
+            logger.info { "Registered another listener for $exchangeName-$currencyPair" }
             true
         } else {
-            logger.warn("Registered another listener for $exchangeName-$currencyPair")
+            logger.warn { "Registered another listener for $exchangeName-$currencyPair" }
             false
         }
     }
@@ -48,33 +48,33 @@ class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExch
             listeners.keys.forEach { currencyPair ->
                 jobs += launch { fetchOrderBookAndNotifyListeners(currencyPair) }
             }
-            logger.info("Waiting for all currencies at $exchangeName...")
+            logger.info { "Waiting for all currencies at $exchangeName..." }
             jobs.forEach { it.join() }
         }
-        logger.info("All currencies done at $exchangeName.")
+        logger.info { "All currencies done at $exchangeName." }
     }
 
     private fun fetchOrderBookAndNotifyListeners(currencyPair: CurrencyPair) {
         val orderBook = getOrderBookForCurrencyPair(currencyPair)
         if (orderBook != null) {
             if (isNew(orderBook, currencyPair)) {
-                logger.info { "New order book at $exchangeName: $orderBook" }
+                logger.debug { "New order book at $exchangeName: $orderBook" }
                 notifyAllCurrencyPairListeners(currencyPair, orderBook)
             } else {
-                logger.info("No new order book at $exchangeName for currency pair $currencyPair}")
+                logger.debug { "No new order book at $exchangeName for currency pair $currencyPair}" }
                 notifyAllListenersNoNewOrderBook(currencyPair, orderBook)
             }
         } else {
-            logger.info("No ticker at $exchangeName for currency pair $currencyPair")
+            logger.debug { "No new order books at $exchangeName for currency pair $currencyPair" }
             notifyAllListenersNoNewOrderBook(currencyPair)
         }
     }
 
     private fun getOrderBookForCurrencyPair(currencyPair: CurrencyPair): OrderBook? {
         return try {
-            userExchagneOrderBookService.getOrderBook(currencyPair)
+            userExchangeOrderBookService.getOrderBook(currencyPair)
         } catch (e: Exception) {
-            logger.error("Error getting ticker at $exchangeName for currency pair $currencyPair: ${e.message}", e)
+            logger.error(e) { "Error getting order book at $exchangeName for currency pair $currencyPair: ${e.message}" }
             null
         }
     }
@@ -84,7 +84,7 @@ class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExch
             try {
                 it.onOrderBook(orderBook)
             } catch (e: Exception) {
-                logger.error("Error during notifying $exchangeName-$currencyPair ticker listener: ${e.message}", e)
+                logger.error(e) { "Error during notifying $exchangeName-$currencyPair order book listener: ${e.message}" }
             }
         }
     }
@@ -94,7 +94,7 @@ class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExch
             try {
                 it.onNoNewOrderBook(orderBook)
             } catch (e: Exception) {
-                logger.error("Error during notifying $exchangeName-$currencyPair ticker listener: ${e.message}", e)
+                logger.error(e) { "Error during notifying $exchangeName-$currencyPair order book listener: ${e.message}" }
             }
         }
     }
@@ -112,14 +112,14 @@ class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExch
         val currencyPair = orderBookListener.currencyPair()
         return if (listeners.containsKey(currencyPair)
                 && listeners[currencyPair]!!.remove(orderBookListener)) {
-            logger.info("Removed ticker listener for $exchangeName-$currencyPair")
+            logger.info { "Removed order book listener for $exchangeName-$currencyPair" }
             if (listeners[currencyPair]!!.isEmpty()) {
                 listeners.remove(currencyPair)
-                logger.info("No ticker listeners left for currency pair $exchangeName-$currencyPair, removed empty group")
+                logger.info { "No order book listeners left for currency pair $exchangeName-$currencyPair, removed empty group" }
             }
             true
         } else {
-            logger.info("Ticker listener for $exchangeName-$currencyPair not removed, there was none matching")
+            logger.info { "Order book listener for $exchangeName-$currencyPair not removed, there was none matching" }
             false
         }
     }
@@ -127,11 +127,11 @@ class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExch
     override fun <T : OrderBookListener> getListenersOfClass(`class`: Class<T>): Map<CurrencyPair, Set<T>> {
         val result: MutableMap<CurrencyPair, MutableSet<T>> = mutableMapOf()
         listeners.keys.forEach { currencyPair ->
-            listeners[currencyPair]?.forEach { tickerListener ->
-                if (tickerListener.javaClass.isAssignableFrom(`class`)) {
+            listeners[currencyPair]?.forEach { orderBookListener ->
+                if (orderBookListener.javaClass.isAssignableFrom(`class`)) {
                     if (!result.containsKey(currencyPair)) result[currencyPair] = mutableSetOf()
                     @Suppress("UNCHECKED_CAST")
-                    result[currencyPair]?.add(tickerListener as T)
+                    result[currencyPair]?.add(orderBookListener as T)
                 }
             }
         }
