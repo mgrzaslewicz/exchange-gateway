@@ -65,7 +65,7 @@ class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExch
                 notifyAllListenersNoNewOrderBook(currencyPair, orderBook)
             }
         } else {
-            logger.debug { "No new order books at $exchangeName for currency pair $currencyPair" }
+            logger.debug { "Null order book at $exchangeName for currency pair $currencyPair" }
             notifyAllListenersNoNewOrderBook(currencyPair)
         }
     }
