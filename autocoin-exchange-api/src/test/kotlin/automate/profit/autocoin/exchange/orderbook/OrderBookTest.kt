@@ -1,7 +1,11 @@
 package automate.profit.autocoin.exchange.orderbook
 
 import automate.profit.autocoin.exchange.currency.CurrencyPair
+import automate.profit.autocoin.exchange.order.ExchangeOrderType
 import automate.profit.autocoin.exchange.order.ExchangeOrderType.BID_BUY
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -15,6 +19,7 @@ import java.time.Instant
 
 
 class OrderBookTest {
+    private val objectMapper = ObjectMapper().registerModule(KotlinModule())
     private val currencyPair = CurrencyPair.of("currencyX/currencyY")
     private val timestampDoesNotMatter: Instant? = null
 
@@ -1079,7 +1084,7 @@ class OrderBookTest {
                     )
             )
     )
-    private val sampleOrders = listOf(
+    private val sampleBuyOrders = listOf(
             OrderBookExchangeOrder(
                     exchangeName = "exchangeA",
                     type = BID_BUY,
@@ -1131,34 +1136,71 @@ class OrderBookTest {
         "1.41533333, 75", // whole order book
         "null, 76" // more than in order book
     ])
-    fun shouldCalculateWeightedAveragePrice(@ConvertWith(NullableConverter::class) expectedWeightedAveragePrice: BigDecimal?, amount: BigDecimal) {
-        val orderBook = OrderBook(buyOrders = sampleOrders, sellOrders = emptyList())
-        assertThat(orderBook.getWeightedAverageBuyPrice(amount)).isEqualTo(expectedWeightedAveragePrice)
+    fun shouldCalculateWeightedAverageBuyPrice(
+            @ConvertWith(NullableConverter::class) expectedWeightedAveragePrice: BigDecimal?,
+            amount: BigDecimal
+    ) {
+        val orderBook = OrderBook(buyOrders = sampleBuyOrders, sellOrders = emptyList())
+        val avgPrice = orderBook.getWeightedAverageBuyPrice(amount)
+        assertThat(avgPrice?.averagePrice).isEqualTo(expectedWeightedAveragePrice)
+        if (avgPrice != null) {
+            assertThat(avgPrice.baseCurrencyAmount).isEqualTo(amount.setScale(8))
+        }
     }
 
     @ParameterizedTest(name = "Weighted average of currencyX price should be {0} for USD price {1} and amount {2}")
     @CsvSource(*[
-        "1.50000000, 10.0, 90.0", // 90.0 / 10.0 = 9 units of currencyY, value of first order is 15.0 currencyY
-        "1.50000000, 8.0, 120.0", // 15 units of currencyY
-        "1.48333333, 10.0, 222.5", // 22.25 units
-        "1.41533333, 10.0, 1061.5", // 106.15 units, whole order book
-        "null, 10.0, 1061.6" // more than in order book
+        "1.50000000, 6.00000000, 10.0, 90.0", // 90.0 / 10.0 = 9 units of currencyY, value of first order is 15.0 currencyY
+        "1.50000000, 10.00000000, 8.0, 120.0", // 15 units of currencyY
+        "1.48333333, 15.00000000, 10.0, 222.5", // 22.25 units
+        "1.41533333, 75.00000000, 10.0, 1061.5", // 106.15 units, whole order book
+        "null, null, 10.0, 1061.6" // more than in order book
     ])
-    fun shouldCalculateWeightedAverageBuyPriceInUsd(@ConvertWith(NullableConverter::class) expectedAveragePrice: BigDecimal?, usdPrice: BigDecimal, usdAmount: BigDecimal) {
-        val orderBook = OrderBook(buyOrders = sampleOrders, sellOrders = emptyList())
-        assertThat(orderBook.getWeightedAverageBuyPrice(usdAmount, usdPrice)).isEqualTo(expectedAveragePrice)
+    fun shouldCalculateWeightedAverageBuyPriceInUsd(
+            @ConvertWith(NullableConverter::class) expectedAveragePrice: BigDecimal?,
+            @ConvertWith(NullableConverter::class) expectedBaseCurrencyAmount: BigDecimal?,
+            usdPrice: BigDecimal,
+            usdAmount: BigDecimal
+    ) {
+        val orderBook = OrderBook(buyOrders = sampleBuyOrders, sellOrders = emptyList())
+        val avgPrice = orderBook.getWeightedAverageBuyPrice(usdAmount, usdPrice)
+        assertThat(avgPrice?.averagePrice).isEqualTo(expectedAveragePrice)
+        assertThat(avgPrice?.baseCurrencyAmount).isEqualTo(expectedBaseCurrencyAmount)
     }
 
     @Test
-    fun testGateioOrderBookAveragePrice() {
+    fun testGateioOrderBookAverageBuyPrice() {
         val avgPriceHavingUsd = gateioOrderBook.getWeightedAverageBuyPrice(BigDecimal(200.0), BigDecimal(7150.31))
-        assertThat(avgPriceHavingUsd).isEqualTo(BigDecimal("0.00023049"))
+        assertThat(avgPriceHavingUsd?.averagePrice).isEqualTo(BigDecimal("0.00023049"))
+        assertThat(avgPriceHavingUsd?.baseCurrencyAmount).isEqualTo(BigDecimal("121.35370407"))
     }
 
     @Test
-    fun testKucoinOrderBookAveragePrice() {
+    fun testKucoinOrderBookAverageBuyPrice() {
         val avgPriceHavingUsd = kucoinOrderBook.getWeightedAverageBuyPrice(BigDecimal(1000.0), BigDecimal(7150.31))
-        assertThat(avgPriceHavingUsd).isEqualTo(BigDecimal("0.00000196"))
+        assertThat(avgPriceHavingUsd?.averagePrice).isEqualTo(BigDecimal("0.00000196"))
+        assertThat(avgPriceHavingUsd?.baseCurrencyAmount).isEqualTo(BigDecimal("71354.12053920"))
+    }
+
+    @Test
+    fun testGateioOntUsdtOrderBookAverageBuyPrice() {
+        val orderBookString = this.javaClass.getResource("/gateio-ont-usdt-orderbook.json").readText()
+        val json = objectMapper.readTree(orderBookString)
+        val buyOrdersJsonArray = json.get("buyOrders") as ArrayNode
+        val buyOrders = buyOrdersJsonArray.map {
+            OrderBookExchangeOrder(
+                    exchangeName = it.get("exchangeName").textValue(),
+                    type = ExchangeOrderType.valueOf(it.get("type").textValue()),
+                    orderedAmount = BigDecimal(it.get("orderedAmount").doubleValue()),
+                    price = BigDecimal(it.get("price").textValue()),
+                    currencyPair = CurrencyPair(base = it.get("baseCurrency").textValue(), counter = it.get("counterCurrency").textValue()),
+                    timestamp = null
+            )
+        }
+        val orderBook = OrderBook(buyOrders = buyOrders, sellOrders = emptyList())
+        val avgPriceHavingUsd = orderBook.getWeightedAverageBuyPrice(BigDecimal(1000.0), BigDecimal("1.00909226"))
+        assertThat(avgPriceHavingUsd?.averagePrice).isEqualTo(BigDecimal("0.55100000"))
+        assertThat(avgPriceHavingUsd?.baseCurrencyAmount).isEqualTo(BigDecimal("1798.52933632"))
     }
 
 }
