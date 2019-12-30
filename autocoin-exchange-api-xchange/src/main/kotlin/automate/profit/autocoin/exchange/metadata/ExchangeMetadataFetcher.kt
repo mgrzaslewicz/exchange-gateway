@@ -296,9 +296,12 @@ class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedEx
                 }
                 .map {
                     val currencyPair = it.key.toCurrencyPair()
+                    if (it.value.priceScale == null) {
+                        logger.warn { "supportedExchange-${it.key} priceScale is not provided" }
+                    }
                     currencyPair to CurrencyPairMetadata(
-                            amountScale = it.value.priceScale,
-                            priceScale = it.value.priceScale,
+                            amountScale = it.value.priceScale ?: DEFAULT_SCALE,
+                            priceScale = it.value.priceScale ?: DEFAULT_SCALE,
                             minimumAmount = it.value.minimumAmount.orMin(),
                             maximumAmount = it.value.maximumAmount.orMax(),
                             minimumOrderValue = BigDecimal.ZERO,
@@ -324,12 +327,15 @@ class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedEx
 }
 
 val defaultExchangeMetadataFetchers = listOf(
+        DefaultExchangeMetadataFetcher(BIBOX),
         DefaultExchangeMetadataFetcher(BITBAY),
         DefaultExchangeMetadataFetcher(BITMEX),
         DefaultExchangeMetadataFetcher(BITSTAMP),
+        DefaultExchangeMetadataFetcher(BITZ),
         DefaultExchangeMetadataFetcher(GATEIO),
         DefaultExchangeMetadataFetcher(KRAKEN),
         DefaultExchangeMetadataFetcher(POLONIEX),
+        DefaultExchangeMetadataFetcher(TRADEOGRE),
         DefaultExchangeMetadataFetcher(YOBIT)
 )
 
