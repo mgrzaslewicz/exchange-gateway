@@ -4,7 +4,7 @@
 
     <groupId>automate.profit</groupId>
     <artifactId>autocoin-exchange-engine</artifactId>
-    <version>1.0.44-SNAPSHOT</version>
+    <version>1.0.44</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -27,7 +27,7 @@
         <connection>scm:git:git://bitbucket.org:autocointrader/autocoin-exchange-engine.git</connection>
         <developerConnection>scm:git:git@bitbucket.org:autocointrader/autocoin-exchange-engine.git</developerConnection>
         <url>https://bitbucket.org/autocointrader/autocoin-exchange-engine</url>
-        <tag>autocoin-exchange-engine-1.0.0</tag>
+        <tag>autocoin-exchange-engine-1.0.44</tag>
     </scm>
 
     <build>
