@@ -332,6 +332,7 @@ val overridenExchangeMetadataFetchers = listOf(
         BittrexExchangeMetadataFetcher(),
         BinanceExchangeMetadataFetcher(),
         KucoinExchangeMetadataFetcher(),
+        DefaultExchangeMetadataFetcher(BITBAY, preventFromLoadingStaticJsonFile = false),
         DefaultExchangeMetadataFetcher(GEMINI, preventFromLoadingStaticJsonFile = false)
 )
 
