@@ -15,6 +15,7 @@ import org.knowm.xchange.coinbasepro.CoinbaseProExchange
 import org.knowm.xchange.coinex.CoinexExchange
 import org.knowm.xchange.gateio.GateioExchange
 import org.knowm.xchange.gemini.v1.GeminiExchange
+import org.knowm.xchange.hitbtc.v2.HitbtcExchange
 import org.knowm.xchange.idex.IdexExchange
 import org.knowm.xchange.kraken.KrakenExchange
 import org.knowm.xchange.kucoin.KucoinExchange
@@ -34,6 +35,7 @@ fun SupportedExchange.toXchangeClass(): KClass<out Exchange> {
         BITSTAMP -> BitstampExchange::class
         BITTREX -> BittrexExchange::class
         BITZ -> BitZExchange::class
+        HITBTC -> HitbtcExchange::class
         COINBASEPRO -> CoinbaseProExchange::class
         COINEX -> CoinexExchange::class
         GATEIO -> GateioExchange::class

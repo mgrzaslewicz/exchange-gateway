@@ -2,7 +2,7 @@ package automate.profit.autocoin.exchange
 
 /**
  * After adding new exchange remember to update:
- * SupportedExchangeToXchangeClass
+ * SupportedExchange.toXchangeClass
  */
 enum class SupportedExchange(val exchangeName: String) {
     BIBOX("bibox"),
@@ -14,6 +14,7 @@ enum class SupportedExchange(val exchangeName: String) {
     BITSTAMP("bitstamp"),
     BITTREX("bittrex"),
     BITZ("bitz"), // requires key for reading ticker
+    HITBTC("hitbtc"),
     COINBASEPRO("coinbasepro"),
     COINEX("coinex"), // xchange market data service not implemented
     GATEIO("gateio"),
