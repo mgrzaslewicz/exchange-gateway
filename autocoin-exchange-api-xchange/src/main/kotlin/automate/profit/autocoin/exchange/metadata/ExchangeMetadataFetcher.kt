@@ -280,11 +280,11 @@ class KucoinExchangeMetadataFetcher : ExchangeMetadataFetcher {
 }
 
 class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedExchange,
-                                     private val preventFromLoadingStaticJsonFile: Boolean = true,
+                                     private val loadStaticXchangeJsonFile: Boolean = false,
                                      private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap()) : ExchangeMetadataFetcher {
     override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        if (preventFromLoadingStaticJsonFile) {
+        if (!loadStaticXchangeJsonFile) {
             preventFromLoadingStaticJsonFile(exchangeSpec)
         }
         val exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
@@ -338,8 +338,9 @@ val overridenExchangeMetadataFetchers = listOf(
         BittrexExchangeMetadataFetcher(),
         BinanceExchangeMetadataFetcher(),
         KucoinExchangeMetadataFetcher(),
-        DefaultExchangeMetadataFetcher(BITBAY, preventFromLoadingStaticJsonFile = false),
-        DefaultExchangeMetadataFetcher(GEMINI, preventFromLoadingStaticJsonFile = false),
+        DefaultExchangeMetadataFetcher(BITBAY, loadStaticXchangeJsonFile = true),
+        DefaultExchangeMetadataFetcher(BITSTAMP, loadStaticXchangeJsonFile = true),
+        DefaultExchangeMetadataFetcher(GEMINI, loadStaticXchangeJsonFile = true),
         DefaultExchangeMetadataFetcher(HITBTC, currencyPairRename = mapOf(
                 CurrencyPair.of("REP/USD") to CurrencyPair.of("REP/USDT"),
                 CurrencyPair.of("XRP/USD") to CurrencyPair.of("XRP/USDT")
