@@ -14,14 +14,18 @@ enum class SupportedExchange(val exchangeName: String) {
     BITSTAMP("bitstamp"),
     BITTREX("bittrex"),
     BITZ("bitz"), // requires key for reading ticker
+    BLEUTRADE("bleutrade"),
     HITBTC("hitbtc"),
     COINBASEPRO("coinbasepro"),
     COINEX("coinex"), // xchange market data service not implemented
+    EXMO("exmo"),
     GATEIO("gateio"),
     GEMINI("gemini"),
     IDEX("idex"), // xchange not adjusted to api changes
     KRAKEN("kraken"),
     KUCOIN("kucoin"),
+    LUNO("luno"),
+    LIVECOIN("livecoin"),
     POLONIEX("poloniex"),
     TRADEOGRE("tradeogre"),
     YOBIT("yobit");

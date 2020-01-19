@@ -148,6 +148,26 @@
             <artifactId>xchange-gemini</artifactId>
             <version>${xchange.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-livecoin</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-bleutrade</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-exmo</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-luno</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
         <!-- /xchange -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>

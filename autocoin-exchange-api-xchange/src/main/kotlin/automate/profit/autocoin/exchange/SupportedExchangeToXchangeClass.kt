@@ -11,14 +11,18 @@ import org.knowm.xchange.bitso.BitsoExchange
 import org.knowm.xchange.bitstamp.BitstampExchange
 import org.knowm.xchange.bittrex.BittrexExchange
 import org.knowm.xchange.bitz.BitZExchange
+import org.knowm.xchange.bleutrade.BleutradeExchange
 import org.knowm.xchange.coinbasepro.CoinbaseProExchange
 import org.knowm.xchange.coinex.CoinexExchange
+import org.knowm.xchange.exmo.ExmoExchange
 import org.knowm.xchange.gateio.GateioExchange
 import org.knowm.xchange.gemini.v1.GeminiExchange
 import org.knowm.xchange.hitbtc.v2.HitbtcExchange
 import org.knowm.xchange.idex.IdexExchange
 import org.knowm.xchange.kraken.KrakenExchange
 import org.knowm.xchange.kucoin.KucoinExchange
+import org.knowm.xchange.livecoin.LivecoinExchange
+import org.knowm.xchange.luno.LunoExchange
 import org.knowm.xchange.poloniex.PoloniexExchange
 import org.knowm.xchange.tradeogre.TradeOgreExchange
 import org.knowm.xchange.yobit.YoBitExchange
@@ -35,6 +39,8 @@ fun SupportedExchange.toXchangeClass(): KClass<out Exchange> {
         BITSTAMP -> BitstampExchange::class
         BITTREX -> BittrexExchange::class
         BITZ -> BitZExchange::class
+        BLEUTRADE -> BleutradeExchange::class
+        EXMO -> ExmoExchange::class
         HITBTC -> HitbtcExchange::class
         COINBASEPRO -> CoinbaseProExchange::class
         COINEX -> CoinexExchange::class
@@ -43,6 +49,8 @@ fun SupportedExchange.toXchangeClass(): KClass<out Exchange> {
         IDEX -> IdexExchange::class
         KRAKEN -> KrakenExchange::class
         KUCOIN -> KucoinExchange::class
+        LUNO -> LunoExchange::class
+        LIVECOIN -> LivecoinExchange::class
         POLONIEX -> PoloniexExchange::class
         TRADEOGRE -> TradeOgreExchange::class
         YOBIT -> YoBitExchange::class
