@@ -144,7 +144,7 @@ class XchangeUserExchangeServicesFactory(
         if (xchangesCache.containsKey(cacheKey)) {
             logger.debug("Using cached exchange for key $keyTruncated")
         } else {
-            logger.info("Creating $supportedExchange exchange for key '$keyTruncated' and userName '${exchangeSpec.userName}'")
+            logger.info("[$supportedExchange] Creating exchange for key '$keyTruncated' and userName '${exchangeSpec.userName}'")
             setupMetadataInit(supportedExchange, exchangeSpec)
             val xchange = xchangeFactory.createExchange(exchangeSpec)
             xchangesCache[cacheKey] = xchange

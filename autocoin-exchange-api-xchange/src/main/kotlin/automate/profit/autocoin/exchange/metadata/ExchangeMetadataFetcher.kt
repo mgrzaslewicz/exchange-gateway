@@ -324,7 +324,7 @@ class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedEx
             )
         }?.toMap() ?: emptyMap()
         if (currencies.isEmpty()) {
-            logger.warn { "Currency metadata for $supportedExchange is empty" }
+            logger.warn { "[$supportedExchange] Currency metadata is empty" }
         }
         val exchangeMetadata = ExchangeMetadata(
                 currencyPairMetadata = currencyPairs,
@@ -344,7 +344,8 @@ val overridenExchangeMetadataFetchers = listOf(
         DefaultExchangeMetadataFetcher(HITBTC, currencyPairRename = mapOf(
                 CurrencyPair.of("REP/USD") to CurrencyPair.of("REP/USDT"),
                 CurrencyPair.of("XRP/USD") to CurrencyPair.of("XRP/USDT")
-        ))
+        )),
+        DefaultExchangeMetadataFetcher(LUNO, loadStaticXchangeJsonFile = true)
 )
 
 val defaultExchangeMetadataFetchers = (SupportedExchange.values().toSet() - overridenExchangeMetadataFetchers.map { it.supportedExchange }.toSet())

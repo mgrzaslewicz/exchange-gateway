@@ -33,12 +33,12 @@ class ExchangeMetadataProvider(
     private val fetchersMap = exchangeMetadataFetchers.map { it.supportedExchange to it }.toMap()
 
     fun getAndSaveExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadata {
-        logger.info { "Getting $supportedExchange metadata" }
+        logger.info { "[$supportedExchange] Getting  metadata" }
         val exchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(supportedExchange)
         return if (exchangeMetadata != null) {
             exchangeMetadata
         } else {
-            logger.info { "Fetching $supportedExchange exchange metadata" }
+            logger.info { "[$supportedExchange] Fetching exchange metadata" }
             val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata()
             exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
             return freshExchangeMetadata
@@ -46,7 +46,7 @@ class ExchangeMetadataProvider(
     }
 
     fun getAndSaveXchangeMetadataFile(supportedExchange: SupportedExchange): File {
-        logger.info { "Getting $supportedExchange xchange metadata file" }
+        logger.info { "[$supportedExchange] Getting xchange metadata file" }
         val exchangeMetadataFile = exchangeMetadataRepository.getLatestXchangeMetadataFile(supportedExchange)
         return if (exchangeMetadataFile != null) {
             exchangeMetadataFile
