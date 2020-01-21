@@ -168,6 +168,11 @@
             <artifactId>xchange-luno</artifactId>
             <version>${xchange.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-cexio</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
         <!-- /xchange -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>

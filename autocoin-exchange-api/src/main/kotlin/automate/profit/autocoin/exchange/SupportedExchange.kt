@@ -17,6 +17,7 @@ enum class SupportedExchange(val exchangeName: String) {
     BLEUTRADE("bleutrade"),
     HITBTC("hitbtc"),
     COINBASEPRO("coinbasepro"),
+    CEXIO("cexio"),
     COINEX("coinex"), // xchange market data service not implemented
     EXMO("exmo"),
     GATEIO("gateio"),
