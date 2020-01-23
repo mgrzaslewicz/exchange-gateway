@@ -1,6 +1,8 @@
 package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
+import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
+import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
 import java.io.File
@@ -10,7 +12,8 @@ import java.io.File
  */
 class ExchangeMetadataProvider(
         exchangeMetadataFetchers: List<ExchangeMetadataFetcher>,
-        private val exchangeMetadataRepository: FileExchangeMetadataRepository
+        private val exchangeMetadataRepository: FileExchangeMetadataRepository,
+        private val serviceApiKeysProvider: ServiceApiKeysProvider
 ) : ExchangeMetadataService {
 
     init {
@@ -39,7 +42,8 @@ class ExchangeMetadataProvider(
             exchangeMetadata
         } else {
             logger.info { "[$supportedExchange] Fetching exchange metadata" }
-            val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata()
+            val apiKey =  serviceApiKeysProvider.getApiKeys(supportedExchange)
+            val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata(apiKey)
             exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
             return freshExchangeMetadata
         }
@@ -51,7 +55,7 @@ class ExchangeMetadataProvider(
         return if (exchangeMetadataFile != null) {
             exchangeMetadataFile
         } else {
-            logger.info { "Fetching $supportedExchange xchange metadata file" }
+            logger.info { "[$supportedExchange] Fetching xchange metadata file" }
             val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata()
             exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
             return exchangeMetadataRepository.getLatestXchangeMetadataFile(supportedExchange)

@@ -9,10 +9,7 @@ import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
 import automate.profit.autocoin.exchange.peruser.XchangeFactory
 import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeServicesFactory
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.spy
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -31,8 +28,13 @@ class XchangeUserExchangeServicesFactoryTest {
         xchangeFactory = spy(XchangeFactory())
         userExchangeServicesFactory = XchangeUserExchangeServicesFactory(
                 xchangeFactory,
-                ExchangeMetadataProvider(exchangeMetadataFetchers, FileExchangeMetadataRepository(tempFolder)),
-                ExchangeSpecificationVerifier()
+                ExchangeMetadataProvider(
+                        exchangeMetadataFetchers = exchangeMetadataFetchers,
+                        exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder),
+                        serviceApiKeysProvider = mock()
+                ),
+                ExchangeSpecificationVerifier(),
+                serviceApiKeysProvider = mock()
         )
     }
 
