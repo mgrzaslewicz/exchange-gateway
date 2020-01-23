@@ -340,6 +340,7 @@ val overridenExchangeMetadataFetchers = listOf(
         KucoinExchangeMetadataFetcher(),
         DefaultExchangeMetadataFetcher(BITBAY, loadStaticXchangeJsonFile = true),
         DefaultExchangeMetadataFetcher(BITSTAMP, loadStaticXchangeJsonFile = true),
+        DefaultExchangeMetadataFetcher(COINDEAL, loadStaticXchangeJsonFile = true),
         DefaultExchangeMetadataFetcher(GEMINI, loadStaticXchangeJsonFile = true),
         DefaultExchangeMetadataFetcher(HITBTC, currencyPairRename = mapOf(
                 CurrencyPair.of("REP/USD") to CurrencyPair.of("REP/USDT"),

@@ -135,6 +135,11 @@
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-coinbene</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-coinex</artifactId>
             <version>${xchange.version}</version>
         </dependency>
@@ -171,6 +176,11 @@
         <dependency>
             <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-cexio</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-coindeal</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <!-- /xchange -->

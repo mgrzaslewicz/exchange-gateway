@@ -24,15 +24,15 @@ class ExchangeMetadataRefresher(
     fun fetchAndSaveFreshMetadataFiles() {
         logger.info { "Refreshing all supported exchange metadata files" }
         SupportedExchange.values().forEach { supportedExchange ->
-            logger.info { "Refreshing $supportedExchange" }
+            logger.info { "[$supportedExchange] Refreshing metadata" }
             try {
                 val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata()
                 exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
             } catch(e: Exception) {
-                logger.error(e) { "Exception during metadata refresh for $supportedExchange" }
+                logger.error(e) { "[$supportedExchange] Exception during metadata refresh" }
             }
             catch (e: Throwable/* catch runtime class errors too */) {
-                logger.error(e) { "Error during metadata refresh for $supportedExchange" }
+                logger.error(e) { "[$supportedExchange] Error during metadata refresh" }
             }
         }
     }
