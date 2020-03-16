@@ -1,9 +1,7 @@
 package automate.profit.autocoin.exchange.ticker
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import java.util.concurrent.ExecutorService
 
 
 interface TickerListenerRegistrars {
@@ -16,20 +14,16 @@ interface TickerListenerRegistrars {
 
 class DefaultTickerListenerRegistrars(
         initialTickerListenerRegistrarList: List<TickerListenerRegistrar>,
-        private val tickerListenerRegistrarProvider: TickerListenerRegistrarProvider
+        private val tickerListenerRegistrarProvider: TickerListenerRegistrarProvider,
+        private val executorService: ExecutorService
 ) : TickerListenerRegistrars {
 
     private val tickerListenerRegistrarMap: MutableMap<SupportedExchange, TickerListenerRegistrar>
 
     override fun fetchTickersAndNotifyListeners() {
-        runBlocking {
-            val jobs = tickerListenerRegistrarMap.values.map {
-                async(Dispatchers.IO) {
-                    it.fetchTickersAndNotifyListeners()
-                }
-            }
-            jobs.forEach { it.join() }
-        }
+        tickerListenerRegistrarMap.values.map {
+            executorService.submit { it.fetchTickersAndNotifyListeners() }
+        }.forEach { it.get() }
     }
 
 

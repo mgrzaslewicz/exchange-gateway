@@ -3,6 +3,7 @@ package automate.profit.autocoin.exchange.orderbook
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.order.UserExchangeOrderBookService
+import com.google.common.util.concurrent.MoreExecutors
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -12,8 +13,8 @@ import org.junit.jupiter.api.Test
 class OrderBookListenerRegistrarTest {
 
     private val userExchangeOrderBookService = mock<UserExchangeOrderBookService>()
-
-    private val tickerListenerRegistrar: OrderBookListenerRegistrar = DefaultOrderBookListenerRegistrar(BITTREX, userExchangeOrderBookService)
+    private val executorRunningSynchronouslyOnTheSameThread = MoreExecutors.newDirectExecutorService()
+    private val tickerListenerRegistrar: OrderBookListenerRegistrar = DefaultOrderBookListenerRegistrar(BITTREX, userExchangeOrderBookService, executorRunningSynchronouslyOnTheSameThread)
 
     private val listener: OrderBookListener = mock()
     private val listener2: OrderBookListener = mock()
