@@ -17,7 +17,7 @@ fun Ticker.toXchangeTicker(): XchangeTicker = XchangeTicker.Builder()
         .build()
 
 fun XchangeTicker.toTicker() = Ticker(
-        currencyPair = CurrencyPair(
+        currencyPair = CurrencyPair.invoke(
                 base = currencyPair.base.currencyCode,
                 counter = currencyPair.counter.currencyCode
         ),
