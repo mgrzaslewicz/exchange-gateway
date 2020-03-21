@@ -187,7 +187,7 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             demoOrderCreator.placeLimitBuyOrder(exchangeName, exchangeUserId, baseCurrencyCode, counterCurrencyCode, buyPrice, amount)
         } else {
             val tradeService = getTradeService(exchangeName, exchangeUserId)
-            tradeService.placeBuyOrder(CurrencyPair(baseCurrencyCode, counterCurrencyCode), buyPrice, amount)
+            tradeService.placeBuyOrder(CurrencyPair.of(baseCurrencyCode, counterCurrencyCode), buyPrice, amount)
         }
     }
 
@@ -204,7 +204,7 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             demoOrderCreator.placeLimitBuyOrder(exchangeName, exchangeKey.exchangeUserId, baseCurrencyCode, counterCurrencyCode, buyPrice, amount)
         } else {
             val tradeService = getTradeService(exchangeName, exchangeKey)
-            tradeService.placeBuyOrder(CurrencyPair(baseCurrencyCode, counterCurrencyCode), buyPrice, amount)
+            tradeService.placeBuyOrder(CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode), buyPrice, amount)
         }
     }
 
@@ -221,7 +221,7 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             demoOrderCreator.placeLimitSellOrder(exchangeName, exchangeUserId, baseCurrencyCode, counterCurrencyCode, sellPrice, amount)
         } else {
             val tradeService = getTradeService(exchangeName, exchangeUserId)
-            return tradeService.placeSellOrder(CurrencyPair(baseCurrencyCode, counterCurrencyCode), sellPrice, amount)
+            return tradeService.placeSellOrder(CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode), sellPrice, amount)
         }
     }
 
@@ -238,7 +238,7 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             demoOrderCreator.placeLimitSellOrder(exchangeName, exchangeKey.exchangeUserId, baseCurrencyCode, counterCurrencyCode, sellPrice, amount)
         } else {
             val tradeService = getTradeService(exchangeName, exchangeKey)
-            tradeService.placeSellOrder(CurrencyPair(baseCurrencyCode, counterCurrencyCode), sellPrice, amount)
+            tradeService.placeSellOrder(CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode), sellPrice, amount)
         }
     }
 

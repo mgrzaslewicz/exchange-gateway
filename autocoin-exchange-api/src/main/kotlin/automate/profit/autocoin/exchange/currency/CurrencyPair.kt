@@ -15,7 +15,7 @@ data class CurrencyPair private constructor(
 
     companion object {
 
-        operator fun invoke(base: String, counter: String): CurrencyPair {
+        fun of(base: String, counter: String): CurrencyPair {
             return CurrencyPair(CurrencyCache.get(base), CurrencyCache.get(counter))
         }
 

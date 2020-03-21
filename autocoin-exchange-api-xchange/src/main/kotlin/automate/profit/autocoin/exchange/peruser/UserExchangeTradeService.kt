@@ -28,7 +28,7 @@ interface UserExchangeTradeService {
     fun getOpenOrders(currencyPair: CurrencyPair): List<ExchangeOrder> // TODO add fetching currency pairs that exist in wallet to get rid of passing currencyPair
 }
 
-fun XchangeCurrencyPair.toCurrencyPair() = CurrencyPair(base = this.base.currencyCode, counter = this.counter.currencyCode)
+fun XchangeCurrencyPair.toCurrencyPair() = CurrencyPair.of(base = this.base.currencyCode, counter = this.counter.currencyCode)
 
 fun LimitOrder.toExchangeOrder(exchangeName: String) = ExchangeOrder(
         exchangeName = exchangeName,

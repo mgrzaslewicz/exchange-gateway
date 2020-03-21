@@ -12,7 +12,7 @@ class DemoOrderCreator(private val timeMillisProvider: TimeMillisProvider) {
         return ExchangeOrder(
                 exchangeName = exchangeName,
                 status = ExchangeOrderStatus.NEW,
-                currencyPair = CurrencyPair(base = baseCurrencyCode, counter = counterCurrencyCode),
+                currencyPair = CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode),
                 filledAmount = BigDecimal.ZERO,
                 orderedAmount = amount,
                 orderId = "$exchangeName-demo-$currentTimeMillis",
@@ -27,7 +27,7 @@ class DemoOrderCreator(private val timeMillisProvider: TimeMillisProvider) {
         return ExchangeOrder(
                 exchangeName = exchangeName,
                 status = ExchangeOrderStatus.NEW,
-                currencyPair = CurrencyPair(base = baseCurrencyCode, counter = counterCurrencyCode),
+                currencyPair = CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode),
                 filledAmount = BigDecimal.ZERO,
                 orderedAmount = amount,
                 orderId = "$exchangeName-demo-${System.currentTimeMillis()}",
