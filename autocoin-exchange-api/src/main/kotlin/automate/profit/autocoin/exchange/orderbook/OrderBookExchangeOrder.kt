@@ -2,7 +2,6 @@ package automate.profit.autocoin.exchange.orderbook
 
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.order.ExchangeOrderType
-import automate.profit.autocoin.exchange.util.CurrencyCache
 import automate.profit.autocoin.exchange.util.ExchangeCache
 import java.math.BigDecimal
 import java.time.Instant

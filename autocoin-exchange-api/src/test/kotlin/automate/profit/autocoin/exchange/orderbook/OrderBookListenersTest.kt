@@ -29,7 +29,7 @@ class OrderBookListenersTest {
     }
 
     @Test
-    fun shouldAddOrderBookListeners() {
+    fun shouldAddOrderBookListenersForDifferentExchanges() {
         // given
         tested.addOrderBookListener(BITTREX, currencyPair_AB, orderBookListener)
         tested.addOrderBookListener(BINANCE, currencyPair_CD, orderBookListener)
@@ -41,6 +41,21 @@ class OrderBookListenersTest {
                 currencyPair_AB to setOf(orderBookListener)
         ))
         verify(orderBookListenerVisitor).fetchOrderBooksThenNotifyListeners(BINANCE, mapOf(
+                currencyPair_CD to setOf(orderBookListener)
+        ))
+    }
+
+    @Test
+    fun shouldAddOrderBookListenersForTheSameExchanges() {
+        // given
+        tested.addOrderBookListener(BITTREX, currencyPair_AB, orderBookListener)
+        tested.addOrderBookListener(BITTREX, currencyPair_CD, orderBookListener)
+        val orderBookListenerVisitor = mock<OrderBookListenersVisitor>()
+        // when
+        tested.iterateOverEachExchangeAndAllCurrencyPairs(orderBookListenerVisitor)
+        // then
+        verify(orderBookListenerVisitor).fetchOrderBooksThenNotifyListeners(BITTREX, mapOf(
+                currencyPair_AB to setOf(orderBookListener),
                 currencyPair_CD to setOf(orderBookListener)
         ))
     }
