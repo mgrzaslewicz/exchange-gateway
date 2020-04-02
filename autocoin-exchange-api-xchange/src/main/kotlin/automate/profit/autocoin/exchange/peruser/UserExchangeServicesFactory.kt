@@ -6,8 +6,6 @@ import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadataProvider
 import automate.profit.autocoin.exchange.order.UserExchangeOrderBookService
 import automate.profit.autocoin.exchange.order.XchangeUserExchangeOrderBookService
-import automate.profit.autocoin.exchange.ticker.DefaultTickerListenerRegistrar
-import automate.profit.autocoin.exchange.ticker.TickerListenerRegistrar
 import automate.profit.autocoin.exchange.ticker.UserExchangeTickerService
 import automate.profit.autocoin.exchange.toXchangeClass
 import mu.KLogging
@@ -37,9 +35,6 @@ interface UserExchangeServicesFactory {
 
     fun createOrderBookService(exchangeName: String): UserExchangeOrderBookService
     fun createOrderBookService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeOrderBookService
-
-    fun createTickerListenerRegistrar(exchangeName: String): TickerListenerRegistrar
-    fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): TickerListenerRegistrar
 
     fun createTradeService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTradeService
 
@@ -110,24 +105,6 @@ class XchangeUserExchangeServicesFactory(
     override fun createOrderBookService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeOrderBookService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         return XchangeUserExchangeOrderBookService(getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService, exchangeName)
-    }
-
-    override fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): TickerListenerRegistrar {
-        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return DefaultTickerListenerRegistrar(
-                exchangeName = supportedExchange,
-                userExchangeTickerService = createTickerService(exchangeName, publicKey, secretKey, userName, exchangeSpecificKeyParameters),
-                executorService = executorService
-        )
-    }
-
-    override fun createTickerListenerRegistrar(exchangeName: String): TickerListenerRegistrar {
-        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return DefaultTickerListenerRegistrar(
-                exchangeName = supportedExchange,
-                userExchangeTickerService = createTickerService(exchangeName),
-                executorService = executorService
-        )
     }
 
     private fun getXchange(exchangeName: SupportedExchange, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): Exchange {
