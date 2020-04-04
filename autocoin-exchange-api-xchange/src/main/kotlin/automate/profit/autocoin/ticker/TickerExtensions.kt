@@ -28,3 +28,18 @@ fun XchangeTicker.toTicker() = Ticker(
         timestamp = this.timestamp?.toInstant()
 )
 
+/**
+ * Override currency pair as a fix because it sometimes happens that currency pair is wrongly provided
+ * from underlying xchange market data implementations.
+ * eg COINBENE has hardcoded substring (0, 3) so it parses improperly currencies with
+ * length > 3 and STORJ/BTC fetched from exchange becomes STO/RJBTC
+ */
+fun XchangeTicker.toTickerWithCurrencyPairFix(currencyPair: CurrencyPair) = Ticker(
+        currencyPair = currencyPair,
+        ask = ask,
+        bid = bid,
+        baseCurrency24hVolume = volume,
+        counterCurrency24hVolume = quoteVolume,
+        timestamp = this.timestamp?.toInstant()
+)
+

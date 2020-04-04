@@ -78,14 +78,14 @@ class XchangeUserExchangeServicesFactory(
             }
             else -> {
                 val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-                XchangeUserExchangeTickerService(getXchange(supportedExchange, exchangeSpec).marketDataService)
+                XchangeUserExchangeTickerService(getXchange(supportedExchange, exchangeSpec).marketDataService, supportedExchange)
             }
         }
     }
 
     override fun createTickerService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTickerService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return XchangeUserExchangeTickerService(getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService)
+        return XchangeUserExchangeTickerService(getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService, supportedExchange)
     }
 
     override fun createOrderBookService(exchangeName: String): UserExchangeOrderBookService {
