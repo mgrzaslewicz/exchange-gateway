@@ -162,7 +162,9 @@ class XchangeUserExchangeServicesFactory(
         exchangeSpecification.apiKey = publicKey.trim()
         exchangeSpecification.secretKey = secretKey.trim()
         exchangeSpecification.userName = userName
-        exchangeSpecification.exchangeSpecificParameters = exchangeSpecificKeyParameters ?: emptyMap()
+        // xchange lib needs mutable map as it sets default values for some implementations when these not provided
+        exchangeSpecification.exchangeSpecificParameters = HashMap(exchangeSpecificKeyParameters) as Map<String, Any>?
+                ?: mutableMapOf()
 
         if (exchangeSpecification.apiKey != publicKey) logger.warn("$supportedExchange API public key contained whitespaces, trimmed")
         if (exchangeSpecification.secretKey != secretKey) logger.warn("$supportedExchange API secret key contained whitespaces, trimmed")
