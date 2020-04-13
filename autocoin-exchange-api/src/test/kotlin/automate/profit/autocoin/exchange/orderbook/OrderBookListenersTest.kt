@@ -25,7 +25,7 @@ class OrderBookListenersTest {
 
     @BeforeEach
     fun setup() {
-        tested = DefaultOrderBookListeners(MoreExecutors.newDirectExecutorService())
+        tested = DefaultOrderBookListeners()
     }
 
     @Test
