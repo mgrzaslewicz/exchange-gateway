@@ -4,8 +4,8 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.*
 import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadataProvider
-import automate.profit.autocoin.exchange.order.UserExchangeOrderBookService
-import automate.profit.autocoin.exchange.order.XchangeUserExchangeOrderBookService
+import automate.profit.autocoin.exchange.orderbook.UserExchangeOrderBookService
+import automate.profit.autocoin.exchange.orderbook.XchangeUserExchangeOrderBookService
 import automate.profit.autocoin.exchange.ticker.UserExchangeTickerService
 import automate.profit.autocoin.exchange.toXchangeClass
 import mu.KLogging

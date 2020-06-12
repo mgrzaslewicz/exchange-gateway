@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-        <xchange.version>4.4.2</xchange.version>
+        <xchange.version>5.0.0</xchange.version>
     </properties>
 
     <dependencies>
@@ -65,6 +65,11 @@
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-stream-binance</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-hitbtc</artifactId>
             <version>${xchange.version}</version>
         </dependency>
@@ -85,7 +90,17 @@
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-stream-kraken</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-poloniex</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-stream-poloniex</artifactId>
             <version>${xchange.version}</version>
         </dependency>
         <dependency>
