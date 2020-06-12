@@ -4,15 +4,12 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArraySet
-import java.util.concurrent.ExecutorService
-
-interface OrderBookListenersVisitor {
-    fun fetchOrderBooksThenNotifyListeners(exchange: SupportedExchange, currencyPairsWithListeners: Map<CurrencyPair, Set<OrderBookListener>>)
-}
 
 interface OrderBookRegistrationListener {
     fun onLastListenerDeregistered(exchange: SupportedExchange)
+    fun onListenerDeregistered(exchange: SupportedExchange, currencyPair: CurrencyPair)
     fun onFirstListenerRegistered(exchange: SupportedExchange)
+    fun onListenerRegistered(exchange: SupportedExchange, currencyPair: CurrencyPair)
 }
 
 interface OrderBookListeners {
@@ -20,7 +17,7 @@ interface OrderBookListeners {
     fun removeOrderBookListener(supportedExchange: SupportedExchange, currencyPair: CurrencyPair, listener: OrderBookListener): Boolean
     fun addOrderBookRegistrationListener(orderBookRegistrationListener: OrderBookRegistrationListener)
     fun removeOrderBookRegistrationListener(orderBookRegistrationListener: OrderBookRegistrationListener)
-    fun iterateOverEachExchangeAndAllCurrencyPairs(orderBookListenersVisitor: OrderBookListenersVisitor)
+    fun getOrderBookListeners(supportedExchange: SupportedExchange): Map<CurrencyPair, Set<OrderBookListener>>
 }
 
 class DefaultOrderBookListeners : OrderBookListeners {
@@ -44,6 +41,9 @@ class DefaultOrderBookListeners : OrderBookListeners {
                 it.onFirstListenerRegistered(exchange)
             }
         }
+        orderBookRegistrationListeners.forEach {
+            it.onListenerRegistered(exchange, currencyPair)
+        }
         return isListenerAdded
     }
 
@@ -66,6 +66,9 @@ class DefaultOrderBookListeners : OrderBookListeners {
                 }
             }
         }
+        orderBookRegistrationListeners.forEach {
+            it.onListenerDeregistered(exchange, currencyPair)
+        }
         if (isLastListenerWithGivenExchangeRemoved) {
             orderBookRegistrationListeners.forEach {
                 it.onLastListenerDeregistered(exchange)
@@ -82,10 +85,8 @@ class DefaultOrderBookListeners : OrderBookListeners {
         orderBookRegistrationListeners.remove(orderBookRegistrationListener)
     }
 
-    override fun iterateOverEachExchangeAndAllCurrencyPairs(orderBookListenerVisitor: OrderBookListenersVisitor) {
-        listenersByExchangeAndCurrencyPair.forEach { (exchange, currencyPairsWithListeners) ->
-            orderBookListenerVisitor.fetchOrderBooksThenNotifyListeners(exchange, currencyPairsWithListeners)
-        }
+    override fun getOrderBookListeners(supportedExchange: SupportedExchange): Map<CurrencyPair, Set<OrderBookListener>> {
+        return listenersByExchangeAndCurrencyPair.getOrElse(supportedExchange, { mapOf() })
     }
 
 }

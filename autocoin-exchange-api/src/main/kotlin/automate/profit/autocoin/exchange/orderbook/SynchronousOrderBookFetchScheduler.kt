@@ -7,10 +7,11 @@ import mu.KLogging
 import java.time.Duration
 import java.util.concurrent.*
 
-interface OrderBookFetchScheduler : OrderBookRegistrationListener, OrderBookListenersVisitor {
+interface SynchronousOrderBookFetchScheduler : OrderBookRegistrationListener {
+    fun fetchOrderBooksThenNotifyListeners(exchange: SupportedExchange)
 }
 
-class DefaultOrderBookFetchScheduler(
+class DefaultSynchronousOrderBookFetchScheduler(
         private val allowedExchangeFetchFrequency: Map<SupportedExchange, Duration>,
         private val exchangeOrderBookService: ExchangeOrderBookService,
         private val orderBookListeners: OrderBookListeners,
@@ -18,12 +19,15 @@ class DefaultOrderBookFetchScheduler(
         private val scheduledExecutorService: ScheduledExecutorService,
         /** preferably a few multiple threads, but not one per single currency pair as it might grow to thousands of threads. workStealingPool might be a good fit */
         private val executorService: ExecutorService
-) : OrderBookFetchScheduler {
+) : SynchronousOrderBookFetchScheduler {
     companion object : KLogging()
 
     private val lastOrderBook = mutableMapOf<String, OrderBook>()
     private val scheduledFetchers = ConcurrentHashMap<SupportedExchange, ScheduledFuture<*>>()
 
+    override fun onListenerDeregistered(exchange: SupportedExchange, currencyPair: CurrencyPair) {
+    }
+   
     override fun onLastListenerDeregistered(exchange: SupportedExchange) {
         if (scheduledFetchers.containsKey(exchange)) {
             val scheduledFetcher = scheduledFetchers.getValue(exchange)
@@ -32,20 +36,26 @@ class DefaultOrderBookFetchScheduler(
         }
     }
 
+    /**
+     * Current synchronous fetcher implementation has to to nothing on currency pair registration as it fetches all currency pairs from exchange at one go
+     */
+    override fun onListenerRegistered(exchange: SupportedExchange, currencyPair: CurrencyPair) {
+    }
+
     override fun onFirstListenerRegistered(exchange: SupportedExchange) {
         if (!scheduledFetchers.containsKey(exchange)) {
             val exchangeFrequency = allowedExchangeFetchFrequency.getValue(exchange)
             val scheduledFetcher = scheduledExecutorService.scheduleAtFixedRate({
-                orderBookListeners.iterateOverEachExchangeAndAllCurrencyPairs(this)
+                fetchOrderBooksThenNotifyListeners(exchange)
             }, 0, exchangeFrequency.toMillis(), TimeUnit.MILLISECONDS)
             scheduledFetchers[exchange] = scheduledFetcher
         }
     }
 
-    override fun fetchOrderBooksThenNotifyListeners(exchange: SupportedExchange, currencyPairsWithListeners: Map<CurrencyPair, Set<OrderBookListener>>) {
+    override fun fetchOrderBooksThenNotifyListeners(exchange: SupportedExchange) {
         // TODO that's possibly subject to optimize and fetch all currency pairs with one exchange request where possible
         executorService.submit {
-            currencyPairsWithListeners.forEach { (currencyPair, orderBookListeners) ->
+            orderBookListeners.getOrderBookListeners(exchange).forEach { (currencyPair, orderBookListeners) ->
                 val orderBook = getOrderBook(exchange, currencyPair)
                 if (orderBook != null && isNew(orderBook, exchange, currencyPair)) {
                     orderBookListeners.forEach {
