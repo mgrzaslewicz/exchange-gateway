@@ -6,10 +6,11 @@ import mu.KLogging
 import java.time.Duration
 import java.util.concurrent.*
 
-interface TickerFetchScheduler : TickerRegistrationListener, TickerListenersVisitor {
+interface SynchronousTickerFetchScheduler : TickerRegistrationListener {
+    fun fetchTickersThenNotifyListeners(exchange: SupportedExchange)
 }
 
-class DefaultTickerFetchScheduler(
+class DefaultSynchronousTickerFetchScheduler(
         private val allowedExchangeFetchFrequency: Map<SupportedExchange, Duration>,
         private val exchangeTickerService: ExchangeTickerService,
         private val tickerListeners: TickerListeners,
@@ -17,7 +18,7 @@ class DefaultTickerFetchScheduler(
         private val scheduledExecutorService: ScheduledExecutorService,
         /** preferably a few multiple threads, but not one per single currency pair as it might grow to thousands of threads. workStealingPool might be a good fit */
         private val executorService: ExecutorService
-) : TickerFetchScheduler {
+) : SynchronousTickerFetchScheduler {
     companion object : KLogging()
 
     private val lastTicker = mutableMapOf<String, Ticker>()
@@ -31,20 +32,26 @@ class DefaultTickerFetchScheduler(
         }
     }
 
+    override fun onListenerDeregistered(exchange: SupportedExchange, currencyPair: CurrencyPair) {
+    }
+
     override fun onFirstListenerRegistered(exchange: SupportedExchange) {
         if (!scheduledFetchers.containsKey(exchange)) {
             val exchangeFrequency = allowedExchangeFetchFrequency.getValue(exchange)
             val scheduledFetcher = scheduledExecutorService.scheduleAtFixedRate({
-                tickerListeners.iterateOverEachExchangeAndAllCurrencyPairs(this)
+                fetchTickersThenNotifyListeners(exchange)
             }, 0, exchangeFrequency.toMillis(), TimeUnit.MILLISECONDS)
             scheduledFetchers[exchange] = scheduledFetcher
         }
     }
 
-    override fun fetchTickersThenNotifyListeners(exchange: SupportedExchange, currencyPairsWithListeners: Map<CurrencyPair, Set<TickerListener>>) {
+    override fun onListenerRegistered(exchange: SupportedExchange, currencyPair: CurrencyPair) {
+    }
+
+    override fun fetchTickersThenNotifyListeners(exchange: SupportedExchange) {
         // TODO that's possibly subject to optimize and fetch all currency pairs with one exchange request where possible
         executorService.submit {
-            currencyPairsWithListeners.forEach { (currencyPair, tickerListeners) ->
+            tickerListeners.getTickerListeners(exchange).forEach { (currencyPair, tickerListeners) ->
                 val ticker = getTicker(exchange, currencyPair)
                 if (ticker != null && isNew(ticker, exchange, currencyPair)) {
                     tickerListeners.forEach {

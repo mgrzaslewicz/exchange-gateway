@@ -5,7 +5,9 @@ import automate.profit.autocoin.exchange.SupportedExchange.BINANCE
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import com.google.common.util.concurrent.MoreExecutors
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -29,49 +31,40 @@ class TickerListenersTest {
     }
 
     @Test
-    fun shouldaddTickerListenersForDifferentExchanges() {
-        // given
+    fun shouldAddTickerListenersForDifferentExchanges() {
+        // when
         tested.addTickerListener(BITTREX, currencyPair_AB, tickerListener)
         tested.addTickerListener(BINANCE, currencyPair_CD, tickerListener)
-        val tickerListenerVisitor = mock<TickerListenersVisitor>()
-        // when
-        tested.iterateOverEachExchangeAndAllCurrencyPairs(tickerListenerVisitor)
         // then
-        verify(tickerListenerVisitor).fetchTickersThenNotifyListeners(BITTREX, mapOf(
+        assertThat(tested.getTickerListeners(BITTREX)).isEqualTo(mapOf(
                 currencyPair_AB to setOf(tickerListener)
         ))
-        verify(tickerListenerVisitor).fetchTickersThenNotifyListeners(BINANCE, mapOf(
+        assertThat(tested.getTickerListeners(BINANCE)).isEqualTo(mapOf(
                 currencyPair_CD to setOf(tickerListener)
         ))
     }
 
     @Test
-    fun shouldaddTickerListenersForTheSameExchanges() {
-        // given
+    fun shouldAddTickerListenersForTheSameExchanges() {
+        // when
         tested.addTickerListener(BITTREX, currencyPair_AB, tickerListener)
         tested.addTickerListener(BITTREX, currencyPair_CD, tickerListener)
-        val tickerListenerVisitor = mock<TickerListenersVisitor>()
-        // when
-        tested.iterateOverEachExchangeAndAllCurrencyPairs(tickerListenerVisitor)
         // then
-        verify(tickerListenerVisitor).fetchTickersThenNotifyListeners(BITTREX, mapOf(
+        assertThat(tested.getTickerListeners(BITTREX)).isEqualTo(mapOf(
                 currencyPair_AB to setOf(tickerListener),
                 currencyPair_CD to setOf(tickerListener)
         ))
     }
 
     @Test
-    fun shouldremoveTickerListeners() {
-        // given
+    fun shouldRemoveTickerListeners() {
+        // when
         tested.addTickerListener(BITTREX, currencyPair_AB, tickerListener)
         tested.addTickerListener(BINANCE, currencyPair_CD, tickerListener)
         tested.removeTickerListener(BITTREX, currencyPair_AB, tickerListener)
-        val tickerListenerVisitor = mock<TickerListenersVisitor>()
-        // when
-        tested.iterateOverEachExchangeAndAllCurrencyPairs(tickerListenerVisitor)
         // then
-        verify(tickerListenerVisitor, never()).fetchTickersThenNotifyListeners(eq(BITTREX), any())
-        verify(tickerListenerVisitor).fetchTickersThenNotifyListeners(BINANCE, mapOf(
+        assertThat(tested.getTickerListeners(BITTREX)).isEqualTo(emptyMap<CurrencyPair, Set<TickerListener>>())
+        assertThat(tested.getTickerListeners(BINANCE)).isEqualTo(mapOf(
                 currencyPair_CD to setOf(tickerListener)
         ))
     }
