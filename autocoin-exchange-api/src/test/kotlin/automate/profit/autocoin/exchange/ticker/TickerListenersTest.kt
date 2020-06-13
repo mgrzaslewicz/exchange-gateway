@@ -4,7 +4,6 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.BINANCE
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
-import com.google.common.util.concurrent.MoreExecutors
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -27,7 +26,7 @@ class TickerListenersTest {
 
     @BeforeEach
     fun setup() {
-        tested = DefaultTickerListeners(MoreExecutors.newDirectExecutorService())
+        tested = DefaultTickerListeners()
     }
 
     @Test
