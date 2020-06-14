@@ -19,6 +19,24 @@ data class OrderBook(
         val sellOrders: List<OrderBookExchangeOrder>
 ) {
 
+    fun deepEquals(other: OrderBook): Boolean {
+        return if (buyOrders.size == other.buyOrders.size && sellOrders.size == other.sellOrders.size) {
+            buyOrders.forEachIndexed { index, it ->
+                if (it != other.buyOrders[index]) {
+                    return false
+                }
+            }
+            sellOrders.forEachIndexed { index, it ->
+                if (it != other.sellOrders[index]) {
+                    return false
+                }
+            }
+            true
+        } else {
+            false
+        }
+    }
+
     fun buyOrderBookValueInCounterCurrency(): BigDecimal = buyOrders.fold(BigDecimal.ZERO) { acc, order -> acc + order.valueInCounterCurrency() }
 
     /**
