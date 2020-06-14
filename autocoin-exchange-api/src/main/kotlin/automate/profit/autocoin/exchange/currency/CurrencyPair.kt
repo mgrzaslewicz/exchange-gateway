@@ -1,6 +1,6 @@
 package automate.profit.autocoin.exchange.currency
 
-import automate.profit.autocoin.exchange.util.CurrencyCache
+import automate.profit.autocoin.exchange.cache.CurrencyPairCache
 
 /**
  * Private constructor + invoke operator override in order to apply memory optimization.
@@ -16,7 +16,9 @@ data class CurrencyPair private constructor(
     companion object {
 
         fun of(base: String, counter: String): CurrencyPair {
-            return CurrencyPair(CurrencyCache.get(base), CurrencyCache.get(counter))
+            val baseUpper = base.toUpperCase()
+            val counterUpper = counter.toUpperCase()
+            return CurrencyPairCache.get(baseUpper, counterUpper) { CurrencyPair(baseUpper, counterUpper) }
         }
 
         fun of(currencyPair: String): CurrencyPair {
@@ -26,7 +28,7 @@ data class CurrencyPair private constructor(
             }
             val base = currencyPair.substring(0, split)
             val counter = currencyPair.substring(split + 1)
-            return CurrencyPair(base, counter).toUpperCase()
+            return of(base, counter)
         }
     }
 
@@ -37,7 +39,7 @@ data class CurrencyPair private constructor(
             counter = counter.toUpperCase()
     )
 
-    override fun toString(): String = "${base.toUpperCase()}/${counter.toUpperCase()}"
+    override fun toString(): String = "$base/$counter"
 
     override fun compareTo(other: CurrencyPair): Int {
         return toString().compareTo(other.toString())
