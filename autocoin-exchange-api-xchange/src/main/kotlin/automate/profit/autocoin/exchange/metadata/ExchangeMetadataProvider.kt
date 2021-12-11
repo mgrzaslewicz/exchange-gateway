@@ -33,7 +33,7 @@ class ExchangeMetadataProvider(
         return getAndSaveExchangeMetadata(SupportedExchange.fromExchangeName(exchangeName)).currencyPairMetadata.getValue(currencyPair)
     }
 
-    private val fetchersMap = exchangeMetadataFetchers.map { it.supportedExchange to it }.toMap()
+    private val fetchersMap = exchangeMetadataFetchers.associateBy { it.supportedExchange }
 
     fun getAndSaveExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadata {
         logger.info { "[$supportedExchange] Getting  metadata" }

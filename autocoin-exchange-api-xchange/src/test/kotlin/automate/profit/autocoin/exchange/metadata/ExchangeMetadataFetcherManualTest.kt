@@ -3,34 +3,34 @@ package automate.profit.autocoin.exchange.metadata
 import automate.profit.autocoin.exchange.SupportedExchange
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
+import org.knowm.xchange.ExchangeFactory
 
+@Disabled
 class ExchangeMetadataFetcherManualTest {
 
+    private val exchangeFactory = ExchangeFactory.INSTANCE
+
     @Test
-    @Disabled
     fun shouldFetchBittrexMetadata() {
-        val fetcher = BittrexExchangeMetadataFetcher()
+        val fetcher = BittrexExchangeMetadataFetcher(exchangeFactory)
         fetcher.fetchExchangeMetadata()
     }
 
     @Test
-    @Disabled
     fun shouldFetchBinanceMetadata() {
-        val fetcher = BinanceExchangeMetadataFetcher()
+        val fetcher = BinanceExchangeMetadataFetcher(exchangeFactory)
         fetcher.fetchExchangeMetadata()
     }
 
     @Test
-    @Disabled
     fun shouldFetchGateioMetadata() {
-        val fetcher = DefaultExchangeMetadataFetcher(SupportedExchange.GATEIO)
+        val fetcher = DefaultExchangeMetadataFetcher(SupportedExchange.GATEIO, exchangeFactory)
         fetcher.fetchExchangeMetadata()
     }
 
     @Test
-    @Disabled
     fun shouldFetchKucoinMetadata() {
-        val fetcher = KucoinExchangeMetadataFetcher()
+        val fetcher = KucoinExchangeMetadataFetcher(exchangeFactory)
         fetcher.fetchExchangeMetadata()
     }
 }

@@ -4,15 +4,19 @@ import automate.profit.autocoin.exchange.SupportedExchange.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.knowm.xchange.ExchangeSpecification
+import org.knowm.xchange.binance.BinanceExchange
+import org.knowm.xchange.bittrex.BittrexExchange
+import org.knowm.xchange.gateio.GateioExchange
 
 class ExchangeSpecificationVerifierTest {
 
     private var exchangeSpecificationVerifier = ExchangeSpecificationVerifier()
+    private val exchangeClassDoesNotMatter = BinanceExchange::class.java
 
     @Test
     fun shouldRejectTheSameApiAndSecretKey() {
         // given
-        val exchangeSpecification = ExchangeSpecification("some exchange").apply {
+        val exchangeSpecification = ExchangeSpecification(exchangeClassDoesNotMatter).apply {
             apiKey = "some-api-key"
             secretKey = "some-api-key"
         }
@@ -26,7 +30,7 @@ class ExchangeSpecificationVerifierTest {
     @Test
     fun shouldRejectBitstampWithoutUsername() {
         // given
-        val exchangeSpecification = ExchangeSpecification("some exchange").apply {
+        val exchangeSpecification = ExchangeSpecification(exchangeClassDoesNotMatter).apply {
             apiKey = "some-api-key"
             secretKey = "some-api-secret"
         }
@@ -39,7 +43,7 @@ class ExchangeSpecificationVerifierTest {
     @Test
     fun shouldNotRejectBitstampWithUsername() {
         // given
-        val exchangeSpecification = ExchangeSpecification("some exchange").apply {
+        val exchangeSpecification = ExchangeSpecification(exchangeClassDoesNotMatter).apply {
             apiKey = "some-api-key"
             secretKey = "some-api-secret"
             userName = "bitstamp-username"
@@ -52,7 +56,7 @@ class ExchangeSpecificationVerifierTest {
     @Test
     fun shouldRejectKucoinWithoutPassphrase() {
         // given
-        val exchangeSpecification = ExchangeSpecification("some exchange").apply {
+        val exchangeSpecification = ExchangeSpecification(exchangeClassDoesNotMatter).apply {
             apiKey = "some-api-key"
             secretKey = "some-api-secret"
         }
@@ -65,7 +69,7 @@ class ExchangeSpecificationVerifierTest {
     @Test
     fun shouldNotRejectKucoinWithPassphrase() {
         // given
-        val exchangeSpecification = ExchangeSpecification("some exchange").apply {
+        val exchangeSpecification = ExchangeSpecification(exchangeClassDoesNotMatter).apply {
             apiKey = "some-api-key"
             secretKey = "some-api-secret"
             exchangeSpecificParameters = mapOf("passphrase" to "some-kucoin-passphrase")
