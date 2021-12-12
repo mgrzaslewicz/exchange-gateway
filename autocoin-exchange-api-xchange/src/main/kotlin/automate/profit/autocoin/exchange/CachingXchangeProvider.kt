@@ -13,7 +13,7 @@ class XchangeFactoryWrapper { // wrap in class to make it testable as original x
     fun createExchange(exchangeSpecification: ExchangeSpecification) = xchangeFactory.createExchange(exchangeSpecification)
 }
 
-class XchangeProvider(
+class CachingXchangeProvider(
     private val exchangeSpecificationVerifier: ExchangeSpecificationVerifier,
     private val xchangeFactoryWrapper: XchangeFactoryWrapper,
     private val exchangeMetadataProvider: ExchangeMetadataProvider
@@ -24,7 +24,7 @@ class XchangeProvider(
     private val xchangesCache = mutableMapOf<String, Exchange>()
 
     fun getXchange(exchangeName: SupportedExchange, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): Exchange {
-        val exchangeSpec = ExchangeSpecification(exchangeName.toXchangeClass().java)
+        val exchangeSpec = ExchangeSpecification(exchangeName.toXchangeJavaClass())
         assignKeys(exchangeName, exchangeSpec, publicKey, secretKey, userName, exchangeSpecificKeyParameters)
         return getXchange(exchangeName, exchangeSpec)
 

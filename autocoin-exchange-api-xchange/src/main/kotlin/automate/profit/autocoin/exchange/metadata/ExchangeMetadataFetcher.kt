@@ -5,7 +5,7 @@ import automate.profit.autocoin.exchange.SupportedExchange.*
 import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
-import automate.profit.autocoin.exchange.toXchangeClass
+import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KotlinLogging
 import org.knowm.xchange.ExchangeFactory
 import org.knowm.xchange.ExchangeSpecification
@@ -86,7 +86,7 @@ class BittrexExchangeMetadataFetcher(private val exchangeFactory: ExchangeFactor
     override val supportedExchange = BITTREX
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
+        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
         exchangeSpec.setApiKey(apiKey)
         preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val exchange = exchangeFactory.createExchange(exchangeSpec)
@@ -148,7 +148,7 @@ class BinanceExchangeMetadataFetcher(private val exchangeFactory: ExchangeFactor
 
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
+        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
         exchangeSpec.setApiKey(apiKey)
         preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val exchange = exchangeFactory.createExchange(exchangeSpec)
@@ -245,7 +245,7 @@ class KucoinExchangeMetadataFetcher(private val exchangeFactory: ExchangeFactory
     override val supportedExchange = KUCOIN
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
+        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
         exchangeSpec.setApiKey(apiKey)
         preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val exchange = exchangeFactory.createExchange(exchangeSpec)
@@ -301,7 +301,7 @@ class DefaultExchangeMetadataFetcher(
 ) : ExchangeMetadataFetcher {
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
+        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
         exchangeSpec.setApiKey(apiKey)
         if (preventFromLoadingDefaultXchangeMetadata) {
             preventFromLoadingDefaultXchangeMetadata(exchangeSpec)

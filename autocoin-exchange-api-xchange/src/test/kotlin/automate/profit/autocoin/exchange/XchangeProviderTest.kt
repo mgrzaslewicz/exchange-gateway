@@ -10,7 +10,7 @@ import org.knowm.xchange.ExchangeFactory
 import java.io.File
 
 class XchangeProviderTest {
-    private lateinit var xchangeProvider: XchangeProvider
+    private lateinit var cachingXchangeProvider: CachingXchangeProvider
     private lateinit var xchangeFactoryWrapper: XchangeFactoryWrapper
     private lateinit var exchangeFactory: ExchangeFactory
     private lateinit var exchangeMetadataProvider: ExchangeMetadataProvider
@@ -20,7 +20,7 @@ class XchangeProviderTest {
         xchangeFactoryWrapper = mock()
         exchangeFactory = mock()
         exchangeMetadataProvider = mock()
-        xchangeProvider = XchangeProvider(
+        cachingXchangeProvider = CachingXchangeProvider(
             exchangeSpecificationVerifier = ExchangeSpecificationVerifier(),
             xchangeFactoryWrapper = xchangeFactoryWrapper,
             exchangeMetadataProvider = exchangeMetadataProvider
@@ -33,8 +33,8 @@ class XchangeProviderTest {
         whenever(xchangeFactoryWrapper.createExchange(any())).thenReturn(mock())
         whenever(exchangeMetadataProvider.getAndSaveXchangeMetadataFile(BITTREX)).thenReturn(File("/does-not-matter"))
         // when
-        xchangeProvider.getXchange(BITTREX, "public-key", "secret-key", null, emptyMap())
-        xchangeProvider.getXchange(BITTREX, "public-key", "secret-key", null, emptyMap())
+        cachingXchangeProvider.getXchange(BITTREX, "public-key", "secret-key", null, emptyMap())
+        cachingXchangeProvider.getXchange(BITTREX, "public-key", "secret-key", null, emptyMap())
         // then
         verify(xchangeFactoryWrapper, times(1)).createExchange(any())
     }

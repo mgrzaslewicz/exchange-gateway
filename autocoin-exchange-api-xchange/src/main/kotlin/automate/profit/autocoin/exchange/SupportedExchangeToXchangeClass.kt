@@ -29,37 +29,36 @@ import org.knowm.xchange.luno.LunoExchange
 import org.knowm.xchange.poloniex.PoloniexExchange
 import org.knowm.xchange.tradeogre.TradeOgreExchange
 import org.knowm.xchange.yobit.YoBitExchange
-import kotlin.reflect.KClass
 
-fun SupportedExchange.toXchangeClass(): KClass<out Exchange> {
+fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
     return when (this) {
-        BIBOX -> BiboxExchange::class
-        BINANCE -> BinanceExchange::class
-        BITBAY -> BitbayExchange::class
-        BITFINEX -> BitfinexExchange::class
-        BITMEX -> BitmexExchange::class
-        BITSO -> BitsoExchange::class
-        BITSTAMP -> BitstampExchange::class
-        BITTREX -> BittrexExchange::class
-        BITZ -> BitZExchange::class
-        BLEUTRADE -> BleutradeExchange::class
-        CEXIO -> CexIOExchange::class
-        EXMO -> ExmoExchange::class
-        COINBASEPRO -> CoinbaseProExchange::class
-        COINBENE -> CoinbeneExchange::class
-        COINDEAL -> CoindealExchange::class
-        COINEX -> CoinexExchange::class
-        GATEIO -> GateioExchange::class
-        HITBTC -> HitbtcExchange::class
-        GEMINI -> GeminiExchange::class
-        IDEX -> IdexExchange::class
-        KRAKEN -> KrakenExchange::class
-        KUCOIN -> KucoinExchange::class
-        LUNO -> LunoExchange::class
-        LIVECOIN -> LivecoinExchange::class
-        POLONIEX -> PoloniexExchange::class
-        TRADEOGRE -> TradeOgreExchange::class
-        YOBIT -> YoBitExchange::class
+        BIBOX -> BiboxExchange::class.java
+        BINANCE -> BinanceExchange::class.java
+        BITBAY -> BitbayExchange::class.java
+        BITFINEX -> BitfinexExchange::class.java
+        BITMEX -> BitmexExchange::class.java
+        BITSO -> BitsoExchange::class.java
+        BITSTAMP -> BitstampExchange::class.java
+        BITTREX -> BittrexExchange::class.java
+        BITZ -> BitZExchange::class.java
+        BLEUTRADE -> BleutradeExchange::class.java
+        CEXIO -> CexIOExchange::class.java
+        EXMO -> ExmoExchange::class.java
+        COINBASEPRO -> CoinbaseProExchange::class.java
+        COINBENE -> CoinbeneExchange::class.java
+        COINDEAL -> CoindealExchange::class.java
+        COINEX -> CoinexExchange::class.java
+        GATEIO -> GateioExchange::class.java
+        HITBTC -> HitbtcExchange::class.java
+        GEMINI -> GeminiExchange::class.java
+        IDEX -> IdexExchange::class.java
+        KRAKEN -> KrakenExchange::class.java
+        KUCOIN -> KucoinExchange::class.java
+        LUNO -> LunoExchange::class.java
+        LIVECOIN -> LivecoinExchange::class.java
+        POLONIEX -> PoloniexExchange::class.java
+        TRADEOGRE -> TradeOgreExchange::class.java
+        YOBIT -> YoBitExchange::class.java
         else -> throw IllegalArgumentException("Unknown exchange name: ${this.exchangeName}")
     }
 }
