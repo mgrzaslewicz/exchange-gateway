@@ -1,6 +1,7 @@
 package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
+import automate.profit.autocoin.exchange.metadata.bittrex.BittrexExchangeMetadataFetcher
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -31,12 +32,12 @@ class ExchangeMetadataProviderTest {
 
     @Test
     fun shouldNotFetchMetadataWhenRepositoryAlreadyHasMetadata() {
-        val expectedExchangeMetadata = ExchangeMetadata(emptyMap(), emptyMap())
+        val expectedExchangeMetadataResult = ExchangeMetadataResult(exchangeMetadata = ExchangeMetadata(emptyMap(), emptyMap()))
         val bittrexMetadataFetcher = mock<BittrexExchangeMetadataFetcher>().apply {
             whenever(this.supportedExchange).thenReturn(BITTREX)
         }
         val metadataRepository = mock<FileExchangeMetadataRepository>().apply {
-            whenever(this.getLatestExchangeMetadata(BITTREX)).thenReturn(expectedExchangeMetadata)
+            whenever(this.getLatestExchangeMetadata(BITTREX)).thenReturn(expectedExchangeMetadataResult)
         }
         val metadataProvider = ExchangeMetadataProvider(listOf(bittrexMetadataFetcher), metadataRepository, mock())
         // when

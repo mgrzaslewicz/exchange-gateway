@@ -1,7 +1,6 @@
 package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
@@ -11,15 +10,15 @@ import java.io.File
  * Will fetch and save metadata if there is none for given exchange yet
  */
 class ExchangeMetadataProvider(
-        exchangeMetadataFetchers: List<ExchangeMetadataFetcher>,
-        private val exchangeMetadataRepository: FileExchangeMetadataRepository,
-        private val serviceApiKeysProvider: ServiceApiKeysProvider
+    exchangeMetadataFetchers: List<ExchangeMetadataFetcher>,
+    private val exchangeMetadataRepository: FileExchangeMetadataRepository,
+    private val serviceApiKeysProvider: ServiceApiKeysProvider
 ) : ExchangeMetadataService {
 
     init {
         check(exchangeMetadataFetchers
-                .map { it.supportedExchange }
-                .toSet().size >= exchangeMetadataFetchers.size
+            .map { it.supportedExchange }
+            .toSet().size >= exchangeMetadataFetchers.size
         ) { "Provided fetchers are invalid, there are duplicated ones" }
     }
 
@@ -37,15 +36,22 @@ class ExchangeMetadataProvider(
 
     fun getAndSaveExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadata {
         logger.info { "[$supportedExchange] Getting  metadata" }
-        val exchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(supportedExchange)
-        return if (exchangeMetadata != null) {
-            exchangeMetadata
+        val exchangeMetadataResult = exchangeMetadataRepository.getLatestExchangeMetadata(supportedExchange)
+        return if (exchangeMetadataResult.hasMetadata()) {
+            exchangeMetadataResult.exchangeMetadata!!
         } else {
+            logGettingMetadataError(exchangeMetadataResult)
             logger.info { "[$supportedExchange] Fetching exchange metadata" }
-            val apiKey =  serviceApiKeysProvider.getApiKeys(supportedExchange)
+            val apiKey = serviceApiKeysProvider.getApiKeys(supportedExchange)
             val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata(apiKey)
             exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
             return freshExchangeMetadata
+        }
+    }
+
+    private fun logGettingMetadataError(exchangeMetadataResult: ExchangeMetadataResult) {
+        if (exchangeMetadataResult.hasException()) {
+            logger.error(exchangeMetadataResult.exception) { "Exception during loading metadata from storage" }
         }
     }
 
@@ -59,7 +65,7 @@ class ExchangeMetadataProvider(
             val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata()
             exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
             return exchangeMetadataRepository.getLatestXchangeMetadataFile(supportedExchange)
-                    ?: throw IllegalStateException("Something went wrong. $supportedExchange exchange metadata was just fetched, but it's not accessible")
+                ?: throw IllegalStateException("Something went wrong. $supportedExchange exchange metadata was just fetched, but it's not accessible")
         }
     }
 

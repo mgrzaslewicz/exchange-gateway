@@ -14,24 +14,45 @@ class FileExchangeMetadataRepositoryTest {
     lateinit var tempFolder: File
 
     private val exchangeMetadataToSave = ExchangeMetadata(
-            currencyPairMetadata = mapOf(
-                    CurrencyPair.of("ABC/BCD") to CurrencyPairMetadata(
-                            amountScale = 23,
-                            priceScale = 2,
-                            minimumAmount = BigDecimal("23.4567"),
-                            maximumAmount = BigDecimal("101.123"),
-                            minimumOrderValue = BigDecimal.ZERO,
-                            maximumPriceMultiplierUp = BigDecimal("0.2"),
-                            maximumPriceMultiplierDown = BigDecimal("0.15"),
-                            buyFeeMultiplier = BigDecimal("0.0015")
-
+        currencyPairMetadata = mapOf(
+            CurrencyPair.of("ABC/BCD") to CurrencyPairMetadata(
+                amountScale = 23,
+                priceScale = 2,
+                minimumAmount = BigDecimal("23.4567"),
+                maximumAmount = BigDecimal("101.123"),
+                minimumOrderValue = BigDecimal.ZERO,
+                maximumPriceMultiplierUp = BigDecimal("0.2"),
+                maximumPriceMultiplierDown = BigDecimal("0.15"),
+                buyFeeMultiplier = BigDecimal("0.0015"),
+                transactionFeeRanges = TransactionFeeRanges(
+                    makerFees = listOf(
+                        TransactionFeeRange(
+                            beginAmount = "0.05".toBigDecimal(),
+                            fee = TransactionFee(percent = "0.2".toBigDecimal())
+                        ),
+                        TransactionFeeRange(
+                            beginAmount = "0.25".toBigDecimal(),
+                            fee = TransactionFee(percent = "0.1".toBigDecimal())
+                        )
+                    ),
+                    takerFees = listOf(
+                        TransactionFeeRange(
+                            beginAmount = "0.05".toBigDecimal(),
+                            fee = TransactionFee(percent = "0.3".toBigDecimal())
+                        ),
+                        TransactionFeeRange(
+                            beginAmount = "0.35".toBigDecimal(),
+                            fee = TransactionFee(percent = "0.2".toBigDecimal())
+                        )
                     )
-            ),
-            currencyMetadata = mapOf(
-                    "ABC" to CurrencyMetadata(
-                            scale = 3
-                    )
+                )
             )
+        ),
+        currencyMetadata = mapOf(
+            "ABC" to CurrencyMetadata(
+                scale = 3
+            )
+        )
     )
     private val xchangeMetadataJson = XchangeMetadataJson("{}")
 
@@ -40,9 +61,9 @@ class FileExchangeMetadataRepositoryTest {
         // given
         val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder) { 19 }
         // when
-        val savedExchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
+        val savedExchangeMetadataResult = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
         // then
-        assertThat(savedExchangeMetadata).isNull()
+        assertThat(savedExchangeMetadataResult.hasMetadata()).isFalse()
     }
 
     @Test
@@ -54,7 +75,7 @@ class FileExchangeMetadataRepositoryTest {
         // when
         val savedExchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
         // then
-        assertThat(exchangeMetadataToSave).isEqualTo(savedExchangeMetadata)
+        assertThat(exchangeMetadataToSave).isEqualTo(savedExchangeMetadata.exchangeMetadata)
     }
 
 
@@ -68,7 +89,7 @@ class FileExchangeMetadataRepositoryTest {
         // when
         val savedExchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
         // then
-        assertThat(savedExchangeMetadata).isEqualTo(secondExchangeMetadataToSave)
+        assertThat(savedExchangeMetadata.exchangeMetadata).isEqualTo(secondExchangeMetadataToSave)
     }
 
     @Test
