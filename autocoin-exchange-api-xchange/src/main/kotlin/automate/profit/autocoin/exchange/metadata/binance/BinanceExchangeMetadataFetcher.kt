@@ -1,6 +1,7 @@
 package automate.profit.autocoin.exchange.metadata.binance
 
 import automate.profit.autocoin.exchange.SupportedExchange
+import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.*
@@ -20,7 +21,8 @@ class BinanceExchangeMetadataFetcher(
     private val exchangeFactory: XchangeExchangeFactory,
     private val binanceExchangeInfoProvider: (XchangeExchange) -> BinanceExchangeInfo = { exchange -> (exchange.marketDataService as BinanceMarketDataService).exchangeInfo },
     private val binanceMetadataProvider: (XchangeExchange) -> XchangeExchangeMetaData = { exchange -> exchange.exchangeMetaData },
-    private val binanceTickerProvider: (XchangeExchange) -> List<BinancePrice> = { exchange -> (exchange.marketDataService as BinanceMarketDataService).tickerAllPrices() }
+    private val binanceTickerProvider: (XchangeExchange) -> List<BinancePrice> = { exchange -> (exchange.marketDataService as BinanceMarketDataService).tickerAllPrices() },
+    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner
 ) : ExchangeMetadataFetcher {
     override val supportedExchange = SupportedExchange.BINANCE
 
@@ -43,7 +45,7 @@ class BinanceExchangeMetadataFetcher(
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = XchangeExchangeSpecification(supportedExchange.toXchangeJavaClass())
-        exchangeSpec.setApiKey(apiKey)
+        xchangeSpecificationApiKeyAssigner.assignKeys(SupportedExchange.BINANCE, exchangeSpec, apiKey)
         preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val exchange = exchangeFactory.createExchange(exchangeSpec)
         val binanceMetadata = binanceMetadataProvider(exchange)

@@ -1,7 +1,9 @@
 package automate.profit.autocoin.exchange.metadata.binance
 
+import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.metadataObjectMapper
+import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import com.fasterxml.jackson.core.type.TypeReference
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
@@ -36,7 +38,8 @@ class BinanceExchangeMetadataFetcherTest {
             exchangeFactory = exchangeFactory,
             binanceExchangeInfoProvider = { _ -> binanceExchangeInfo },
             binanceTickerProvider = { _ -> binanceTickers },
-            binanceMetadataProvider = {_ -> binanceMetadata}
+            binanceMetadataProvider = {_ -> binanceMetadata},
+            xchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier())
         )
     }
 

@@ -21,7 +21,7 @@ class XchangeProviderTest {
         exchangeFactory = mock()
         exchangeMetadataProvider = mock()
         cachingXchangeProvider = CachingXchangeProvider(
-            exchangeSpecificationVerifier = ExchangeSpecificationVerifier(),
+            xchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier()),
             xchangeFactoryWrapper = xchangeFactoryWrapper,
             exchangeMetadataProvider = exchangeMetadataProvider
         )

@@ -41,6 +41,8 @@ data class CurrencyPair private constructor(
 
     override fun toString(): String = "$base/$counter"
 
+    fun toStringWithSeparator(separator: Char): String = "$base$separator$counter"
+
     override fun compareTo(other: CurrencyPair): Int {
         return toString().compareTo(other.toString())
     }

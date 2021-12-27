@@ -8,13 +8,15 @@ import org.knowm.xchange.Exchange
 import org.knowm.xchange.ExchangeFactory
 import org.knowm.xchange.ExchangeSpecification
 
-class XchangeFactoryWrapper { // wrap in class to make it testable as original xchange factory is an enum
-    private val xchangeFactory = ExchangeFactory.INSTANCE
+class XchangeFactoryWrapper(
+    private val xchangeFactory: ExchangeFactory = ExchangeFactory.INSTANCE
+) { // wrap in class to make it testable as original xchange factory is an enum
+
     fun createExchange(exchangeSpecification: ExchangeSpecification) = xchangeFactory.createExchange(exchangeSpecification)
 }
 
 class CachingXchangeProvider(
-    private val exchangeSpecificationVerifier: ExchangeSpecificationVerifier,
+    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner,
     private val xchangeFactoryWrapper: XchangeFactoryWrapper,
     private val exchangeMetadataProvider: ExchangeMetadataProvider
 ) {
@@ -25,7 +27,7 @@ class CachingXchangeProvider(
 
     fun getXchange(exchangeName: SupportedExchange, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): Exchange {
         val exchangeSpec = ExchangeSpecification(exchangeName.toXchangeJavaClass())
-        assignKeys(exchangeName, exchangeSpec, publicKey, secretKey, userName, exchangeSpecificKeyParameters)
+        xchangeSpecificationApiKeyAssigner.assignKeys(exchangeName, exchangeSpec, publicKey, secretKey, userName, exchangeSpecificKeyParameters)
         return getXchange(exchangeName, exchangeSpec)
 
     }
@@ -43,27 +45,6 @@ class CachingXchangeProvider(
         }
         return xchangesCache[cacheKey]!!
 
-    }
-
-    private fun assignKeys(
-        supportedExchange: SupportedExchange,
-        exchangeSpecification: ExchangeSpecification,
-        publicKey: String,
-        secretKey: String,
-        userName: String?,
-        exchangeSpecificKeyParameters: Map<String, String>?
-    ) {
-        val exchangeSpecificParametersMap = if (exchangeSpecificKeyParameters == null) mutableMapOf<String, String>() else HashMap(exchangeSpecificKeyParameters)
-        exchangeSpecification.apiKey = publicKey.trim()
-        exchangeSpecification.secretKey = secretKey.trim()
-        exchangeSpecification.userName = userName
-        // xchange lib needs mutable map as it sets default values for some implementations when these not provided
-        exchangeSpecification.exchangeSpecificParameters = exchangeSpecificParametersMap as Map<String, Any>
-
-        if (exchangeSpecification.apiKey != publicKey) logger.warn("$supportedExchange API public key contained whitespaces, trimmed")
-        if (exchangeSpecification.secretKey != secretKey) logger.warn("$supportedExchange API secret key contained whitespaces, trimmed")
-
-        exchangeSpecificationVerifier.verifyKeys(supportedExchange, exchangeSpecification)
     }
 
     private fun setupMetadataInit(supportedExchange: SupportedExchange, exchangeSpec: ExchangeSpecification) {

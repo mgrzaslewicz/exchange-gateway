@@ -1,7 +1,9 @@
 package automate.profit.autocoin.exchange.metadata.bittrex
 
+import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.metadataObjectMapper
+import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import com.fasterxml.jackson.core.type.TypeReference
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
@@ -32,7 +34,8 @@ class BittrexExchangeMetadataFetcherTest {
         tested = BittrexExchangeMetadataFetcher(
             exchangeFactory = exchangeFactory,
             bittrexSymbolsProvider = { _ -> bittrexSymbols },
-            xchangeMetadataProvider = { _ -> xchangeMetadata }
+            xchangeMetadataProvider = { _ -> xchangeMetadata },
+            xchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier())
         )
     }
 
