@@ -60,17 +60,20 @@ data class CurrencyMetadataDto(
 
 data class ExchangeMetadataDto(
     val currencyPairMetadata: Map<CurrencyPair, CurrencyPairMetadataDto>,
-    val currencyMetadata: Map<String, CurrencyMetadataDto>
+    val currencyMetadata: Map<String, CurrencyMetadataDto>,
+    val debugWarnings: List<String>
 ) {
     fun toExchangeMetadata() = ExchangeMetadata(
         currencyPairMetadata = currencyPairMetadata.mapValues { it.value.toCurrencyPairMetadata() },
-        currencyMetadata = currencyMetadata.mapValues { it.value.toCurrencyMetadata() }
+        currencyMetadata = currencyMetadata.mapValues { it.value.toCurrencyMetadata() },
+        debugWarnings = debugWarnings
     )
 }
 
-fun ExchangeMetadata.toDto() = ExchangeMetadataDto(
+fun ExchangeMetadata.toDto(includeDebugWarnings: Boolean) = ExchangeMetadataDto(
     currencyMetadata = currencyMetadata.mapValues { it.value.toDto() },
-    currencyPairMetadata = currencyPairMetadata.mapValues { it.value.toDto() }
+    currencyPairMetadata = currencyPairMetadata.mapValues { it.value.toDto() },
+    debugWarnings = if (includeDebugWarnings) this.debugWarnings else emptyList()
 )
 
 

@@ -32,63 +32,50 @@ private val exchangeMetadataModule = SimpleModule().apply {
 fun exchangeMetadataFromJson(json: String): ExchangeMetadata = metadataObjectMapper.readValue(json, ExchangeMetadata::class.java)
 
 data class ExchangeMetadataResult(
-    val exchangeMetadata: ExchangeMetadata? = null,
-    val exception: Exception? = null
+    val exchangeMetadata: ExchangeMetadata? = null, val exception: Exception? = null
 ) {
     fun hasMetadata() = exchangeMetadata != null
     fun hasException() = exception != null
 }
 
-internal val metadataObjectMapper = jacksonObjectMapper()
-    .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).apply {
-        registerModule(exchangeMetadataModule)
-    }
+internal val metadataObjectMapper = jacksonObjectMapper().configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).apply {
+    registerModule(exchangeMetadataModule)
+}
 
 class FileExchangeMetadataRepository(
-    private val metadataDirectory: File,
-    private val currentTimeMillis: () -> Long = System::currentTimeMillis
+    private val metadataDirectory: File, private val currentTimeMillis: () -> Long = System::currentTimeMillis
 ) {
     companion object : KLogging()
 
     /**
-     * Metadata needs 2 files.
-     * Avoid writing only first and not 2nd yet
-     * and reading metadata in other thread expecting to have 2 files
+     * Avoid writing files at the same millisecond
      */
     private val updateLock = ReentrantLock()
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
 
-    private fun getCurrentDateTimeAsString() = dateTimeFormatter.format(Instant.ofEpochMilli(currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime())
+    private fun getCurrentDateTimeAsString() = getDateTimeAsString(currentTimeMillis())
+    private fun getDateTimeAsString(millis: Long) = dateTimeFormatter.format(Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).toLocalDateTime())
 
-    fun saveExchangeMetadata(supportedExchange: SupportedExchange, exchangeMetadata: ExchangeMetadata, xchangeMetadataJson: XchangeMetadataJson) {
+    fun saveExchangeMetadata(supportedExchange: SupportedExchange, exchangeMetadata: ExchangeMetadata) {
         logger.info { "[$supportedExchange] Saving  metadata" }
         val exchangeDirectory = getOrCreateDirectory(supportedExchange)
-
+        updateLock.lock()
         val currentDateTime = getCurrentDateTimeAsString()
 
         val newMetadataFileName = "${supportedExchange.exchangeName}_$currentDateTime.json"
-        val newXchangeMetadataFileName = "${supportedExchange.exchangeName}-xchange_$currentDateTime.json"
         val newMetadataFile = exchangeDirectory.resolve(newMetadataFileName)
-        val newXchangeMetadataFile = exchangeDirectory.resolve(newXchangeMetadataFileName)
-        updateLock.lock()
         try {
-            logger.info { "[$supportedExchange] Writing acutocoin metadata to file ${newMetadataFile.absolutePath}" }
+            logger.info { "[$supportedExchange] Writing exchange metadata to ${newMetadataFile.absolutePath}" }
             newMetadataFile.writeText(exchangeMetadata.asJson())
-            logger.info { "[$supportedExchange] Writing xchange metadata to file ${newXchangeMetadataFile.absolutePath}" }
-            newXchangeMetadataFile.writeText(xchangeMetadataJson.json)
         } finally {
             updateLock.unlock()
         }
     }
 
     private fun getLatestMetadataFileName(exchangeDirectory: File, exchangeName: String): String? {
-        return exchangeDirectory
-            .list()!!
-            .filter {
-                !it.contains("-xchange")
-                        && it.contains(exchangeName)
-                        && it.endsWith(".json")
-            }.maxBy { getNumberFromName(it) }
+        return exchangeDirectory.list()!!.filter {
+            it.contains(exchangeName) && it.endsWith(".json")
+        }.maxBy { getNumberFromName(it) }
     }
 
     fun getLatestExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadataResult {
@@ -109,21 +96,8 @@ class FileExchangeMetadataRepository(
         } else ExchangeMetadataResult()
     }
 
-    fun getLatestXchangeMetadataFile(supportedExchange: SupportedExchange): File? {
-        val exchangeDirectory = getOrCreateDirectory(supportedExchange)
-        val latestMetadataFileName = exchangeDirectory
-            .list()
-            .filter { it.contains("${supportedExchange.exchangeName}-xchange") }
-            .maxBy { getNumberFromName(it) }
-        return if (latestMetadataFileName != null) {
-            logger.info { "[$supportedExchange] Found xchange metadata file $latestMetadataFileName" }
-            exchangeDirectory.resolve(latestMetadataFileName)
-        } else null
-    }
-
     /**
      * bittrex_12345.json -> 12345
-     * bittrex-xchange_12345.json -> 12345
      */
     private fun getNumberFromName(fileName: String): Long {
         val exchangeNameAndDateTime = fileName.split("_", ".json")
@@ -138,6 +112,19 @@ class FileExchangeMetadataRepository(
             }
         }
         return result
+    }
+
+    fun keepLastNBackups(supportedExchange: SupportedExchange, maxBackups: Int) {
+        logger.debug { "[$supportedExchange] Keeping max $maxBackups exchange metadata files" }
+        val exchangeDirectory = getOrCreateDirectory(supportedExchange)
+        val allFiles = exchangeDirectory.list()
+            .filter { it.contains(supportedExchange.exchangeName) }
+            .sortedBy { getNumberFromName(it) }
+        if (allFiles.size > maxBackups) {
+            allFiles
+                .subList(0, maxBackups)
+                .forEach { exchangeDirectory.resolve(it).delete() }
+        }
     }
 
 }

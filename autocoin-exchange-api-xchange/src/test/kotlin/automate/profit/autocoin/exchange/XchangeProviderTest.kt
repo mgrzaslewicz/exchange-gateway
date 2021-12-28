@@ -7,7 +7,6 @@ import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.knowm.xchange.ExchangeFactory
-import java.io.File
 
 class XchangeProviderTest {
     private lateinit var cachingXchangeProvider: CachingXchangeProvider
@@ -22,8 +21,7 @@ class XchangeProviderTest {
         exchangeMetadataProvider = mock()
         cachingXchangeProvider = CachingXchangeProvider(
             xchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier()),
-            xchangeFactoryWrapper = xchangeFactoryWrapper,
-            exchangeMetadataProvider = exchangeMetadataProvider
+            xchangeFactoryWrapper = xchangeFactoryWrapper
         )
     }
 
@@ -31,7 +29,6 @@ class XchangeProviderTest {
     fun shouldUseCachedXchangeFactoryWhenUsingKeys() {
         // given
         whenever(xchangeFactoryWrapper.createExchange(any())).thenReturn(mock())
-        whenever(exchangeMetadataProvider.getAndSaveXchangeMetadataFile(BITTREX)).thenReturn(File("/does-not-matter"))
         // when
         cachingXchangeProvider.getXchange(BITTREX, "public-key", "secret-key", null, emptyMap())
         cachingXchangeProvider.getXchange(BITTREX, "public-key", "secret-key", null, emptyMap())

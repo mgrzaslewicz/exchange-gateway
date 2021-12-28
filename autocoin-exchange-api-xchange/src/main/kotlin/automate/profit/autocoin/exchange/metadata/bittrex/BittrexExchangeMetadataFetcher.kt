@@ -28,7 +28,7 @@ class BittrexExchangeMetadataFetcher(
 
     override val supportedExchange = SupportedExchange.BITTREX
 
-    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
+    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
         xchangeSpecificationApiKeyAssigner.assignKeys(SupportedExchange.BITTREX, exchangeSpec, apiKey)
         preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
@@ -38,17 +38,19 @@ class BittrexExchangeMetadataFetcher(
         val xchangeMetadata = xchangeMetadataProvider(exchange)
         val bittrexPriceScale = DEFAULT_SCALE
 
+        val debugWarnings = ArrayList<String>()
+        debugWarnings.add("Trading fees are hardcoded based on https://bittrex.zendesk.com/hc/en-us/articles/115000199651-Bittrex-fees")
         val defaultTransactionFeeRanges = TransactionFeeRanges(
             makerFees = listOf(
                 TransactionFeeRange(
                     beginAmount = BigDecimal.ZERO,
-                    fee = TransactionFee(percent = "0.75".toBigDecimal())
+                    fee = TransactionFee(percent = "0.35".toBigDecimal())
                 )
             ),
             takerFees = listOf(
                 TransactionFeeRange(
                     beginAmount = BigDecimal.ZERO,
-                    fee = TransactionFee(percent = "0.75".toBigDecimal())
+                    fee = TransactionFee(percent = "0.35".toBigDecimal())
                 )
             )
         )
@@ -68,12 +70,11 @@ class BittrexExchangeMetadataFetcher(
             xchangeMetadata.currencies[currencyPair.counter] = null
         }
 
-        val xchangeMetadataJson = xchangeMetadata.toJSONString()
         val exchangeMetadata = ExchangeMetadata(
             currencyPairMetadata = xchangeMetadata.currencyPairs
                 .filter {
                     if (it.value == null) {
-                        logger.debug { "$supportedExchange-${it.key} no currency pair in metadata, skipping" }
+                        debugWarnings.add("${it.key} null currency pair value in bittrex metadata, excluded")
                     }
                     it.value != null
                 }
@@ -97,9 +98,10 @@ class BittrexExchangeMetadataFetcher(
                 it.key.currencyCode to CurrencyMetadata(
                     scale = getScaleOrDefault(supportedExchange, it.key, it.value)
                 )
-            }.toMap()
+            }.toMap(),
+            debugWarnings = debugWarnings
         )
-        return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
+        return exchangeMetadata
     }
 
 }

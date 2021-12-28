@@ -1,7 +1,6 @@
 package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
 import mu.KLogging
 
@@ -30,8 +29,9 @@ class ExchangeMetadataRefresher(
             logger.info { "[$supportedExchange] Refreshing metadata" }
             try {
                 val apiKeys = serviceApiKeysProvider.getApiKeys(supportedExchange)
-                val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata(apiKeys)
-                exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
+                val freshExchangeMetadata = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata(apiKeys)
+                exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata)
+                exchangeMetadataRepository.keepLastNBackups(supportedExchange, maxBackups = 100)
             } catch (e: Exception) {
                 logger.error(e) { "[$supportedExchange] Exception during metadata refresh" }
             } catch (e: Throwable/* catch runtime class errors too */) {

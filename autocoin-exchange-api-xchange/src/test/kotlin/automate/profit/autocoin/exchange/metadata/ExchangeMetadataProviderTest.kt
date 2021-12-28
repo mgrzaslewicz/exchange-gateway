@@ -13,13 +13,18 @@ import java.io.File
 
 class ExchangeMetadataProviderTest {
 
+    private val emptyMetadata = ExchangeMetadata(
+        currencyPairMetadata = emptyMap(),
+        currencyMetadata = emptyMap(),
+        debugWarnings = emptyList()
+    )
+
     @Test
     fun shouldFetchMetadataWhenRepositoryEmpty(@TempDir tempFolder: File) {
-        val expectedExchangeMetadata = ExchangeMetadata(emptyMap(), emptyMap())
-        val expectedXchangeMetadata = XchangeMetadataJson("{}")
+        val expectedExchangeMetadata = emptyMetadata
         val bittrexMetadataFetcher = mock<BittrexExchangeMetadataFetcher>().apply {
             whenever(this.supportedExchange).thenReturn(BITTREX)
-            whenever(this.fetchExchangeMetadata()).thenReturn(Pair(expectedXchangeMetadata, expectedExchangeMetadata))
+            whenever(this.fetchExchangeMetadata()).thenReturn(expectedExchangeMetadata)
         }
 
         val metadataRepository = FileExchangeMetadataRepository(tempFolder)
@@ -32,7 +37,7 @@ class ExchangeMetadataProviderTest {
 
     @Test
     fun shouldNotFetchMetadataWhenRepositoryAlreadyHasMetadata() {
-        val expectedExchangeMetadataResult = ExchangeMetadataResult(exchangeMetadata = ExchangeMetadata(emptyMap(), emptyMap()))
+        val expectedExchangeMetadataResult = ExchangeMetadataResult(exchangeMetadata = emptyMetadata)
         val bittrexMetadataFetcher = mock<BittrexExchangeMetadataFetcher>().apply {
             whenever(this.supportedExchange).thenReturn(BITTREX)
         }

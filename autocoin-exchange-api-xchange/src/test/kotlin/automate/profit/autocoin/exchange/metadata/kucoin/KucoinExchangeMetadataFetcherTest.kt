@@ -65,7 +65,7 @@ class KucoinExchangeMetadataFetcherTest {
         // when
         val exchangeMetadata = tested.fetchExchangeMetadata(apiKey = kucoinApiKey)
         // then
-        val feeRanges = exchangeMetadata.second.currencyPairMetadata.getValue(CurrencyPair.of("BTC/USDT")).transactionFeeRanges
+        val feeRanges = exchangeMetadata.currencyPairMetadata.getValue(CurrencyPair.of("BTC/USDT")).transactionFeeRanges
         assertThat(feeRanges.takerFees).hasSize(1)
         assertThat(feeRanges.takerFees.first().fee.percent).isEqualTo("0.01".toBigDecimal())
         assertThat(feeRanges.makerFees.first().fee.percent).isEqualTo("0.005".toBigDecimal())
@@ -76,7 +76,7 @@ class KucoinExchangeMetadataFetcherTest {
         // when
         val exchangeMetadata = tested.fetchExchangeMetadata(apiKey = kucoinApiKey)
         // then
-        assertThat(exchangeMetadata.second.currencyPairs()).hasSize(1110)
+        assertThat(exchangeMetadata.currencyPairs()).hasSize(1110)
     }
 
     @Test

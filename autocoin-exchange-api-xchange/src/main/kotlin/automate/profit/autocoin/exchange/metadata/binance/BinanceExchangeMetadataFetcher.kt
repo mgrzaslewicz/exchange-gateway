@@ -11,11 +11,11 @@ import mu.KotlinLogging
 import org.knowm.xchange.binance.dto.marketdata.BinancePrice
 import org.knowm.xchange.binance.dto.meta.exchangeinfo.BinanceExchangeInfo
 import org.knowm.xchange.binance.service.BinanceMarketDataService
-import org.knowm.xchange.dto.meta.ExchangeMetaData as XchangeExchangeMetaData
 import java.math.BigDecimal
 import org.knowm.xchange.Exchange as XchangeExchange
 import org.knowm.xchange.ExchangeFactory as XchangeExchangeFactory
 import org.knowm.xchange.ExchangeSpecification as XchangeExchangeSpecification
+import org.knowm.xchange.dto.meta.ExchangeMetaData as XchangeExchangeMetaData
 
 class BinanceExchangeMetadataFetcher(
     private val exchangeFactory: XchangeExchangeFactory,
@@ -43,7 +43,7 @@ class BinanceExchangeMetadataFetcher(
         )
     )
 
-    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
+    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
         val exchangeSpec = XchangeExchangeSpecification(supportedExchange.toXchangeJavaClass())
         xchangeSpecificationApiKeyAssigner.assignKeys(SupportedExchange.BINANCE, exchangeSpec, apiKey)
         preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
@@ -109,10 +109,10 @@ class BinanceExchangeMetadataFetcher(
         }
         val exchangeMetadata = ExchangeMetadata(
             currencyPairMetadata = currencyPairsMap,
-            currencyMetadata = currenciesMap.toMap()
+            currencyMetadata = currenciesMap.toMap(),
+            debugWarnings = emptyList()
         )
-        val xchangeMetadataJson = binanceMetadata.toJSONString()
-        return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
+        return exchangeMetadata
     }
 
 

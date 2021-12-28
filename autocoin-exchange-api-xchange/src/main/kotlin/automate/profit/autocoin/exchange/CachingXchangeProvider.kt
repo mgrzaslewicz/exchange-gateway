@@ -1,7 +1,5 @@
 package automate.profit.autocoin.exchange
 
-import automate.profit.autocoin.exchange.metadata.ExchangeMetadataProvider
-import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import automate.profit.autocoin.exchange.peruser.md5
 import mu.KLogging
 import org.knowm.xchange.Exchange
@@ -17,8 +15,7 @@ class XchangeFactoryWrapper(
 
 class CachingXchangeProvider(
     private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner,
-    private val xchangeFactoryWrapper: XchangeFactoryWrapper,
-    private val exchangeMetadataProvider: ExchangeMetadataProvider
+    private val xchangeFactoryWrapper: XchangeFactoryWrapper
 ) {
 
     private companion object : KLogging()
@@ -39,7 +36,8 @@ class CachingXchangeProvider(
             logger.debug { "Using cached exchange for key $keyTruncated" }
         } else {
             logger.info { "[$supportedExchange] Creating exchange for key '$keyTruncated' and userName '${exchangeSpec.userName}'" }
-            setupMetadataInit(supportedExchange, exchangeSpec)
+             //Metadata is provided by ExchangeMetadataService so don't fetch it each time
+            exchangeSpec.isShouldLoadRemoteMetaData = false
             val xchange = xchangeFactoryWrapper.createExchange(exchangeSpec)
             xchangesCache[cacheKey] = xchange
         }
@@ -47,36 +45,4 @@ class CachingXchangeProvider(
 
     }
 
-    private fun setupMetadataInit(supportedExchange: SupportedExchange, exchangeSpec: ExchangeSpecification) {
-        val xchangeMetadataFile = exchangeMetadataProvider.getAndSaveXchangeMetadataFile(supportedExchange).absolutePath
-        when (supportedExchange) {
-            // >> providing fresh metadata working
-            // run LoadingMetadataManualTest to see which exchanges are able to load fresh metadata
-            SupportedExchange.BINANCE,
-            SupportedExchange.BITTREX,
-            SupportedExchange.KUCOIN -> {
-                exchangeSpec.isShouldLoadRemoteMetaData = false
-                exchangeSpec.metaDataJsonFileOverride = xchangeMetadataFile
-            }
-            // << providing fresh metadata working
-
-            // >> metadata implemented from static file only
-            SupportedExchange.BITBAY, SupportedExchange.BITSTAMP -> {
-                // TODO manual fetch metadata file or provide pull request to Xchange, it has only static data in bitbay.json and no remoteInit() implemented. priceScale and amountScale vary so default metadata might not be ok
-            }
-            SupportedExchange.POLONIEX -> {
-                // priceScale and amountScale is 8 everywhere so default metadata is fine
-                exchangeSpec.isShouldLoadRemoteMetaData = false
-            }
-            // << metadata from static file only
-
-            // >> fetching metadata not working properly - gives nulls
-            SupportedExchange.GATEIO -> {
-                exchangeSpec.isShouldLoadRemoteMetaData = false
-            }
-            // << fetching metadata not working properly - gives nulls
-        }
-
-
-    }
 }

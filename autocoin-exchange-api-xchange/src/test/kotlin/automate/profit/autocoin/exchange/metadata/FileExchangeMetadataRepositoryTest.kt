@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import java.math.BigDecimal
+import java.util.ArrayDeque
 
 class FileExchangeMetadataRepositoryTest {
 
@@ -52,9 +53,9 @@ class FileExchangeMetadataRepositoryTest {
             "ABC" to CurrencyMetadata(
                 scale = 3
             )
-        )
+        ),
+        debugWarnings = emptyList()
     )
-    private val xchangeMetadataJson = XchangeMetadataJson("{}")
 
     @Test
     fun shouldReturnNoMetadataWhenNothingSavedBefore() {
@@ -71,7 +72,7 @@ class FileExchangeMetadataRepositoryTest {
         // given
         val currentTimeMillis = 19L
         val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder) { currentTimeMillis }
-        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave, xchangeMetadataJson)
+        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
         // when
         val savedExchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
         // then
@@ -84,8 +85,8 @@ class FileExchangeMetadataRepositoryTest {
         // given
         val secondExchangeMetadataToSave = exchangeMetadataToSave.copy(currencyMetadata = emptyMap())
         val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder)
-        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave, xchangeMetadataJson)
-        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, secondExchangeMetadataToSave, xchangeMetadataJson)
+        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
+        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, secondExchangeMetadataToSave)
         // when
         val savedExchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
         // then
@@ -98,12 +99,36 @@ class FileExchangeMetadataRepositoryTest {
         val currentTimeMillis = 19L
         val currentTimeMillisAsDateTimeString = "19700101010000019"
         val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder) { currentTimeMillis }
-        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave, xchangeMetadataJson)
         // when
-        val savedFile = tempFolder.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_$currentTimeMillisAsDateTimeString.json")
+        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
         // then
+        val savedFile = tempFolder.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_$currentTimeMillisAsDateTimeString.json")
         assertThat(savedFile).exists()
         assertThat(savedFile.readText()).isEqualTo(metadataObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(exchangeMetadataToSave))
+    }
+
+    @Test
+    fun shouldKeepLastNBackups() {
+        val timeMillisQueue = ArrayDeque<Long>().apply {
+            add(1L)
+            add(2L)
+            add(3L)
+            add(4L)
+        }
+        val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder) {
+            timeMillisQueue.pollFirst()
+        }
+        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
+        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
+        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
+        exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
+        // when
+        exchangeMetadataRepository.keepLastNBackups(BITTREX, 2)
+        // then
+        assertThat(tempFolder.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_19700101010000001.json")).doesNotExist()
+        assertThat(tempFolder.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_19700101010000002.json")).doesNotExist()
+        assertThat(tempFolder.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_19700101010000003.json")).exists()
+        assertThat(tempFolder.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_19700101010000004.json")).exists()
     }
 
 }

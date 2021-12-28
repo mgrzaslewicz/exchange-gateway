@@ -48,7 +48,7 @@ class BinanceExchangeMetadataFetcherTest {
         // when
         val exchangeMetadata = tested.fetchExchangeMetadata(apiKey = null)
         // then
-        val feeRanges = exchangeMetadata.second.currencyPairMetadata.getValue(CurrencyPair.of("ADA/BTC")).transactionFeeRanges
+        val feeRanges = exchangeMetadata.currencyPairMetadata.getValue(CurrencyPair.of("ADA/BTC")).transactionFeeRanges
         assertThat(feeRanges.takerFees).hasSize(1)
         assertThat(feeRanges.takerFees.first().fee.percent).isEqualTo("0.1".toBigDecimal())
         assertThat(feeRanges.makerFees.first().fee.percent).isEqualTo("0.1".toBigDecimal())
@@ -59,7 +59,7 @@ class BinanceExchangeMetadataFetcherTest {
         // when
         val exchangeMetadata = tested.fetchExchangeMetadata(apiKey = null)
         // then
-        assertThat(exchangeMetadata.second.currencyPairs()).hasSize(1846)
+        assertThat(exchangeMetadata.currencyPairs()).hasSize(1846)
     }
 
 }
