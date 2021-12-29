@@ -52,9 +52,13 @@ private fun getEmptyXchangeMetadataFile(): File {
     return emptyMetadataFile
 }
 
-internal fun getScaleOrDefault(supportedExchange: SupportedExchange, currency: XchangeCurrency, currencyMetaData: XchangeCurrencyMetaData?): Int {
+internal fun getScaleOrDefault(
+    currency: XchangeCurrency,
+    currencyMetaData: XchangeCurrencyMetaData?,
+    debugWarnings: ArrayList<String>
+): Int {
     return if (currencyMetaData?.scale == null) {
-        logger.warn { "$supportedExchange-$currency scale is null, returning default=$DEFAULT_SCALE" }
+        debugWarnings.add("$currency scale is null, returning default=$DEFAULT_SCALE")
         DEFAULT_SCALE
     } else {
         currencyMetaData.scale
@@ -136,7 +140,7 @@ class DefaultExchangeMetadataFetcher(
             }.toMap()
         val currencies = exchange.exchangeMetaData.currencies?.map {
             it.key.currencyCode to CurrencyMetadata(
-                scale = getScaleOrDefault(supportedExchange, it.key, it.value)
+                scale = getScaleOrDefault(it.key, it.value, metadataWarnings)
             )
         }?.toMap() ?: emptyMap()
         if (currencies.isEmpty()) {

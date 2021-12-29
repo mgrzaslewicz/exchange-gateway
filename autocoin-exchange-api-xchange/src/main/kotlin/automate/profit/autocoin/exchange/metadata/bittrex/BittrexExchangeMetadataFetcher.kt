@@ -96,7 +96,7 @@ class BittrexExchangeMetadataFetcher(
                 }.toMap(),
             currencyMetadata = xchangeMetadata.currencies.map {
                 it.key.currencyCode to CurrencyMetadata(
-                    scale = getScaleOrDefault(supportedExchange, it.key, it.value)
+                    scale = getScaleOrDefault(it.key, it.value, debugWarnings)
                 )
             }.toMap(),
             debugWarnings = debugWarnings

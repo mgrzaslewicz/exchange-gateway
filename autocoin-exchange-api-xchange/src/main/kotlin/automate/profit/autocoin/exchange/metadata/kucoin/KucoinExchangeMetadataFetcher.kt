@@ -76,9 +76,9 @@ class KucoinExchangeMetadataFetcher(
         }
         if (apiKey == null) {
             logger.warn { "[$supportedExchange] apiKey is missing, will not fetch trading fees" }
-            debugWarnings.add("apiKey is missing, will not fetch trading fees")
+            debugWarnings.add("apiKey is missing, cannot fetch trading fees")
         } else {
-            fillTradingFees(currencyPairsMap, kucoinMarketDataService)
+            fillTradingFees(currencyPairsMap, kucoinMarketDataService, debugWarnings)
         }
         val exchangeMetadata = ExchangeMetadata(
             currencyPairMetadata = currencyPairsMap,
@@ -89,14 +89,27 @@ class KucoinExchangeMetadataFetcher(
         return exchangeMetadata
     }
 
-    private fun fillTradingFees(currencyPairsMap: MutableMap<CurrencyPair, CurrencyPairMetadata>, kucoinMarketDataService: KucoinMarketDataService) {
+    private fun fillTradingFees(
+        currencyPairsMap: MutableMap<CurrencyPair, CurrencyPairMetadata>,
+        kucoinMarketDataService: KucoinMarketDataService,
+        debugWarnings: ArrayList<String>
+    ) {
+        try {
+            tryFillTradingFees(currencyPairsMap, kucoinMarketDataService)
+        } catch (e: Exception) {
+            debugWarnings.add("Could not fetch trading fees: ${e.message}")
+            logger.error(e) { "[$supportedExchange] Could not fetch trading fees" }
+        }
+    }
+
+    private fun tryFillTradingFees(currencyPairsMap: MutableMap<CurrencyPair, CurrencyPairMetadata>, kucoinMarketDataService: KucoinMarketDataService) {
         currencyPairsMap.keys.toList()
             .sortedBy { it.toString() } // make order deterministic for unit tests
             .chunked(maxCurrencyPairsPerRequest)
             .forEach { currencyPairSublist ->
                 val currencyPairsComaSeparated = currencyPairSublist.joinToString(",") { it.toStringWithSeparator('-') }
-                val kucoinTradeFee = kucoinMarketDataService.getKucoinTradeFee(currencyPairsComaSeparated)
-                kucoinTradeFee.forEach {
+                val kucoinTradeFeeResponses = kucoinMarketDataService.getKucoinTradeFee(currencyPairsComaSeparated)
+                kucoinTradeFeeResponses.forEach {
                     /* sample response
             {
                 "symbol": "BTC-USDT",

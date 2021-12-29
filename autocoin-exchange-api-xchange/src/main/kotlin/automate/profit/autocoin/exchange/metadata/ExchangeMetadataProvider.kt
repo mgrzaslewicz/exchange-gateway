@@ -35,7 +35,7 @@ class ExchangeMetadataProvider(
     private val fetchersMap = exchangeMetadataFetchers.associateBy { it.supportedExchange }
 
     fun getAndSaveExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadata {
-        logger.info { "[$supportedExchange] Getting  exchange metadata" }
+        logger.debug { "[$supportedExchange] Getting  exchange metadata" }
         val exchangeMetadataResult = exchangeMetadataRepository.getLatestExchangeMetadata(supportedExchange)
         return if (exchangeMetadataResult.hasMetadata()) {
             exchangeMetadataResult.exchangeMetadata!!
