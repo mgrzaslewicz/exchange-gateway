@@ -36,6 +36,7 @@ class ExchangeMetadataProvider(
 
     fun getAndSaveExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadata {
         logger.debug { "[$supportedExchange] Getting  exchange metadata" }
+        // TODO add CachingExchangeMetadataService or CachingExchangeMetadataRepository wrapper to avoid frequent IO reads. Not a problem right now
         val exchangeMetadataResult = exchangeMetadataRepository.getLatestExchangeMetadata(supportedExchange)
         return if (exchangeMetadataResult.hasMetadata()) {
             exchangeMetadataResult.exchangeMetadata!!

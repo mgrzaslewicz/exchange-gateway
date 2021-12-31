@@ -21,9 +21,9 @@ class KucoinExchangeMetadataFetcher(
     private val logger = KotlinLogging.logger {}
 
     /**
-     * https://docs.kucoin.com/#actual-fee-rate-of-the-trading-pair
+     * @see <a href="https://docs.kucoin.com/#actual-fee-rate-of-the-trading-pair">Documentation says 10 is fine, surprisingly response is 401 when > 1 currency pair is used</a>
      */
-    private val maxCurrencyPairsPerRequest = 10
+    internal val maxCurrencyPairsPerTradeFeeRequest = 1
     override val supportedExchange = SupportedExchange.KUCOIN
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
@@ -105,7 +105,7 @@ class KucoinExchangeMetadataFetcher(
     private fun tryFillTradingFees(currencyPairsMap: MutableMap<CurrencyPair, CurrencyPairMetadata>, kucoinMarketDataService: KucoinMarketDataService) {
         currencyPairsMap.keys.toList()
             .sortedBy { it.toString() } // make order deterministic for unit tests
-            .chunked(maxCurrencyPairsPerRequest)
+            .chunked(maxCurrencyPairsPerTradeFeeRequest)
             .forEach { currencyPairSublist ->
                 val currencyPairsComaSeparated = currencyPairSublist.joinToString(",") { it.toStringWithSeparator('-') }
                 val kucoinTradeFeeResponses = kucoinMarketDataService.getKucoinTradeFee(currencyPairsComaSeparated)
@@ -123,13 +123,13 @@ class KucoinExchangeMetadataFetcher(
                             takerFees = listOf(
                                 TransactionFeeRange(
                                     beginAmount = BigDecimal.ZERO,
-                                    fee = TransactionFee(percent = it.takerFeeRate.movePointLeft(1))
+                                    fee = TransactionFee(rate = it.takerFeeRate)
                                 )
                             ),
                             makerFees = listOf(
                                 TransactionFeeRange(
                                     beginAmount = BigDecimal.ZERO,
-                                    fee = TransactionFee(percent = it.makerFeeRate.movePointLeft(1))
+                                    fee = TransactionFee(rate = it.makerFeeRate)
                                 )
                             )
                         )

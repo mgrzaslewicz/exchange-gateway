@@ -17,7 +17,7 @@ fun CurrencyPairMetadata.toDto() = CurrencyPairMetadataDto(
 )
 
 
-fun TransactionFee.toDto() = TransactionFeeDto(percent = this.percent.toDouble())
+fun TransactionFee.toDto() = TransactionFeeDto(ratio = this.rate.toDouble())
 
 fun TransactionFeeRange.toDto() = TransactionFeeRangeDto(
     beginAmount = this.beginAmount.toDouble(),

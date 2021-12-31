@@ -21,6 +21,7 @@ import org.knowm.xchange.kucoin.dto.response.TradeFeeResponse
 class KucoinExchangeMetadataFetcherTest {
     private val kucoinSymbolsJson = this::class.java.getResource("/metadata/kucoin/kucoin-symbols-response.json").readText()
     private val kucoinMetadataJson = this::class.java.getResource("/metadata/kucoin/kucoin-metadata.json").readText()
+    private val numberOfCyrrencyPairsInMetadata = 1110
 
     private object kucoinSymbolsResoponseType : TypeReference<List<SymbolResponse>>()
 
@@ -43,8 +44,8 @@ class KucoinExchangeMetadataFetcherTest {
             whenever(this.kucoinSymbols).thenReturn(this@KucoinExchangeMetadataFetcherTest.kucoinSymbols)
             whenever(this.getKucoinTradeFee(any())).thenReturn(listOf(TradeFeeResponse().apply {
                 this.symbol = "BTC-USDT"
-                this.takerFeeRate = "0.1".toBigDecimal()
-                this.makerFeeRate = "0.05".toBigDecimal()
+                this.takerFeeRate = "0.01".toBigDecimal()
+                this.makerFeeRate = "0.005".toBigDecimal()
             }))
         }
         val xchangeExchange = mock<Exchange>().apply {
@@ -67,8 +68,8 @@ class KucoinExchangeMetadataFetcherTest {
         // then
         val feeRanges = exchangeMetadata.currencyPairMetadata.getValue(CurrencyPair.of("BTC/USDT")).transactionFeeRanges
         assertThat(feeRanges.takerFees).hasSize(1)
-        assertThat(feeRanges.takerFees.first().fee.percent).isEqualTo("0.01".toBigDecimal())
-        assertThat(feeRanges.makerFees.first().fee.percent).isEqualTo("0.005".toBigDecimal())
+        assertThat(feeRanges.takerFees.first().fee.rate).isEqualTo("0.01".toBigDecimal())
+        assertThat(feeRanges.makerFees.first().fee.rate).isEqualTo("0.005".toBigDecimal())
     }
 
     @Test
@@ -76,7 +77,7 @@ class KucoinExchangeMetadataFetcherTest {
         // when
         val exchangeMetadata = tested.fetchExchangeMetadata(apiKey = kucoinApiKey)
         // then
-        assertThat(exchangeMetadata.currencyPairs()).hasSize(1110)
+        assertThat(exchangeMetadata.currencyPairs()).hasSize(numberOfCyrrencyPairsInMetadata)
     }
 
     @Test
@@ -84,7 +85,7 @@ class KucoinExchangeMetadataFetcherTest {
         // when
         tested.fetchExchangeMetadata(apiKey = kucoinApiKey)
         // then
-        verify(kucoinMarketDataService, times(111)).getKucoinTradeFee(any())
-        verify(kucoinMarketDataService).getKucoinTradeFee("1EARTH-USDT,1INCH-USDT,2CRZ-BTC,2CRZ-USDT,AAVE-BTC,AAVE-KCS,AAVE-USDT,AAVE-UST,AAVE3L-USDT,AAVE3S-USDT")
+        verify(kucoinMarketDataService, times(numberOfCyrrencyPairsInMetadata / tested.maxCurrencyPairsPerTradeFeeRequest)).getKucoinTradeFee(any())
+        verify(kucoinMarketDataService).getKucoinTradeFee("1EARTH-USDT")
     }
 }

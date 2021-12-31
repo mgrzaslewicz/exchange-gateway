@@ -29,7 +29,7 @@ data class CurrencyPairMetadataDto(
     )
 }
 
-fun TransactionFeeDto.toTransactionFee() = TransactionFee(percent = this.percent.toBigDecimal())
+fun TransactionFeeDto.toTransactionFee() = TransactionFee(rate = this.ratio.toBigDecimal())
 
 fun TransactionFeeRangeDto.toTransactionFeeRange() = TransactionFeeRange(
     beginAmount = this.beginAmount.toBigDecimal(),
@@ -47,7 +47,7 @@ data class TransactionFeeRangeDto(
 )
 
 data class TransactionFeeDto(
-    val percent: Double
+    val ratio: Double
 )
 
 data class CurrencyMetadataDto(

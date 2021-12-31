@@ -134,7 +134,11 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
      * Buy currencyPair.base for currencyPair.base
      */
     override fun placeBuyOrder(currencyPair: CurrencyPair, limitPrice: BigDecimal, amount: BigDecimal): ExchangeOrder {
-        val limitBuyOrder = LimitOrder.Builder(Order.OrderType.BID, currencyPair.toXchangeCurrencyPair()).orderStatus(Order.OrderStatus.NEW).limitPrice(limitPrice).originalAmount(amount).build()
+        val limitBuyOrder = LimitOrder.Builder(Order.OrderType.BID, currencyPair.toXchangeCurrencyPair())
+            .orderStatus(Order.OrderStatus.NEW)
+            .limitPrice(limitPrice)
+            .originalAmount(amount)
+            .build()
         logger.info { "Requesting limit buy order: $limitBuyOrder" }
 
         val orderId = wrapped.placeLimitOrder(limitBuyOrder)
@@ -157,7 +161,11 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
      * Sell currencyPair.base currency and gain currencyPair.counter
      */
     override fun placeSellOrder(currencyPair: CurrencyPair, limitPrice: BigDecimal, amount: BigDecimal): ExchangeOrder {
-        val limitSellOrder = LimitOrder.Builder(Order.OrderType.ASK, currencyPair.toXchangeCurrencyPair()).orderStatus(Order.OrderStatus.NEW).limitPrice(limitPrice).originalAmount(amount).build()
+        val limitSellOrder = LimitOrder.Builder(Order.OrderType.ASK, currencyPair.toXchangeCurrencyPair())
+            .orderStatus(Order.OrderStatus.NEW)
+            .limitPrice(limitPrice)
+            .originalAmount(amount)
+            .build()
         logger.info { "Requesting limit sell order: $limitSellOrder" }
 
         val orderId = wrapped.placeLimitOrder(limitSellOrder)
