@@ -4,12 +4,11 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
-import java.io.File
 
 /**
  * Will fetch and save metadata if there is none for given exchange yet
  */
-class ExchangeMetadataProvider(
+class DefaultExchangeMetadataService(
     exchangeMetadataFetchers: List<ExchangeMetadataFetcher>,
     private val exchangeMetadataRepository: FileExchangeMetadataRepository,
     private val serviceApiKeysProvider: ServiceApiKeysProvider
@@ -36,7 +35,6 @@ class ExchangeMetadataProvider(
 
     fun getAndSaveExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadata {
         logger.debug { "[$supportedExchange] Getting  exchange metadata" }
-        // TODO add CachingExchangeMetadataService or CachingExchangeMetadataRepository wrapper to avoid frequent IO reads. Not a problem right now
         val exchangeMetadataResult = exchangeMetadataRepository.getLatestExchangeMetadata(supportedExchange)
         return if (exchangeMetadataResult.hasMetadata()) {
             exchangeMetadataResult.exchangeMetadata!!

@@ -7,7 +7,8 @@ import mu.KLogging
 class ExchangeMetadataRefresher(
         exchangeMetadataFetchers: List<ExchangeMetadataFetcher>,
         private val exchangeMetadataRepository: FileExchangeMetadataRepository,
-        private val serviceApiKeysProvider: ServiceApiKeysProvider
+        private val serviceApiKeysProvider: ServiceApiKeysProvider,
+        private val cachingExchangeMetadataService: CachingExchangeMetadataService
 ) {
 
     init {
@@ -32,12 +33,18 @@ class ExchangeMetadataRefresher(
                 val freshExchangeMetadata = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata(apiKeys)
                 exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata)
                 exchangeMetadataRepository.keepLastNBackups(supportedExchange, maxBackups = 100)
+                reinitCache(supportedExchange.exchangeName)
             } catch (e: Exception) {
                 logger.error(e) { "[$supportedExchange] Exception during metadata refresh" }
             } catch (e: Throwable/* catch runtime class errors too */) {
                 logger.error(e) { "[$supportedExchange] Error during metadata refresh" }
             }
         }
+    }
+
+    private fun reinitCache(exchangeName: String) {
+        cachingExchangeMetadataService.removeFromCache(exchangeName)
+        cachingExchangeMetadataService.getMetadata(exchangeName)
     }
 
 }

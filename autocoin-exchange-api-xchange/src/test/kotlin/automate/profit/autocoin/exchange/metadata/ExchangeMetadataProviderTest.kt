@@ -28,9 +28,9 @@ class ExchangeMetadataProviderTest {
         }
 
         val metadataRepository = FileExchangeMetadataRepository(tempFolder)
-        val metadataProvider = ExchangeMetadataProvider(listOf(bittrexMetadataFetcher), metadataRepository, mock())
+        val metadataService = DefaultExchangeMetadataService(listOf(bittrexMetadataFetcher), metadataRepository, mock())
         // when
-        val exchangeMetadata = metadataProvider.getAndSaveExchangeMetadata(BITTREX)
+        val exchangeMetadata = metadataService.getAndSaveExchangeMetadata(BITTREX)
         // then
         assertThat(exchangeMetadata).isEqualTo(expectedExchangeMetadata)
     }
@@ -44,9 +44,9 @@ class ExchangeMetadataProviderTest {
         val metadataRepository = mock<FileExchangeMetadataRepository>().apply {
             whenever(this.getLatestExchangeMetadata(BITTREX)).thenReturn(expectedExchangeMetadataResult)
         }
-        val metadataProvider = ExchangeMetadataProvider(listOf(bittrexMetadataFetcher), metadataRepository, mock())
+        val metadataService = DefaultExchangeMetadataService(listOf(bittrexMetadataFetcher), metadataRepository, mock())
         // when
-        metadataProvider.getAndSaveExchangeMetadata(BITTREX)
+        metadataService.getAndSaveExchangeMetadata(BITTREX)
         // then
         verify(bittrexMetadataFetcher, times(0)).fetchExchangeMetadata()
     }

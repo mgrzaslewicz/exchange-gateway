@@ -1,7 +1,7 @@
 package automate.profit.autocoin.exchange
 
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
-import automate.profit.autocoin.exchange.metadata.ExchangeMetadataProvider
+import automate.profit.autocoin.exchange.metadata.ExchangeMetadataService
 import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import com.nhaarman.mockitokotlin2.*
 import org.junit.jupiter.api.BeforeEach
@@ -12,13 +12,13 @@ class XchangeProviderTest {
     private lateinit var cachingXchangeProvider: CachingXchangeProvider
     private lateinit var xchangeFactoryWrapper: XchangeFactoryWrapper
     private lateinit var exchangeFactory: ExchangeFactory
-    private lateinit var exchangeMetadataProvider: ExchangeMetadataProvider
+    private lateinit var exchangeMetadataService: ExchangeMetadataService
 
     @BeforeEach
     fun setup() {
         xchangeFactoryWrapper = mock()
         exchangeFactory = mock()
-        exchangeMetadataProvider = mock()
+        exchangeMetadataService = mock()
         cachingXchangeProvider = CachingXchangeProvider(
             xchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier()),
             xchangeFactoryWrapper = xchangeFactoryWrapper
