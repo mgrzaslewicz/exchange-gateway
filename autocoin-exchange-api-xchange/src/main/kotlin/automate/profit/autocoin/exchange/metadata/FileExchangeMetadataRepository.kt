@@ -75,7 +75,7 @@ class FileExchangeMetadataRepository(
     private fun getLatestMetadataFileName(exchangeDirectory: File, exchangeName: String): String? {
         return exchangeDirectory.list()!!.filter {
             it.contains(exchangeName) && it.endsWith(".json")
-        }.maxBy { getNumberFromName(it) }
+        }.maxByOrNull { getNumberFromName(it) }
     }
 
     fun getLatestExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadataResult {

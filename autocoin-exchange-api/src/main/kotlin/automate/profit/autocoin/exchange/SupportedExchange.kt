@@ -35,7 +35,7 @@ enum class SupportedExchange(val exchangeName: String, val comments: List<String
 
     companion object {
         fun fromExchangeName(exchangeName: String): SupportedExchange =
-                values().find { it.exchangeName.toLowerCase() == exchangeName }
+                values().find { it.exchangeName.lowercase() == exchangeName }
                         ?: throw IllegalArgumentException("Unknown exchange name: $exchangeName")
     }
 }

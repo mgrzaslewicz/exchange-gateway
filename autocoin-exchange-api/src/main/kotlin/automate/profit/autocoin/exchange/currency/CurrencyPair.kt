@@ -16,8 +16,8 @@ data class CurrencyPair private constructor(
     companion object {
 
         fun of(base: String, counter: String): CurrencyPair {
-            val baseUpper = base.toUpperCase()
-            val counterUpper = counter.toUpperCase()
+            val baseUpper = base.uppercase()
+            val counterUpper = counter.uppercase()
             return CurrencyPairCache.get(baseUpper, counterUpper) { CurrencyPair(baseUpper, counterUpper) }
         }
 
@@ -35,8 +35,8 @@ data class CurrencyPair private constructor(
     fun contains(currency: String): Boolean = base == currency || counter == currency
 
     fun toUpperCase() = copy(
-            base = base.toUpperCase(),
-            counter = counter.toUpperCase()
+            base = base.uppercase(),
+            counter = counter.uppercase()
     )
 
     override fun toString(): String = "$base/$counter"

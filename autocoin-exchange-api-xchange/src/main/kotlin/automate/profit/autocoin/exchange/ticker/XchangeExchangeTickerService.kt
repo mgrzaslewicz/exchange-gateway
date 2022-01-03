@@ -20,13 +20,13 @@ class CachingXchangeExchangeTickerService(private val userExchangeServicesFactor
     private val cache = ConcurrentHashMap<String, UserExchangeTickerService>()
 
     override fun getTicker(exchangeName: String, currencyPair: CurrencyPair): Ticker {
-        return cache.computeIfAbsent(exchangeName.toLowerCase()) {
+        return cache.computeIfAbsent(exchangeName.lowercase()) {
             userExchangeServicesFactory.createTickerService(exchangeName)
         }.getTicker(currencyPair)
     }
 
     override fun getTickers(exchangeName: String, currencyPairs: Collection<CurrencyPair>): List<Ticker> {
-        return cache.computeIfAbsent(exchangeName.toLowerCase()) {
+        return cache.computeIfAbsent(exchangeName.lowercase()) {
             userExchangeServicesFactory.createTickerService(exchangeName)
         }.getTickers(currencyPairs)
     }

@@ -18,7 +18,7 @@ class CachingXchangeExchangeOrderBookService(private val userExchangeServicesFac
     private val cache = ConcurrentHashMap<String, UserExchangeOrderBookService>()
 
     override fun getOrderBook(exchangeName: String, currencyPair: CurrencyPair): OrderBook {
-        return cache.computeIfAbsent(exchangeName.toLowerCase()) {
+        return cache.computeIfAbsent(exchangeName.lowercase()) {
             userExchangeServicesFactory.createOrderBookService(exchangeName)
         }.getOrderBook(currencyPair)
     }
