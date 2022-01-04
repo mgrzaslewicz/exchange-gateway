@@ -51,7 +51,9 @@ class FileExchangeMetadataRepositoryTest {
         ),
         currencyMetadata = mapOf(
             "ABC" to CurrencyMetadata(
-                scale = 3
+                scale = 3,
+                minWithdrawalAmount = "0.05".toBigDecimal(),
+                withdrawalFee = "0.0001".toBigDecimal()
             )
         ),
         debugWarnings = emptyList()

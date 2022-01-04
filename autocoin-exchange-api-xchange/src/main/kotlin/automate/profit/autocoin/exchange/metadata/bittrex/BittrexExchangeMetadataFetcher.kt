@@ -82,8 +82,8 @@ class BittrexExchangeMetadataFetcher(
                     it.key.toCurrencyPair() to CurrencyPairMetadata(
                         amountScale = it.value.priceScale,
                         priceScale = it.value.priceScale,
-                        minimumAmount = it.value.minimumAmount.orMin(),
-                        maximumAmount = it.value.maximumAmount.orMax(),
+                        minimumAmount = it.value.minimumAmount.orDefaultMin(),
+                        maximumAmount = it.value.maximumAmount.orDefaultMax(),
                         minimumOrderValue = BigDecimal.ZERO,
                         maximumPriceMultiplierUp = 10.toBigDecimal(),
                         maximumPriceMultiplierDown = 0.1.toBigDecimal(),
@@ -96,7 +96,10 @@ class BittrexExchangeMetadataFetcher(
                 }.toMap(),
             currencyMetadata = xchangeMetadata.currencies.map {
                 it.key.currencyCode to CurrencyMetadata(
-                    scale = getScaleOrDefault(it.key, it.value, debugWarnings)
+                    scale = getScaleOrDefault(it.key, it.value, debugWarnings),
+                    withdrawalFee = it?.value?.withdrawalFee,
+                    minWithdrawalAmount = it?.value?.minWithdrawalAmount
+
                 )
             }.toMap(),
             debugWarnings = debugWarnings

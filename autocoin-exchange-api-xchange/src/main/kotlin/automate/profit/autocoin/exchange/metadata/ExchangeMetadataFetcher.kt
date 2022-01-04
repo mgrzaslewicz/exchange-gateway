@@ -25,8 +25,8 @@ interface ExchangeMetadataFetcher {
 }
 
 private val logger = KotlinLogging.logger {}
-internal fun BigDecimal?.orMin() = this ?: 0.00000001.toBigDecimal()
-internal fun BigDecimal?.orMax() = this ?: BigDecimal.valueOf(Long.MAX_VALUE)
+internal fun BigDecimal?.orDefaultMin() = this ?: 0.00000001.toBigDecimal()
+internal fun BigDecimal?.orDefaultMax() = this ?: BigDecimal.valueOf(Long.MAX_VALUE)
 internal val DEFAULT_SCALE = 8
 
 internal fun numberOfDecimals(value: String): Int {
@@ -129,8 +129,8 @@ class DefaultExchangeMetadataFetcher(
                 currencyPair to CurrencyPairMetadata(
                     amountScale = it.value.priceScale ?: DEFAULT_SCALE,
                     priceScale = it.value.priceScale ?: DEFAULT_SCALE,
-                    minimumAmount = it.value.minimumAmount.orMin(),
-                    maximumAmount = it.value.maximumAmount.orMax(),
+                    minimumAmount = it.value.minimumAmount.orDefaultMin(),
+                    maximumAmount = it.value.maximumAmount.orDefaultMax(),
                     minimumOrderValue = BigDecimal.ZERO,
                     maximumPriceMultiplierUp = 10.toBigDecimal(),
                     maximumPriceMultiplierDown = 0.1.toBigDecimal(),
@@ -140,7 +140,9 @@ class DefaultExchangeMetadataFetcher(
             }.toMap()
         val currencies = exchange.exchangeMetaData.currencies?.map {
             it.key.currencyCode to CurrencyMetadata(
-                scale = getScaleOrDefault(it.key, it.value, metadataWarnings)
+                scale = getScaleOrDefault(it.key, it.value, metadataWarnings),
+                withdrawalFee = it.value.withdrawalFee,
+                minWithdrawalAmount = it.value.withdrawalFee
             )
         }?.toMap() ?: emptyMap()
         if (currencies.isEmpty()) {
