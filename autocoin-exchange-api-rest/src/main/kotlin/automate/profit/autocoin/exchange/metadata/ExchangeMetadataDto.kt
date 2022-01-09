@@ -52,12 +52,12 @@ data class TransactionFeeDto(
 
 data class CurrencyMetadataDto(
     val scale: Int,
-    val withdrawalFee: Double?,
+    val withdrawalFeeAmount: Double?,
     val minWithdrawalAmount: Double?
 ) {
     fun toCurrencyMetadata() = CurrencyMetadata(
         scale = scale,
-        withdrawalFee = withdrawalFee?.toBigDecimal(),
+        withdrawalFeeAmount = withdrawalFeeAmount?.toBigDecimal(),
         minWithdrawalAmount = minWithdrawalAmount?.toBigDecimal()
     )
 }
