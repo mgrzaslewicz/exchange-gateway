@@ -201,6 +201,12 @@ fun overridenExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, x
         xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
     ),
     DefaultExchangeMetadataFetcher(
+        supportedExchange = KRAKEN,
+        exchangeFactory = exchangeFactory,
+        preventFromLoadingDefaultXchangeMetadata = false,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
+    DefaultExchangeMetadataFetcher(
         exchangeFactory = exchangeFactory,
         supportedExchange = HITBTC, currencyPairRename = mapOf(
             CurrencyPair.of("REP/USD") to CurrencyPair.of("REP/USDT"),
