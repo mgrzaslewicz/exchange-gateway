@@ -1,0 +1,43 @@
+{
+  "currency_pairs": {
+    "1INCH/BTC": {
+      "trading_fee": 0.1,
+      "min_amount": 0.1,
+      "max_amount": 9E+7,
+      "counter_min_amount": 0.0001,
+      "counter_max_amount": 1E+3,
+      "base_scale": 1,
+      "price_scale": 8,
+      "volume_scale": null,
+      "fee_tiers": null,
+      "amount_step_size": 0.1,
+      "tradingFeeCurrency": null,
+      "marketOrderEnabled": true
+    }
+  },
+  "currencies": {
+    "1INCH": {
+      "scale": 8,
+      "withdrawal_fee": null,
+      "min_withdrawal_amount": null,
+      "wallet_health": "UNKNOWN"
+    },
+    "BTC": {
+      "scale": 8,
+      "withdrawal_fee": null,
+      "min_withdrawal_amount": null,
+      "wallet_health": "UNKNOWN"
+    }
+  },
+  "futures": null,
+  "options": null,
+  "public_rate_limits": [
+    {
+      "calls": 0,
+      "time_span": 0,
+      "time_unit": null
+    }
+  ],
+  "private_rate_limits": null,
+  "share_rate_limits": false
+}
