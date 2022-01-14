@@ -30,11 +30,11 @@ class ExchangeMetadataFetcherManualTest {
 
     @Test
     fun shouldFetchGateioMetadata() {
-        val fetcher = DefaultExchangeMetadataFetcher(
+        val fetcher = DefaultExchangeMetadataFetcher.Builder(
             supportedExchange = SupportedExchange.GATEIO,
             exchangeFactory = exchangeFactory,
             xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-        )
+        ).build()
         fetcher.fetchExchangeMetadata()
     }
 

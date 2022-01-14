@@ -8,6 +8,7 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.binance.BinanceExchangeMetadataFetcher
 import automate.profit.autocoin.exchange.metadata.bittrex.BittrexExchangeMetadataFetcher
 import automate.profit.autocoin.exchange.metadata.kucoin.KucoinExchangeMetadataFetcher
+import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KotlinLogging
@@ -99,14 +100,14 @@ data class CurrencyMetadataOverride(
     val minWithdrawalAmount: Double?
 )
 
-class DefaultExchangeMetadataFetcher(
+class DefaultExchangeMetadataFetcher private constructor(
     override val supportedExchange: SupportedExchange,
     private val exchangeFactory: XchangeExchangeFactory,
-    private val preventFromLoadingDefaultXchangeMetadata: Boolean = true,
+    private val preventFromLoadingDefaultXchangeMetadata: Boolean,
     private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner,
-    private val xchangeMetadataProvider: (exchange: Exchange) -> ExchangeMetaData = { exchange -> exchange.exchangeMetaData },
-    private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap(),
-    private val overridenCurrencies: Map<String, CurrencyMetadataOverride> = emptyMap(),
+    private val xchangeMetadataProvider: (exchange: Exchange) -> ExchangeMetaData,
+    private val currencyPairRename: Map<CurrencyPair, CurrencyPair>,
+    private val overridenCurrencies: Map<String, CurrencyMetadataOverride>,
 ) : ExchangeMetadataFetcher {
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
@@ -179,89 +180,102 @@ class DefaultExchangeMetadataFetcher(
             currencyMetadata
         }
     }
+
+    data class Builder(
+        var supportedExchange: SupportedExchange? = null,
+        var exchangeFactory: XchangeExchangeFactory? = null,
+        var preventFromLoadingDefaultXchangeMetadata: Boolean = false,
+        var xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier()),
+        var xchangeMetadataProvider: (exchange: Exchange) -> ExchangeMetaData = { exchange -> exchange.exchangeMetaData },
+        var currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap(),
+        var overridenCurrencies: Map<String, CurrencyMetadataOverride> = emptyMap(),
+    ) {
+
+        fun build(): DefaultExchangeMetadataFetcher {
+            return DefaultExchangeMetadataFetcher(
+                supportedExchange = supportedExchange!!,
+                exchangeFactory = exchangeFactory!!,
+                preventFromLoadingDefaultXchangeMetadata = preventFromLoadingDefaultXchangeMetadata,
+                xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
+                xchangeMetadataProvider = xchangeMetadataProvider,
+                currencyPairRename = currencyPairRename,
+                overridenCurrencies = overridenCurrencies
+            )
+        }
+    }
 }
 
-fun overridenExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner) = listOf(
-    BittrexExchangeMetadataFetcher(
+fun overridenExchangeMetadataFetchers(
+    exchangeFactory: XchangeExchangeFactory,
+    xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner
+): List<ExchangeMetadataFetcher> {
+    val defaultBuilder = DefaultExchangeMetadataFetcher.Builder(
         exchangeFactory = exchangeFactory,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    BinanceExchangeMetadataFetcher(
-        exchangeFactory = exchangeFactory,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    KucoinExchangeMetadataFetcher(
-        exchangeFactory = exchangeFactory,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    DefaultExchangeMetadataFetcher(
-        supportedExchange = BITBAY,
-        exchangeFactory = exchangeFactory,
-        preventFromLoadingDefaultXchangeMetadata = false,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    DefaultExchangeMetadataFetcher(
-        supportedExchange = BITSTAMP,
-        exchangeFactory = exchangeFactory,
-        preventFromLoadingDefaultXchangeMetadata = false,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    DefaultExchangeMetadataFetcher(
-        supportedExchange = COINDEAL,
-        exchangeFactory = exchangeFactory,
-        preventFromLoadingDefaultXchangeMetadata = false,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    DefaultExchangeMetadataFetcher(
-        supportedExchange = GEMINI,
-        exchangeFactory = exchangeFactory,
-        preventFromLoadingDefaultXchangeMetadata = false,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    DefaultExchangeMetadataFetcher(
-        supportedExchange = IDEX,
-        exchangeFactory = exchangeFactory,
-        preventFromLoadingDefaultXchangeMetadata = false,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    DefaultExchangeMetadataFetcher(
-        supportedExchange = KRAKEN,
-        exchangeFactory = exchangeFactory,
-        preventFromLoadingDefaultXchangeMetadata = false,
         xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
-        overridenCurrencies = krakenOverridenCurrenciesMetadata
-    ),
-    DefaultExchangeMetadataFetcher(
-        exchangeFactory = exchangeFactory,
-        supportedExchange = HITBTC, currencyPairRename = mapOf(
-            CurrencyPair.of("REP/USD") to CurrencyPair.of("REP/USDT"),
-            CurrencyPair.of("XRP/USD") to CurrencyPair.of("XRP/USDT")
-        ),
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    DefaultExchangeMetadataFetcher(
-        supportedExchange = LUNO,
-        exchangeFactory = exchangeFactory,
-        preventFromLoadingDefaultXchangeMetadata = false,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-    ),
-    DefaultExchangeMetadataFetcher(
-        supportedExchange = POLONIEX,
-        exchangeFactory = exchangeFactory,
-        preventFromLoadingDefaultXchangeMetadata = false,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
     )
-)
+    return listOf(
+        BittrexExchangeMetadataFetcher(
+            exchangeFactory = exchangeFactory,
+            xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+        ),
+        BinanceExchangeMetadataFetcher(
+            exchangeFactory = exchangeFactory,
+            xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+        ),
+        KucoinExchangeMetadataFetcher(
+            exchangeFactory = exchangeFactory,
+            xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+        ),
+        defaultBuilder.copy(
+            supportedExchange = BITBAY,
+        ).build(),
+        defaultBuilder.copy(
+            supportedExchange = BITSTAMP,
+        ).build(),
+        defaultBuilder.copy(
+            supportedExchange = COINDEAL,
+        ).build(),
+        defaultBuilder.copy(
+            supportedExchange = GATEIO,
+        ).build(),
+        defaultBuilder.copy(
+            supportedExchange = GEMINI,
+        ).build(),
+        defaultBuilder.copy(
+            supportedExchange = IDEX,
+        ).build(),
+        defaultBuilder.copy(
+            supportedExchange = KRAKEN,
+            overridenCurrencies = krakenOverridenCurrenciesMetadata
+        ).build(),
+        defaultBuilder.copy(
+            exchangeFactory = exchangeFactory,
+            supportedExchange = HITBTC, currencyPairRename = mapOf(
+                CurrencyPair.of("REP/USD") to CurrencyPair.of("REP/USDT"),
+                CurrencyPair.of("XRP/USD") to CurrencyPair.of("XRP/USDT")
+            ),
+            xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
+            preventFromLoadingDefaultXchangeMetadata = true
+        ).build(),
+        defaultBuilder.copy(
+            supportedExchange = LUNO,
+        ).build(),
+        defaultBuilder.copy(
+            supportedExchange = POLONIEX,
+        ).build()
+    )
+}
 
 fun defaultExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner) =
     (SupportedExchange.values().toSet() - overridenExchangeMetadataFetchers(exchangeFactory, xchangeSpecificationApiKeyAssigner)
         .map { it.supportedExchange }.toSet())
         .map {
-            DefaultExchangeMetadataFetcher(
+            DefaultExchangeMetadataFetcher.Builder(
                 supportedExchange = it,
                 exchangeFactory = exchangeFactory,
-                xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-            )
+                xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
+                preventFromLoadingDefaultXchangeMetadata = true
+            ).build()
         }
 
 fun exchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner) =
