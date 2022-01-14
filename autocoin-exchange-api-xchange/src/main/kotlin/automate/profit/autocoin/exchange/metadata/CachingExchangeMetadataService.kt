@@ -7,9 +7,10 @@ class CachingExchangeMetadataService(private val decorated: ExchangeMetadataServ
     private val locks = ConcurrentHashMap<String, Any>()
     private val cache = ConcurrentHashMap<String, ExchangeMetadata>()
 
-    fun removeFromCache(exchangeName: String) {
+    fun refreshMetadata(exchangeName: String) {
         synchronized(locks.computeIfAbsent(exchangeName) { Any() }) {
             cache.remove(exchangeName)
+            getMetadata(exchangeName)
         }
     }
 

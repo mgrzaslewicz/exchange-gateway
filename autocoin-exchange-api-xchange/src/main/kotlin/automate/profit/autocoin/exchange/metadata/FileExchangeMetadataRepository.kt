@@ -14,6 +14,7 @@ import java.io.IOException
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.locks.ReentrantLock
 
 fun ExchangeMetadata.asJson() = metadataObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(this)
@@ -50,16 +51,19 @@ class FileExchangeMetadataRepository(
     /**
      * Avoid writing files at the same millisecond
      */
-    private val updateLock = ReentrantLock()
+    private val updateLocks = ConcurrentHashMap<SupportedExchange, ReentrantLock>()
+
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
 
     private fun getCurrentDateTimeAsString() = getDateTimeAsString(currentTimeMillis())
     private fun getDateTimeAsString(millis: Long) = dateTimeFormatter.format(Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).toLocalDateTime())
 
+    private fun getLock(supportedExchange: SupportedExchange) = updateLocks.computeIfAbsent(supportedExchange) { ReentrantLock() }
+
     fun saveExchangeMetadata(supportedExchange: SupportedExchange, exchangeMetadata: ExchangeMetadata) {
         logger.info { "[$supportedExchange] Saving  metadata" }
         val exchangeDirectory = getOrCreateDirectory(supportedExchange)
-        updateLock.lock()
+        getLock(supportedExchange).lock()
         val currentDateTime = getCurrentDateTimeAsString()
 
         val newMetadataFileName = "${supportedExchange.exchangeName}_$currentDateTime.json"
@@ -68,7 +72,7 @@ class FileExchangeMetadataRepository(
             logger.info { "[$supportedExchange] Writing exchange metadata to ${newMetadataFile.absolutePath}" }
             newMetadataFile.writeText(exchangeMetadata.asJson())
         } finally {
-            updateLock.unlock()
+            getLock(supportedExchange).unlock()
         }
     }
 
@@ -80,9 +84,9 @@ class FileExchangeMetadataRepository(
 
     fun getLatestExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadataResult {
         val exchangeDirectory = getOrCreateDirectory(supportedExchange)
-        updateLock.lock()
+        getLock(supportedExchange).lock()
         val latestMetadataFileName = getLatestMetadataFileName(exchangeDirectory, supportedExchange.exchangeName)
-        updateLock.unlock()
+        getLock(supportedExchange).unlock()
         return if (latestMetadataFileName != null) {
             val latestMetadataFile = exchangeDirectory.resolve(latestMetadataFileName)
             logger.info { "[$supportedExchange] Found metadata file ${latestMetadataFile.absolutePath}" }
