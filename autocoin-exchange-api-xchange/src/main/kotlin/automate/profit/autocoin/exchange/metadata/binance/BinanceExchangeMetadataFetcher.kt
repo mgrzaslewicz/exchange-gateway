@@ -35,13 +35,13 @@ class BinanceExchangeMetadataFetcher(
         makerFees = listOf(
             TransactionFeeRange(
                 beginAmount = BigDecimal.ZERO,
-                fee = TransactionFee(rate = "0.001".toBigDecimal())
+                feeRatio = "0.001".toBigDecimal()
             )
         ),
         takerFees = listOf(
             TransactionFeeRange(
                 beginAmount = BigDecimal.ZERO,
-                fee = TransactionFee(rate = "0.001".toBigDecimal())
+                feeRatio = "0.001".toBigDecimal()
             )
         )
     )
@@ -98,7 +98,11 @@ class BinanceExchangeMetadataFetcher(
                         buyFeeMultiplier = BigDecimal.ZERO,
                         transactionFeeRanges = binanceMetadata.currencyPairs[price.currencyPair]?.getTransactionFeeRanges(
                             defaultTakerFees = defaultTransactionFeeRanges.takerFees,
-                            defaultMakerFees = defaultTransactionFeeRanges.makerFees
+                            defaultMakerFees = defaultTransactionFeeRanges.makerFees,
+                            tradingFeeToTransactionFeeRangeFunction = { tradingFee -> TransactionFeeRange(
+                                beginAmount = BigDecimal.ZERO,
+                                feeRatio = tradingFee.movePointLeft(2)
+                            ) }
                         ) ?: defaultTransactionFeeRanges
                     )
                     currenciesMap[pair.base.currencyCode] = CurrencyMetadata(

@@ -3,14 +3,17 @@ package automate.profit.autocoin.exchange.metadata
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 
-data class TransactionFee(
-    val rate: BigDecimal
-)
-
 data class TransactionFeeRange(
     val beginAmount: BigDecimal,
-    val fee: TransactionFee
-)
+    val feeAmount: BigDecimal? = null,
+    val feeRatio: BigDecimal? = null,
+) {
+    init {
+       if (feeAmount == null && feeRatio == null) {
+           throw error("Both feeAmount and feeRatio are null. One of them needs to be provided")
+       }
+    }
+}
 
 data class TransactionFeeRanges(
     val makerFees: List<TransactionFeeRange> = emptyList(),
@@ -18,8 +21,8 @@ data class TransactionFeeRanges(
 ) {
     private val takerFeesSortedAscending = takerFees.sortedBy { it.beginAmount }
 
-    fun takerPercentForBaseCurrency(baseCurrencyAmount: BigDecimal): BigDecimal {
-        return takerFeesSortedAscending.find { it.beginAmount >= baseCurrencyAmount }?.fee?.rate ?: BigDecimal.ZERO
+    fun takerRatioForBaseCurrency(baseCurrencyAmount: BigDecimal): BigDecimal {
+        return takerFeesSortedAscending.find { it.beginAmount >= baseCurrencyAmount }?.feeAmount ?: BigDecimal.ZERO
     }
 }
 

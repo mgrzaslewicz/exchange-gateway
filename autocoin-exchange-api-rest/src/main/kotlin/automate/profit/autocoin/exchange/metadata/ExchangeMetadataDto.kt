@@ -29,11 +29,11 @@ data class CurrencyPairMetadataDto(
     )
 }
 
-fun TransactionFeeDto.toTransactionFee() = TransactionFee(rate = this.ratio.toBigDecimal())
 
 fun TransactionFeeRangeDto.toTransactionFeeRange() = TransactionFeeRange(
     beginAmount = this.beginAmount.toBigDecimal(),
-    fee = this.fee.toTransactionFee()
+    feeAmount = this.feeAmount?.toBigDecimal(),
+    feeRatio = this.feeRatio?.toBigDecimal()
 )
 
 data class TransactionFeesRangesDto(
@@ -43,8 +43,15 @@ data class TransactionFeesRangesDto(
 
 data class TransactionFeeRangeDto(
     val beginAmount: Double,
-    val fee: TransactionFeeDto
-)
+    val feeAmount: Double?,
+    val feeRatio: Double?
+) {
+    init {
+        if (feeAmount == null && feeRatio == null) {
+            throw error("Both feeAmount and feeRatio are null. One of them needs to be provided")
+        }
+    }
+}
 
 data class TransactionFeeDto(
     val ratio: Double
