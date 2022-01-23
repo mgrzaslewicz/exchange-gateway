@@ -1,4 +1,4 @@
-package automate.profit.autocoin.exchange.cache
+package automate.profit.autocoin.exchange.currency
 
 /**
  * This can significantly improve memory usage.

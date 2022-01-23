@@ -1,6 +1,4 @@
-package automate.profit.autocoin.exchange.cache
-
-import automate.profit.autocoin.exchange.currency.CurrencyPair
+package automate.profit.autocoin.exchange.currency
 
 object CurrencyPairCache : Cache<String, CurrencyPair>() {
     fun get(base: String, counter: String, valueFunction: () -> CurrencyPair): CurrencyPair {

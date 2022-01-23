@@ -1,7 +1,5 @@
 package automate.profit.autocoin.exchange.currency
 
-import automate.profit.autocoin.exchange.cache.CurrencyPairCache
-
 /**
  * Private constructor + invoke operator override in order to apply memory optimization.
  * Note: Private constructor will be called if you call .copy().
