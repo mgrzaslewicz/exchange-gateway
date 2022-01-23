@@ -1,6 +1,5 @@
 package automate.profit.autocoin.exchange.metadata
 
-import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.util.concurrent.ConcurrentHashMap
 
 class CachingExchangeMetadataService(private val decorated: ExchangeMetadataService) : ExchangeMetadataService {
@@ -20,7 +19,4 @@ class CachingExchangeMetadataService(private val decorated: ExchangeMetadataServ
         }
     }
 
-    override fun getMetadata(exchangeName: String, currencyPair: CurrencyPair): CurrencyPairMetadata {
-        return getMetadata(exchangeName).currencyPairMetadata.getValue(currencyPair)
-    }
 }
