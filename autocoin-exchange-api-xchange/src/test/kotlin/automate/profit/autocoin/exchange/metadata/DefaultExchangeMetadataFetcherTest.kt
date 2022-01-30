@@ -54,8 +54,8 @@ class DefaultExchangeMetadataFetcherTest {
         assertThat(exchangeMetadata.currencyPairMetadata.getValue(oneInchBtcCurrencyPair).transactionFeeRanges)
             .isEqualTo(
                 TransactionFeeRanges(
-                    takerFees = listOf(TransactionFeeRange(beginAmount = BigDecimal.ZERO, feeAmount = "0.1".toBigDecimal())),
-                    makerFees = listOf(TransactionFeeRange(beginAmount = BigDecimal.ZERO, feeAmount = "0.1".toBigDecimal())),
+                    takerFees = listOf(TransactionFeeRange(beginAmount = BigDecimal.ZERO, feeRatio = "0.001".toBigDecimal())),
+                    makerFees = listOf(TransactionFeeRange(beginAmount = BigDecimal.ZERO, feeRatio = "0.001".toBigDecimal())),
                 )
             )
     }

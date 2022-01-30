@@ -99,10 +99,6 @@ class BinanceExchangeMetadataFetcher(
                         transactionFeeRanges = binanceMetadata.currencyPairs[price.currencyPair]?.getTransactionFeeRanges(
                             defaultTakerFees = defaultTransactionFeeRanges.takerFees,
                             defaultMakerFees = defaultTransactionFeeRanges.makerFees,
-                            tradingFeeToTransactionFeeRangeFunction = { tradingFee -> TransactionFeeRange(
-                                beginAmount = BigDecimal.ZERO,
-                                feeRatio = tradingFee.movePointLeft(2)
-                            ) }
                         ) ?: defaultTransactionFeeRanges
                     )
                     currenciesMap[pair.base.currencyCode] = CurrencyMetadata(

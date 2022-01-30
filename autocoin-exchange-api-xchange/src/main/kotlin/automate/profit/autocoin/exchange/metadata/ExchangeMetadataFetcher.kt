@@ -78,14 +78,18 @@ internal fun preventFromLoadingDefaultXchangeMetadata(es: XchangeExchangeSpecifi
 internal fun XchangeCurrencyPairMetaData.getTransactionFeeRanges(
     defaultTakerFees: List<TransactionFeeRange> = emptyList(),
     defaultMakerFees: List<TransactionFeeRange> = emptyList(),
-    tradingFeeToTransactionFeeRangeFunction: (tradingFee: BigDecimal) -> TransactionFeeRange = { tradingFee ->
+    tradingFeeToTransactionFeeRangeFunction: (xchangeTradingFee: BigDecimal) -> TransactionFeeRange = { tradingFee ->
         TransactionFeeRange(
             beginAmount = BigDecimal.ZERO,
-            feeAmount = tradingFee
+            feeRatio = tradingFee.movePointLeft(2) // org.knowm.xchange.dto.meta.CurrencyPairMetaData.tradingFee is fraction of percent, however in javadoc mentioned only as a fraction
         )
     }
 ): TransactionFeeRanges {
     return when {
+        tradingFee != null -> TransactionFeeRanges(
+            takerFees = listOf(tradingFeeToTransactionFeeRangeFunction(tradingFee)),
+            makerFees = listOf(tradingFeeToTransactionFeeRangeFunction(tradingFee)),
+        )
         feeTiers != null -> TransactionFeeRanges(
             takerFees = feeTiers.map { feeTier ->
                 TransactionFeeRange(
@@ -100,12 +104,7 @@ internal fun XchangeCurrencyPairMetaData.getTransactionFeeRanges(
                 )
             }
         )
-        tradingFee != null -> TransactionFeeRanges(
-            takerFees = listOf(tradingFeeToTransactionFeeRangeFunction(tradingFee)),
-            makerFees = listOf(tradingFeeToTransactionFeeRangeFunction(tradingFee)),
-        )
         else -> TransactionFeeRanges(takerFees = defaultTakerFees, makerFees = defaultMakerFees)
-
     }
 }
 
