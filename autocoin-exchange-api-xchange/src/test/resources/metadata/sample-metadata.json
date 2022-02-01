@@ -27,6 +27,24 @@
       "withdrawal_fee": null,
       "min_withdrawal_amount": null,
       "wallet_health": "UNKNOWN"
+    },
+    "BCH": {
+      "scale": 8,
+      "withdrawal_fee": null,
+      "min_withdrawal_amount": null,
+      "wallet_health": "OFFLINE"
+    },
+    "ETH": {
+      "scale": 8,
+      "withdrawal_fee": null,
+      "min_withdrawal_amount": null,
+      "wallet_health": "DEPOSITS_DISABLED"
+    },
+    "LTC": {
+      "scale": 8,
+      "withdrawal_fee": null,
+      "min_withdrawal_amount": null,
+      "wallet_health": "WITHDRAWALS_DISABLED"
     }
   },
   "futures": null,

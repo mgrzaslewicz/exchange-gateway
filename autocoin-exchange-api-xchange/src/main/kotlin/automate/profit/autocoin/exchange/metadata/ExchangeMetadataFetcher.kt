@@ -14,6 +14,7 @@ import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KotlinLogging
 import org.knowm.xchange.Exchange
 import org.knowm.xchange.dto.meta.ExchangeMetaData
+import org.knowm.xchange.dto.meta.WalletHealth
 import java.io.File
 import java.math.BigDecimal
 import org.knowm.xchange.ExchangeFactory as XchangeExchangeFactory
@@ -110,8 +111,26 @@ internal fun XchangeCurrencyPairMetaData.getTransactionFeeRanges(
 
 data class CurrencyMetadataOverride(
     val withdrawalFee: Double?,
-    val minWithdrawalAmount: Double?
+    val minWithdrawalAmount: Double?,
+    val isWithdrawalEnabled: Boolean? = null,
+    val isDepositEnabled: Boolean? = null,
 )
+
+fun WalletHealth.toDepositEnabled(): Boolean? {
+    return when {
+        this == WalletHealth.UNKNOWN -> null
+        this == WalletHealth.ONLINE || this == WalletHealth.WITHDRAWALS_DISABLED -> true
+        else -> false
+    }
+}
+
+fun WalletHealth.toWithdrawalEnabled(): Boolean? {
+    return when {
+        this == WalletHealth.UNKNOWN -> null
+        this == WalletHealth.ONLINE || this == WalletHealth.DEPOSITS_DISABLED -> true
+        else -> false
+    }
+}
 
 class DefaultExchangeMetadataFetcher private constructor(
     override val supportedExchange: SupportedExchange,
@@ -167,7 +186,9 @@ class DefaultExchangeMetadataFetcher private constructor(
                 currencyMetadata = CurrencyMetadata(
                     scale = getScaleOrDefault(it.key, it.value, metadataWarnings),
                     withdrawalFeeAmount = it.value?.withdrawalFee,
-                    minWithdrawalAmount = it.value?.minWithdrawalAmount
+                    minWithdrawalAmount = it.value?.minWithdrawalAmount,
+                    depositEnabled = it.value?.walletHealth?.toDepositEnabled(),
+                    withdrawalEnabled = it.value?.walletHealth?.toWithdrawalEnabled()
                 )
             )
         }?.toMap() ?: emptyMap()
@@ -187,7 +208,9 @@ class DefaultExchangeMetadataFetcher private constructor(
             val overridenCurrencyMetadata = overridenCurrencies.getValue(currencyCode)
             return currencyMetadata.copy(
                 withdrawalFeeAmount = overridenCurrencyMetadata.withdrawalFee?.toBigDecimal() ?: currencyMetadata.withdrawalFeeAmount,
-                minWithdrawalAmount = overridenCurrencyMetadata.minWithdrawalAmount?.toBigDecimal() ?: currencyMetadata.minWithdrawalAmount
+                minWithdrawalAmount = overridenCurrencyMetadata.minWithdrawalAmount?.toBigDecimal() ?: currencyMetadata.minWithdrawalAmount,
+                withdrawalEnabled = overridenCurrencyMetadata.isWithdrawalEnabled ?: currencyMetadata.withdrawalEnabled,
+                depositEnabled = overridenCurrencyMetadata.isDepositEnabled ?: currencyMetadata.depositEnabled,
             )
         } else {
             currencyMetadata

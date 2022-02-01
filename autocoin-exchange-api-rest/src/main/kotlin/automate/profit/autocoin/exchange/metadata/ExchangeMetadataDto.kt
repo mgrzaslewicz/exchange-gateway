@@ -53,19 +53,19 @@ data class TransactionFeeRangeDto(
     }
 }
 
-data class TransactionFeeDto(
-    val ratio: Double
-)
-
 data class CurrencyMetadataDto(
     val scale: Int,
     val withdrawalFeeAmount: Double?,
-    val minWithdrawalAmount: Double?
+    val minWithdrawalAmount: Double?,
+    val withdrawalEnabled: Boolean?,
+    val depositEnabled: Boolean?,
 ) {
     fun toCurrencyMetadata() = CurrencyMetadata(
         scale = scale,
         withdrawalFeeAmount = withdrawalFeeAmount?.toBigDecimal(),
-        minWithdrawalAmount = minWithdrawalAmount?.toBigDecimal()
+        minWithdrawalAmount = minWithdrawalAmount?.toBigDecimal(),
+        withdrawalEnabled = withdrawalEnabled,
+        depositEnabled = depositEnabled,
     )
 }
 
