@@ -45,7 +45,9 @@ data class CurrencyPairMetadata(
 data class CurrencyMetadata(
     val scale: Int,
     val withdrawalFeeAmount: BigDecimal?,
-    val minWithdrawalAmount: BigDecimal?
+    val minWithdrawalAmount: BigDecimal?,
+    val withdrawalEnabled: Boolean?,
+    val depositEnabled: Boolean?,
 )
 
 data class ExchangeMetadata(
