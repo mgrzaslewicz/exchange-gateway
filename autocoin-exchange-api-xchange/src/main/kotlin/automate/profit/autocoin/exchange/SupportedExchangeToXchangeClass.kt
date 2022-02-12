@@ -1,6 +1,7 @@
 package automate.profit.autocoin.exchange
 
 import automate.profit.autocoin.exchange.SupportedExchange.*
+import automate.profit.xchange.HitBtcExchangeFork
 import org.knowm.xchange.Exchange
 import org.knowm.xchange.bibox.BiboxExchange
 import org.knowm.xchange.binance.BinanceExchange
@@ -49,7 +50,7 @@ fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
         COINDEAL -> CoindealExchange::class.java
         COINEX -> CoinexExchange::class.java
         GATEIO -> GateioExchange::class.java
-        HITBTC -> HitbtcExchange::class.java
+        HITBTC -> HitBtcExchangeFork::class.java
         GEMINI -> GeminiExchange::class.java
         IDEX -> IdexExchange::class.java
         KRAKEN -> KrakenExchange::class.java

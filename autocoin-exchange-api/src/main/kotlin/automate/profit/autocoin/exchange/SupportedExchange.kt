@@ -2,7 +2,7 @@ package automate.profit.autocoin.exchange
 
 /**
  * After adding new exchange remember to update:
- * SupportedExchange.toXchangeClass
+ * SupportedExchange.toXchangeJavaClass
  */
 enum class SupportedExchange(val exchangeName: String, val comments: List<String> = emptyList()) {
     BIBOX("bibox"),

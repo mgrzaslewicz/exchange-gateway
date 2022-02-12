@@ -43,4 +43,16 @@ class ExchangeMetadataFetcherManualTest {
         val fetcher = KucoinExchangeMetadataFetcher(exchangeFactory, xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner)
         fetcher.fetchExchangeMetadata()
     }
+
+    @Test
+    fun shouldFetchHitBtcMetadata() {
+        val fetcher = DefaultExchangeMetadataFetcher.Builder(
+            supportedExchange = SupportedExchange.HITBTC,
+            exchangeFactory = exchangeFactory,
+            xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+        ).build()
+        val metadata = fetcher.fetchExchangeMetadata()
+        metadata.currencyMetadata
+
+    }
 }
