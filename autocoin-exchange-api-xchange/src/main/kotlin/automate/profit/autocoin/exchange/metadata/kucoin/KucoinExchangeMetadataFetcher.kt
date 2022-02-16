@@ -5,6 +5,7 @@ import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.*
+import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KotlinLogging
@@ -16,7 +17,7 @@ import org.knowm.xchange.ExchangeFactory as XchangeExchangeFactory
 
 class KucoinExchangeMetadataFetcher(
     private val exchangeFactory: XchangeExchangeFactory,
-    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner
+    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier())
 ) : ExchangeMetadataFetcher {
     private val logger = KotlinLogging.logger {}
 

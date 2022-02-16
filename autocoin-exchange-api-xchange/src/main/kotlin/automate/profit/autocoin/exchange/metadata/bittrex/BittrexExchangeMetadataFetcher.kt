@@ -4,6 +4,7 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.metadata.*
+import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KotlinLogging
@@ -22,7 +23,7 @@ class BittrexExchangeMetadataFetcher(
     private val exchangeFactory: ExchangeFactory,
     private val bittrexSymbolsProvider: (Exchange) -> List<BittrexSymbol> = { exchange -> (exchange.marketDataService as BittrexMarketDataServiceRaw).bittrexSymbols },
     private val xchangeMetadataProvider: (Exchange) -> ExchangeMetaData = { exchange -> exchange.exchangeMetaData },
-    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner
+    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier())
 ) : ExchangeMetadataFetcher {
     private val logger = KotlinLogging.logger {}
 

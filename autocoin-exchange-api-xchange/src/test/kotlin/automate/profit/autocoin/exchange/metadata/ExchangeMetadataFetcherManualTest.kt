@@ -1,30 +1,26 @@
 package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.metadata.binance.BinanceExchangeMetadataFetcher
 import automate.profit.autocoin.exchange.metadata.bittrex.BittrexExchangeMetadataFetcher
 import automate.profit.autocoin.exchange.metadata.kucoin.KucoinExchangeMetadataFetcher
-import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.knowm.xchange.ExchangeFactory
 
 @Disabled
 class ExchangeMetadataFetcherManualTest {
-    private val xchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier())
-
     private val exchangeFactory = ExchangeFactory.INSTANCE
 
     @Test
     fun shouldFetchBittrexMetadata() {
-        val fetcher = BittrexExchangeMetadataFetcher(exchangeFactory, xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner)
+        val fetcher = BittrexExchangeMetadataFetcher(exchangeFactory)
         fetcher.fetchExchangeMetadata()
     }
 
     @Test
     fun shouldFetchBinanceMetadata() {
-        val fetcher = BinanceExchangeMetadataFetcher(exchangeFactory, xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner)
+        val fetcher = BinanceExchangeMetadataFetcher(exchangeFactory)
         fetcher.fetchExchangeMetadata()
     }
 
@@ -33,14 +29,13 @@ class ExchangeMetadataFetcherManualTest {
         val fetcher = DefaultExchangeMetadataFetcher.Builder(
             supportedExchange = SupportedExchange.GATEIO,
             exchangeFactory = exchangeFactory,
-            xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
         ).build()
         fetcher.fetchExchangeMetadata()
     }
 
     @Test
     fun shouldFetchKucoinMetadata() {
-        val fetcher = KucoinExchangeMetadataFetcher(exchangeFactory, xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner)
+        val fetcher = KucoinExchangeMetadataFetcher(exchangeFactory)
         fetcher.fetchExchangeMetadata()
     }
 
@@ -49,10 +44,19 @@ class ExchangeMetadataFetcherManualTest {
         val fetcher = DefaultExchangeMetadataFetcher.Builder(
             supportedExchange = SupportedExchange.HITBTC,
             exchangeFactory = exchangeFactory,
-            xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
         ).build()
         val metadata = fetcher.fetchExchangeMetadata()
         metadata.currencyMetadata
+    }
 
+    @Test
+    fun shouldFetchKrakenMetadata() {
+        val fetcher = DefaultExchangeMetadataFetcher.Builder(
+            supportedExchange = SupportedExchange.KRAKEN,
+            exchangeFactory = exchangeFactory,
+            overridenCurrencies = krakenOverridenCurrenciesMetadata
+        ).build()
+        val metadata = fetcher.fetchExchangeMetadata()
+        metadata.currencyMetadata
     }
 }

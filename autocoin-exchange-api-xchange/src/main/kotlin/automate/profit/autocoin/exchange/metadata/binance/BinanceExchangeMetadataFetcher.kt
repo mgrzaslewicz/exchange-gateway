@@ -5,6 +5,7 @@ import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.*
+import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KotlinLogging
@@ -22,7 +23,7 @@ class BinanceExchangeMetadataFetcher(
     private val binanceExchangeInfoProvider: (XchangeExchange) -> BinanceExchangeInfo = { exchange -> (exchange.marketDataService as BinanceMarketDataService).exchangeInfo },
     private val binanceMetadataProvider: (XchangeExchange) -> XchangeExchangeMetaData = { exchange -> exchange.exchangeMetaData },
     private val binanceTickerProvider: (XchangeExchange) -> List<BinancePrice> = { exchange -> (exchange.marketDataService as BinanceMarketDataService).tickerAllPrices() },
-    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner
+    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier())
 ) : ExchangeMetadataFetcher {
     override val supportedExchange = SupportedExchange.BINANCE
 
