@@ -1,11 +1,10 @@
 package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.SupportedExchange.BITFINEX
+import automate.profit.autocoin.exchange.SupportedExchange.*
+import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
-import automate.profit.autocoin.exchange.metadata.binance.BinanceExchangeMetadataFetcher
-import automate.profit.autocoin.exchange.metadata.bittrex.BittrexExchangeMetadataFetcher
-import automate.profit.autocoin.exchange.metadata.kucoin.KucoinExchangeMetadataFetcher
+import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import org.assertj.core.api.SoftAssertions
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -15,29 +14,24 @@ import java.lang.System.getProperty
 
 @Disabled
 class ExchangeMetadataFetcherManualTest {
-    private val exchangeFactory = ExchangeFactory.INSTANCE
+    private val exchangeMetadataFetchers =
+        exchangeMetadataFetchers(ExchangeFactory.INSTANCE, XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier())).associateBy { it.supportedExchange }
 
     @Test
     fun shouldFetchBittrexMetadata() {
-        val fetcher = BittrexExchangeMetadataFetcher(exchangeFactory)
-        val metadata = fetcher.fetchExchangeMetadata()
+        val metadata = exchangeMetadataFetchers.getValue(BITTREX).fetchExchangeMetadata()
         assertsFor(metadata)
     }
 
     @Test
     fun shouldFetchBinanceMetadata() {
-        val fetcher = BinanceExchangeMetadataFetcher(exchangeFactory)
-        val metadata = fetcher.fetchExchangeMetadata()
+        val metadata = exchangeMetadataFetchers.getValue(BINANCE).fetchExchangeMetadata()
         assertsFor(metadata)
     }
 
     @Test
     fun shouldFetchGateioMetadata() {
-        val fetcher = DefaultExchangeMetadataFetcher.Builder(
-            supportedExchange = SupportedExchange.GATEIO,
-            exchangeFactory = exchangeFactory,
-        ).build()
-        val metadata = fetcher.fetchExchangeMetadata()
+        val metadata = exchangeMetadataFetchers.getValue(GATEIO).fetchExchangeMetadata()
         assertsFor(metadata)
     }
 
@@ -61,28 +55,19 @@ class ExchangeMetadataFetcherManualTest {
 
     @Test
     fun shouldFetchKucoinMetadata() {
-        val fetcher = KucoinExchangeMetadataFetcher(exchangeFactory)
-        val metadata = fetcher.fetchExchangeMetadata()
+        val metadata = exchangeMetadataFetchers.getValue(KUCOIN).fetchExchangeMetadata()
         assertsFor(metadata)
     }
 
     @Test
     fun shouldFetchHitBtcMetadata() {
-        val fetcher = DefaultExchangeMetadataFetcher.Builder(
-            supportedExchange = SupportedExchange.HITBTC,
-            exchangeFactory = exchangeFactory,
-        ).build()
-        val metadata = fetcher.fetchExchangeMetadata()
+        val metadata = exchangeMetadataFetchers.getValue(HITBTC).fetchExchangeMetadata()
         assertsFor(metadata)
     }
 
     @Test
     fun shouldFetchKrakenMetadata() {
-        val fetcher = DefaultExchangeMetadataFetcher.Builder(
-            supportedExchange = SupportedExchange.KRAKEN,
-            exchangeFactory = exchangeFactory,
-            overridenCurrencies = krakenOverridenCurrenciesMetadata
-        ).build()
+        val fetcher = exchangeMetadataFetchers.getValue(KRAKEN)
         val metadata = fetcher.fetchExchangeMetadata()
         assertsFor(metadata)
     }
@@ -105,11 +90,15 @@ class ExchangeMetadataFetcherManualTest {
 
     @Test
     fun shouldFetchBitfinexMetadata() {
-        val fetcher = DefaultExchangeMetadataFetcher.Builder(
-            supportedExchange = BITFINEX,
-            exchangeFactory = exchangeFactory,
-        ).build()
-        val metadata = fetcher.fetchExchangeMetadata(exchangeApiKeyFromProperties(BITFINEX))
+        val exchange = BITFINEX
+        val metadata = exchangeMetadataFetchers.getValue(BITFINEX).fetchExchangeMetadata(exchangeApiKeyFromProperties(exchange))
+        assertsFor(metadata)
+    }
+
+    @Test
+    fun shouldFetchPoloniexMetadata() {
+        val exchange = POLONIEX
+        val metadata = exchangeMetadataFetchers.getValue(exchange).fetchExchangeMetadata(exchangeApiKeyFromProperties(exchange))
         assertsFor(metadata)
     }
 }

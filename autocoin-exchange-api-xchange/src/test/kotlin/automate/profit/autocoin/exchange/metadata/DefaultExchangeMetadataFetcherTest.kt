@@ -20,7 +20,7 @@ class DefaultExchangeMetadataFetcherTest {
         exchangeFactory = mock<ExchangeFactory>().apply {
             whenever(this.createExchange(any<ExchangeSpecification>())).thenReturn(mock())
         },
-        preventFromLoadingDefaultXchangeMetadata = false,
+        preventFromLoadingStaticXchangeMetadata = false,
         xchangeMetadataProvider = { _ -> sampleMetadata },
     )
     private val noApiKey: ExchangeApiKey? = null

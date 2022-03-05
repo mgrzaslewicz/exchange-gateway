@@ -72,7 +72,7 @@ internal fun getScaleOrDefault(
 /**
  * @see BaseExchange.applySpecification
  */
-internal fun preventFromLoadingDefaultXchangeMetadata(es: XchangeExchangeSpecification) {
+internal fun preventFromLoadingStaticXchangeMetadata(es: XchangeExchangeSpecification) {
     es.metaDataJsonFileOverride = getEmptyXchangeMetadataFile().absolutePath
 }
 
@@ -146,7 +146,7 @@ class DefaultExchangeMetadataFetcher private constructor(
         val exchangeSpec = XchangeExchangeSpecification(supportedExchange.toXchangeJavaClass())
         xchangeSpecificationApiKeyAssigner.assignKeys(supportedExchange, exchangeSpec, apiKey)
         if (preventFromLoadingDefaultXchangeMetadata) {
-            preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
+            preventFromLoadingStaticXchangeMetadata(exchangeSpec)
         }
         val exchange = exchangeFactory.createExchange(exchangeSpec)
         val xchangeMetadata = xchangeMetadataProvider(exchange)
@@ -220,7 +220,7 @@ class DefaultExchangeMetadataFetcher private constructor(
     data class Builder(
         var supportedExchange: SupportedExchange? = null,
         var exchangeFactory: XchangeExchangeFactory? = null,
-        var preventFromLoadingDefaultXchangeMetadata: Boolean = false,
+        var preventFromLoadingStaticXchangeMetadata: Boolean = false,
         var xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier()),
         var xchangeMetadataProvider: (exchange: Exchange) -> ExchangeMetaData = { exchange -> exchange.exchangeMetaData },
         var currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap(),
@@ -231,7 +231,7 @@ class DefaultExchangeMetadataFetcher private constructor(
             return DefaultExchangeMetadataFetcher(
                 supportedExchange = supportedExchange!!,
                 exchangeFactory = exchangeFactory!!,
-                preventFromLoadingDefaultXchangeMetadata = preventFromLoadingDefaultXchangeMetadata,
+                preventFromLoadingDefaultXchangeMetadata = preventFromLoadingStaticXchangeMetadata,
                 xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
                 xchangeMetadataProvider = xchangeMetadataProvider,
                 currencyPairRename = currencyPairRename,
@@ -291,7 +291,7 @@ fun overridenExchangeMetadataFetchers(
                 CurrencyPair.of("XRP/USD") to CurrencyPair.of("XRP/USDT")
             ),
             xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
-            preventFromLoadingDefaultXchangeMetadata = true
+            preventFromLoadingStaticXchangeMetadata = true
         ).build(),
         defaultBuilder.copy(
             supportedExchange = LUNO,
@@ -310,7 +310,7 @@ fun defaultExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, xch
                 supportedExchange = it,
                 exchangeFactory = exchangeFactory,
                 xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
-                preventFromLoadingDefaultXchangeMetadata = true
+                preventFromLoadingStaticXchangeMetadata = true
             ).build()
         }
 

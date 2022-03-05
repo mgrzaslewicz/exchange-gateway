@@ -32,7 +32,7 @@ class BittrexExchangeMetadataFetcher(
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
         xchangeSpecificationApiKeyAssigner.assignKeys(SupportedExchange.BITTREX, exchangeSpec, apiKey)
-        preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
+        preventFromLoadingStaticXchangeMetadata(exchangeSpec)
         val exchange = exchangeFactory.createExchange(exchangeSpec)
         val bittrexSymbols = bittrexSymbolsProvider(exchange)
         val currencyPairs = BittrexAdapters.adaptCurrencyPairs(bittrexSymbols)

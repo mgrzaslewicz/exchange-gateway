@@ -30,7 +30,7 @@ class KucoinExchangeMetadataFetcher(
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
         xchangeSpecificationApiKeyAssigner.assignKeys(SupportedExchange.KUCOIN, exchangeSpec, apiKey)
-        preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
+        preventFromLoadingStaticXchangeMetadata(exchangeSpec)
         val xchangeExchange = exchangeFactory.createExchange(exchangeSpec)
         val xchangeKucoinMetadata = xchangeExchange.exchangeMetaData
         val kucoinMarketDataService = xchangeExchange.marketDataService as KucoinMarketDataService
