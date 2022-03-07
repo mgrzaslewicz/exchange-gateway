@@ -5,6 +5,7 @@ import automate.profit.autocoin.exchange.CachingXchangeProvider
 import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
 import automate.profit.autocoin.exchange.orderbook.UserExchangeOrderBookService
 import automate.profit.autocoin.exchange.orderbook.XchangeUserExchangeOrderBookService
+import automate.profit.autocoin.exchange.ratelimiter.ExchangeRateLimiters
 import automate.profit.autocoin.exchange.ticker.UserExchangeTickerService
 import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KLogging
@@ -64,7 +65,8 @@ interface UserExchangeServicesFactory {
 
 class XchangeUserExchangeServicesFactory(
     private val serviceApiKeysProvider: ServiceApiKeysProvider,
-    private val cachingXchangeProvider: CachingXchangeProvider
+    private val cachingXchangeProvider: CachingXchangeProvider,
+    private val exchangeRateLimiters: ExchangeRateLimiters,
 ) : UserExchangeServicesFactory {
     private companion object : KLogging()
 
@@ -78,7 +80,11 @@ class XchangeUserExchangeServicesFactory(
     ): UserExchangeTradeService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         val xchange = cachingXchangeProvider.getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters)
-        return XchangeUserExchangeTradeService(exchangeName, xchange.tradeService)
+        return XchangeUserExchangeTradeService(
+            exchangeName = exchangeName,
+            wrapped = xchange.tradeService,
+            exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange)
+        )
     }
 
     override fun createWalletService(
@@ -104,7 +110,11 @@ class XchangeUserExchangeServicesFactory(
             }
             else -> {
                 val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
-                XchangeUserExchangeTickerService(cachingXchangeProvider.getXchange(supportedExchange, exchangeSpec).marketDataService, supportedExchange)
+                XchangeUserExchangeTickerService(
+                    marketDataService = cachingXchangeProvider.getXchange(supportedExchange, exchangeSpec).marketDataService,
+                    exchange = supportedExchange,
+                    exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange)
+                )
             }
         }
     }
@@ -118,8 +128,15 @@ class XchangeUserExchangeServicesFactory(
     ): UserExchangeTickerService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         return XchangeUserExchangeTickerService(
-            cachingXchangeProvider.getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService,
-            supportedExchange
+            marketDataService = cachingXchangeProvider.getXchange(
+                exchangeName = supportedExchange,
+                publicKey = publicKey,
+                secretKey = secretKey,
+                userName = userName,
+                exchangeSpecificKeyParameters = exchangeSpecificKeyParameters
+            ).marketDataService,
+            exchange = supportedExchange,
+            exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange)
         )
     }
 
@@ -132,7 +149,11 @@ class XchangeUserExchangeServicesFactory(
             }
             else -> {
                 val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
-                return XchangeUserExchangeOrderBookService(cachingXchangeProvider.getXchange(supportedExchange, exchangeSpec).marketDataService, exchangeName)
+                return XchangeUserExchangeOrderBookService(
+                    marketDataService = cachingXchangeProvider.getXchange(supportedExchange, exchangeSpec).marketDataService,
+                    exchangeName = exchangeName,
+                    exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange)
+                )
             }
         }
     }
@@ -146,8 +167,9 @@ class XchangeUserExchangeServicesFactory(
     ): UserExchangeOrderBookService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         return XchangeUserExchangeOrderBookService(
-            cachingXchangeProvider.getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService,
-            exchangeName
+            marketDataService = cachingXchangeProvider.getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService,
+            exchangeName = exchangeName,
+            exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange)
         )
     }
 
