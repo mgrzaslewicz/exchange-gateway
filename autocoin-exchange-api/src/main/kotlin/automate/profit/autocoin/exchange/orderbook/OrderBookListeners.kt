@@ -86,7 +86,7 @@ class DefaultOrderBookListeners : OrderBookListeners {
     }
 
     override fun getOrderBookListeners(supportedExchange: SupportedExchange): Map<CurrencyPair, Set<OrderBookListener>> {
-        return listenersByExchangeAndCurrencyPair.getOrElse(supportedExchange, { mapOf() })
+        return listenersByExchangeAndCurrencyPair.getOrElse(supportedExchange) { emptyMap() }
     }
 
 }

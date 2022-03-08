@@ -5,24 +5,25 @@ import automate.profit.autocoin.exchange.currency.toXchangeCurrencyPair
 import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
 import automate.profit.autocoin.exchange.peruser.toOrderBookExchangeOrder
 import automate.profit.autocoin.exchange.ratelimiter.ExchangeRateLimiter
+import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior
+import automate.profit.autocoin.exchange.ratelimiter.acquireWith
 import org.knowm.xchange.service.marketdata.MarketDataService
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.TimeUnit
 
 class XchangeExchangeOrderBookService(private val userExchangeServicesFactory: UserExchangeServicesFactory) : ExchangeOrderBookService {
-    override fun getOrderBook(exchangeName: String, currencyPair: CurrencyPair): OrderBook {
+    override fun getOrderBook(exchangeName: String, currencyPair: CurrencyPair, rateLimiterBehaviour: RateLimiterBehavior): OrderBook {
         val orderBookService = userExchangeServicesFactory.createOrderBookService(exchangeName)
-        return orderBookService.getOrderBook(currencyPair)
+        return orderBookService.getOrderBook(currencyPair, rateLimiterBehaviour)
     }
 }
 
 class CachingXchangeExchangeOrderBookService(private val userExchangeServicesFactory: UserExchangeServicesFactory) : ExchangeOrderBookService {
     private val cache = ConcurrentHashMap<String, UserExchangeOrderBookService>()
 
-    override fun getOrderBook(exchangeName: String, currencyPair: CurrencyPair): OrderBook {
+    override fun getOrderBook(exchangeName: String, currencyPair: CurrencyPair, rateLimiterBehaviour: RateLimiterBehavior): OrderBook {
         return cache.computeIfAbsent(exchangeName.lowercase()) {
             userExchangeServicesFactory.createOrderBookService(exchangeName)
-        }.getOrderBook(currencyPair)
+        }.getOrderBook(currencyPair, rateLimiterBehaviour)
     }
 }
 
@@ -31,8 +32,9 @@ class XchangeUserExchangeOrderBookService(
     private val exchangeName: String,
     private val exchangeRateLimiter: ExchangeRateLimiter,
 ) : UserExchangeOrderBookService {
-    override fun getOrderBook(currencyPair: CurrencyPair): OrderBook {
-        check(exchangeRateLimiter.tryAcquirePermit(250L, TimeUnit.MILLISECONDS)) { "[$exchangeName] Could not acquire permit for getting order book within 250ms" }
+
+    override fun getOrderBook(currencyPair: CurrencyPair, rateLimiterBehaviour: RateLimiterBehavior): OrderBook {
+        exchangeRateLimiter.acquireWith(rateLimiterBehaviour) { "[$exchangeName] Could not acquire permit to getOrderBook" }
         return marketDataService.getOrderBook(currencyPair.toXchangeCurrencyPair()).toOrderBook(exchangeName)
     }
 

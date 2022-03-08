@@ -1,24 +1,24 @@
 package automate.profit.autocoin.exchange.orderbook
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.currency.ExchangeWithCurrencyPairStringCache
 import automate.profit.autocoin.exchange.currency.CurrencyPair
+import automate.profit.autocoin.exchange.currency.ExchangeWithCurrencyPairStringCache
+import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior
+import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior.WAIT_WITHOUT_TIMEOUT
 import mu.KLogger
 import mu.KotlinLogging
 import java.lang.ref.SoftReference
-import java.time.Duration
-import java.util.concurrent.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Future
 
 interface SynchronousOrderBookFetchScheduler : OrderBookRegistrationListener {
     fun fetchOrderBooksThenNotifyListeners(exchange: SupportedExchange)
 }
 
 class DefaultSynchronousOrderBookFetchScheduler(
-    private val allowedExchangeFetchFrequency: Map<SupportedExchange, Duration>,
     private val exchangeOrderBookService: ExchangeOrderBookService,
     private val orderBookListeners: OrderBookListeners,
-    /** preferably one thread per exchange - cached thread pool is a good fit */
-    private val scheduledExecutorService: ScheduledExecutorService,
     /** preferably a few multiple threads, but not one per single currency pair as it might grow to thousands of threads. workStealingPool might be a good fit */
     private val executorService: ExecutorService,
     private val logger: KLogger = KotlinLogging.logger {},
@@ -26,16 +26,16 @@ class DefaultSynchronousOrderBookFetchScheduler(
 ) : SynchronousOrderBookFetchScheduler {
 
     private val lastOrderBooks = ConcurrentHashMap<String, SoftReference<OrderBook>>()
-    private val scheduledFetchers = ConcurrentHashMap<SupportedExchange, ScheduledFuture<*>>()
+    private val runningFetchers = ConcurrentHashMap<SupportedExchange, Future<*>>()
 
     override fun onListenerDeregistered(exchange: SupportedExchange, currencyPair: CurrencyPair) {
     }
 
     override fun onLastListenerDeregistered(exchange: SupportedExchange) {
-        if (scheduledFetchers.containsKey(exchange)) {
-            val scheduledFetcher = scheduledFetchers.getValue(exchange)
+        if (runningFetchers.containsKey(exchange)) {
+            val scheduledFetcher = runningFetchers.getValue(exchange)
             scheduledFetcher.cancel(false)
-            scheduledFetchers.remove(exchange)
+            runningFetchers.remove(exchange)
         }
     }
 
@@ -46,28 +46,26 @@ class DefaultSynchronousOrderBookFetchScheduler(
     }
 
     override fun onFirstListenerRegistered(exchange: SupportedExchange) {
-        if (!scheduledFetchers.containsKey(exchange)) {
-            val exchangeFrequency = allowedExchangeFetchFrequency.getValue(exchange)
-            val scheduledFetcher = scheduledExecutorService.scheduleAtFixedRate({
-                fetchOrderBooksThenNotifyListeners(exchange)
-            }, 0, exchangeFrequency.toMillis(), TimeUnit.MILLISECONDS)
-            scheduledFetchers[exchange] = scheduledFetcher
+        if (!runningFetchers.containsKey(exchange)) {
+            val fetcher = executorService.submit {
+                while (true) {
+                    fetchOrderBooksThenNotifyListeners(exchange)
+                }
+            }
+            runningFetchers[exchange] = fetcher
         }
     }
 
     override fun fetchOrderBooksThenNotifyListeners(exchange: SupportedExchange) {
-        // TODO that's possibly subject to optimize and fetch all currency pairs with one exchange request where possible
-        executorService.submit {
-            orderBookListeners.getOrderBookListeners(exchange).forEach { (currencyPair, orderBookListeners) ->
-                val orderBook = getOrderBook(exchange, currencyPair)
-                if (orderBook != null && isNew(orderBook, exchange, currencyPair)) {
-                    orderBookListeners.forEach {
-                        it.onOrderBook(exchange, currencyPair, orderBook)
-                    }
-                } else {
-                    orderBookListeners.forEach {
-                        it.onNoNewOrderBook(exchange, currencyPair, orderBook)
-                    }
+        orderBookListeners.getOrderBookListeners(exchange).forEach { (currencyPair, orderBookListeners) ->
+            val orderBook = getOrderBook(exchange, currencyPair)
+            if (orderBook != null && isNew(orderBook, exchange, currencyPair)) {
+                orderBookListeners.forEach {
+                    it.onOrderBook(exchange, currencyPair, orderBook)
+                }
+            } else {
+                orderBookListeners.forEach {
+                    it.onNoNewOrderBook(exchange, currencyPair, orderBook)
                 }
             }
         }
