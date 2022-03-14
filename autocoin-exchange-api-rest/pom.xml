@@ -8,6 +8,10 @@
 
     <name>autocoin-exchange-api-rest</name>
 
+    <properties>
+        <kotlin.version>1.6.20-RC</kotlin.version>
+    </properties>
+
     <parent>
         <groupId>automate.profit</groupId>
         <artifactId>autocoin-exchange-engine</artifactId>
@@ -75,6 +79,17 @@
             <version>1.7.25</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib-jdk8</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -86,7 +101,7 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <version>${kotlin.version}</version>
                 <configuration>
-                    <jvmTarget>12</jvmTarget>
+                    <jvmTarget>1.8</jvmTarget>
                 </configuration>
                 <executions>
                     <execution>
