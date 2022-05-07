@@ -5,9 +5,9 @@ package automate.profit.autocoin.exchange.metadata
  * Taken from https://support.kraken.com/hc/en-us/articles/360000767986-Cryptocurrency-withdrawal-fees-and-minimums
  *
  * According to https://docs.kraken.com/rest/#operation/getAssetInfo
- * Currenciec that kraken sends are available for deposit, withdrawal, trading and staking.
+ * Currencies that kraken sends are available for deposit, withdrawal, trading and staking.
  */
-val krakenOverridenCurrenciesMetadata: Map<String, CurrencyMetadataOverride> = mapOf(
+val krakenOverridenCurrencyMetadata: Map<String, CurrencyMetadataOverride> = mapOf(
     "ZRX" to CurrencyMetadataOverride(withdrawalFee = 12.0, minWithdrawalAmount = 24.0, isWithdrawalEnabled = true, isDepositEnabled = true),
     "1INCH" to CurrencyMetadataOverride(withdrawalFee = 5.0, minWithdrawalAmount = 10.0, isWithdrawalEnabled = true, isDepositEnabled = true),
     "AAVE" to CurrencyMetadataOverride(withdrawalFee = 0.05, minWithdrawalAmount = 0.12, isWithdrawalEnabled = true, isDepositEnabled = true),

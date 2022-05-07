@@ -30,7 +30,7 @@ class DefaultExchangeMetadataFetcherTest {
     fun shouldOverrideCurrencyMetadata() {
         // given
         val tested = builder.copy(
-            overridenCurrencies = mapOf(
+            overridenCurrencyMetadata = mapOf(
                 "BTC" to CurrencyMetadataOverride(
                     minWithdrawalAmount = 2.0,
                     withdrawalFee = 10.0
@@ -42,6 +42,29 @@ class DefaultExchangeMetadataFetcherTest {
         // then
         assertThat(exchangeMetadata.currencyMetadata.getValue("BTC").minWithdrawalAmount).isEqualTo("2.0".toBigDecimal())
         assertThat(exchangeMetadata.currencyMetadata.getValue("BTC").withdrawalFeeAmount).isEqualTo("10.0".toBigDecimal())
+    }
+
+    @Test
+    fun shouldOverrideCurrencyPairMetadata() {
+        // given
+        val expectedTransactionFeeRanges = TransactionFeeRanges(
+            makerFees = emptyList(),
+            takerFees = listOf(
+                TransactionFeeRange(
+                    beginAmount = BigDecimal.ZERO,
+                    feeRatio = BigDecimal("0.0015"),
+                )
+            )
+        )
+        val tested = builder.copy(
+            overridenCurrencyPairMetadata = mapOf(
+                oneInchBtcCurrencyPair to CurrencyPairMetadataOverride(transactionFeeRanges = expectedTransactionFeeRanges)
+            )
+        ).build()
+        // when
+        val exchangeMetadata = tested.fetchExchangeMetadata(noApiKey)
+        // then
+        assertThat(exchangeMetadata.currencyPairMetadata.getValue(oneInchBtcCurrencyPair).transactionFeeRanges).isEqualTo(expectedTransactionFeeRanges)
     }
 
     @Test
