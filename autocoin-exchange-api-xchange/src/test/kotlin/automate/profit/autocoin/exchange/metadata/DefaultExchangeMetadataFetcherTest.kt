@@ -9,6 +9,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.knowm.xchange.ExchangeFactory
 import org.knowm.xchange.ExchangeSpecification
+import org.knowm.xchange.currency.Currency
+import org.knowm.xchange.dto.meta.CurrencyMetaData
 import org.knowm.xchange.dto.meta.ExchangeMetaData
 import java.math.BigDecimal
 
@@ -33,7 +35,7 @@ class DefaultExchangeMetadataFetcherTest {
             overridenCurrencyMetadata = mapOf(
                 "BTC" to CurrencyMetadataOverride(
                     minWithdrawalAmount = 2.0,
-                    withdrawalFee = 10.0
+                    withdrawalFeeAmount = 10.0
                 )
             )
         ).build()
@@ -65,6 +67,23 @@ class DefaultExchangeMetadataFetcherTest {
         val exchangeMetadata = tested.fetchExchangeMetadata(noApiKey)
         // then
         assertThat(exchangeMetadata.currencyPairMetadata.getValue(oneInchBtcCurrencyPair).transactionFeeRanges).isEqualTo(expectedTransactionFeeRanges)
+    }
+
+    @Test
+    fun shouldUseDefaultCurrencyMetadataWhenNoneProvidedByXchange() {
+        // given
+        val expectedWithdrawalFeeAmount = BigDecimal("0.00025")
+        val nullCurrencyMetaData: Map<Currency, CurrencyMetaData>? = null
+        val tested = builder.copy(
+            defaultCurrencyMetadata = mapOf(
+                "BTC" to CurrencyMetadata(withdrawalFeeAmount = expectedWithdrawalFeeAmount)
+            ),
+            xchangeMetadataProvider = { _ -> ExchangeMetaData(emptyMap(), nullCurrencyMetaData, null, null, false) }
+        ).build()
+        // when
+        val exchangeMetadata = tested.fetchExchangeMetadata(noApiKey)
+        // then
+        assertThat(exchangeMetadata.currencyMetadata.getValue("BTC").withdrawalFeeAmount).isEqualTo(expectedWithdrawalFeeAmount)
     }
 
     @Test
