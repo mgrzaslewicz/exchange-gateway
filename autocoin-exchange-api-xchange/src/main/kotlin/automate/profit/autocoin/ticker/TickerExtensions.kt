@@ -8,24 +8,25 @@ import org.knowm.xchange.dto.marketdata.Ticker as XchangeTicker
 
 
 fun Ticker.toXchangeTicker(): XchangeTicker = XchangeTicker.Builder()
-        .currencyPair(currencyPair.toXchangeCurrencyPair())
-        .ask(ask)
-        .bid(bid)
-        .volume(baseCurrency24hVolume)
-        .quoteVolume(counterCurrency24hVolume)
-        .timestamp(timestamp?.toEpochMilli()?.let { Date(it) })
-        .build()
+    .currencyPair(currencyPair.toXchangeCurrencyPair())
+    .ask(ask)
+    .bid(bid)
+    .volume(baseCurrency24hVolume)
+    .quoteVolume(counterCurrency24hVolume)
+    .timestamp(exchangeTimestampMillis?.let { Date(it) })
+    .build()
 
-fun XchangeTicker.toTicker() = Ticker(
-        currencyPair = CurrencyPair.of(
-                base = currencyPair.base.currencyCode,
-                counter = currencyPair.counter.currencyCode
-        ),
-        ask = ask,
-        bid = bid,
-        baseCurrency24hVolume = volume,
-        counterCurrency24hVolume = quoteVolume,
-        timestamp = this.timestamp?.toInstant()
+fun XchangeTicker.toTicker(receivedAtMillis: Long) = Ticker(
+    currencyPair = CurrencyPair.of(
+        base = currencyPair.base.currencyCode,
+        counter = currencyPair.counter.currencyCode
+    ),
+    ask = ask,
+    bid = bid,
+    baseCurrency24hVolume = volume,
+    counterCurrency24hVolume = quoteVolume,
+    receivedAtMillis = receivedAtMillis,
+    exchangeTimestampMillis = this.timestamp?.time,
 )
 
 /**
@@ -34,12 +35,13 @@ fun XchangeTicker.toTicker() = Ticker(
  * eg COINBENE has hardcoded substring (0, 3) so it parses improperly currencies with
  * length > 3 and STORJ/BTC fetched from exchange becomes STO/RJBTC
  */
-fun XchangeTicker.toTickerWithCurrencyPairFix(currencyPair: CurrencyPair) = Ticker(
-        currencyPair = currencyPair,
-        ask = ask,
-        bid = bid,
-        baseCurrency24hVolume = volume,
-        counterCurrency24hVolume = quoteVolume,
-        timestamp = this.timestamp?.toInstant()
+fun XchangeTicker.toTickerWithCurrencyPairFix(currencyPair: CurrencyPair, receivedAtMillis: Long) = Ticker(
+    currencyPair = currencyPair,
+    ask = ask,
+    bid = bid,
+    baseCurrency24hVolume = volume,
+    counterCurrency24hVolume = quoteVolume,
+    receivedAtMillis = receivedAtMillis,
+    exchangeTimestampMillis = this.timestamp?.time,
 )
 

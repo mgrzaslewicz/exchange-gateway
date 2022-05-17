@@ -13,12 +13,13 @@ class TickerDtoTest {
         // given
         val currencyPair = CurrencyPair.of("STORJ/BTC")
         val ticker = Ticker(
-                currencyPair = currencyPair,
-                ask = BigDecimal.ZERO,
-                bid = BigDecimal.ONE,
-                baseCurrency24hVolume = BigDecimal.TEN,
-                counterCurrency24hVolume = BigDecimal.TEN,
-                timestamp = null
+            currencyPair = currencyPair,
+            ask = BigDecimal.ZERO,
+            bid = BigDecimal.ONE,
+            baseCurrency24hVolume = BigDecimal.TEN,
+            counterCurrency24hVolume = BigDecimal.TEN,
+            receivedAtMillis = System.currentTimeMillis(),
+            exchangeTimestampMillis = null,
         )
         // when
         val dto = ticker.toDto(SupportedExchange.BITTREX)

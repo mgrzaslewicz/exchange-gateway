@@ -11,9 +11,10 @@ data class Ticker(
         val bid: BigDecimal,
         val baseCurrency24hVolume: BigDecimal,
         val counterCurrency24hVolume: BigDecimal,
-        val timestamp: Instant?
+        val receivedAtMillis: Long,
+        val exchangeTimestampMillis: Long?,
 ) {
-    fun hasTimestamp() = this.timestamp != null
+    fun hasTimestamp() = this.exchangeTimestampMillis != null
 }
 
 interface TickerListener {

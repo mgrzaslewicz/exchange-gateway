@@ -3,6 +3,7 @@ package automate.profit.autocoin.exchange
 import automate.profit.autocoin.exchange.SupportedExchange.*
 import automate.profit.xchange.HitBtcExchangeFork
 import automate.profit.xchange.PoloniexExchangeFork
+import automate.profit.xchange.ZondaBitbayExchangFork
 import org.knowm.xchange.Exchange
 import org.knowm.xchange.bibox.BiboxExchange
 import org.knowm.xchange.binance.BinanceExchange
@@ -36,7 +37,7 @@ fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
     return when (this) {
         BIBOX -> BiboxExchange::class.java
         BINANCE -> BinanceExchange::class.java
-        BITBAY -> BitbayExchange::class.java
+        BITBAY -> ZondaBitbayExchangFork::class.java
         BITFINEX -> BitfinexExchange::class.java
         BITMEX -> BitmexExchange::class.java
         BITSO -> BitsoExchange::class.java

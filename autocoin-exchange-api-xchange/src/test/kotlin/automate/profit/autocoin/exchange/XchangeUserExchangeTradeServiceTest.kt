@@ -10,6 +10,7 @@ import automate.profit.autocoin.exchange.order.ExchangeOrderType.BID_BUY
 import automate.profit.autocoin.exchange.order.toXchangeLimitOrder
 import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeTradeService
 import automate.profit.autocoin.exchange.ratelimiter.NoOpExchangeRateLimiter
+import automate.profit.autocoin.exchange.time.SystemTimeMillisProvider
 import com.nhaarman.mockitokotlin2.whenever
 import mu.KLogging
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
@@ -49,7 +50,7 @@ class XchangeUserExchangeTradeServiceTest {
         price = limitPriceBigDecimal,
         currencyPair = currencyPair,
         status = PARTIALLY_FILLED,
-        timestamp = null
+        receivedAtMillis = System.currentTimeMillis(), exchangeTimestampMillis = null,
     )
 
     private val openBuyOrder2 = ExchangeOrder(
@@ -61,7 +62,7 @@ class XchangeUserExchangeTradeServiceTest {
         price = limitPriceBigDecimal,
         currencyPair = currencyPair,
         status = NEW,
-        timestamp = null
+        receivedAtMillis = System.currentTimeMillis(), exchangeTimestampMillis = null,
     )
 
     private val openSellOrder1 = ExchangeOrder(
@@ -73,7 +74,7 @@ class XchangeUserExchangeTradeServiceTest {
         price = limitPriceBigDecimal,
         currencyPair = currencyPair,
         status = NEW,
-        timestamp = null
+        receivedAtMillis = System.currentTimeMillis(), exchangeTimestampMillis = null,
     )
 
     @BeforeEach
@@ -81,7 +82,8 @@ class XchangeUserExchangeTradeServiceTest {
         tested = XchangeUserExchangeTradeService(
             exchangeName = KUCOIN.exchangeName,
             wrapped = wrappedTradeService,
-            exchangeRateLimiter = NoOpExchangeRateLimiter()
+            exchangeRateLimiter = NoOpExchangeRateLimiter(),
+            timeMillisProvider = SystemTimeMillisProvider(),
         )
     }
 
@@ -92,7 +94,7 @@ class XchangeUserExchangeTradeServiceTest {
         // when
         val completed = tested.isOrderNotOpen(openBuyOrder2)
         // then
-        assertThat(completed).isTrue()
+        assertThat(completed).isTrue
     }
 
     @Test
@@ -102,7 +104,7 @@ class XchangeUserExchangeTradeServiceTest {
         // when
         val completed = tested.isOrderNotOpen(openBuyOrder2)
         // then
-        assertThat(completed).isFalse()
+        assertThat(completed).isFalse
     }
 
     @Test
@@ -133,8 +135,7 @@ class XchangeUserExchangeTradeServiceTest {
         whenever(wrappedTradeService.getOpenOrders(any(OpenOrdersParams::class.java))).thenReturn(
             OpenOrders(
                 listOf(
-                    openBuyOrder1.toXchangeLimitOrder(),
-                    openSellOrder1.toXchangeLimitOrder()
+                    openBuyOrder1.toXchangeLimitOrder(), openSellOrder1.toXchangeLimitOrder()
                 )
             )
         )
@@ -144,9 +145,7 @@ class XchangeUserExchangeTradeServiceTest {
         whenever(wrappedTradeService.getOpenOrders(any(OpenOrdersParams::class.java))).thenReturn(
             OpenOrders(
                 listOf(
-                    openBuyOrder1.toXchangeLimitOrder(),
-                    openBuyOrder2.toXchangeLimitOrder(),
-                    openSellOrder1.toXchangeLimitOrder()
+                    openBuyOrder1.toXchangeLimitOrder(), openBuyOrder2.toXchangeLimitOrder(), openSellOrder1.toXchangeLimitOrder()
                 )
             )
         )

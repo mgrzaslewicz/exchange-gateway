@@ -10,7 +10,6 @@ import automate.profit.autocoin.exchange.currency.toXchangeCurrencyPair
 import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
 import automate.profit.autocoin.exchange.peruser.UserExchangeTradeService
 import automate.profit.autocoin.exchange.wallet.ExchangeCurrencyPairsInWalletService
-import automate.profit.autocoin.util.toDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -18,6 +17,9 @@ import mu.KLogging
 import org.knowm.xchange.dto.Order
 import org.knowm.xchange.dto.trade.LimitOrder
 import java.math.BigDecimal
+import java.util.*
+
+private fun Long.toDate() = Date(this)
 
 fun ExchangeOrderType.toXchangeOrderType() = when (this) {
     ExchangeOrderType.ASK_SELL -> Order.OrderType.ASK
@@ -51,18 +53,20 @@ fun ExchangeOrderStatus.toXchangeOrderStatus() = when (this) {
 }
 
 fun ExchangeOrder.toXchangeLimitOrder(): LimitOrder = LimitOrder.Builder(this.type.toXchangeOrderType(), this.currencyPair.toXchangeCurrencyPair())
-        .id(this.orderId)
-        .originalAmount(this.orderedAmount)
-        .limitPrice(this.price)
-        .orderStatus(this.status.toXchangeOrderStatus())
-        .timestamp(this.timestamp?.toDate())
-        .build()
+    .id(this.orderId)
+    .originalAmount(this.orderedAmount)
+    .limitPrice(this.price)
+    .orderStatus(this.status.toXchangeOrderStatus())
+    .timestamp(this.exchangeTimestampMillis?.toDate())
+    .build()
 
-class XchangeOrderService(private val exchangeService: ExchangeService,
-                          private val exchangeKeyService: ExchangeKeyService,
-                          private val userExchangeServicesFactory: UserExchangeServicesFactory,
-                          private val exchangeCurrencyPairsInWallet: ExchangeCurrencyPairsInWalletService,
-                          private val demoOrderCreator: DemoOrderCreator) : ExchangeOrderService {
+class XchangeOrderService(
+    private val exchangeService: ExchangeService,
+    private val exchangeKeyService: ExchangeKeyService,
+    private val userExchangeServicesFactory: UserExchangeServicesFactory,
+    private val exchangeCurrencyPairsInWallet: ExchangeCurrencyPairsInWalletService,
+    private val demoOrderCreator: DemoOrderCreator
+) : ExchangeOrderService {
 
     private companion object : KLogging()
 
@@ -112,17 +116,17 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
     }
 
     private fun getOpenOrdersFromExchange(
-            exchangeName: String,
-            exchangeKey: ExchangeKeyDto,
-            tradeService: UserExchangeTradeService,
-            currencyPairs: List<CurrencyPair>
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        tradeService: UserExchangeTradeService,
+        currencyPairs: List<CurrencyPair>
     ): List<ExchangeOrder> {
         return when (SupportedExchange.fromExchangeName(exchangeName)) {
             YOBIT -> { // API allows only requesting open orders per single market
                 logger.debug("Requesting open orders at exchange $exchangeName for markets:  $currencyPairs")
                 exchangeCurrencyPairsInWallet
-                        .generateFromWalletIfGivenEmpty(exchangeName, exchangeKey, currencyPairs)
-                        .flatMap { getOpenOrdersFromExchangeForMarket(exchangeName, tradeService, it) }
+                    .generateFromWalletIfGivenEmpty(exchangeName, exchangeKey, currencyPairs)
+                    .flatMap { getOpenOrdersFromExchangeForMarket(exchangeName, tradeService, it) }
             }
             BINANCE,
             BITBAY,
@@ -165,22 +169,28 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
     private fun getTradeService(exchangeName: String, exchangeUserId: String): UserExchangeTradeService {
         val exchangeId = exchangeService.getExchangeIdByName(exchangeName)
         val exchangeKey = exchangeKeyService.getExchangeKey(exchangeUserId, exchangeId)
-                ?: throw IllegalArgumentException("Exchange key for Exchange(name=$exchangeName,id=$exchangeId) and exchangeUserId=$exchangeUserId not found")
+            ?: throw IllegalArgumentException("Exchange key for Exchange(name=$exchangeName,id=$exchangeId) and exchangeUserId=$exchangeUserId not found")
         return getTradeService(exchangeName, exchangeKey)
     }
 
     private fun getTradeService(exchangeName: String, exchangeKey: ExchangeKeyDto): UserExchangeTradeService {
-        return userExchangeServicesFactory.createTradeService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName, exchangeKey.exchangeSpecificKeyParameters)
+        return userExchangeServicesFactory.createTradeService(
+            exchangeName,
+            exchangeKey.apiKey,
+            exchangeKey.secretKey,
+            exchangeKey.userName,
+            exchangeKey.exchangeSpecificKeyParameters
+        )
     }
 
     override fun placeLimitBuyOrder(
-            exchangeName: String,
-            exchangeUserId: String,
-            baseCurrencyCode: String,
-            counterCurrencyCode: String,
-            buyPrice: BigDecimal,
-            amount: BigDecimal,
-            isDemoOrder: Boolean
+        exchangeName: String,
+        exchangeUserId: String,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        buyPrice: BigDecimal,
+        amount: BigDecimal,
+        isDemoOrder: Boolean
     ): ExchangeOrder {
         return if (isDemoOrder) {
             demoOrderCreator.placeLimitBuyOrder(exchangeName, exchangeUserId, baseCurrencyCode, counterCurrencyCode, buyPrice, amount)
@@ -191,13 +201,13 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
     }
 
     fun placeLimitBuyOrder(
-            exchangeName: String,
-            exchangeKey: ExchangeKeyDto,
-            baseCurrencyCode: String,
-            counterCurrencyCode: String,
-            buyPrice: BigDecimal,
-            amount: BigDecimal,
-            isDemoOrder: Boolean = false
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        buyPrice: BigDecimal,
+        amount: BigDecimal,
+        isDemoOrder: Boolean = false
     ): ExchangeOrder {
         return if (isDemoOrder) {
             demoOrderCreator.placeLimitBuyOrder(exchangeName, exchangeKey.exchangeUserId, baseCurrencyCode, counterCurrencyCode, buyPrice, amount)
@@ -208,13 +218,13 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
     }
 
     override fun placeLimitSellOrder(
-            exchangeName: String,
-            exchangeUserId: String,
-            baseCurrencyCode: String,
-            counterCurrencyCode: String,
-            sellPrice: BigDecimal,
-            amount: BigDecimal,
-            isDemoOrder: Boolean
+        exchangeName: String,
+        exchangeUserId: String,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        sellPrice: BigDecimal,
+        amount: BigDecimal,
+        isDemoOrder: Boolean
     ): ExchangeOrder {
         return if (isDemoOrder) {
             demoOrderCreator.placeLimitSellOrder(exchangeName, exchangeUserId, baseCurrencyCode, counterCurrencyCode, sellPrice, amount)
@@ -225,13 +235,13 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
     }
 
     fun placeLimitSellOrder(
-            exchangeName: String,
-            exchangeKey: ExchangeKeyDto,
-            baseCurrencyCode: String,
-            counterCurrencyCode: String,
-            sellPrice: BigDecimal,
-            amount: BigDecimal,
-            isDemoOrder: Boolean = false
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        sellPrice: BigDecimal,
+        amount: BigDecimal,
+        isDemoOrder: Boolean = false
     ): ExchangeOrder {
         return if (isDemoOrder) {
             demoOrderCreator.placeLimitSellOrder(exchangeName, exchangeKey.exchangeUserId, baseCurrencyCode, counterCurrencyCode, sellPrice, amount)

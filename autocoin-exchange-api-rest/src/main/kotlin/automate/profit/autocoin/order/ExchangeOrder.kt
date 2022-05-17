@@ -16,6 +16,7 @@ fun ExchangeOrder.toOrderDto(exchangeName: String, exchangeId: String, exchangeU
             orderedAmount = orderedAmount.toDouble(),
             filledAmount = filledAmount?.toDouble(),
             price = price.toDouble(),
-            timestamp = this.timestamp?.toEpochMilli()
+            receivedAtMillis = receivedAtMillis,
+            exchangeTimestampMillis = this.exchangeTimestampMillis,
     )
 }
