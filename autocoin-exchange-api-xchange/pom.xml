@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>autocoin-exchange-api-xchange</artifactId>
-    <version>2.0.30-SNAPSHOT</version>
+    <version>2.0.30</version>
     <packaging>jar</packaging>
 
     <name>autocoin-exchange-api-xchange</name>
@@ -12,7 +11,7 @@
     <parent>
         <groupId>automate.profit</groupId>
         <artifactId>autocoin-exchange-engine</artifactId>
-        <version>2.0.30-SNAPSHOT</version>
+        <version>2.0.30</version>
     </parent>
 
     <properties>
@@ -24,7 +23,7 @@
         <dependency>
             <groupId>automate.profit</groupId>
             <artifactId>autocoin-exchange-api</artifactId>
-            <version>2.0.30-SNAPSHOT</version>
+            <version>2.0.30</version>
         </dependency>
         <!-- Kotlin -->
         <dependency>
@@ -330,7 +329,7 @@
     <repositories>
         <repository>
             <id>sonatype-oss-snapshot</id>
-            <snapshots/>
+            <snapshots />
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
     </repositories>
