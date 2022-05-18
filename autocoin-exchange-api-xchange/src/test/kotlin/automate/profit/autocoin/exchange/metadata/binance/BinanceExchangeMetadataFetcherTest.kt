@@ -19,7 +19,7 @@ import org.knowm.xchange.dto.meta.ExchangeMetaData as XchangeExchangeMetaData
 
 class BinanceExchangeMetadataFetcherTest {
     private val binanceMetadataJson = this::class.java.getResource("/metadata/binance/binance-metadata.json").readText()
-    private val binanceExchangeInfoJson= this::class.java.getResource("/metadata/binance/binance-exchangeInfo.json").readText()
+    private val binanceExchangeInfoJson = this::class.java.getResource("/metadata/binance/binance-exchangeInfo.json").readText()
     private val binanceTickersJson = this::class.java.getResource("/metadata/binance/binance-tickers.json").readText()
 
     private object binanceTickersType : TypeReference<List<BinancePrice>>()
@@ -38,7 +38,7 @@ class BinanceExchangeMetadataFetcherTest {
             exchangeFactory = exchangeFactory,
             binanceExchangeInfoProvider = { _ -> binanceExchangeInfo },
             binanceTickerProvider = { _ -> binanceTickers },
-            binanceMetadataProvider = {_ -> binanceMetadata},
+            binanceMetadataProvider = { _ -> binanceMetadata },
             xchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier())
         )
     }

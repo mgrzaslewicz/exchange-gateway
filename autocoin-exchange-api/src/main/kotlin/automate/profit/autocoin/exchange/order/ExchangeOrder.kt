@@ -4,15 +4,15 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 
 data class ExchangeOrder(
-        val exchangeName: String,
-        /** id at external exchange **/
-        val orderId: String,
-        val type: ExchangeOrderType,
-        val orderedAmount: BigDecimal,
-        val filledAmount: BigDecimal?,
-        val price: BigDecimal,
-        val currencyPair: CurrencyPair,
-        val status: ExchangeOrderStatus,
-        val receivedAtMillis: Long,
-        val exchangeTimestampMillis: Long?,
+    val exchangeName: String,
+    /** id at external exchange **/
+    val orderId: String,
+    val type: ExchangeOrderType,
+    val orderedAmount: BigDecimal,
+    val filledAmount: BigDecimal?,
+    val price: BigDecimal,
+    val currencyPair: CurrencyPair,
+    val status: ExchangeOrderStatus,
+    val receivedAtMillis: Long,
+    val exchangeTimestampMillis: Long?,
 )

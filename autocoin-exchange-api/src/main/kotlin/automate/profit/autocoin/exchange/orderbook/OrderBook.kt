@@ -4,21 +4,21 @@ import java.math.BigDecimal
 import java.math.RoundingMode.HALF_EVEN
 
 data class OrderBookAveragePrice(
-        /**
-         * scale = 8
-         */
-        val averagePrice: BigDecimal,
-        /**
-         * scale = 8
-         */
-        val baseCurrencyAmount: BigDecimal
+    /**
+     * scale = 8
+     */
+    val averagePrice: BigDecimal,
+    /**
+     * scale = 8
+     */
+    val baseCurrencyAmount: BigDecimal
 )
 
 data class OrderBook(
-        val buyOrders: List<OrderBookExchangeOrder>,
-        val sellOrders: List<OrderBookExchangeOrder>,
-        val receivedAtMillis: Long,
-        val exchangeTimestampMillis: Long?
+    val buyOrders: List<OrderBookExchangeOrder>,
+    val sellOrders: List<OrderBookExchangeOrder>,
+    val receivedAtMillis: Long,
+    val exchangeTimestampMillis: Long?
 ) {
 
     fun deepEquals(other: OrderBook): Boolean {
@@ -67,8 +67,8 @@ data class OrderBook(
         }
         return if (baseCurrencyToUseAmountLeft <= BigDecimal.ZERO) {
             return OrderBookAveragePrice(
-                    averagePrice = sum.setScale(8, HALF_EVEN).divide(baseCurrencyAmount, HALF_EVEN).setScale(8, HALF_EVEN),
-                    baseCurrencyAmount = baseCurrencyAmount.setScale(8, HALF_EVEN)
+                averagePrice = sum.setScale(8, HALF_EVEN).divide(baseCurrencyAmount, HALF_EVEN).setScale(8, HALF_EVEN),
+                baseCurrencyAmount = baseCurrencyAmount.setScale(8, HALF_EVEN)
             )
         } else {
             null
@@ -114,8 +114,8 @@ data class OrderBook(
         }
         return if (counterCurrencyAmountToUseLeft <= BigDecimal.ZERO) {
             return OrderBookAveragePrice(
-                    averagePrice = counterCurrencyAmount.divide(sumAmountBaseCurrrencyUsed, HALF_EVEN).setScale(8, HALF_EVEN),
-                    baseCurrencyAmount = sumAmountBaseCurrrencyUsed.setScale(8, HALF_EVEN)
+                averagePrice = counterCurrencyAmount.divide(sumAmountBaseCurrrencyUsed, HALF_EVEN).setScale(8, HALF_EVEN),
+                baseCurrencyAmount = sumAmountBaseCurrrencyUsed.setScale(8, HALF_EVEN)
             )
         } else {
             null

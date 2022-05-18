@@ -11,9 +11,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import mu.KLogging
 
-class XchangeExchangeWalletService(private val exchangeService: ExchangeService,
-                                   private val exchangeKeyService: ExchangeKeyService,
-                                   private val userExchangeServicesFactory: UserExchangeServicesFactory) : ExchangeWalletService {
+class XchangeExchangeWalletService(
+    private val exchangeService: ExchangeService,
+    private val exchangeKeyService: ExchangeKeyService,
+    private val userExchangeServicesFactory: UserExchangeServicesFactory
+) : ExchangeWalletService {
 
     companion object : KLogging()
 
@@ -39,15 +41,27 @@ class XchangeExchangeWalletService(private val exchangeService: ExchangeService,
     }
 
     private fun getUserExchangeWalletService(exchangeName: String, exchangeKey: ExchangeKeyDto): UserExchangeWalletService {
-        return userExchangeServicesFactory.createWalletService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName, exchangeKey.exchangeSpecificKeyParameters)
+        return userExchangeServicesFactory.createWalletService(
+            exchangeName,
+            exchangeKey.apiKey,
+            exchangeKey.secretKey,
+            exchangeKey.userName,
+            exchangeKey.exchangeSpecificKeyParameters
+        )
 
     }
 
     private fun getUserExchangeWalletService(exchangeName: String, exchangeUserId: String): UserExchangeWalletService {
         val exchangeId = exchangeService.getExchangeIdByName(exchangeName)
         val exchangeKey = exchangeKeyService.getExchangeKey(exchangeUserId, exchangeId)
-                ?: throw IllegalArgumentException("Exchange key for Exchange(name=$exchangeName,id=$exchangeId) and exchangeUserId=$exchangeUserId not found")
-        return userExchangeServicesFactory.createWalletService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName, exchangeKey.exchangeSpecificKeyParameters)
+            ?: throw IllegalArgumentException("Exchange key for Exchange(name=$exchangeName,id=$exchangeId) and exchangeUserId=$exchangeUserId not found")
+        return userExchangeServicesFactory.createWalletService(
+            exchangeName,
+            exchangeKey.apiKey,
+            exchangeKey.secretKey,
+            exchangeKey.userName,
+            exchangeKey.exchangeSpecificKeyParameters
+        )
 
     }
 
@@ -76,7 +90,13 @@ class XchangeExchangeWalletService(private val exchangeService: ExchangeService,
 
     private fun getAccountBalancesFor(exchangeName: String, exchangeKeys: List<ExchangeKeyDto>): List<CurrencyBalance> {
         return exchangeKeys.flatMap { exchangeKey ->
-            val accountService = userExchangeServicesFactory.createWalletService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName, exchangeKey.exchangeSpecificKeyParameters)
+            val accountService = userExchangeServicesFactory.createWalletService(
+                exchangeName,
+                exchangeKey.apiKey,
+                exchangeKey.secretKey,
+                exchangeKey.userName,
+                exchangeKey.exchangeSpecificKeyParameters
+            )
             accountService.getCurrencyBalances()
         }
     }

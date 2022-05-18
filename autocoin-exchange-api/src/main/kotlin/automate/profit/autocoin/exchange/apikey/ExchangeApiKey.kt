@@ -5,8 +5,8 @@ package automate.profit.autocoin.exchange.apikey
  * like getting public meta/market data which requires API key
  */
 data class ExchangeApiKey(
-        val publicKey: String,
-        val secretKey: String,
-        val userName: String? = null,
-        val exchangeSpecificKeyParameters: Map<String, String>? = null
+    val publicKey: String,
+    val secretKey: String,
+    val userName: String? = null,
+    val exchangeSpecificKeyParameters: Map<String, String>? = null
 )

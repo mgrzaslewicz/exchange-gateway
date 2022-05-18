@@ -1,7 +1,8 @@
 package automate.profit.autocoin.exchange.peruser
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.SupportedExchange.*
+import automate.profit.autocoin.exchange.SupportedExchange.BITSTAMP
+import automate.profit.autocoin.exchange.SupportedExchange.KUCOIN
 import org.knowm.xchange.ExchangeSpecification
 
 class ExchangeSpecificationVerifier {

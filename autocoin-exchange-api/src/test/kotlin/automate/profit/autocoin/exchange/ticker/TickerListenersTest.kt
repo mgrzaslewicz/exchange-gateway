@@ -35,12 +35,16 @@ class TickerListenersTest {
         tested.addTickerListener(BITTREX, currencyPair_AB, tickerListener)
         tested.addTickerListener(BINANCE, currencyPair_CD, tickerListener)
         // then
-        assertThat(tested.getTickerListeners(BITTREX)).isEqualTo(mapOf(
+        assertThat(tested.getTickerListeners(BITTREX)).isEqualTo(
+            mapOf(
                 currencyPair_AB to setOf(tickerListener)
-        ))
-        assertThat(tested.getTickerListeners(BINANCE)).isEqualTo(mapOf(
+            )
+        )
+        assertThat(tested.getTickerListeners(BINANCE)).isEqualTo(
+            mapOf(
                 currencyPair_CD to setOf(tickerListener)
-        ))
+            )
+        )
     }
 
     @Test
@@ -49,10 +53,12 @@ class TickerListenersTest {
         tested.addTickerListener(BITTREX, currencyPair_AB, tickerListener)
         tested.addTickerListener(BITTREX, currencyPair_CD, tickerListener)
         // then
-        assertThat(tested.getTickerListeners(BITTREX)).isEqualTo(mapOf(
+        assertThat(tested.getTickerListeners(BITTREX)).isEqualTo(
+            mapOf(
                 currencyPair_AB to setOf(tickerListener),
                 currencyPair_CD to setOf(tickerListener)
-        ))
+            )
+        )
     }
 
     @Test
@@ -63,9 +69,11 @@ class TickerListenersTest {
         tested.removeTickerListener(BITTREX, currencyPair_AB, tickerListener)
         // then
         assertThat(tested.getTickerListeners(BITTREX)).isEqualTo(emptyMap<CurrencyPair, Set<TickerListener>>())
-        assertThat(tested.getTickerListeners(BINANCE)).isEqualTo(mapOf(
+        assertThat(tested.getTickerListeners(BINANCE)).isEqualTo(
+            mapOf(
                 currencyPair_CD to setOf(tickerListener)
-        ))
+            )
+        )
     }
 
     @Test

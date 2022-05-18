@@ -102,7 +102,7 @@ class BittrexExchangeMetadataFetcher(
                     minWithdrawalAmount = it.value?.minWithdrawalAmount,
                     withdrawalEnabled = it.value?.walletHealth?.toWithdrawalEnabled(),
                     depositEnabled = it.value?.walletHealth?.toDepositEnabled(),
-                    )
+                )
             }.toMap(),
             debugWarnings = debugWarnings
         )

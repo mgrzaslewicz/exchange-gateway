@@ -7,8 +7,8 @@ package automate.profit.autocoin.exchange.currency
  * https://stackoverflow.com/a/49561916
  */
 data class CurrencyPair private constructor(
-        val base: String, // "base/counter" market
-        val counter: String
+    val base: String, // "base/counter" market
+    val counter: String
 ) : Comparable<CurrencyPair> {
 
     companion object {
@@ -33,8 +33,8 @@ data class CurrencyPair private constructor(
     fun contains(currency: String): Boolean = base == currency || counter == currency
 
     fun toUpperCase() = copy(
-            base = base.uppercase(),
-            counter = counter.uppercase()
+        base = base.uppercase(),
+        counter = counter.uppercase()
     )
 
     override fun toString(): String = "$base/$counter"
