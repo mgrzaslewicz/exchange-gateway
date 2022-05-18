@@ -49,5 +49,5 @@ fun org.knowm.xchange.dto.marketdata.OrderBook.toOrderBook(exchangeName: String,
     buyOrders = bids.map { it.toOrderBookExchangeOrder(exchangeName = exchangeName, receivedAtMillis = currentTimeMillis) },
     sellOrders = asks.map { it.toOrderBookExchangeOrder(exchangeName = exchangeName, receivedAtMillis = currentTimeMillis) },
     receivedAtMillis = currentTimeMillis,
-    exchangeTimestampMillis = timeStamp.time,
+    exchangeTimestampMillis = timeStamp?.time,
 )
