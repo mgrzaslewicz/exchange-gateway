@@ -43,7 +43,6 @@ fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
         BITSO -> BitsoExchange::class.java
         BITSTAMP -> BitstampExchange::class.java
         BITTREX -> BittrexExchange::class.java
-        BITZ -> BitZExchange::class.java
         BLEUTRADE -> BleutradeExchange::class.java
         CEXIO -> CexIOExchange::class.java
         EXMO -> ExmoExchange::class.java
