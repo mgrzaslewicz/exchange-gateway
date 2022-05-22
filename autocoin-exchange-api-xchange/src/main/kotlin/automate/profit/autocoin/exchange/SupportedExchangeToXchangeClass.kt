@@ -26,6 +26,7 @@ import org.knowm.xchange.kraken.KrakenExchange
 import org.knowm.xchange.kucoin.KucoinExchange
 import org.knowm.xchange.livecoin.LivecoinExchange
 import org.knowm.xchange.luno.LunoExchange
+import org.knowm.xchange.okex.v5.OkexExchange
 import org.knowm.xchange.tradeogre.TradeOgreExchange
 import org.knowm.xchange.yobit.YoBitExchange
 
@@ -54,6 +55,7 @@ fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
         KUCOIN -> KucoinExchange::class.java
         LUNO -> LunoExchange::class.java
         LIVECOIN -> LivecoinExchange::class.java
+        OKEX -> OkexExchange::class.java
         POLONIEX -> PoloniexExchangeFork::class.java
         TRADEOGRE -> TradeOgreExchange::class.java
         YOBIT -> YoBitExchange::class.java
