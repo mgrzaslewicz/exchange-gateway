@@ -7,7 +7,7 @@ import java.time.Duration
 class GuavaExchangeRateLimiter(
     permitsPerDuration: Long,
     duration: Duration,
-    private val timeout: Duration,
+    private val permitAcquireTimeout: Duration,
 ) : ExchangeRateLimiter {
 
     private val permitsPerSecond = permitsPerDuration / duration.seconds.toDouble()
@@ -17,6 +17,6 @@ class GuavaExchangeRateLimiter(
         guavaRateLimiter.acquire()
     }
 
-    override fun tryAcquirePermit() = guavaRateLimiter.tryAcquire(timeout)
+    override fun tryAcquirePermit() = guavaRateLimiter.tryAcquire(permitAcquireTimeout)
 
 }

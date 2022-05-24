@@ -19,6 +19,7 @@ import org.knowm.xchange.coinbene.CoinbeneExchange
 import org.knowm.xchange.coindeal.CoindealExchange
 import org.knowm.xchange.coinex.CoinexExchange
 import org.knowm.xchange.exmo.ExmoExchange
+import org.knowm.xchange.ftx.FtxExchange
 import org.knowm.xchange.gateio.GateioExchange
 import org.knowm.xchange.gemini.v1.GeminiExchange
 import org.knowm.xchange.idex.IdexExchange
@@ -42,13 +43,14 @@ fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
         BITTREX -> BittrexExchange::class.java
         BLEUTRADE -> BleutradeExchange::class.java
         CEXIO -> CexIOExchange::class.java
-        EXMO -> ExmoExchange::class.java
         COINBASEPRO -> CoinbaseProExchange::class.java
         COINDEAL -> CoindealExchange::class.java
         COINEX -> CoinexExchange::class.java
+        EXMO -> ExmoExchange::class.java
+        FTX -> FtxExchange::class.java
         GATEIO -> GateioExchange::class.java
-        HITBTC -> HitBtcExchangeFork::class.java
         GEMINI -> GeminiExchange::class.java
+        HITBTC -> HitBtcExchangeFork::class.java
         IDEX -> IdexExchange::class.java
         KRAKEN -> KrakenExchange::class.java
         KUCOIN -> KucoinExchange::class.java

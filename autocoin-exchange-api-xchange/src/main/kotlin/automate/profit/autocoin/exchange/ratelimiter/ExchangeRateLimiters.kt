@@ -9,12 +9,12 @@ import java.time.temporal.ChronoUnit.SECONDS
 class ExchangeRateLimiters(
     private val defaultPermitsPerDuration: Long = 500L,
     private val defaultDuration: Duration = Duration.of(1L, MINUTES),
-    private val timeout: Duration,
+    private val permitAcquireTimeout: Duration,
     private val createRateLimiterFunction: (permitsPerDuration: Long, duration: Duration) -> ExchangeRateLimiter = { permitsPerDuration, duration ->
         GuavaExchangeRateLimiter(
             permitsPerDuration = permitsPerDuration,
             duration = duration,
-            timeout = timeout,
+            permitAcquireTimeout = permitAcquireTimeout,
         )
     },
 
@@ -24,10 +24,20 @@ class ExchangeRateLimiters(
         val duration: Duration,
     )
 
-    private val nonDefaultRateLimiters = mapOf(
-        // Could not find anything
-        //SupportedExchange.BIBOX to
+    /**
+     * Explicitly mark exchanges with unknown rate limits and make unit test fail when exchange
+     * from SupportedExchange has no rate limit defined (either as unknown or known).
+     * This way when adding new exchange you won't forget to add rate limit too.
+     */
+    private val exchangesWithUnknownRateLimitsSoUsingDefault = setOf(
+        BIBOX, // Could not find anything
+        BITBAY,
+        BLEUTRADE,
+        TRADEOGRE, // https://tradeogre.com/help/api - nothing about rate limits
+        YOBIT
+    )
 
+    private val exchangeRateLimits = mapOf(
         // https://python-binance.readthedocs.io/en/latest/overview.html#:~:text=API%20Rate%20Limit,-Check%20the%20get_exchange_info&text=At%20the%20current%20time%20Binance,100%2C000%20orders%20per%2024hrs
         BINANCE to RateLimit(1200L, Duration.of(1L, MINUTES)),
 
@@ -66,6 +76,9 @@ class ExchangeRateLimiters(
         // https://documenter.getpostman.com/view/10287440/SzYXWKPi#:~:text=API%20Rate%20Limits,or%20by%20a%20single%20user.
         EXMO to RateLimit(10L, Duration.of(1L, SECONDS)),
 
+        // https://help.ftx.com/hc/en-us/articles/360052595091-Ratelimits-on-FTX
+        FTX to RateLimit(35L, Duration.of(1L, SECONDS)),
+
         // https://www.gate.io/docs/apiv4/en/#frequency-limit-rule
         GATEIO to RateLimit(300L, Duration.of(1L, SECONDS)),
 
@@ -93,22 +106,16 @@ class ExchangeRateLimiters(
 
         // https://futures-docs.poloniex.com/#introduction
         POLONIEX to RateLimit(180L, Duration.of(1L, MINUTES)),
+    )
 
-        // https://tradeogre.com/help/api - nothing about rate limits
-        //TRADEOGRE
+    private fun createRateLimiterWithDefaults() = createRateLimiterFunction(defaultPermitsPerDuration, defaultDuration)
 
-        // Could not find anything about rate limits
-        // YOBIT
-        )
-
-    private val rateLimiters = values()
-        .associateWith {
-            if (nonDefaultRateLimiters.containsKey(it)) {
-                createRateLimiterFunction(nonDefaultRateLimiters[it]!!.permitsPerDuration, nonDefaultRateLimiters[it]!!.duration)
-            } else {
-                createRateLimiterFunction(defaultPermitsPerDuration, defaultDuration)
-            }
-        }
+    private val rateLimiters =
+        exchangeRateLimits
+            .map { it.key to createRateLimiterFunction(it.value.permitsPerDuration, it.value.duration) }.toMap()
+            .plus(
+                exchangesWithUnknownRateLimitsSoUsingDefault.associateWith { createRateLimiterWithDefaults() }
+            )
 
     fun get(supportedExchange: SupportedExchange) = rateLimiters[supportedExchange]!!
 }

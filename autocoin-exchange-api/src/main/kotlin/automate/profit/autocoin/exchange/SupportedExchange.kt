@@ -15,6 +15,7 @@ enum class SupportedExchange(val exchangeName: String, val comments: List<String
     COINDEAL("coindeal", comments = listOf("CoindealMarketDataService.getTicker not implemented yet")),
     COINEX("coinex", comments = listOf("xchange market data service not implemented")),
     EXMO("exmo"),
+    FTX("ftx"),
     GATEIO("gateio", comments = listOf("Requires API key for currency metadata (not for currency pairs)")),
     GEMINI("gemini"),
     HITBTC("hitbtc"),
