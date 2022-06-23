@@ -1,6 +1,6 @@
 package automate.profit.autocoin.exchange.wallet
 
-import automate.profit.autocoin.exchange.currency.CurrencyBalance
+import automate.profit.autocoin.exchange.currency.ExchangeCurrencyBalance
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.*
 import com.nhaarman.mockitokotlin2.mock
@@ -112,11 +112,11 @@ class ExchangeCurrencyPairsInWalletServiceTest {
         )
     }
 
-    private fun toCurrencyBalance(currencyCode: String) = CurrencyBalance(
+    private fun toCurrencyBalance(currencyCode: String) = ExchangeCurrencyBalance(
         currencyCode = currencyCode,
-        available = numberDoesNotMatter,
-        total = numberDoesNotMatter,
-        frozen = numberDoesNotMatter
+        amountAvailable = numberDoesNotMatter,
+        totalAmount = numberDoesNotMatter,
+        amountInOrders = numberDoesNotMatter
     )
 
 }

@@ -1,16 +1,16 @@
 package automate.profit.autocoin.exchange.wallet
 
-import automate.profit.autocoin.exchange.currency.CurrencyBalance
+import automate.profit.autocoin.exchange.currency.ExchangeCurrencyBalance
 
 data class ExchangeSingleCurrencyBalanceDto(
     val exchangeName: String,
-    val currencyBalance: CurrencyBalanceDto?,
+    val currencyBalance: ExchangeCurrencyBalanceDto?,
     val errorMessage: String?
 ) {
-    fun toCurrencyBalance() = CurrencyBalance(
+    fun toCurrencyBalance() = ExchangeCurrencyBalance(
         currencyCode = currencyBalance!!.currencyCode,
-        total = currencyBalance.total.toBigDecimal(),
-        available = currencyBalance.available.toBigDecimal(),
-        frozen = currencyBalance.frozen.toBigDecimal()
+        totalAmount = currencyBalance.totalAmount.toBigDecimal(),
+        amountAvailable = currencyBalance.amountAvailable.toBigDecimal(),
+        amountInOrders = currencyBalance.amountInOrders.toBigDecimal(),
     )
 }

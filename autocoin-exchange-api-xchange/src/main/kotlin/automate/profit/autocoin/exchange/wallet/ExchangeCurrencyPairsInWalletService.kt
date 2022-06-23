@@ -1,7 +1,7 @@
 package automate.profit.autocoin.exchange.wallet
 
 import automate.profit.autocoin.exchange.apikey.ExchangeKeyDto
-import automate.profit.autocoin.exchange.currency.CurrencyBalance
+import automate.profit.autocoin.exchange.currency.ExchangeCurrencyBalance
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadata
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadataService
@@ -53,8 +53,8 @@ class DefaultExchangeCurrencyPairsInWalletService(
             }
     }
 
-    private fun allPossibleCurrencyPairsFromBalances(exchangeMetadata: ExchangeMetadata, currencyBalances: List<CurrencyBalance>): List<CurrencyPair> {
-        val currencyCodesInWallet = currencyBalances.map { it.currencyCode }
+    private fun allPossibleCurrencyPairsFromBalances(exchangeMetadata: ExchangeMetadata, exchangeCurrencyBalances: List<ExchangeCurrencyBalance>): List<CurrencyPair> {
+        val currencyCodesInWallet = exchangeCurrencyBalances.map { it.currencyCode }
         return exchangeMetadata.currencyPairMetadata.keys.filter { currencyPair ->
             currencyPair.counter in currencyCodesInWallet
         }

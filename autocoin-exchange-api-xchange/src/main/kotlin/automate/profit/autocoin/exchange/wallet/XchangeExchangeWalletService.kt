@@ -3,7 +3,7 @@ package automate.profit.autocoin.exchange.wallet
 import automate.profit.autocoin.exchange.apikey.ExchangeKeyDto
 import automate.profit.autocoin.exchange.apikey.ExchangeKeyService
 import automate.profit.autocoin.exchange.apikey.ExchangeService
-import automate.profit.autocoin.exchange.currency.CurrencyBalance
+import automate.profit.autocoin.exchange.currency.ExchangeCurrencyBalance
 import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
 import automate.profit.autocoin.exchange.peruser.UserExchangeWalletService
 import kotlinx.coroutines.Dispatchers
@@ -19,23 +19,23 @@ class XchangeExchangeWalletService(
 
     companion object : KLogging()
 
-    fun getCurrencyBalances(exchangeName: String, exchangeKey: ExchangeKeyDto): List<CurrencyBalance> {
+    fun getCurrencyBalances(exchangeName: String, exchangeKey: ExchangeKeyDto): List<ExchangeCurrencyBalance> {
         val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeKey)
         return userExchangeWalletService.getCurrencyBalances()
     }
 
-    override fun getCurrencyBalances(exchangeName: String, exchangeUserId: String): List<CurrencyBalance> {
+    override fun getCurrencyBalances(exchangeName: String, exchangeUserId: String): List<ExchangeCurrencyBalance> {
         val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeUserId)
         return userExchangeWalletService.getCurrencyBalances()
     }
 
 
-    override fun getCurrencyBalance(exchangeName: String, exchangeUserId: String, currencyCode: String): CurrencyBalance {
+    override fun getCurrencyBalance(exchangeName: String, exchangeUserId: String, currencyCode: String): ExchangeCurrencyBalance {
         val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeUserId)
         return userExchangeWalletService.getCurrencyBalance(currencyCode)
     }
 
-    fun getCurrencyBalance(exchangeName: String, exchangeKey: ExchangeKeyDto, currencyCode: String): CurrencyBalance {
+    fun getCurrencyBalance(exchangeName: String, exchangeKey: ExchangeKeyDto, currencyCode: String): ExchangeCurrencyBalance {
         val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeKey)
         return userExchangeWalletService.getCurrencyBalance(currencyCode)
     }
@@ -65,8 +65,8 @@ class XchangeExchangeWalletService(
 
     }
 
-    fun getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchange: Map<String, List<ExchangeKeyDto>>): Map<ExchangeWithErrorMessage, List<CurrencyBalance>> {
-        val result = mutableMapOf<ExchangeWithErrorMessage, List<CurrencyBalance>>()
+    fun getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchange: Map<String, List<ExchangeKeyDto>>): Map<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>> {
+        val result = mutableMapOf<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>>()
         runBlocking {
             exchangeKeysGroupedByExchange.forEach {
                 val exchangeName = exchangeService.getExchangeNameById(it.key)
@@ -83,12 +83,12 @@ class XchangeExchangeWalletService(
         return result
     }
 
-    override fun getCurrencyBalancesForEveryExchange(exchangeUserId: String): Map<ExchangeWithErrorMessage, List<CurrencyBalance>> {
+    override fun getCurrencyBalancesForEveryExchange(exchangeUserId: String): Map<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>> {
         val exchangeKeysGroupedByExchange = exchangeKeyService.getExchangeKeys(exchangeUserId).groupBy { it.exchangeId }
         return getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchange)
     }
 
-    private fun getAccountBalancesFor(exchangeName: String, exchangeKeys: List<ExchangeKeyDto>): List<CurrencyBalance> {
+    private fun getAccountBalancesFor(exchangeName: String, exchangeKeys: List<ExchangeKeyDto>): List<ExchangeCurrencyBalance> {
         return exchangeKeys.flatMap { exchangeKey ->
             val accountService = userExchangeServicesFactory.createWalletService(
                 exchangeName,
