@@ -65,11 +65,11 @@ class XchangeExchangeWalletService(
 
     }
 
-    fun getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchange: Map<String, List<ExchangeKeyDto>>): Map<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>> {
+    fun getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchangeName: Map<String, List<ExchangeKeyDto>>): Map<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>> {
         val result = mutableMapOf<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>>()
         runBlocking {
-            exchangeKeysGroupedByExchange.forEach {
-                val exchangeName = exchangeService.getExchangeNameById(it.key)
+            exchangeKeysGroupedByExchangeName.forEach {
+                val exchangeName = it.key
                 launch(Dispatchers.IO) {
                     try {
                         result[ExchangeWithErrorMessage(exchangeName, null)] = getAccountBalancesFor(exchangeName, it.value)
@@ -84,8 +84,8 @@ class XchangeExchangeWalletService(
     }
 
     override fun getCurrencyBalancesForEveryExchange(exchangeUserId: String): Map<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>> {
-        val exchangeKeysGroupedByExchange = exchangeKeyService.getExchangeKeys(exchangeUserId).groupBy { it.exchangeId }
-        return getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchange)
+        val exchangeKeysGroupedByExchangeName = exchangeKeyService.getExchangeKeys(exchangeUserId).groupBy { it.exchangeName }
+        return getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchangeName)
     }
 
     private fun getAccountBalancesFor(exchangeName: String, exchangeKeys: List<ExchangeKeyDto>): List<ExchangeCurrencyBalance> {
