@@ -15,6 +15,7 @@ class FileExchangeMetadataRepositoryTest {
     lateinit var tempFolder: File
 
     private val exchangeMetadataToSave = ExchangeMetadata(
+        exchange = BITTREX,
         currencyPairMetadata = mapOf(
             CurrencyPair.of("ABC/BCD") to CurrencyPairMetadata(
                 amountScale = 23,

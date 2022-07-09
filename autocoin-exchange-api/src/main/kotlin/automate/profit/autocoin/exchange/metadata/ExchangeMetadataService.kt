@@ -2,12 +2,20 @@ package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
+import mu.KotlinLogging
+
+private val logger = KotlinLogging.logger {}
 
 interface ExchangeMetadataService {
 
     fun getAllExchangesMetadata(): List<ExchangeMetadata> {
-        return SupportedExchange.values().map {
-            getMetadata(it.exchangeName)
+        return SupportedExchange.values().mapNotNull {
+            try {
+                getMetadata(it.exchangeName)
+            } catch (e: Exception) {
+                logger.error(e) { "[${it.exchangeName}] Could not get metadata" }
+                null
+            }
         }
     }
 

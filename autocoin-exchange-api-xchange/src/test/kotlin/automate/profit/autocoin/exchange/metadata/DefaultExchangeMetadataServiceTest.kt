@@ -14,6 +14,7 @@ import java.io.File
 class DefaultExchangeMetadataServiceTest {
 
     private val emptyMetadata = ExchangeMetadata(
+        exchange = BITTREX,
         currencyPairMetadata = emptyMap(),
         currencyMetadata = emptyMap(),
         debugWarnings = emptyList()

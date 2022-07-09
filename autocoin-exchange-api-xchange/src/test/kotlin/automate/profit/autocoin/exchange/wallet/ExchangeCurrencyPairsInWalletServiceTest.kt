@@ -1,5 +1,7 @@
 package automate.profit.autocoin.exchange.wallet
 
+import automate.profit.autocoin.exchange.SupportedExchange
+import automate.profit.autocoin.exchange.SupportedExchange.*
 import automate.profit.autocoin.exchange.currency.ExchangeCurrencyBalance
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.*
@@ -52,6 +54,7 @@ class ExchangeCurrencyPairsInWalletServiceTest {
         )
     )
     private val exchangeMetadata = ExchangeMetadata(
+        exchange = BINANCE,
         currencyPairMetadata = mapOf(
             CurrencyPair.of("ETH/BTC") to currencyPairMetadataDoesNotMatter,
             CurrencyPair.of("THETA/ETH") to currencyPairMetadataDoesNotMatter,

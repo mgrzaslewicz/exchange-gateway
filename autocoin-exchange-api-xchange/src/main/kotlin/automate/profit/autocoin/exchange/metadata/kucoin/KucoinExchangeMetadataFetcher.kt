@@ -94,6 +94,7 @@ class KucoinExchangeMetadataFetcher(
             fillTradingFees(currencyPairsMap, kucoinMarketDataService, debugWarnings)
         }
         val exchangeMetadata = ExchangeMetadata(
+            exchange = supportedExchange,
             currencyPairMetadata = currencyPairsMap,
             currencyMetadata = currenciesMap.toMap(),
             debugWarnings = debugWarnings

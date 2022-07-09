@@ -120,6 +120,7 @@ class BinanceExchangeMetadataFetcher(
             }
         }
         val exchangeMetadata = ExchangeMetadata(
+            exchange = supportedExchange,
             currencyPairMetadata = currencyPairsMap,
             currencyMetadata = currenciesMap.toMap(),
             debugWarnings = emptyList()

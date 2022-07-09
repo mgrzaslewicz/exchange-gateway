@@ -1,5 +1,6 @@
 package automate.profit.autocoin.exchange.metadata
 
+import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 
@@ -51,6 +52,7 @@ data class CurrencyMetadata(
 )
 
 data class ExchangeMetadata(
+    val exchange: SupportedExchange,
     val currencyPairMetadata: Map<CurrencyPair, CurrencyPairMetadata>,
     val currencyMetadata: Map<String, CurrencyMetadata>,
     val debugWarnings: List<String>

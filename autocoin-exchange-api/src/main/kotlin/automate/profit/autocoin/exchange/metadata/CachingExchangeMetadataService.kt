@@ -13,6 +13,10 @@ class CachingExchangeMetadataService(private val decorated: ExchangeMetadataServ
         }
     }
 
+    override fun getAllExchangesMetadata(): List<ExchangeMetadata> {
+        return decorated.getAllExchangesMetadata().onEach { cache[it.exchange.exchangeName] = it }
+    }
+
     override fun getMetadata(exchangeName: String): ExchangeMetadata {
         synchronized(locks.computeIfAbsent(exchangeName) { Any() }) {
             return cache.computeIfAbsent(exchangeName) { decorated.getMetadata(exchangeName) }
