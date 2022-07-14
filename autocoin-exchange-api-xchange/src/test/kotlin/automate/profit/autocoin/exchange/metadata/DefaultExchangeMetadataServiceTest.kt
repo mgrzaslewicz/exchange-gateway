@@ -2,6 +2,8 @@ package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.metadata.bittrex.BittrexExchangeMetadataFetcher
+import automate.profit.autocoin.exchange.time.SystemTimeMillisProvider
+import automate.profit.autocoin.keyvalue.FileKeyValueRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -20,6 +22,7 @@ class DefaultExchangeMetadataServiceTest {
         debugWarnings = emptyList()
     )
 
+    private val fileKeyValueRepository = FileKeyValueRepository(timeMillisProvider = SystemTimeMillisProvider())
     @Test
     fun shouldFetchMetadataWhenRepositoryEmpty(@TempDir tempFolder: File) {
         val expectedExchangeMetadata = emptyMetadata
@@ -28,7 +31,7 @@ class DefaultExchangeMetadataServiceTest {
             whenever(this.fetchExchangeMetadata()).thenReturn(expectedExchangeMetadata)
         }
 
-        val metadataRepository = FileExchangeMetadataRepository(tempFolder)
+        val metadataRepository = FileExchangeMetadataRepository(tempFolder, fileKeyValueRepository = fileKeyValueRepository)
         val metadataService = DefaultExchangeMetadataService(listOf(bittrexMetadataFetcher), metadataRepository, mock())
         // when
         val exchangeMetadata = metadataService.getAndSaveExchangeMetadata(BITTREX)
