@@ -1,13 +1,14 @@
 package automate.profit.autocoin.keyvalue
 
-import automate.profit.autocoin.exchange.time.SystemTimeMillisProvider
-import automate.profit.autocoin.exchange.time.TestFixedTimeMillisProvider
-import automate.profit.autocoin.exchange.time.TestQueueTimeMillisProvider
+import automate.profit.autocoin.exchange.time.QueueClock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 
 class FileKeyValueRepositoryTest {
 
@@ -18,7 +19,7 @@ class FileKeyValueRepositoryTest {
 
     @BeforeEach
     fun setup() {
-        tested = FileKeyValueRepository(timeMillisProvider = SystemTimeMillisProvider())
+        tested = FileKeyValueRepository(clock = Clock.systemDefaultZone())
     }
 
     @Test
@@ -57,7 +58,7 @@ class FileKeyValueRepositoryTest {
     fun shouldCreateFileWithProperNameAndContent() {
         // given
         val currentTimeMillis = 19L
-        val tested = FileKeyValueRepository(timeMillisProvider = TestFixedTimeMillisProvider(currentTimeMillis), fileExtension = ".json")
+        val tested = FileKeyValueRepository(clock = Clock.fixed(Instant.ofEpochMilli(currentTimeMillis), ZoneId.systemDefault()), fileExtension = ".json")
         val currentTimeMillisAsDateTimeString = "19700101010000019"
         // when
         tested.saveNewVersion(directory = tempFolder, key = "test", value = "value1")
@@ -69,7 +70,7 @@ class FileKeyValueRepositoryTest {
 
     @Test
     fun shouldKeepLastNVersions() {
-        val tested = FileKeyValueRepository(timeMillisProvider = TestQueueTimeMillisProvider(listOf(1L, 2L, 3L, 4L)), fileExtension = ".json")
+        val tested = FileKeyValueRepository(clock = QueueClock(listOf(1L, 2L, 3L, 4L)), fileExtension = ".json")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value1")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value2")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value3")
@@ -85,7 +86,7 @@ class FileKeyValueRepositoryTest {
 
     @Test
     fun shouldNotRemoveOtherKeysWhenKeepLastNVersions() {
-        val tested = FileKeyValueRepository(timeMillisProvider = TestQueueTimeMillisProvider(listOf(1L, 2L, 3L)), fileExtension = ".json")
+        val tested = FileKeyValueRepository(clock = QueueClock(listOf(1L, 2L, 3L)), fileExtension = ".json")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value1")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value2")
         tested.saveNewVersion(directory = tempFolder, key = "test2", "value3")

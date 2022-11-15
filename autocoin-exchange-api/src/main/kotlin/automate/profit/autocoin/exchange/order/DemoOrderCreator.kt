@@ -1,10 +1,10 @@
 package automate.profit.autocoin.exchange.order
 
 import automate.profit.autocoin.exchange.currency.CurrencyPair
-import automate.profit.autocoin.exchange.time.TimeMillisProvider
 import java.math.BigDecimal
+import java.time.Clock
 
-class DemoOrderCreator(private val timeMillisProvider: TimeMillisProvider) {
+class DemoOrderCreator(private val clock: Clock) {
 
     fun placeLimitSellOrder(
         exchangeName: String,
@@ -14,7 +14,7 @@ class DemoOrderCreator(private val timeMillisProvider: TimeMillisProvider) {
         sellPrice: BigDecimal,
         amount: BigDecimal
     ): ExchangeOrder {
-        val currentTimeMillis = timeMillisProvider.now()
+        val currentTimeMillis = clock.millis()
         return ExchangeOrder(
             exchangeName = exchangeName,
             status = ExchangeOrderStatus.NEW,
@@ -37,7 +37,7 @@ class DemoOrderCreator(private val timeMillisProvider: TimeMillisProvider) {
         buyPrice: BigDecimal,
         amount: BigDecimal
     ): ExchangeOrder {
-        val currentTimeMillis = timeMillisProvider.now()
+        val currentTimeMillis = clock.millis()
         return ExchangeOrder(
             exchangeName = exchangeName,
             status = ExchangeOrderStatus.NEW,

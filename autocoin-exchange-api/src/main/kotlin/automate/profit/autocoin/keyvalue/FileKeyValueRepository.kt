@@ -1,9 +1,9 @@
 package automate.profit.autocoin.keyvalue
 
-import automate.profit.autocoin.exchange.time.TimeMillisProvider
 import mu.KLogging
 import java.io.File
 import java.nio.file.Path
+import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -15,7 +15,7 @@ data class LatestVersion(
 )
 
 class FileKeyValueRepository(
-    private val timeMillisProvider: TimeMillisProvider,
+    private val clock: Clock = Clock.systemDefaultZone(),
     private val fileExtension: String = ".json",
 ) {
     private companion object : KLogging()
@@ -26,7 +26,7 @@ class FileKeyValueRepository(
     private val saveLocks = WeakHashMap<String, Any>()
 
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS")
-    private fun getCurrentDateTimeAsString() = getDateTimeAsString(timeMillisProvider.now())
+    private fun getCurrentDateTimeAsString() = getDateTimeAsString(clock.millis())
 
     private fun getDateTimeAsString(millis: Long) = dateTimeFormatter.format(Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault()).toLocalDateTime())
 

@@ -7,12 +7,12 @@ import automate.profit.autocoin.exchange.orderbook.UserExchangeOrderBookService
 import automate.profit.autocoin.exchange.orderbook.XchangeUserExchangeOrderBookService
 import automate.profit.autocoin.exchange.ratelimiter.ExchangeRateLimiters
 import automate.profit.autocoin.exchange.ticker.UserExchangeTickerService
-import automate.profit.autocoin.exchange.time.TimeMillisProvider
 import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KLogging
 import org.knowm.xchange.ExchangeSpecification
 import org.knowm.xchange.utils.DigestUtils
 import java.security.MessageDigest
+import java.time.Clock
 
 fun String?.md5(): String {
     return if (this == null) "null" else {
@@ -68,7 +68,7 @@ class XchangeUserExchangeServicesFactory(
     private val serviceApiKeysProvider: ServiceApiKeysProvider,
     private val cachingXchangeProvider: CachingXchangeProvider,
     private val exchangeRateLimiters: ExchangeRateLimiters,
-    private val timeMillisProvider: TimeMillisProvider,
+    private val clock: Clock,
 ) : UserExchangeServicesFactory {
     private companion object : KLogging()
 
@@ -86,7 +86,7 @@ class XchangeUserExchangeServicesFactory(
             exchangeName = exchangeName,
             wrapped = xchange.tradeService,
             exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange),
-            timeMillisProvider = timeMillisProvider,
+            clock = clock,
         )
     }
 
@@ -118,7 +118,7 @@ class XchangeUserExchangeServicesFactory(
                     marketDataService = cachingXchangeProvider.getXchange(supportedExchange, exchangeSpec).marketDataService,
                     exchange = supportedExchange,
                     exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange),
-                    timeMillisProvider = timeMillisProvider,
+                    clock = clock,
                 )
             }
         }
@@ -142,7 +142,7 @@ class XchangeUserExchangeServicesFactory(
             ).marketDataService,
             exchange = supportedExchange,
             exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange),
-            timeMillisProvider = timeMillisProvider,
+            clock = clock,
         )
     }
 
@@ -159,7 +159,7 @@ class XchangeUserExchangeServicesFactory(
                     marketDataService = cachingXchangeProvider.getXchange(supportedExchange, exchangeSpec).marketDataService,
                     exchangeName = exchangeName,
                     exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange),
-                    timeMillisProvider = timeMillisProvider,
+                    clock = clock,
                 )
             }
         }
@@ -177,7 +177,7 @@ class XchangeUserExchangeServicesFactory(
             marketDataService = cachingXchangeProvider.getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService,
             exchangeName = exchangeName,
             exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange),
-            timeMillisProvider = timeMillisProvider,
+            clock = clock,
         )
     }
 

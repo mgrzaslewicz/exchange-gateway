@@ -9,20 +9,20 @@ import automate.profit.autocoin.exchange.ratelimiter.acquireWith
 import automate.profit.autocoin.exchange.ticker.InvalidCurrencyPairException
 import automate.profit.autocoin.exchange.ticker.Ticker
 import automate.profit.autocoin.exchange.ticker.UserExchangeTickerService
-import automate.profit.autocoin.exchange.time.TimeMillisProvider
 import automate.profit.autocoin.ticker.toTicker
 import automate.profit.autocoin.ticker.toTickerWithCurrencyPairFix
 import mu.KLogging
 import org.knowm.xchange.exceptions.CurrencyPairNotValidException
 import org.knowm.xchange.service.marketdata.MarketDataService
 import org.knowm.xchange.service.marketdata.params.CurrencyPairsParam
+import java.time.Clock
 
 
 class XchangeUserExchangeTickerService(
     private val marketDataService: MarketDataService,
     private val exchange: SupportedExchange,
     private val exchangeRateLimiter: ExchangeRateLimiter,
-    private val timeMillisProvider: TimeMillisProvider,
+    private val clock: Clock,
 ) : UserExchangeTickerService {
     companion object : KLogging()
 
@@ -33,7 +33,7 @@ class XchangeUserExchangeTickerService(
         return try {
             val xchangeTicker = marketDataService.getTicker(currencyPair.toXchangeCurrencyPair())
             logInvalidCurrencyPair(currencyPair, xchangeTicker)
-            return xchangeTicker.toTickerWithCurrencyPairFix(currencyPair, timeMillisProvider.now())
+            return xchangeTicker.toTickerWithCurrencyPairFix(currencyPair, clock.millis())
         } catch (e: CurrencyPairNotValidException) {
             throw InvalidCurrencyPairException(currencyPair)
         }
@@ -52,7 +52,7 @@ class XchangeUserExchangeTickerService(
             currencyPairs.map { it.toXchangeCurrencyPair() }
         })
         return xchangeTickers
-            .map { it.toTicker(timeMillisProvider.now()) }
+            .map { it.toTicker(clock.millis()) }
             .filter { currencyPairs.contains(it.currencyPair) }
     }
 }

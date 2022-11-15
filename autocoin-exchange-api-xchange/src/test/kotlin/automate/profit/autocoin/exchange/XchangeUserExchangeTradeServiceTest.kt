@@ -10,7 +10,6 @@ import automate.profit.autocoin.exchange.order.ExchangeOrderType.BID_BUY
 import automate.profit.autocoin.exchange.order.toXchangeLimitOrder
 import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeTradeService
 import automate.profit.autocoin.exchange.ratelimiter.NoOpExchangeRateLimiter
-import automate.profit.autocoin.exchange.time.SystemTimeMillisProvider
 import com.nhaarman.mockitokotlin2.whenever
 import mu.KLogging
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
@@ -25,6 +24,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.any
 import org.mockito.junit.jupiter.MockitoExtension
 import java.math.BigDecimal
+import java.time.Clock
 
 @ExtendWith(MockitoExtension::class)
 class XchangeUserExchangeTradeServiceTest {
@@ -83,7 +83,7 @@ class XchangeUserExchangeTradeServiceTest {
             exchangeName = KUCOIN.exchangeName,
             wrapped = wrappedTradeService,
             exchangeRateLimiter = NoOpExchangeRateLimiter(),
-            timeMillisProvider = SystemTimeMillisProvider(),
+            clock = Clock.systemDefaultZone(),
         )
     }
 
