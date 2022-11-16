@@ -160,7 +160,7 @@ class XchangeOrderService(
         return tradeService.cancelOrder(cancelOrderParams)
     }
 
-    fun cancelOrder(exchangeName: String, exchangeKey: ExchangeKeyDto, cancelOrderParams: ExchangeCancelOrderParams): Boolean {
+    override fun cancelOrder(exchangeName: String, exchangeKey: ExchangeKeyDto, cancelOrderParams: ExchangeCancelOrderParams): Boolean {
         logger.info("Canceling order '${cancelOrderParams.orderId}' at exchange '$exchangeName' for exchangeUser '${exchangeKey.exchangeUserId}'")
         val tradeService = getTradeService(exchangeName, exchangeKey)
         return tradeService.cancelOrder(cancelOrderParams)
@@ -200,14 +200,14 @@ class XchangeOrderService(
         }
     }
 
-    fun placeLimitBuyOrder(
+    override fun placeLimitBuyOrder(
         exchangeName: String,
         exchangeKey: ExchangeKeyDto,
         baseCurrencyCode: String,
         counterCurrencyCode: String,
         buyPrice: BigDecimal,
         amount: BigDecimal,
-        isDemoOrder: Boolean = false
+        isDemoOrder: Boolean,
     ): ExchangeOrder {
         return if (isDemoOrder) {
             demoOrderCreator.placeLimitBuyOrder(exchangeName, exchangeKey.exchangeUserId, baseCurrencyCode, counterCurrencyCode, buyPrice, amount)
@@ -234,14 +234,14 @@ class XchangeOrderService(
         }
     }
 
-    fun placeLimitSellOrder(
+    override fun placeLimitSellOrder(
         exchangeName: String,
         exchangeKey: ExchangeKeyDto,
         baseCurrencyCode: String,
         counterCurrencyCode: String,
         sellPrice: BigDecimal,
         amount: BigDecimal,
-        isDemoOrder: Boolean = false
+        isDemoOrder: Boolean,
     ): ExchangeOrder {
         return if (isDemoOrder) {
             demoOrderCreator.placeLimitSellOrder(exchangeName, exchangeKey.exchangeUserId, baseCurrencyCode, counterCurrencyCode, sellPrice, amount)
@@ -256,7 +256,7 @@ class XchangeOrderService(
         return tradeService.getOpenOrders()
     }
 
-    fun getOpenOrders(exchangeName: String, exchangeKey: ExchangeKeyDto): List<ExchangeOrder> {
+    override fun getOpenOrders(exchangeName: String, exchangeKey: ExchangeKeyDto): List<ExchangeOrder> {
         val tradeService = getTradeService(exchangeName, exchangeKey)
         return tradeService.getOpenOrders()
     }
