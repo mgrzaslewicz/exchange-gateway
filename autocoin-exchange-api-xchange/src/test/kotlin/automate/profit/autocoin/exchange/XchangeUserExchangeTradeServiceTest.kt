@@ -112,7 +112,7 @@ class XchangeUserExchangeTradeServiceTest {
         // given
         returnOrderId(sellOrderId1)
         // when
-        val sellOrder = tested.placeSellOrder(currencyPair, BigDecimal(3.0), BigDecimal(2.0))
+        val sellOrder = tested.placeLimitSellOrder(currencyPair, BigDecimal(3.0), BigDecimal(2.0))
         // then
         assertThat(sellOrder.orderId).isEqualTo(sellOrderId1)
     }
@@ -122,7 +122,7 @@ class XchangeUserExchangeTradeServiceTest {
         // given
         returnOrderId("some-id")
         // when
-        val buyOrder = tested.placeBuyOrder(currencyPair, BigDecimal(3.0), BigDecimal(2.0))
+        val buyOrder = tested.placeLimitBuyOrder(currencyPair, BigDecimal(3.0), BigDecimal(2.0))
         // then
         assertThat(buyOrder.orderId).isEqualTo("some-id")
     }

@@ -128,6 +128,7 @@ class XchangeOrderService(
                     .generateFromWalletIfGivenEmpty(exchangeName, exchangeKey, currencyPairs)
                     .flatMap { getOpenOrdersFromExchangeForMarket(exchangeName, tradeService, it) }
             }
+
             BINANCE,
             BITBAY,
             BITMEX,
@@ -140,6 +141,7 @@ class XchangeOrderService(
                 logger.debug("Requesting open orders at exchange $exchangeName for all markets")
                 tradeService.getOpenOrders()
             }
+
             else -> throw IllegalArgumentException("Exchange $exchangeName not supported for getting open orders")
         }
     }
@@ -173,13 +175,13 @@ class XchangeOrderService(
         return getTradeService(exchangeName, exchangeKey)
     }
 
-    private fun getTradeService(exchangeName: String, exchangeKey: ExchangeKeyDto): UserExchangeTradeService {
+    fun getTradeService(exchangeName: String, exchangeKey: ExchangeKeyDto): UserExchangeTradeService {
         return userExchangeServicesFactory.createTradeService(
-            exchangeName,
-            exchangeKey.apiKey,
-            exchangeKey.secretKey,
-            exchangeKey.userName,
-            exchangeKey.exchangeSpecificKeyParameters
+            exchangeName = exchangeName,
+            publicKey = exchangeKey.apiKey,
+            secretKey = exchangeKey.secretKey,
+            userName = exchangeKey.userName,
+            exchangeSpecificKeyParameters = exchangeKey.exchangeSpecificKeyParameters
         )
     }
 
@@ -193,12 +195,136 @@ class XchangeOrderService(
         isDemoOrder: Boolean
     ): ExchangeOrder {
         return if (isDemoOrder) {
-            demoOrderCreator.placeLimitBuyOrder(exchangeName, exchangeUserId, baseCurrencyCode, counterCurrencyCode, buyPrice, amount)
+            demoOrderCreator.placeLimitBuyOrder(
+                exchangeName = exchangeName,
+                exchangeUserId = exchangeUserId,
+                baseCurrencyCode = baseCurrencyCode,
+                counterCurrencyCode = counterCurrencyCode,
+                buyPrice = buyPrice,
+                amount = amount
+            )
         } else {
             val tradeService = getTradeService(exchangeName, exchangeUserId)
-            tradeService.placeBuyOrder(CurrencyPair.of(baseCurrencyCode, counterCurrencyCode), buyPrice, amount)
+            tradeService.placeLimitBuyOrder(CurrencyPair.of(baseCurrencyCode, counterCurrencyCode), buyPrice, amount)
         }
     }
+
+    override fun placeMarketBuyOrderWithBaseCurrencyAmount(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        isDemoOrder: Boolean
+    ): ExchangeOrder {
+        return if (isDemoOrder) {
+            demoOrderCreator.placeMarketBuyOrder(
+                exchangeName = exchangeName,
+                exchangeUserId = exchangeKey.exchangeUserId,
+                baseCurrencyCode = baseCurrencyCode,
+                counterCurrencyCode = counterCurrencyCode,
+                baseCurrencyAmount = baseCurrencyAmount,
+                counterCurrencyAmount = null,
+                currentPrice = currentPrice,
+            )
+        } else {
+            val tradeService = getTradeService(exchangeName, exchangeKey)
+            tradeService.placeMarketBuyOrderWithBaseCurrencyAmount(
+                currencyPair = CurrencyPair.of(baseCurrencyCode, counterCurrencyCode),
+                baseCurrencyAmount = baseCurrencyAmount,
+                currentPrice = currentPrice,
+            )
+        }
+    }
+
+    override fun placeMarketBuyOrderWithCounterCurrencyAmount(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        counterCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        isDemoOrder: Boolean
+    ): ExchangeOrder {
+        return if (isDemoOrder) {
+            demoOrderCreator.placeMarketBuyOrder(
+                exchangeName = exchangeName,
+                exchangeUserId = exchangeKey.exchangeUserId,
+                baseCurrencyCode = baseCurrencyCode,
+                counterCurrencyCode = counterCurrencyCode,
+                baseCurrencyAmount = null,
+                counterCurrencyAmount = counterCurrencyAmount,
+                currentPrice = currentPrice,
+            )
+        } else {
+            val tradeService = getTradeService(exchangeName, exchangeKey)
+            tradeService.placeMarketBuyOrderWithCounterCurrencyAmount(
+                currencyPair = CurrencyPair.of(baseCurrencyCode, counterCurrencyCode),
+                counterCurrencyAmount = counterCurrencyAmount,
+                currentPrice = currentPrice,
+            )
+        }
+    }
+
+    override fun placeMarketSellOrderWithBaseCurrencyAmount(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        isDemoOrder: Boolean
+    ): ExchangeOrder {
+        return if (isDemoOrder) {
+            demoOrderCreator.placeMarketSellOrder(
+                exchangeName = exchangeName,
+                exchangeUserId = exchangeKey.exchangeUserId,
+                baseCurrencyCode = baseCurrencyCode,
+                counterCurrencyCode = counterCurrencyCode,
+                baseCurrencyAmount = baseCurrencyAmount,
+                counterCurrencyAmount = null,
+                currentPrice = currentPrice,
+            )
+        } else {
+            val tradeService = getTradeService(exchangeName, exchangeKey)
+            tradeService.placeMarketSellOrderWithBaseCurrencyAmount(
+                currencyPair = CurrencyPair.of(baseCurrencyCode, counterCurrencyCode),
+                baseCurrencyAmount = baseCurrencyAmount,
+                currentPrice = currentPrice,
+            )
+        }
+    }
+
+    override fun placeMarketSellOrderWithCounterCurrencyAmount(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        counterCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        isDemoOrder: Boolean
+    ): ExchangeOrder {
+        return if (isDemoOrder) {
+            demoOrderCreator.placeMarketSellOrder(
+                exchangeName = exchangeName,
+                exchangeUserId = exchangeKey.exchangeUserId,
+                baseCurrencyCode = baseCurrencyCode,
+                counterCurrencyCode = counterCurrencyCode,
+                baseCurrencyAmount = null,
+                counterCurrencyAmount = counterCurrencyAmount,
+                currentPrice = currentPrice,
+            )
+        } else {
+            val tradeService = getTradeService(exchangeName, exchangeKey)
+            tradeService.placeMarketSellOrderWithCounterCurrencyAmount(
+                currencyPair = CurrencyPair.of(baseCurrencyCode, counterCurrencyCode),
+                counterCurrencyAmount = counterCurrencyAmount,
+                currentPrice = currentPrice,
+            )
+        }
+    }
+
 
     override fun placeLimitBuyOrder(
         exchangeName: String,
@@ -213,7 +339,7 @@ class XchangeOrderService(
             demoOrderCreator.placeLimitBuyOrder(exchangeName, exchangeKey.exchangeUserId, baseCurrencyCode, counterCurrencyCode, buyPrice, amount)
         } else {
             val tradeService = getTradeService(exchangeName, exchangeKey)
-            tradeService.placeBuyOrder(CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode), buyPrice, amount)
+            tradeService.placeLimitBuyOrder(CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode), buyPrice, amount)
         }
     }
 
@@ -230,7 +356,7 @@ class XchangeOrderService(
             demoOrderCreator.placeLimitSellOrder(exchangeName, exchangeUserId, baseCurrencyCode, counterCurrencyCode, sellPrice, amount)
         } else {
             val tradeService = getTradeService(exchangeName, exchangeUserId)
-            return tradeService.placeSellOrder(CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode), sellPrice, amount)
+            return tradeService.placeLimitSellOrder(CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode), sellPrice, amount)
         }
     }
 
@@ -247,7 +373,7 @@ class XchangeOrderService(
             demoOrderCreator.placeLimitSellOrder(exchangeName, exchangeKey.exchangeUserId, baseCurrencyCode, counterCurrencyCode, sellPrice, amount)
         } else {
             val tradeService = getTradeService(exchangeName, exchangeKey)
-            tradeService.placeSellOrder(CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode), sellPrice, amount)
+            tradeService.placeLimitSellOrder(CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode), sellPrice, amount)
         }
     }
 

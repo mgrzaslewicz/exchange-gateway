@@ -14,6 +14,7 @@ import mu.KLogging
 import org.knowm.xchange.binance.service.BinanceCancelOrderParams
 import org.knowm.xchange.dto.Order
 import org.knowm.xchange.dto.trade.LimitOrder
+import org.knowm.xchange.dto.trade.MarketOrder
 import org.knowm.xchange.service.trade.params.CancelOrderParams
 import org.knowm.xchange.service.trade.params.DefaultCancelOrderParamId
 import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair
@@ -25,17 +26,46 @@ import org.knowm.xchange.service.trade.TradeService as XchangeTradeService
 
 interface UserExchangeTradeService {
     fun cancelOrder(params: ExchangeCancelOrderParams, rateLimiterBehaviour: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT): Boolean
-    fun placeBuyOrder(
+    fun placeLimitBuyOrder(
         currencyPair: CurrencyPair,
         limitPrice: BigDecimal,
         amount: BigDecimal,
         rateLimiterBehaviour: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT
     ): ExchangeOrder
 
-    fun placeSellOrder(
+
+    fun placeLimitSellOrder(
         currencyPair: CurrencyPair,
         limitPrice: BigDecimal,
         amount: BigDecimal,
+        rateLimiterBehaviour: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT
+    ): ExchangeOrder
+
+    fun placeMarketBuyOrderWithBaseCurrencyAmount(
+        currencyPair: CurrencyPair,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        rateLimiterBehaviour: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT
+    ): ExchangeOrder
+
+    fun placeMarketBuyOrderWithCounterCurrencyAmount(
+        currencyPair: CurrencyPair,
+        counterCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        rateLimiterBehaviour: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT
+    ): ExchangeOrder
+
+    fun placeMarketSellOrderWithBaseCurrencyAmount(
+        currencyPair: CurrencyPair,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        rateLimiterBehaviour: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT
+    ): ExchangeOrder
+
+    fun placeMarketSellOrderWithCounterCurrencyAmount(
+        currencyPair: CurrencyPair,
+        counterCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
         rateLimiterBehaviour: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT
     ): ExchangeOrder
 
@@ -79,7 +109,7 @@ fun ExchangeCancelOrderParams.xchangeOrderType(): Order.OrderType = when (this.o
 
 open class XchangeUserExchangeTradeService(
     private val exchangeName: String,
-    private val wrapped: XchangeTradeService,
+    val wrapped: XchangeTradeService,
     private val exchangeRateLimiter: ExchangeRateLimiter,
     private val clock: Clock,
 ) : UserExchangeTradeService {
@@ -169,7 +199,7 @@ open class XchangeUserExchangeTradeService(
     /**
      * Buy currencyPair.base for currencyPair.base
      */
-    override fun placeBuyOrder(currencyPair: CurrencyPair, limitPrice: BigDecimal, amount: BigDecimal, rateLimiterBehaviour: RateLimiterBehavior): ExchangeOrder {
+    override fun placeLimitBuyOrder(currencyPair: CurrencyPair, limitPrice: BigDecimal, amount: BigDecimal, rateLimiterBehaviour: RateLimiterBehavior): ExchangeOrder {
         val limitBuyOrder = LimitOrder.Builder(Order.OrderType.BID, currencyPair.toXchangeCurrencyPair())
             .orderStatus(Order.OrderStatus.NEW)
             .limitPrice(limitPrice)
@@ -181,7 +211,7 @@ open class XchangeUserExchangeTradeService(
         val orderId = wrapped.placeLimitOrder(limitBuyOrder)
         val receivedAtMillis = clock.millis()
 
-        logger.info { "Limit $exchangeName-buy order created with id: $orderId" }
+        logger.info { "Limit $exchangeName-limit-buy order created with id: $orderId" }
         return ExchangeOrder(
             exchangeName = exchangeName,
             orderId = orderId,
@@ -199,7 +229,7 @@ open class XchangeUserExchangeTradeService(
     /**
      * Sell currencyPair.base currency and gain currencyPair.counter
      */
-    override fun placeSellOrder(currencyPair: CurrencyPair, limitPrice: BigDecimal, amount: BigDecimal, rateLimiterBehaviour: RateLimiterBehavior): ExchangeOrder {
+    override fun placeLimitSellOrder(currencyPair: CurrencyPair, limitPrice: BigDecimal, amount: BigDecimal, rateLimiterBehaviour: RateLimiterBehavior): ExchangeOrder {
         val limitSellOrder = LimitOrder.Builder(Order.OrderType.ASK, currencyPair.toXchangeCurrencyPair())
             .orderStatus(Order.OrderStatus.NEW)
             .limitPrice(limitPrice)
@@ -211,7 +241,7 @@ open class XchangeUserExchangeTradeService(
         val orderId = wrapped.placeLimitOrder(limitSellOrder)
         val receivedAtMillis = clock.millis()
 
-        logger.info { "Limit $exchangeName-sell order created with id: $orderId" }
+        logger.info { "Limit $exchangeName-limit-sell order created with id: $orderId" }
         return ExchangeOrder(
             exchangeName = exchangeName,
             orderId = orderId,
@@ -224,6 +254,86 @@ open class XchangeUserExchangeTradeService(
             receivedAtMillis = receivedAtMillis,
             exchangeTimestampMillis = null,
         )
+    }
+
+    override fun placeMarketBuyOrderWithBaseCurrencyAmount(
+        currencyPair: CurrencyPair,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        rateLimiterBehaviour: RateLimiterBehavior
+    ): ExchangeOrder {
+        val marketBuyOrder = MarketOrder.Builder(Order.OrderType.BID, currencyPair.toXchangeCurrencyPair())
+            .orderStatus(Order.OrderStatus.NEW)
+            .originalAmount(baseCurrencyAmount)
+            .build()
+        logger.info { "Requesting market buy order with base currency amount: $marketBuyOrder" }
+
+        exchangeRateLimiter.acquireWith(rateLimiterBehaviour) { "[$exchangeName] Could not acquire permit to placeMarketBuyOrderWithBaseCurrencyAmount" }
+        val orderId = wrapped.placeMarketOrder(marketBuyOrder)
+        val receivedAtMillis = clock.millis()
+
+        logger.info { "Limit $exchangeName-market-buy order created with id: $orderId" }
+        return ExchangeOrder(
+            exchangeName = exchangeName,
+            orderId = orderId,
+            type = ExchangeOrderType.BID_BUY,
+            orderedAmount = baseCurrencyAmount,
+            filledAmount = BigDecimal.ZERO,
+            price = currentPrice,
+            currencyPair = currencyPair,
+            status = ExchangeOrderStatus.NEW,
+            receivedAtMillis = receivedAtMillis,
+            exchangeTimestampMillis = null,
+        )
+    }
+
+    override fun placeMarketBuyOrderWithCounterCurrencyAmount(
+        currencyPair: CurrencyPair,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        rateLimiterBehaviour: RateLimiterBehavior
+    ): ExchangeOrder {
+        TODO("Not yet implemented")
+    }
+
+    override fun placeMarketSellOrderWithBaseCurrencyAmount(
+        currencyPair: CurrencyPair,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        rateLimiterBehaviour: RateLimiterBehavior
+    ): ExchangeOrder {
+        val marketSellOrder = MarketOrder.Builder(Order.OrderType.ASK, currencyPair.toXchangeCurrencyPair())
+            .orderStatus(Order.OrderStatus.NEW)
+            .originalAmount(baseCurrencyAmount)
+            .build()
+        logger.info { "Requesting market sell order: $marketSellOrder" }
+
+        exchangeRateLimiter.acquireWith(rateLimiterBehaviour) { "[$exchangeName] Could not acquire permit to placeMarketSellOrderWithBaseCurrencyAmount" }
+        val orderId = wrapped.placeMarketOrder(marketSellOrder)
+        val receivedAtMillis = clock.millis()
+
+        logger.info { "Limit $exchangeName-market-sell order created with id: $orderId" }
+        return ExchangeOrder(
+            exchangeName = exchangeName,
+            orderId = orderId,
+            type = ExchangeOrderType.BID_BUY,
+            orderedAmount = baseCurrencyAmount,
+            filledAmount = BigDecimal.ZERO,
+            price = currentPrice,
+            currencyPair = currencyPair,
+            status = ExchangeOrderStatus.NEW,
+            receivedAtMillis = receivedAtMillis,
+            exchangeTimestampMillis = null,
+        )
+    }
+
+    override fun placeMarketSellOrderWithCounterCurrencyAmount(
+        currencyPair: CurrencyPair,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        rateLimiterBehaviour: RateLimiterBehavior
+    ): ExchangeOrder {
+        TODO("Not yet implemented")
     }
 
 }

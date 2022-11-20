@@ -50,6 +50,46 @@ interface ExchangeOrderService {
         isDemoOrder: Boolean = false
     ): ExchangeOrder
 
+    fun placeMarketBuyOrderWithCounterCurrencyAmount(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        counterCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        isDemoOrder: Boolean = false
+    ): ExchangeOrder
+
+    fun placeMarketBuyOrderWithBaseCurrencyAmount(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        counterCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        isDemoOrder: Boolean = false
+    ): ExchangeOrder
+
+    fun placeMarketSellOrderWithCounterCurrencyAmount(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        counterCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        isDemoOrder: Boolean = false
+    ): ExchangeOrder
+
+    fun placeMarketSellOrderWithBaseCurrencyAmount(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+        isDemoOrder: Boolean = false
+    ): ExchangeOrder
+
     fun placeLimitBuyOrder(
         exchangeName: String,
         exchangeKey: ExchangeKeyDto,
