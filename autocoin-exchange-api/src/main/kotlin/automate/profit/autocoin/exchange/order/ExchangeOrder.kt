@@ -5,8 +5,7 @@ import java.math.BigDecimal
 
 data class ExchangeOrder(
     val exchangeName: String,
-    /** id at external exchange **/
-    val orderId: String,
+    val exchangeOrderId: String,
     val type: ExchangeOrderType,
     val orderedAmount: BigDecimal,
     val filledAmount: BigDecimal?,

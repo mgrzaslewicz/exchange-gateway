@@ -43,7 +43,7 @@ class XchangeUserExchangeTradeServiceTest {
 
     private val openBuyOrder1 = ExchangeOrder(
         exchangeName = KUCOIN.exchangeName,
-        orderId = buyOrderId1,
+        exchangeOrderId = buyOrderId1,
         type = BID_BUY,
         orderedAmount = BigDecimal(5.5),
         filledAmount = BigDecimal(3.5),
@@ -55,7 +55,7 @@ class XchangeUserExchangeTradeServiceTest {
 
     private val openBuyOrder2 = ExchangeOrder(
         exchangeName = KUCOIN.exchangeName,
-        orderId = buyOrderId2,
+        exchangeOrderId = buyOrderId2,
         type = BID_BUY,
         orderedAmount = BigDecimal(5.5),
         filledAmount = BigDecimal.ZERO,
@@ -67,7 +67,7 @@ class XchangeUserExchangeTradeServiceTest {
 
     private val openSellOrder1 = ExchangeOrder(
         exchangeName = KUCOIN.exchangeName,
-        orderId = sellOrderId1,
+        exchangeOrderId = sellOrderId1,
         type = ASK_SELL,
         orderedAmount = BigDecimal(45.5),
         filledAmount = BigDecimal.ZERO,
@@ -114,7 +114,7 @@ class XchangeUserExchangeTradeServiceTest {
         // when
         val sellOrder = tested.placeLimitSellOrder(currencyPair, BigDecimal(3.0), BigDecimal(2.0))
         // then
-        assertThat(sellOrder.orderId).isEqualTo(sellOrderId1)
+        assertThat(sellOrder.exchangeOrderId).isEqualTo(sellOrderId1)
     }
 
     @Test
@@ -124,7 +124,7 @@ class XchangeUserExchangeTradeServiceTest {
         // when
         val buyOrder = tested.placeLimitBuyOrder(currencyPair, BigDecimal(3.0), BigDecimal(2.0))
         // then
-        assertThat(buyOrder.orderId).isEqualTo("some-id")
+        assertThat(buyOrder.exchangeOrderId).isEqualTo("some-id")
     }
 
     private fun returnOrderId(orderId: String) {

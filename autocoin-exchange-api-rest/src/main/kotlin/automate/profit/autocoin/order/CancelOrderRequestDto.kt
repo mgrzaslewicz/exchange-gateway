@@ -6,6 +6,7 @@ import automate.profit.autocoin.exchange.order.ExchangeOrderType
 
 data class CancelOrderRequestDto(
     val exchangeUserId: String,
+    val exchangeName: String,
     val exchangeId: String,
     val orderId: String,
     val orderType: String,
@@ -14,6 +15,7 @@ data class CancelOrderRequestDto(
     fun toExchangeCancelOrderParams() = ExchangeCancelOrderParams(
         orderId = orderId,
         orderType = ExchangeOrderType.valueOf(orderType),
+        exchangeName = exchangeName,
         currencyPair = CurrencyPair.of(currencyPair.baseCurrencyCode, currencyPair.counterCurrencyCode)
     )
 }

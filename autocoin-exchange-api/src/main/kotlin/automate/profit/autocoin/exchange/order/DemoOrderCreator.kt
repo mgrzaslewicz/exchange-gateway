@@ -2,7 +2,6 @@ package automate.profit.autocoin.exchange.order
 
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
-import java.math.RoundingMode
 import java.time.Clock
 
 class DemoOrderCreator(private val clock: Clock) {
@@ -22,7 +21,7 @@ class DemoOrderCreator(private val clock: Clock) {
             currencyPair = CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode),
             filledAmount = BigDecimal.ZERO,
             orderedAmount = amount,
-            orderId = "$exchangeName-demo-$currentTimeMillis",
+            exchangeOrderId = "$exchangeName-demo-$currentTimeMillis",
             price = sellPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,
@@ -45,7 +44,7 @@ class DemoOrderCreator(private val clock: Clock) {
             currencyPair = CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode),
             filledAmount = BigDecimal.ZERO,
             orderedAmount = amount,
-            orderId = "$exchangeName-demo-${System.currentTimeMillis()}",
+            exchangeOrderId = "$exchangeName-demo-${System.currentTimeMillis()}",
             price = buyPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,
@@ -69,7 +68,7 @@ class DemoOrderCreator(private val clock: Clock) {
             currencyPair = CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode),
             filledAmount = BigDecimal.ZERO,
             orderedAmount = baseCurrencyAmount ?: counterCurrencyAmount?.div(currentPrice) ?: BigDecimal.ZERO,
-            orderId = "$exchangeName-demo-market-buy-order-${System.currentTimeMillis()}",
+            exchangeOrderId = "$exchangeName-demo-market-buy-order-${System.currentTimeMillis()}",
             price = currentPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,
@@ -93,7 +92,7 @@ class DemoOrderCreator(private val clock: Clock) {
             currencyPair = CurrencyPair.of(base = baseCurrencyCode, counter = counterCurrencyCode),
             filledAmount = BigDecimal.ZERO,
             orderedAmount = baseCurrencyAmount ?: counterCurrencyAmount?.div(currentPrice) ?: BigDecimal.ZERO,
-            orderId = "$exchangeName-demo-market-sell-order-${System.currentTimeMillis()}",
+            exchangeOrderId = "$exchangeName-demo-market-sell-order-${System.currentTimeMillis()}",
             price = currentPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,

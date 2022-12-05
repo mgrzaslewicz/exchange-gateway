@@ -53,7 +53,7 @@ fun ExchangeOrderStatus.toXchangeOrderStatus() = when (this) {
 }
 
 fun ExchangeOrder.toXchangeLimitOrder(): LimitOrder = LimitOrder.Builder(this.type.toXchangeOrderType(), this.currencyPair.toXchangeCurrencyPair())
-    .id(this.orderId)
+    .id(this.exchangeOrderId)
     .originalAmount(this.orderedAmount)
     .limitPrice(this.price)
     .orderStatus(this.status.toXchangeOrderStatus())
