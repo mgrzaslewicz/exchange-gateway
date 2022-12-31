@@ -44,13 +44,13 @@ class BittrexExchangeMetadataFetcher(
             makerFees = listOf(
                 TransactionFeeRange(
                     beginAmount = BigDecimal.ZERO,
-                    fee = TransactionFee(rate = "0.0025".toBigDecimal())
+                    feeAmount = "0.0025".toBigDecimal()
                 )
             ),
             takerFees = listOf(
                 TransactionFeeRange(
                     beginAmount = BigDecimal.ZERO,
-                    fee = TransactionFee(rate = "0.0025".toBigDecimal())
+                    feeAmount = "0.0025".toBigDecimal()
                 )
             )
         )

@@ -48,10 +48,10 @@ class BinanceExchangeMetadataFetcherTest {
         // when
         val exchangeMetadata = tested.fetchExchangeMetadata(apiKey = null)
         // then
-        val feeRanges = exchangeMetadata.currencyPairMetadata.getValue(CurrencyPair.of("ADA/BTC")).transactionFeeRanges
-        assertThat(feeRanges.takerFees).hasSize(1)
-        assertThat(feeRanges.takerFees.first().fee.rate).isEqualTo("0.001".toBigDecimal())
-        assertThat(feeRanges.makerFees.first().fee.rate).isEqualTo("0.001".toBigDecimal())
+        val transactionFee = exchangeMetadata.currencyPairMetadata.getValue(CurrencyPair.of("ADA/BTC")).transactionFeeRanges
+        assertThat(transactionFee.takerFees).hasSize(1)
+        assertThat(transactionFee.takerFees.first().feeRatio).isEqualTo("0.001".toBigDecimal())
+        assertThat(transactionFee.makerFees.first().feeRatio).isEqualTo("0.001".toBigDecimal())
     }
 
     @Test

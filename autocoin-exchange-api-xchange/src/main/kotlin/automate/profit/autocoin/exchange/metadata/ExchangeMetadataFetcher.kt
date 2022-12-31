@@ -77,22 +77,36 @@ internal fun preventFromLoadingDefaultXchangeMetadata(es: XchangeExchangeSpecifi
 
 internal fun XchangeCurrencyPairMetaData.getTransactionFeeRanges(
     defaultTakerFees: List<TransactionFeeRange> = emptyList(),
-    defaultMakerFees: List<TransactionFeeRange> = emptyList()
+    defaultMakerFees: List<TransactionFeeRange> = emptyList(),
+    tradingFeeToTransactionFeeRangeFunction: (tradingFee: BigDecimal) -> TransactionFeeRange = { tradingFee ->
+        TransactionFeeRange(
+            beginAmount = BigDecimal.ZERO,
+            feeAmount = tradingFee
+        )
+    }
 ): TransactionFeeRanges {
-    return TransactionFeeRanges(
-        takerFees = this.feeTiers?.map { feeTier ->
-            TransactionFeeRange(
-                beginAmount = feeTier.beginQuantity,
-                fee = TransactionFee(rate = feeTier.fee.takerFee)
-            )
-        } ?: defaultTakerFees,
-        makerFees = this.feeTiers?.map { feeTier ->
-            TransactionFeeRange(
-                beginAmount = feeTier.beginQuantity,
-                fee = TransactionFee(rate = feeTier.fee.makerFee)
-            )
-        } ?: defaultMakerFees
-    )
+    return when {
+        feeTiers != null -> TransactionFeeRanges(
+            takerFees = feeTiers.map { feeTier ->
+                TransactionFeeRange(
+                    beginAmount = feeTier.beginQuantity,
+                    feeAmount = feeTier.fee.takerFee
+                )
+            },
+            makerFees = feeTiers.map { feeTier ->
+                TransactionFeeRange(
+                    beginAmount = feeTier.beginQuantity,
+                    feeAmount = feeTier.fee.makerFee
+                )
+            }
+        )
+        tradingFee != null -> TransactionFeeRanges(
+            takerFees = listOf(tradingFeeToTransactionFeeRangeFunction(tradingFee)),
+            makerFees = listOf(tradingFeeToTransactionFeeRangeFunction(tradingFee)),
+        )
+        else -> TransactionFeeRanges(takerFees = defaultTakerFees, makerFees = defaultMakerFees)
+
+    }
 }
 
 data class CurrencyMetadataOverride(
