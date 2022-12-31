@@ -21,7 +21,7 @@ class XchangeUserExchangeTickerService(
 
     override fun getTicker(currencyPair: CurrencyPair): Ticker {
         return try {
-            var xchangeTicker = marketDataService.getTicker(currencyPair.toXchangeCurrencyPair())
+            val xchangeTicker = marketDataService.getTicker(currencyPair.toXchangeCurrencyPair())
             if (currencyPair.base != xchangeTicker.currencyPair.base.currencyCode || currencyPair.counter != xchangeTicker.currencyPair.counter.currencyCode) {
                 logger.error { "[$exchange-$currencyPair] Xchange implementation provided invalid currencyPair. expected=$currencyPair, actual=${xchangeTicker.currencyPair}" }
                 isFirstInvalidCurrencyPairLogged = true
