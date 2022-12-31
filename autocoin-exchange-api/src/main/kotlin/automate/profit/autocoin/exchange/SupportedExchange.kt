@@ -21,7 +21,6 @@ enum class SupportedExchange(val exchangeName: String, val comments: List<String
     IDEX("idex", comments = listOf("xchange not adjusted to api changes")),
     KRAKEN("kraken"),
     KUCOIN("kucoin"),
-    LIVECOIN("livecoin"),
     LUNO("luno"),
     OKEX("okex", listOf("Requires API key for reading currency list")),
     POLONIEX("poloniex", listOf("Requires API key for reading ticker")),
