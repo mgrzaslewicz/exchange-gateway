@@ -73,7 +73,7 @@ class DefaultOrderBookListenerRegistrar(
         return try {
             userExchangeOrderBookService.getOrderBook(currencyPair)
         } catch (e: Exception) {
-            logger.error(e) { "Error getting order book at $exchangeName for currency pair $currencyPair: ${e.message}" }
+            logger.error { "Error getting order book at $exchangeName for currency pair $currencyPair: ${e.message} (${e.stackTrace[0]})" }
             null
         }
     }
@@ -83,7 +83,7 @@ class DefaultOrderBookListenerRegistrar(
             try {
                 it.onOrderBook(orderBook)
             } catch (e: Exception) {
-                logger.error(e) { "Error during notifying $exchangeName-$currencyPair order book listener: ${e.message}" }
+                logger.error { "Error during notifying new order book listeners for $exchangeName-$currencyPair: ${e.message} (${e.stackTrace[0]})" }
             }
         }
     }
@@ -93,7 +93,7 @@ class DefaultOrderBookListenerRegistrar(
             try {
                 it.onNoNewOrderBook(orderBook)
             } catch (e: Exception) {
-                logger.error(e) { "Error during notifying $exchangeName-$currencyPair order book listener: ${e.message}" }
+                logger.error { "Error during notifying no new order book listeners for $exchangeName-$currencyPair: ${e.message} (${e.stackTrace[0]})" }
             }
         }
     }
