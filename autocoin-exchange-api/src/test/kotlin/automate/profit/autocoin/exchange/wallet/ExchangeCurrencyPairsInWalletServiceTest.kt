@@ -29,7 +29,8 @@ class ExchangeCurrencyPairsInWalletServiceTest {
             maximumAmount = numberDoesNotMatter,
             minimumOrderValue = numberDoesNotMatter,
             maximumPriceMultiplierDown = numberDoesNotMatter,
-            maximumPriceMultiplierUp = numberDoesNotMatter
+            maximumPriceMultiplierUp = numberDoesNotMatter,
+            buyFeeMultiplier = numberDoesNotMatter
     )
     private val exchangeMetadata = ExchangeMetadata(
             currencyPairMetadata = mapOf(

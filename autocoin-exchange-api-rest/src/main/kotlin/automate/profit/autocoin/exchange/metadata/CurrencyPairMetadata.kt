@@ -8,5 +8,6 @@ fun CurrencyPairMetadata.toDto() = CurrencyPairMetadataDto(
         maximumAmount = maximumAmount.toDouble(),
         minimumOrderValue = minimumOrderValue.toDouble(),
         maximumPriceMultiplierUp = maximumPriceMultiplierUp.toDouble(),
-        maximumPriceMultiplierDown = maximumPriceMultiplierDown.toDouble()
+        maximumPriceMultiplierDown = maximumPriceMultiplierDown.toDouble(),
+        buyFeeMultiplier = buyFeeMultiplier.toDouble()
 )

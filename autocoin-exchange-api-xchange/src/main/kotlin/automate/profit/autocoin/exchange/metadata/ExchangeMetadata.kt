@@ -2,6 +2,7 @@ package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.BINANCE
+import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import mu.KotlinLogging
@@ -24,7 +25,8 @@ fun metadataFromExchange(supportedExchange: SupportedExchange, exchange: Exchang
                         maximumAmount = it.value.maximumAmount.orMax(),
                         minimumOrderValue = getMinimumOrderValue(supportedExchange, it.key.toCurrencyPair()),
                         maximumPriceMultiplierUp = 10.toBigDecimal(),
-                        maximumPriceMultiplierDown = 0.1.toBigDecimal()
+                        maximumPriceMultiplierDown = 0.1.toBigDecimal(),
+                        buyFeeMultiplier = getBuyFeeMultiplier(supportedExchange)
                 )
             }.toMap(),
             currencyMetadata = exchange.exchangeMetaData.currencies.map {
@@ -33,6 +35,13 @@ fun metadataFromExchange(supportedExchange: SupportedExchange, exchange: Exchang
                 )
             }.toMap()
     )
+}
+
+fun getBuyFeeMultiplier(supportedExchange: SupportedExchange): BigDecimal {
+    return when (supportedExchange) {
+        BITTREX -> BigDecimal("0.0025")
+        else -> BigDecimal.ZERO
+    }
 }
 
 fun getMinimumOrderValue(supportedExchange: SupportedExchange, currencyPair: CurrencyPair): BigDecimal {
