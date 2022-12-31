@@ -168,49 +168,51 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
     private val xchangesCache = mutableMapOf<String, Exchange>()
 
     override fun createTradeService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeTradeService {
-        return XchangeUserExchangeTradeService(exchangeName, getXchange(exchangeName, publicKey, secretKey, userName).tradeService)
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
+        return XchangeUserExchangeTradeService(exchangeName, getXchange(supportedExchange, publicKey, secretKey, userName).tradeService)
     }
 
     override fun createMetadataProvider(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeMetadataProvider {
-        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(getXchange(exchangeName, publicKey, secretKey, userName)))
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
+        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(getXchange(supportedExchange, publicKey, secretKey, userName)))
     }
 
     override fun createMetadataProvider(exchangeName: String): UserExchangeMetadataProvider {
-        val supportedExchange = enumFromNameOrThrow(exchangeName)
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
         return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(getXchange(supportedExchange, exchangeSpec)))
     }
 
     override fun createWalletService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeWalletService {
-        val supportedExchange = enumFromNameOrThrow(exchangeName)
-        return XchangeUserExchangeWalletService(supportedExchange, getXchange(exchangeName, publicKey, secretKey, userName).accountService)
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
+        return XchangeUserExchangeWalletService(supportedExchange, getXchange(supportedExchange, publicKey, secretKey, userName).accountService)
     }
 
     override fun createTickerService(exchangeName: String): UserExchangeTickerService {
-        val supportedExchange = enumFromNameOrThrow(exchangeName)
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
         return XchangeUserExchangeTickerService(getXchange(supportedExchange, exchangeSpec).marketDataService)
     }
 
     override fun createTickerService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeTickerService {
-        return XchangeUserExchangeTickerService(getXchange(exchangeName, publicKey, secretKey, userName).marketDataService)
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
+        return XchangeUserExchangeTickerService(getXchange(supportedExchange, publicKey, secretKey, userName).marketDataService)
     }
 
     override fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?): TickerListenerRegistrar {
-        val supportedExchange = enumFromNameOrThrow(exchangeName)
-        return DefaultTickerListenerRegistrar(exchangeName, createTickerService(exchangeName, publicKey, secretKey, userName))
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
+        return DefaultTickerListenerRegistrar(supportedExchange, createTickerService(exchangeName, publicKey, secretKey, userName))
     }
 
     override fun createTickerListenerRegistrar(exchangeName: String): TickerListenerRegistrar {
-        val supportedExchange = enumFromNameOrThrow(exchangeName)
-        return DefaultTickerListenerRegistrar(exchangeName, createTickerService(exchangeName))
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
+        return DefaultTickerListenerRegistrar(supportedExchange, createTickerService(exchangeName))
     }
 
-    private fun getXchange(exchangeName: String, publicKey: String, secretKey: String, userName: String?): Exchange {
-        val supportedExchange = enumFromNameOrThrow(exchangeName)
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        assignKeys(supportedExchange, exchangeSpec, publicKey, secretKey, userName)
-        return getXchange(supportedExchange, exchangeSpec)
+    private fun getXchange(exchangeName: SupportedExchange, publicKey: String, secretKey: String, userName: String?): Exchange {
+        val exchangeSpec = ExchangeSpecification(exchangeName.toXchangeClass().java)
+        assignKeys(exchangeName, exchangeSpec, publicKey, secretKey, userName)
+        return getXchange(exchangeName, exchangeSpec)
     }
 
     private fun setupMetadataInit(supportedExchange: SupportedExchange, exchangeSpec: ExchangeSpecification) {
@@ -242,10 +244,6 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
             }
             // << fetching metadata not working properly - gives nulls
         }
-    }
-
-    private fun enumFromNameOrThrow(exchangeName: String): SupportedExchange {
-        return SupportedExchange.fromExchangeName(exchangeName)
     }
 
     private fun getXchange(supportedExchange: SupportedExchange, exchangeSpec: ExchangeSpecification): Exchange {

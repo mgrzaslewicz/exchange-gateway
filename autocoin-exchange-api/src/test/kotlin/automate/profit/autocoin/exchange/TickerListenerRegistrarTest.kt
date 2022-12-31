@@ -1,5 +1,6 @@
 package automate.profit.autocoin.exchange
 
+import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.ticker.*
 import com.nhaarman.mockito_kotlin.*

@@ -1,5 +1,6 @@
 package automate.profit.autocoin.exchange
 
+import automate.profit.autocoin.exchange.SupportedExchange.*
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.ticker.*
 import com.nhaarman.mockito_kotlin.*
@@ -14,8 +15,6 @@ class TestTickerListener(private val currencyPair: CurrencyPair) : TickerListene
     override fun currencyPair() = currencyPair
 }
 
-const val BITTREX = "bittrex"
-const val BITBAY = "bitbay"
 
 @RunWith(MockitoJUnitRunner::class)
 class TickerListenerRegistrarsTest {
