@@ -23,7 +23,7 @@ interface OrderBookListeners {
     fun iterateOverEachExchangeAndAllCurrencyPairs(orderBookListenersVisitor: OrderBookListenersVisitor)
 }
 
-class DefaultOrderBookListeners(private val executorService: ExecutorService) : OrderBookListeners {
+class DefaultOrderBookListeners : OrderBookListeners {
 
     private val listenersByExchangeAndCurrencyPair = ConcurrentHashMap<SupportedExchange, ConcurrentHashMap<CurrencyPair, MutableSet<OrderBookListener>>>()
     private val orderBookRegistrationListeners = mutableListOf<OrderBookRegistrationListener>()
@@ -84,9 +84,7 @@ class DefaultOrderBookListeners(private val executorService: ExecutorService) : 
 
     override fun iterateOverEachExchangeAndAllCurrencyPairs(orderBookListenerVisitor: OrderBookListenersVisitor) {
         listenersByExchangeAndCurrencyPair.forEach { (exchange, currencyPairsWithListeners) ->
-            executorService.submit {
-                orderBookListenerVisitor.fetchOrderBooksThenNotifyListeners(exchange, currencyPairsWithListeners)
-            }
+            orderBookListenerVisitor.fetchOrderBooksThenNotifyListeners(exchange, currencyPairsWithListeners)
         }
     }
 
