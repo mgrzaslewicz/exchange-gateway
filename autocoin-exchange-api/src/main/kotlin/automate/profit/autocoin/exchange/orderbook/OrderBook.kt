@@ -3,6 +3,17 @@ package automate.profit.autocoin.exchange.orderbook
 import java.math.BigDecimal
 import java.math.RoundingMode.HALF_EVEN
 
+data class OrderBookAveragePrice(
+        /**
+         * scale = 8
+         */
+        val averagePrice: BigDecimal,
+        /**
+         * scale = 8
+         */
+        val baseCurrencyAmount: BigDecimal
+)
+
 data class OrderBook(
         val buyOrders: List<OrderBookExchangeOrder>,
         val sellOrders: List<OrderBookExchangeOrder>
@@ -13,21 +24,32 @@ data class OrderBook(
     /**
      * @return null when order cannot be filled for given amount, weighted average price otherwise
      */
-    fun getWeightedAverageBuyPrice(baseCurrencyAmount: BigDecimal): BigDecimal? {
-        var baseCurrencyToSellAmountLeft = baseCurrencyAmount
+    fun getWeightedAverageBuyPrice(baseCurrencyAmount: BigDecimal): OrderBookAveragePrice? {
+        return getWeightedAveragePrice(baseCurrencyAmount, buyOrders)
+    }
+
+    fun getWeightedAverageSellPrice(baseCurrencyAmount: BigDecimal): OrderBookAveragePrice? {
+        return getWeightedAveragePrice(baseCurrencyAmount, sellOrders)
+    }
+
+    private fun getWeightedAveragePrice(baseCurrencyAmount: BigDecimal, orders: List<OrderBookExchangeOrder>): OrderBookAveragePrice? {
+        var baseCurrencyToUseAmountLeft = baseCurrencyAmount
         var sum = BigDecimal.ZERO
         run loop@{
-            buyOrders.forEach {
-                val amountFilledAtThisOrder = baseCurrencyToSellAmountLeft.min(it.orderedAmount)
-                baseCurrencyToSellAmountLeft = baseCurrencyToSellAmountLeft.minus(amountFilledAtThisOrder)
+            orders.forEach {
+                val amountFilledAtThisOrder = baseCurrencyToUseAmountLeft.min(it.orderedAmount)
+                baseCurrencyToUseAmountLeft = baseCurrencyToUseAmountLeft.minus(amountFilledAtThisOrder)
                 sum += amountFilledAtThisOrder.multiply(it.price)
-                if (baseCurrencyToSellAmountLeft <= BigDecimal.ZERO) {
+                if (baseCurrencyToUseAmountLeft <= BigDecimal.ZERO) {
                     return@loop
                 }
             }
         }
-        return if (baseCurrencyToSellAmountLeft <= BigDecimal.ZERO) {
-            sum.setScale(8, HALF_EVEN).divide(baseCurrencyAmount, HALF_EVEN).setScale(8, HALF_EVEN)
+        return if (baseCurrencyToUseAmountLeft <= BigDecimal.ZERO) {
+            return OrderBookAveragePrice(
+                    averagePrice = sum.setScale(8, HALF_EVEN).divide(baseCurrencyAmount, HALF_EVEN).setScale(8, HALF_EVEN),
+                    baseCurrencyAmount = baseCurrencyAmount.setScale(8, HALF_EVEN)
+            )
         } else {
             null
         }
@@ -39,29 +61,42 @@ data class OrderBook(
      * @param otherCurrencyPrice price of counterCurrency/otherCurrency
      * @return null when order cannot be filled for given otherCurrencyAmount
      */
-    fun getWeightedAverageBuyPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal): BigDecimal? {
+    fun getWeightedAverageBuyPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal): OrderBookAveragePrice? {
         val counterCurrencyAmountToSpend = otherCurrencyAmount.setScale(16, HALF_EVEN).divide(otherCurrencyPrice.setScale(16, HALF_EVEN), HALF_EVEN)
-        return getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmountToSpend)
+        return getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmountToSpend, buyOrders)
     }
 
-    fun getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmount: BigDecimal): BigDecimal? {
-        var counterCurrencyAmountToSpendLeft = counterCurrencyAmount
+    fun getWeightedAverageSellPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal): OrderBookAveragePrice? {
+        val counterCurrencyAmountToSpend = otherCurrencyAmount.setScale(16, HALF_EVEN).divide(otherCurrencyPrice.setScale(16, HALF_EVEN), HALF_EVEN)
+        return getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmountToSpend, sellOrders)
+    }
 
-        var sumAmountBaseCurrrencyBought = BigDecimal.ZERO
+    private fun getWeightedAverageBuyPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal, orders: List<OrderBookExchangeOrder>): OrderBookAveragePrice? {
+        val counterCurrencyAmountToSpend = otherCurrencyAmount.setScale(16, HALF_EVEN).divide(otherCurrencyPrice.setScale(16, HALF_EVEN), HALF_EVEN)
+        return getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmountToSpend, orders)
+    }
+
+    private fun getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmount: BigDecimal, orders: List<OrderBookExchangeOrder>): OrderBookAveragePrice? {
+        var counterCurrencyAmountToUseLeft = counterCurrencyAmount
+
+        var sumAmountBaseCurrrencyUsed = BigDecimal.ZERO
         run loop@{
-            buyOrders.forEach {
+            orders.forEach {
                 val counterCurrencyAmountAtOrder = it.valueInCounterCurrency()
-                val counterCurrencyFilledAtOrder = counterCurrencyAmountAtOrder.min(counterCurrencyAmountToSpendLeft)
-                counterCurrencyAmountToSpendLeft -= counterCurrencyFilledAtOrder
+                val counterCurrencyFilledAtOrder = counterCurrencyAmountAtOrder.min(counterCurrencyAmountToUseLeft)
+                counterCurrencyAmountToUseLeft -= counterCurrencyFilledAtOrder
                 val filledRatio = counterCurrencyFilledAtOrder.divide(counterCurrencyAmountAtOrder, HALF_EVEN)
-                sumAmountBaseCurrrencyBought += filledRatio.multiply(it.orderedAmount)
-                if (counterCurrencyAmountToSpendLeft <= BigDecimal.ZERO) {
+                sumAmountBaseCurrrencyUsed += filledRatio.multiply(it.orderedAmount)
+                if (counterCurrencyAmountToUseLeft <= BigDecimal.ZERO) {
                     return@loop
                 }
             }
         }
-        return if (counterCurrencyAmountToSpendLeft <= BigDecimal.ZERO) {
-            return counterCurrencyAmount.divide(sumAmountBaseCurrrencyBought, HALF_EVEN).setScale(8, HALF_EVEN)
+        return if (counterCurrencyAmountToUseLeft <= BigDecimal.ZERO) {
+            return OrderBookAveragePrice(
+                    averagePrice = counterCurrencyAmount.divide(sumAmountBaseCurrrencyUsed, HALF_EVEN).setScale(8, HALF_EVEN),
+                    baseCurrencyAmount = sumAmountBaseCurrrencyUsed.setScale(8, HALF_EVEN)
+            )
         } else {
             null
         }
