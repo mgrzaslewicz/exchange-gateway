@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>autocoin-exchange-api-rest</artifactId>
-    <version>2.0.14-SNAPSHOT</version>
+    <version>2.0.14</version>
     <packaging>jar</packaging>
 
     <name>autocoin-exchange-api-rest</name>
@@ -11,7 +11,7 @@
     <parent>
         <groupId>automate.profit</groupId>
         <artifactId>autocoin-exchange-engine</artifactId>
-        <version>2.0.14-SNAPSHOT</version>
+        <version>2.0.14</version>
     </parent>
 
     <dependencies>
