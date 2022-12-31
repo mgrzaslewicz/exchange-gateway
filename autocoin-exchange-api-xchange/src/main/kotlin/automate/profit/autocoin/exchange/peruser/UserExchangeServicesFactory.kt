@@ -159,12 +159,12 @@ class XchangeUserExchangeServicesFactory(
     }
 
     private fun assignKeys(supportedExchange: SupportedExchange, exchangeSpecification: ExchangeSpecification, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?) {
+        val exchangeSpecificParametersMap = if (exchangeSpecificKeyParameters == null) mutableMapOf<String,String>() else HashMap(exchangeSpecificKeyParameters)
         exchangeSpecification.apiKey = publicKey.trim()
         exchangeSpecification.secretKey = secretKey.trim()
         exchangeSpecification.userName = userName
         // xchange lib needs mutable map as it sets default values for some implementations when these not provided
-        exchangeSpecification.exchangeSpecificParameters = HashMap(exchangeSpecificKeyParameters) as Map<String, Any>?
-                ?: mutableMapOf()
+        exchangeSpecification.exchangeSpecificParameters = exchangeSpecificParametersMap as Map<String, Any>
 
         if (exchangeSpecification.apiKey != publicKey) logger.warn("$supportedExchange API public key contained whitespaces, trimmed")
         if (exchangeSpecification.secretKey != secretKey) logger.warn("$supportedExchange API secret key contained whitespaces, trimmed")
