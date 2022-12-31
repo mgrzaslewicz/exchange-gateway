@@ -5,6 +5,9 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
 import java.io.File
 
+/**
+ * Will fetch and save metadata if there is none for given exchange yet
+ */
 class ExchangeMetadataProvider(
         exchangeMetadataFetchers: List<ExchangeMetadataFetcher>,
         private val exchangeMetadataRepository: FileExchangeMetadataRepository
