@@ -11,6 +11,8 @@ import automate.profit.autocoin.exchange.metadata.kucoin.KucoinExchangeMetadataF
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KotlinLogging
+import org.knowm.xchange.Exchange
+import org.knowm.xchange.dto.meta.ExchangeMetaData
 import java.io.File
 import java.math.BigDecimal
 import org.knowm.xchange.ExchangeFactory as XchangeExchangeFactory
@@ -92,12 +94,19 @@ internal fun XchangeCurrencyPairMetaData.getTransactionFeeRanges(
     )
 }
 
+data class CurrencyMetadataOverride(
+    val withdrawalFee: Double?,
+    val minWithdrawalAmount: Double?
+)
+
 class DefaultExchangeMetadataFetcher(
     override val supportedExchange: SupportedExchange,
     private val exchangeFactory: XchangeExchangeFactory,
     private val preventFromLoadingDefaultXchangeMetadata: Boolean = true,
     private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner,
-    private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap()
+    private val xchangeMetadataProvider: (exchange: Exchange) -> ExchangeMetaData = { exchange -> exchange.exchangeMetaData },
+    private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap(),
+    private val overridenCurrencies: Map<String, CurrencyMetadataOverride> = emptyMap(),
 ) : ExchangeMetadataFetcher {
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
@@ -107,7 +116,7 @@ class DefaultExchangeMetadataFetcher(
             preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         }
         val exchange = exchangeFactory.createExchange(exchangeSpec)
-        val xchangeMetadata = exchange.exchangeMetaData
+        val xchangeMetadata = xchangeMetadataProvider(exchange)
 
         val metadataWarnings = ArrayList<String>()
         val currencyPairs = xchangeMetadata.currencyPairs
@@ -138,11 +147,14 @@ class DefaultExchangeMetadataFetcher(
                     transactionFeeRanges = it.value.getTransactionFeeRanges()
                 )
             }.toMap()
-        val currencies = exchange.exchangeMetaData.currencies?.map {
-            it.key.currencyCode to CurrencyMetadata(
-                scale = getScaleOrDefault(it.key, it.value, metadataWarnings),
-                withdrawalFeeAmount = it.value?.withdrawalFee,
-                minWithdrawalAmount = it.value?.minWithdrawalAmount
+        val currencies = xchangeMetadata.currencies?.map {
+            it.key.currencyCode to overrideCurrencyMetadataIfNeeded(
+                currencyCode = it.key.currencyCode,
+                currencyMetadata = CurrencyMetadata(
+                    scale = getScaleOrDefault(it.key, it.value, metadataWarnings),
+                    withdrawalFeeAmount = it.value?.withdrawalFee,
+                    minWithdrawalAmount = it.value?.minWithdrawalAmount
+                )
             )
         }?.toMap() ?: emptyMap()
         if (currencies.isEmpty()) {
@@ -154,6 +166,18 @@ class DefaultExchangeMetadataFetcher(
             debugWarnings = metadataWarnings
         )
         return exchangeMetadata
+    }
+
+    private fun overrideCurrencyMetadataIfNeeded(currencyCode: String, currencyMetadata: CurrencyMetadata): CurrencyMetadata {
+        return if (overridenCurrencies.containsKey(currencyCode)) {
+            val overridenCurrencyMetadata = overridenCurrencies.getValue(currencyCode)
+            return currencyMetadata.copy(
+                withdrawalFeeAmount = overridenCurrencyMetadata.withdrawalFee?.toBigDecimal() ?: currencyMetadata.withdrawalFeeAmount,
+                minWithdrawalAmount = overridenCurrencyMetadata.minWithdrawalAmount?.toBigDecimal() ?: currencyMetadata.minWithdrawalAmount
+            )
+        } else {
+            currencyMetadata
+        }
     }
 }
 
@@ -204,7 +228,8 @@ fun overridenExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, x
         supportedExchange = KRAKEN,
         exchangeFactory = exchangeFactory,
         preventFromLoadingDefaultXchangeMetadata = false,
-        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
+        overridenCurrencies = krakenOverridenCurrenciesMetadata
     ),
     DefaultExchangeMetadataFetcher(
         exchangeFactory = exchangeFactory,
@@ -231,11 +256,13 @@ fun overridenExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, x
 fun defaultExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner) =
     (SupportedExchange.values().toSet() - overridenExchangeMetadataFetchers(exchangeFactory, xchangeSpecificationApiKeyAssigner)
         .map { it.supportedExchange }.toSet())
-        .map { DefaultExchangeMetadataFetcher(
-            supportedExchange = it,
-            exchangeFactory = exchangeFactory,
-            xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
-        ) }
+        .map {
+            DefaultExchangeMetadataFetcher(
+                supportedExchange = it,
+                exchangeFactory = exchangeFactory,
+                xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+            )
+        }
 
 fun exchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner) =
     overridenExchangeMetadataFetchers(exchangeFactory, xchangeSpecificationApiKeyAssigner) + defaultExchangeMetadataFetchers(exchangeFactory, xchangeSpecificationApiKeyAssigner)
