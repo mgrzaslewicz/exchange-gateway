@@ -1,12 +1,11 @@
 package automate.profit.autocoin.spi.exchange.orderbook.service.authorized
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
-import java.util.function.Supplier
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 
-interface AuthorizedOrderBookServiceFactory {
+interface AuthorizedOrderBookServiceFactory<T> {
     fun createAuthorizedOrderBookService(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey?>,
-    ): AuthorizedOrderBookService
+        apiKey: ApiKeySupplier<T>,
+    ): AuthorizedOrderBookService<T>
 }

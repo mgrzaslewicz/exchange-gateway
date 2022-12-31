@@ -1,5 +1,6 @@
 package automate.profit.autocoin.exchange
 
+import automate.profit.autocoin.api.exchange.ApiKeySupplier
 import automate.profit.autocoin.exchange.xchange.CachingXchangeProvider
 import automate.profit.autocoin.exchange.xchange.DefaultXchangeProvider
 import automate.profit.autocoin.exchange.xchange.ExchangeNames.Companion.binance
@@ -14,7 +15,7 @@ import org.knowm.xchange.Exchange
 import org.knowm.xchange.ExchangeSpecification
 
 class CachingXchangeProviderTest {
-    private lateinit var tested: CachingXchangeProvider
+    private lateinit var tested: CachingXchangeProvider<String>
     private lateinit var countingXchangeInstanceWrapper: CountingXchangeInstanceWrapper
 
     @BeforeEach
@@ -43,8 +44,8 @@ class CachingXchangeProviderTest {
     @Test
     fun shouldUseCachedXchangeInstance() {
         // when
-        tested.invoke(exchangeName = binance, apiKey = null)
-        tested.invoke(exchangeName = binance, apiKey = null)
+        tested.invoke(exchangeName = binance, apiKey = ApiKeySupplier(id = "1", supplier = null))
+        tested.invoke(exchangeName = binance, apiKey = ApiKeySupplier(id = "1", supplier = null))
         // then
         assertThat(countingXchangeInstanceWrapper.invokeCount).isEqualTo(1)
     }

@@ -30,8 +30,7 @@ import org.mockito.junit.jupiter.MockitoExtension
 import java.math.BigDecimal
 import java.time.Clock
 import java.util.*
-import java.util.function.Supplier
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey as SpiApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier as SpiApiKeySupplier
 import org.knowm.xchange.dto.Order as XchangeOrder
 
 @ExtendWith(MockitoExtension::class)
@@ -40,7 +39,7 @@ class XchangeAuthorizedOrderServiceTest {
 
     @Mock
     private lateinit var wrappedTradeService: TradeService
-    private lateinit var tested: AuthorizedOrderService
+    private lateinit var tested: AuthorizedOrderService<String>
 
     private val buyOrderId1 = "buy-order-id-1"
     private val buyOrderId2 = "buy-order-id-2"
@@ -87,11 +86,11 @@ class XchangeAuthorizedOrderServiceTest {
 
     @BeforeEach
     fun setUp() {
-        tested = XchangeAuthorizedOrderServiceFactory<String>(
-            xchangeProvider = object : XchangeProvider {
+        tested = XchangeAuthorizedOrderServiceFactory(
+            xchangeProvider = object : XchangeProvider<String> {
                 override operator fun invoke(
                     exchangeName: ExchangeName,
-                    apiKey: Supplier<SpiApiKey>?,
+                    apiKey: SpiApiKeySupplier<String>,
                 ): Exchange {
                     return mock<Exchange>().apply { whenever(tradeService).thenReturn(wrappedTradeService) }
                 }

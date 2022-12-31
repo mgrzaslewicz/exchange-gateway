@@ -21,7 +21,7 @@ import org.knowm.xchange.service.trade.params.CancelOrderParams as XchangeCancel
 
 
 class XchangeAuthorizedOrderServiceFactory<T>(
-    private val xchangeProvider: XchangeProvider,
+    private val xchangeProvider: XchangeProvider<T>,
     private val clock: Clock,
     private val currencyPairToXchange: Function<CurrencyPair, XchangeCurrencyPair> = defaultCurrencyPairToXchange,
     private val cancelOrderParamsToXchangeParams: Function<CancelOrderParams, XchangeCancelOrderParams> = defaultCancelOrderParamsToXchangeParams(currencyPairToXchange),
@@ -49,14 +49,15 @@ class XchangeAuthorizedOrderServiceFactory<T>(
     override fun createAuthorizedOrderService(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
-    ): XchangeAuthorizedOrderService {
+    ): XchangeAuthorizedOrderService<T> {
         val xchange = xchangeProvider(
             exchangeName = exchangeName,
-            apiKey = apiKey.supplier,
+            apiKey = apiKey,
         )
 
         return XchangeAuthorizedOrderService(
             exchangeName = exchangeName,
+            apiKey = apiKey,
             delegate = xchange.tradeService,
             cancelOrderParamsToXchangeParams = cancelOrderParamsToXchangeParams,
             openOrdersCurrencyPairParamsToXchangeParams = openOrdersCurrencyPairParamsToXchangeParams,

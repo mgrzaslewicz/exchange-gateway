@@ -3,6 +3,7 @@ package automate.profit.autocoin.exchange.order.service.authorized
 import automate.profit.autocoin.api.exchange.order.Order
 import automate.profit.autocoin.exchange.order.XchangeLimitOrderToOrderTransformer
 import automate.profit.autocoin.spi.exchange.ExchangeName
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.order.CancelOrderParams
 import automate.profit.autocoin.spi.exchange.order.OrderSide
@@ -19,15 +20,16 @@ import org.knowm.xchange.service.trade.TradeService as XchangeTradeService
 import org.knowm.xchange.service.trade.params.CancelOrderParams as XchangeCancelOrderParams
 
 
-class XchangeAuthorizedOrderService(
+class XchangeAuthorizedOrderService<T>(
     override val exchangeName: ExchangeName,
+    override val apiKey: ApiKeySupplier<T>,
     val delegate: XchangeTradeService,
     private val cancelOrderParamsToXchangeParams: Function<CancelOrderParams, XchangeCancelOrderParams>,
     private val openOrdersCurrencyPairParamsToXchangeParams: Function<CurrencyPair, OpenOrdersParamCurrencyPair>,
     private val currencyPairToXchange: Function<CurrencyPair, org.knowm.xchange.currency.CurrencyPair>,
     private val xchangeLimitOrderToOrderTransformer: XchangeLimitOrderToOrderTransformer,
     private val clock: Clock,
-) : AuthorizedOrderService {
+) : AuthorizedOrderService<T> {
     override fun cancelOrder(cancelOrderParams: CancelOrderParams): Boolean {
         val xchangeCancelOrderParams = cancelOrderParamsToXchangeParams.apply(cancelOrderParams)
         return delegate.cancelOrder(xchangeCancelOrderParams)

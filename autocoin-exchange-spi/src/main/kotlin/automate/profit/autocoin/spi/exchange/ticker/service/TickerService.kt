@@ -1,20 +1,19 @@
 package automate.profit.autocoin.spi.exchange.ticker.service
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.ticker.Ticker
-import java.util.function.Supplier
 
-interface TickerService {
+interface TickerService<T> {
     val exchangeName: ExchangeName
     fun getTicker(
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): Ticker
 
     fun getTickers(
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
         currencyPairs: Collection<CurrencyPair>,
     ): List<Ticker>
 }

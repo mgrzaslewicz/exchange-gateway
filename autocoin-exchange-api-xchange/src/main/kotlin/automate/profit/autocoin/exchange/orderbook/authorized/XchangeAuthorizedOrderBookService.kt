@@ -8,6 +8,7 @@ import automate.profit.autocoin.exchange.orderbook.XchangeLimitOrderToOrderInOrd
 import automate.profit.autocoin.exchange.orderbook.XchangeOrderBookTransformer
 import automate.profit.autocoin.exchange.orderbook.defaultXchangeLimitOrderToOrderInOrderBookTransformer
 import automate.profit.autocoin.spi.exchange.ExchangeName
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.order.OrderSide
 import automate.profit.autocoin.spi.exchange.orderbook.service.authorized.AuthorizedOrderBookService
@@ -20,8 +21,9 @@ import org.knowm.xchange.dto.Order as XchangeOrder
 import org.knowm.xchange.dto.marketdata.OrderBook as XchangeOrderBook
 
 
-class XchangeAuthorizedOrderBookService(
+class XchangeAuthorizedOrderBookService<T>(
     override val exchangeName: ExchangeName,
+    override val apiKey: ApiKeySupplier<T>,
     val delegate: MarketDataService,
     private val clock: Clock,
     private val xchangeCurrencyPairTransformer: Function<XchangeCurrencyPair, CurrencyPair> = defaultXchangeCurrencyPairTransformer,
@@ -29,7 +31,7 @@ class XchangeAuthorizedOrderBookService(
     private val xchangeOrderBookTransformer: XchangeOrderBookTransformer = defaultXchangeOrderBookTransformer,
     private val xchangeTypeToOrderSide: Function<XchangeOrder.OrderType, OrderSide> = defaultXchangeTypeToOrderSide,
     private val xchangeLimitOrderToOrderInOrderBookTransformer: XchangeLimitOrderToOrderInOrderBookTransformer = defaultXchangeLimitOrderToOrderInOrderBookTransformer,
-) : AuthorizedOrderBookService {
+) : AuthorizedOrderBookService<T> {
     companion object {
 
         val defaultXchangeOrderBookTransformer: XchangeOrderBookTransformer = object : XchangeOrderBookTransformer {

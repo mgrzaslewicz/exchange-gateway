@@ -1,17 +1,16 @@
 package automate.profit.autocoin.spi.exchange.wallet.gateway
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyBalance
 import automate.profit.autocoin.spi.exchange.wallet.service.authorized.AuthorizedWalletServiceFactory
-import java.util.function.Supplier
 
-class WalletServiceGatewayUsingAuthorizedWalletService(
-    private val authorizedWalletServiceFactory: AuthorizedWalletServiceFactory,
-) : WalletServiceGateway {
+class WalletServiceGatewayUsingAuthorizedWalletService<T>(
+    private val authorizedWalletServiceFactory: AuthorizedWalletServiceFactory<T>,
+) : WalletServiceGateway<T> {
     override fun getCurrencyBalance(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyCode: String,
     ): CurrencyBalance {
         return authorizedWalletServiceFactory
@@ -21,7 +20,7 @@ class WalletServiceGatewayUsingAuthorizedWalletService(
 
     override fun getCurrencyBalances(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
     ): List<CurrencyBalance> {
         return authorizedWalletServiceFactory
             .createAuthorizedWalletService(exchangeName = exchangeName, apiKey = apiKey)

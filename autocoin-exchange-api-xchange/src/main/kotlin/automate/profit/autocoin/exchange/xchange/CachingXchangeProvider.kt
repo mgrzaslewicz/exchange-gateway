@@ -1,13 +1,12 @@
 package automate.profit.autocoin.exchange.xchange
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import org.knowm.xchange.utils.DigestUtils
 import java.security.MessageDigest
-import java.util.function.Supplier
 import org.knowm.xchange.Exchange as XchangeExchange
 
-class CachingXchangeProvider(private val decorated: XchangeProvider) : XchangeProvider {
+class CachingXchangeProvider<T>(private val decorated: XchangeProvider<T>) : XchangeProvider<T> {
     private val cache = mutableMapOf<String, XchangeExchange>()
 
     private fun String?.md5(): String {
@@ -20,9 +19,9 @@ class CachingXchangeProvider(private val decorated: XchangeProvider) : XchangePr
 
     override fun invoke(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
     ): XchangeExchange {
-        val key = apiKey?.get()
+        val key = apiKey.supplier?.get()
         val cacheKey = if (key != null) {
             "$exchangeName:${key.secretKey.md5()}:${key.secretKey.md5()}"
         }

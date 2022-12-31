@@ -3,6 +3,7 @@ package automate.profit.autocoin.exchange.ticker.service.authorized
 import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformer
 import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformerWithCurrencyPair
 import automate.profit.autocoin.spi.exchange.ExchangeName
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.ticker.Ticker
 import automate.profit.autocoin.spi.exchange.ticker.gateway.InvalidCurrencyPairException
@@ -14,15 +15,16 @@ import java.time.Clock
 import java.util.function.Function
 import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 
-class XchangeAuthorizedTickerService(
+class XchangeAuthorizedTickerService<T>(
     override val exchangeName: ExchangeName,
+    override val apiKey: ApiKeySupplier<T>,
     val delegate: MarketDataService,
     private val currencyPairToXchange: Function<CurrencyPair, XchangeCurrencyPair>,
     private val currencyPairsToXchangeCurrencyPairsParam: Function<Collection<CurrencyPair>, CurrencyPairsParam>,
     private val xchangeTickerTransformerWithCurrencyPair: XchangeTickerTransformerWithCurrencyPair,
     private val xchangeTickerTransformer: XchangeTickerTransformer,
     private val clock: Clock,
-) : AuthorizedTickerService {
+) : AuthorizedTickerService<T> {
 
     override fun getTicker(currencyPair: CurrencyPair): Ticker {
         return try {

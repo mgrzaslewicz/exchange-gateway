@@ -1,15 +1,14 @@
 package automate.profit.autocoin.exchange.xchange
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import org.knowm.xchange.Exchange
-import java.util.function.Supplier
 
 
-interface XchangeProvider {
+interface XchangeProvider<T> {
     operator fun invoke(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
     ): Exchange
 }
 

@@ -18,7 +18,6 @@ val defaultXchangeOrderStatusTransformer: Function<XchangeOrder.OrderStatus, Ord
         XchangeOrder.OrderStatus.PARTIALLY_CANCELED -> OrderStatus.PARTIALLY_CANCELED
         XchangeOrder.OrderStatus.PARTIALLY_FILLED -> OrderStatus.PARTIALLY_FILLED
         XchangeOrder.OrderStatus.CANCELED -> OrderStatus.CANCELED
-        null -> OrderStatus.NOT_AVAILABLE
         else -> throw IllegalStateException("Status $it not handled")
     }
 }

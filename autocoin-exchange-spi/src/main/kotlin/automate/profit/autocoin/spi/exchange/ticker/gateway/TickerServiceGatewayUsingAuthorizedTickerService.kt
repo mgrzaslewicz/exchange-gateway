@@ -1,19 +1,18 @@
 package automate.profit.autocoin.spi.exchange.ticker.gateway
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.ticker.Ticker
 import automate.profit.autocoin.spi.exchange.ticker.service.authorized.AuthorizedTickerServiceFactory
-import java.util.function.Supplier
 
-class TickerServiceGatewayUsingAuthorizedTickerService(
-    private val authorizedTickerServiceFactory: AuthorizedTickerServiceFactory,
-) : TickerServiceGateway {
+class TickerServiceGatewayUsingAuthorizedTickerService<T>(
+    private val authorizedTickerServiceFactory: AuthorizedTickerServiceFactory<T>,
+) : TickerServiceGateway<T> {
 
     override fun getTicker(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): Ticker {
         return authorizedTickerServiceFactory.createAuthorizedTickerService(
@@ -24,7 +23,7 @@ class TickerServiceGatewayUsingAuthorizedTickerService(
 
     override fun getTickers(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
         currencyPairs: Collection<CurrencyPair>,
     ): List<Ticker> {
         return authorizedTickerServiceFactory.createAuthorizedTickerService(

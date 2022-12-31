@@ -7,28 +7,27 @@ import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformer
 import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformerWithCurrencyPair
 import automate.profit.autocoin.exchange.xchange.XchangeProvider
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.ticker.service.authorized.AuthorizedTickerService
 import automate.profit.autocoin.spi.exchange.ticker.service.authorized.AuthorizedTickerServiceFactory
 import org.knowm.xchange.service.marketdata.params.CurrencyPairsParam
 import java.time.Clock
 import java.util.function.Function
-import java.util.function.Supplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair as SpiCurrencyPair
 import automate.profit.autocoin.spi.exchange.ticker.Ticker as SpiTicker
 import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 import org.knowm.xchange.dto.marketdata.Ticker as XchangeTicker
 
 
-class XchangeAuthorizedTickerServiceFactory(
-    private val xchangeProvider: XchangeProvider,
+class XchangeAuthorizedTickerServiceFactory<T>(
+    private val xchangeProvider: XchangeProvider<T>,
     private val currencyPairToXchange: Function<SpiCurrencyPair, XchangeCurrencyPair> = defaultCurrencyPairToXchange,
     private val xchangeCurrencyPairTransformer: Function<XchangeCurrencyPair, SpiCurrencyPair> = defaultXchangeCurrencyPairTransformer,
     private val xchangeTickerTransformerWithCurrencyPair: XchangeTickerTransformerWithCurrencyPair = defaultXchangeTickerTransformerWithCurrencyPairFix,
     private val xchangeTickerTransformer: XchangeTickerTransformer = defaultXchangeTickerTransformer(xchangeCurrencyPairTransformer),
     private val currencyPairsToXchangeCurrencyPairsParam: Function<Collection<SpiCurrencyPair>, CurrencyPairsParam> = currencyPairsToXchangeCurrencyPairsParam(currencyPairToXchange),
     private val clock: Clock,
-) : AuthorizedTickerServiceFactory {
+) : AuthorizedTickerServiceFactory<T> {
     companion object {
 
         val defaultXchangeTickerTransformerWithCurrencyPairFix: XchangeTickerTransformerWithCurrencyPair = object : XchangeTickerTransformerWithCurrencyPair {
@@ -81,11 +80,12 @@ class XchangeAuthorizedTickerServiceFactory(
 
     override fun createAuthorizedTickerService(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
-    ): AuthorizedTickerService {
+        apiKey: ApiKeySupplier<T>,
+    ): AuthorizedTickerService<T> {
         val xchange = xchangeProvider(exchangeName = exchangeName, apiKey = apiKey)
         return XchangeAuthorizedTickerService(
             exchangeName = exchangeName,
+            apiKey = apiKey,
             delegate = xchange.marketDataService,
             currencyPairToXchange = currencyPairToXchange,
             xchangeTickerTransformerWithCurrencyPair = xchangeTickerTransformerWithCurrencyPair,

@@ -1,19 +1,18 @@
 package automate.profit.autocoin.spi.exchange.ticker.gateway
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.ticker.Ticker
 import automate.profit.autocoin.spi.exchange.ticker.service.TickerService
-import java.util.function.Supplier
 
-class DelegateTickerServiceGateway(
-    private val tickerServiceGateways: Map<ExchangeName, TickerService>,
-) : TickerServiceGateway {
+class DelegateTickerServiceGateway<T>(
+    private val tickerServiceGateways: Map<ExchangeName, TickerService<T>>,
+) : TickerServiceGateway<T> {
 
     override fun getTicker(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): Ticker {
         return tickerServiceGateways.getValue(exchangeName).getTicker(
@@ -24,7 +23,7 @@ class DelegateTickerServiceGateway(
 
     override fun getTickers(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
         currencyPairs: Collection<CurrencyPair>,
     ): List<Ticker> {
         return tickerServiceGateways.getValue(exchangeName).getTickers(

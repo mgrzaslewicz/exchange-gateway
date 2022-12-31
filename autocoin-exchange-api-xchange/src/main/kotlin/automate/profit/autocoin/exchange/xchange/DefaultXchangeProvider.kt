@@ -27,7 +27,7 @@ import automate.profit.autocoin.exchange.xchange.ExchangeNames.Companion.polonie
 import automate.profit.autocoin.exchange.xchange.ExchangeNames.Companion.tradeogre
 import automate.profit.autocoin.exchange.xchange.ExchangeNames.Companion.yobit
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.xchange.HitBtcExchangeFork
 import automate.profit.xchange.PoloniexExchangeFork
 import automate.profit.xchange.ZondaBitbayExchangFork
@@ -57,14 +57,13 @@ import org.knowm.xchange.okex.OkexExchange
 import org.knowm.xchange.tradeogre.TradeOgreExchange
 import org.knowm.xchange.yobit.YoBitExchange
 import java.util.function.Function
-import java.util.function.Supplier
 import org.knowm.xchange.Exchange as XchangeExchange
 
-class DefaultXchangeProvider(
+class DefaultXchangeProvider<T>(
     private val xchangeInstanceProvider: XchangeInstanceProvider,
     private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner,
     private val exchangeNameToXchangeClass: Function<ExchangeName, Class<out Exchange>> = defaultExchangeNameToXchangeClass,
-) : XchangeProvider {
+) : XchangeProvider<T> {
     companion object {
 
 
@@ -104,14 +103,14 @@ class DefaultXchangeProvider(
 
     override operator fun invoke(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
     ): XchangeExchange {
         val exchangeSpec = ExchangeSpecification(exchangeNameToXchangeClass.apply(exchangeName))
-        if (apiKey != null) {
+        if (apiKey.supplier != null) {
             xchangeSpecificationApiKeyAssigner.assignKeys(
                 exchangeName = exchangeName,
                 exchangeSpecification = exchangeSpec,
-                apiKeySupplier = apiKey,
+                apiKeySupplier = apiKey.supplier!!,
             )
         }
         // TODO when it needs to be more effective, prevent from remote init each time and change provide json file

@@ -8,6 +8,6 @@ interface AuthorizedOrderServiceFactory<T> {
     fun createAuthorizedOrderService(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
-    ): AuthorizedOrderService
+    ): AuthorizedOrderService<T>
 
 }

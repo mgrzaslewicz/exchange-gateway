@@ -1,12 +1,11 @@
 package automate.profit.autocoin.spi.exchange.ticker.service.authorized
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
-import java.util.function.Supplier
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 
-interface AuthorizedTickerServiceFactory {
+interface AuthorizedTickerServiceFactory<T> {
     fun createAuthorizedTickerService(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
-    ): AuthorizedTickerService
+        apiKey: ApiKeySupplier<T>,
+    ): AuthorizedTickerService<T>
 }

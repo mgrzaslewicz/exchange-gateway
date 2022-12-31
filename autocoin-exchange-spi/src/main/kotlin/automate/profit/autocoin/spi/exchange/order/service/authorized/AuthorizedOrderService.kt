@@ -1,13 +1,12 @@
 package automate.profit.autocoin.spi.exchange.order.service.authorized
 
-import automate.profit.autocoin.spi.exchange.ExchangeName
+import automate.profit.autocoin.spi.exchange.AuthorizedService
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.order.CancelOrderParams
 import automate.profit.autocoin.spi.exchange.order.Order
 import java.math.BigDecimal
 
-interface AuthorizedOrderService {
-    val exchangeName: ExchangeName
+interface AuthorizedOrderService<T>: AuthorizedService<T> {
 
     fun cancelOrder(cancelOrderParams: CancelOrderParams): Boolean
 

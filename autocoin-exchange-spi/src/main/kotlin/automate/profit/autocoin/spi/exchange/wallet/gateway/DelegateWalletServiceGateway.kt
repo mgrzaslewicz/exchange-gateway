@@ -1,17 +1,16 @@
 package automate.profit.autocoin.spi.exchange.wallet.gateway
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyBalance
 import automate.profit.autocoin.spi.exchange.wallet.service.WalletService
-import java.util.function.Supplier
 
-class DelegateWalletServiceGateway(
-    private val walletServices: Map<ExchangeName, WalletService>,
-) : WalletServiceGateway {
+class DelegateWalletServiceGateway<T>(
+    private val walletServices: Map<ExchangeName, WalletService<T>>,
+) : WalletServiceGateway<T> {
     override fun getCurrencyBalance(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyCode: String,
     ): CurrencyBalance {
         return walletServices.getValue(exchangeName).getCurrencyBalance(apiKey, currencyCode)
@@ -19,7 +18,7 @@ class DelegateWalletServiceGateway(
 
     override fun getCurrencyBalances(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
     ): List<CurrencyBalance> {
         return walletServices.getValue(exchangeName).getCurrencyBalances(apiKey)
     }

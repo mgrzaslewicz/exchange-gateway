@@ -1,5 +1,6 @@
 package automate.profit.autocoin.api.exchange.ticker
 
+import automate.profit.autocoin.api.exchange.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.ExchangeName
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.currency.ExchangeWithCurrencyPairStringCache
@@ -15,18 +16,19 @@ import java.util.concurrent.TimeUnit
 import automate.profit.autocoin.spi.exchange.ticker.Ticker as SpiTicker
 import automate.profit.autocoin.spi.exchange.ticker.gateway.TickerServiceGateway as SpiTickerService
 
-interface SynchronousTickerFetchScheduler : TickerRegistrationListener {
+interface SynchronousTickerFetchScheduler<T> : TickerRegistrationListener {
     fun fetchTickersThenNotifyListeners(exchangeName: ExchangeName)
 }
 
-class DefaultSynchronousTickerFetchScheduler(
+class DefaultSynchronousTickerFetchScheduler<T>(
     private val allowedExchangeFetchFrequency: Map<ExchangeName, Duration>,
-    private val tickerService: SpiTickerService,
+    private val tickerService: SpiTickerService<T>,
+    private val apiKeys: Map<ExchangeName, ApiKeySupplier<T>>,
     private val tickerListeners: TickerListeners,
     /** Not 100% sure if separate threads are needed here in the same way as for fetching order books.
      * However, it proved to work well there so using it here too.*/
     private val executorService: Map<ExchangeName, ScheduledExecutorService>,
-) : SynchronousTickerFetchScheduler {
+) : SynchronousTickerFetchScheduler<T> {
     companion object : KLogging()
 
     private val lastTickers = mutableMapOf<String, SoftReference<SpiTicker>>()
@@ -91,7 +93,7 @@ class DefaultSynchronousTickerFetchScheduler(
         return try {
             tickerService.getTicker(
                 exchangeName = exchangeName,
-                apiKey = null,
+                apiKey = apiKeys.getValue(exchangeName),
                 currencyPair = currencyPair,
             )
         } catch (e: Exception) {
