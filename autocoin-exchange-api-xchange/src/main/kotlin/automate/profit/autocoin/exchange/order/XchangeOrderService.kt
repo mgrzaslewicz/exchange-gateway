@@ -109,7 +109,6 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
     private fun getOpenOrdersFromExchange(exchangeKey: ExchangeKeyDto, tradeService: UserExchangeTradeService, currencyPairs: List<CurrencyPair>): List<ExchangeOrder> {
         val exchangeName = exchangeService.getExchangeNameById(exchangeKey.exchangeId)
         return when (SupportedExchange.fromExchangeName(exchangeName)) {
-            BINANCE,
             KUCOIN,
             YOBIT -> { // API allows only requesting open orders per single market
                 logger.debug("Requesting open orders at exchange $exchangeName for ${currencyPairs.size} markets")
@@ -117,6 +116,7 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
                         .generateFromWalletIfGivenEmpty(exchangeName, exchangeKey.exchangeUserId, currencyPairs)
                         .flatMap { getOpenOrdersFromExchangeForMarket(exchangeName, tradeService, it) }
             }
+            BINANCE,
             BITBAY,
             BITMEX,
             BITSTAMP,
