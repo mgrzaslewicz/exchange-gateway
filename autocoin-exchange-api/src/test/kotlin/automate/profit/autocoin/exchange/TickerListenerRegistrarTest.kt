@@ -241,7 +241,6 @@ class TickerListenerRegistrarTest {
         val baseValue = next()
         return Ticker(
                 currencyPair = currencyPair,
-                last = BigDecimal(baseValue + 1.1),
                 bid = BigDecimal(baseValue + 1.2),
                 ask = BigDecimal(baseValue + 1.1),
                 timestamp = timestamp
