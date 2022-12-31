@@ -166,7 +166,7 @@ class TickerListenerRegistrarTest {
         // when
         fetchTickersTwice()
         // then
-        verify(tickerListener, times(1)).onNoNewTicker()
+        verify(tickerListener, times(1)).onNoNewTicker(anyOrNull())
     }
 
     @Test
