@@ -2,10 +2,8 @@ package automate.profit.autocoin.exchange.ticker
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
+import java.util.concurrent.ExecutorService
 
 interface TickerListenerRegistrar {
     fun registerTickerListener(tickerListener: TickerListener): Boolean
@@ -16,8 +14,11 @@ interface TickerListenerRegistrar {
 }
 
 
-class DefaultTickerListenerRegistrar(override val exchangeName: SupportedExchange, private val userExchangeTickerService
-: UserExchangeTickerService) : TickerListenerRegistrar {
+class DefaultTickerListenerRegistrar(
+        override val exchangeName: SupportedExchange,
+        private val userExchangeTickerService: UserExchangeTickerService,
+        private val executorService: ExecutorService
+) : TickerListenerRegistrar {
 
     private val logger = KotlinLogging.logger("${DefaultTickerListenerRegistrar::class.java.name}.$exchangeName")
 
@@ -42,14 +43,10 @@ class DefaultTickerListenerRegistrar(override val exchangeName: SupportedExchang
     }
 
     override fun fetchTickersAndNotifyListeners() {
-        runBlocking {
-            val jobs = mutableListOf<Job>()
-            currencyPairListeners.keys.forEach { currencyPair ->
-                jobs += launch { fetchTickerAndNotifyListeners(currencyPair) }
-            }
-            logger.info { "Waiting for all currencies at $exchangeName..." }
-            jobs.forEach { it.join() }
-        }
+        currencyPairListeners.keys.map { currencyPair ->
+                    executorService.submit { fetchTickerAndNotifyListeners(currencyPair) }
+                }.also { logger.info { "Waiting for all currencies at $exchangeName..." } }
+                .forEach { it.get() }
         logger.info { "All currencies done at $exchangeName." }
     }
 

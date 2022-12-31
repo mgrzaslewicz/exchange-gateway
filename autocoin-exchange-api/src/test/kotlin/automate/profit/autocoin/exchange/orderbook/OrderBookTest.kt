@@ -27,6 +27,7 @@ class OrderBookTest {
     private val trxBtcCurrencyPair = CurrencyPair.of("TRX/BTC")
 
     private val xtzBtcCurrencyPair = CurrencyPair.of("XTZ/BTC")
+
     /**
      * real order book snapshot taken from exchange
      */

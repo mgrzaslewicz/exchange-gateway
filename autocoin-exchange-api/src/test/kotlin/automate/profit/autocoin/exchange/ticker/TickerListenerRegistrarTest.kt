@@ -2,6 +2,7 @@ package automate.profit.autocoin.exchange.ticker
 
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
+import com.google.common.util.concurrent.MoreExecutors
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
@@ -13,8 +14,12 @@ import java.time.Instant
 class TickerListenerRegistrarTest {
 
     private val userExchangeTickerService = mock<UserExchangeTickerService>()
-
-    private val tickerListenerRegistrar: TickerListenerRegistrar = DefaultTickerListenerRegistrar(BITTREX, userExchangeTickerService)
+    private val executorRunningSynchronouslyOnTheSameThread = MoreExecutors.newDirectExecutorService()
+    private val tickerListenerRegistrar: TickerListenerRegistrar = DefaultTickerListenerRegistrar(
+            exchangeName = BITTREX,
+            userExchangeTickerService = userExchangeTickerService,
+            executorService = executorRunningSynchronouslyOnTheSameThread
+    )
 
     private val tickerListener: TickerListener = mock()
     private val tickerListener2: TickerListener = mock()

@@ -4,6 +4,7 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.BITBAY
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
+import com.google.common.util.concurrent.MoreExecutors
 import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -28,13 +29,26 @@ class OrderBookListenerRegistrarsTest {
     private lateinit var tickerListenerRegistrarList: List<OrderBookListenerRegistrar>
     private lateinit var tickerListenerRegistrars: OrderBookListenerRegistrars
     private val btcLtc = CurrencyPair.of("BTC/LTC")
+    private val executorRunningSynchronouslyOnTheSameThread = MoreExecutors.newDirectExecutorService()
 
     @BeforeEach
     fun setup() {
-        bittrexListenerRegistrar = spy(DefaultOrderBookListenerRegistrar(BITTREX, mock()))
-        bitbayListenerRegistrar = spy(DefaultOrderBookListenerRegistrar(BITBAY, mock()))
+        bittrexListenerRegistrar = spy(DefaultOrderBookListenerRegistrar(
+                exchangeName = BITTREX,
+                userExchangeOrderBookService = mock(),
+                executorService = executorRunningSynchronouslyOnTheSameThread
+        ))
+        bitbayListenerRegistrar = spy(DefaultOrderBookListenerRegistrar(
+                exchangeName = BITBAY,
+                userExchangeOrderBookService = mock(),
+                executorService = executorRunningSynchronouslyOnTheSameThread
+        ))
         tickerListenerRegistrarList = listOf(bittrexListenerRegistrar, bitbayListenerRegistrar)
-        tickerListenerRegistrars = DefaultOrderBookListenerRegistrars(listOf(bittrexListenerRegistrar, bitbayListenerRegistrar), mock())
+        tickerListenerRegistrars = DefaultOrderBookListenerRegistrars(
+                initialTickerListenerRegistrarList = listOf(bittrexListenerRegistrar, bitbayListenerRegistrar),
+                orderBookListenerRegistrarProvider = mock(),
+                executorService = executorRunningSynchronouslyOnTheSameThread
+        )
     }
 
     @Test
@@ -55,7 +69,11 @@ class OrderBookListenerRegistrarsTest {
         val tickerListenerRegistrarProvider = mock<OrderBookListenerRegistrarProvider>().apply {
             whenever(this.createOrderBookListenerRegistrar(BITTREX)).thenReturn(bittrexListenerRegistrar)
         }
-        tickerListenerRegistrars = DefaultOrderBookListenerRegistrars(emptyList(), tickerListenerRegistrarProvider)
+        tickerListenerRegistrars = DefaultOrderBookListenerRegistrars(
+                initialTickerListenerRegistrarList = emptyList(),
+                orderBookListenerRegistrarProvider = tickerListenerRegistrarProvider,
+                executorService = executorRunningSynchronouslyOnTheSameThread
+        )
         // when
         tickerListenerRegistrars.registerOrderBookListener(listener)
         // then
@@ -65,7 +83,11 @@ class OrderBookListenerRegistrarsTest {
     @Test
     fun shouldGetListenersOfClass() {
         // given
-        tickerListenerRegistrars = DefaultOrderBookListenerRegistrars(tickerListenerRegistrarList, mock())
+        tickerListenerRegistrars = DefaultOrderBookListenerRegistrars(
+                initialTickerListenerRegistrarList = tickerListenerRegistrarList,
+                orderBookListenerRegistrarProvider = mock(),
+                executorService = executorRunningSynchronouslyOnTheSameThread
+        )
         val listener = TestOrderBookListener(btcLtc, BITTREX)
         tickerListenerRegistrars.registerOrderBookListener(listener)
         // when
@@ -88,7 +110,11 @@ class OrderBookListenerRegistrarsTest {
     @Test
     fun shouldFailWhenAddingExchangeDuplicates() {
         assertThrows<IllegalArgumentException> {
-            DefaultOrderBookListenerRegistrars(listOf(bittrexListenerRegistrar, bitbayListenerRegistrar, bitbayListenerRegistrar), mock())
+            DefaultOrderBookListenerRegistrars(
+                    initialTickerListenerRegistrarList = listOf(bittrexListenerRegistrar, bitbayListenerRegistrar, bitbayListenerRegistrar),
+                    orderBookListenerRegistrarProvider = mock(),
+                    executorService = executorRunningSynchronouslyOnTheSameThread
+            )
         }
 
     }

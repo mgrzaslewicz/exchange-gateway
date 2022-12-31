@@ -16,6 +16,8 @@ import org.knowm.xchange.ExchangeFactory
 import org.knowm.xchange.ExchangeSpecification
 import org.knowm.xchange.utils.DigestUtils
 import java.security.MessageDigest
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 fun String?.md5(): String {
     return if (this == null) "null" else {
@@ -55,7 +57,8 @@ class XchangeUserExchangeServicesFactory(
         private val xchangeFactory: XchangeFactory,
         private val exchangeMetadataProvider: ExchangeMetadataProvider,
         private val exchangeSpecificationVerifier: ExchangeSpecificationVerifier,
-        private val serviceApiKeysProvider: ServiceApiKeysProvider
+        private val serviceApiKeysProvider: ServiceApiKeysProvider,
+        private val executorService: ExecutorService = Executors.newCachedThreadPool()
 ) : UserExchangeServicesFactory {
     private companion object : KLogging()
 
@@ -78,10 +81,10 @@ class XchangeUserExchangeServicesFactory(
             apiKey != null -> {
                 createTickerService(exchangeName, apiKey.publicKey, apiKey.secretKey, apiKey.userName, apiKey.exchangeSpecificKeyParameters)
             }
-             else -> {
-                 val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-                 XchangeUserExchangeTickerService(getXchange(supportedExchange, exchangeSpec).marketDataService)
-             }
+            else -> {
+                val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
+                XchangeUserExchangeTickerService(getXchange(supportedExchange, exchangeSpec).marketDataService)
+            }
         }
     }
 
@@ -111,12 +114,20 @@ class XchangeUserExchangeServicesFactory(
 
     override fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): TickerListenerRegistrar {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return DefaultTickerListenerRegistrar(supportedExchange, createTickerService(exchangeName, publicKey, secretKey, userName, exchangeSpecificKeyParameters))
+        return DefaultTickerListenerRegistrar(
+                exchangeName = supportedExchange,
+                userExchangeTickerService = createTickerService(exchangeName, publicKey, secretKey, userName, exchangeSpecificKeyParameters),
+                executorService = executorService
+        )
     }
 
     override fun createTickerListenerRegistrar(exchangeName: String): TickerListenerRegistrar {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return DefaultTickerListenerRegistrar(supportedExchange, createTickerService(exchangeName))
+        return DefaultTickerListenerRegistrar(
+                exchangeName = supportedExchange,
+                userExchangeTickerService = createTickerService(exchangeName),
+                executorService = executorService
+        )
     }
 
     private fun getXchange(exchangeName: SupportedExchange, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): Exchange {

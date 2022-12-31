@@ -4,6 +4,7 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import java.util.concurrent.ExecutorService
 
 
 interface OrderBookListenerRegistrars {
@@ -16,7 +17,9 @@ interface OrderBookListenerRegistrars {
 
 class DefaultOrderBookListenerRegistrars(
         initialTickerListenerRegistrarList: List<OrderBookListenerRegistrar>,
-        private val orderBookListenerRegistrarProvider: OrderBookListenerRegistrarProvider
+        private val orderBookListenerRegistrarProvider: OrderBookListenerRegistrarProvider,
+        /** preferably one thread per exchange - cached thread pool is a good fit */
+        private val executorService: ExecutorService
 ) : OrderBookListenerRegistrars {
 
     private val listenerRegistrarMap: MutableMap<SupportedExchange, OrderBookListenerRegistrar>
@@ -33,14 +36,9 @@ class DefaultOrderBookListenerRegistrars(
     }
 
     override fun fetchOrderBooksAndNotifyListeners() {
-        runBlocking {
-            val jobs = listenerRegistrarMap.values.map {
-                async(Dispatchers.IO) {
-                    it.fetchOrderBooksAndNotifyListeners()
-                }
-            }
-            jobs.forEach { it.join() }
-        }
+        listenerRegistrarMap.values.map {
+            executorService.submit { it.fetchOrderBooksAndNotifyListeners() }
+        }.forEach { it.get() }
     }
 
 

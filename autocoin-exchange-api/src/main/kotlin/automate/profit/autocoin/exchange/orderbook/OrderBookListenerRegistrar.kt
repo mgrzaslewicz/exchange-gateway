@@ -3,10 +3,8 @@ package automate.profit.autocoin.exchange.orderbook
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.order.UserExchangeOrderBookService
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
+import java.util.concurrent.ExecutorService
 
 interface OrderBookListenerRegistrar {
     fun registerOrderBookListener(orderBookListener: OrderBookListener): Boolean
@@ -17,8 +15,12 @@ interface OrderBookListenerRegistrar {
 }
 
 
-class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExchange, private val userExchangeOrderBookService
-: UserExchangeOrderBookService) : OrderBookListenerRegistrar {
+class DefaultOrderBookListenerRegistrar(
+        override val exchangeName: SupportedExchange,
+        private val userExchangeOrderBookService: UserExchangeOrderBookService,
+        /** preferably a few multiple threads, but not one per single currency pair as it might grow to thousands of threads. workStealingPool might be a good fit */
+        private val executorService: ExecutorService
+) : OrderBookListenerRegistrar {
 
     private val logger = KotlinLogging.logger("${DefaultOrderBookListenerRegistrar::class.java.name}.$exchangeName")
 
@@ -43,14 +45,11 @@ class DefaultOrderBookListenerRegistrar(override val exchangeName: SupportedExch
     }
 
     override fun fetchOrderBooksAndNotifyListeners() {
-        runBlocking {
-            val jobs = mutableListOf<Job>()
-            listeners.keys.forEach { currencyPair ->
-                jobs += launch { fetchOrderBookAndNotifyListeners(currencyPair) }
-            }
-            logger.info { "Waiting for all currencies at $exchangeName..." }
-            jobs.forEach { it.join() }
-        }
+        listeners.keys.map { currencyPair ->
+                    executorService.submit { fetchOrderBookAndNotifyListeners(currencyPair) }
+                }
+                .also { logger.info { "Waiting for all currencies at $exchangeName..." } }
+                .forEach { it.get() }
         logger.info { "All currencies done at $exchangeName." }
     }
 
