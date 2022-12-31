@@ -1,7 +1,5 @@
 package automate.profit.autocoin.exchange.metadata
 
-import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -16,14 +14,22 @@ class CurrencyPairMetadataApplierTest {
     companion object : KLogging()
 
     private val pairMetadataApplier = CurrencyPairMetadataApplier()
-    private val minimum = 0.0001.toBigDecimal()
-    private val maximum = 10000.toBigDecimal()
-    private val priceScale = 5
-    private val currencyPair = CurrencyPair("ETH", "BTC")
+    private val minimumAmount = 0.0001.toBigDecimal()
+    private val maximumAmount = 10000.toBigDecimal()
+    private val minimumOrderValue = 40.toBigDecimal()
+    private val amountScale = 5
+    private val priceScale = 4
+    private val maximumPriceMultiplierDown = 0.1.toBigDecimal()
+    private val maximumPriceMultiplierUp = BigDecimal.TEN
+
     private val currencyPairMetadata = CurrencyPairMetadata(
-            scale = priceScale,
-            minimumAmount = minimum,
-            maximumAmount = maximum
+            amountScale = amountScale,
+            priceScale = 4,
+            minimumAmount = minimumAmount,
+            maximumAmount = maximumAmount,
+            minimumOrderValue = minimumOrderValue,
+            maximumPriceMultiplierDown = maximumPriceMultiplierUp,
+            maximumPriceMultiplierUp = maximumPriceMultiplierDown
     )
 
     @Test
@@ -31,11 +37,10 @@ class CurrencyPairMetadataApplierTest {
         // given
         val originalAmount = BigDecimal("45.123456")
         val originalPrice = BigDecimal("1.0")
-        val exchange = SupportedExchange.BITTREX
         // when
-        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
+        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPairMetadata)
         // then
-        assertThat(amount.scale()).isEqualTo(priceScale)
+        assertThat(amount.scale()).isEqualTo(amountScale)
         assertThat(amount).isEqualTo(BigDecimal("45.12345"))
     }
 
@@ -44,85 +49,95 @@ class CurrencyPairMetadataApplierTest {
         // given
         val originalAmount = BigDecimal(45)
         val originalPrice = BigDecimal("1.0")
-        val exchange = SupportedExchange.BITTREX
         // when
-        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
+        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPairMetadata)
         // then
-        assertThat(amount.scale()).isEqualTo(priceScale)
+        assertThat(amount.scale()).isEqualTo(amountScale)
         assertThat(amount).isEqualTo(BigDecimal("45.00000"))
     }
 
     @Test
     fun shouldReturnZeroAmountWhenBelowMinimum() {
         // given
-        val originalAmount = BigDecimal("0.00009")
+        val originalAmount = minimumAmount - BigDecimal("0.00001")
         val originalPrice = BigDecimal("1.0")
-        val exchange = SupportedExchange.BITTREX
         // when
-        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
+        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPairMetadata)
         // then
-        assertThat(amount).isEqualTo(BigDecimal.ZERO.setScale(priceScale))
+        assertThat(amount).isEqualTo(BigDecimal.ZERO.setScale(amountScale))
     }
 
-    /**
-     * Based on https://support.binance.com/hc/en-us/articles/115000594711-Trading-Rule
-     */
     @Test
-    fun shouldReturnZeroAmountWhenBelowBtcMinNotionalOnBinance() {
+    fun shouldReturnZeroAmountWhenBelowMinOrderValue() {
         // given
         val originalAmount = BigDecimal("0.999")
-        val originalPrice = BigDecimal("0.001")
-        val exchange = SupportedExchange.BINANCE
+        val price = BigDecimal("0.001")
         // when
-        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
+        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, price, currencyPairMetadata.copy(minimumOrderValue = 0.005.toBigDecimal()))
         // then
-        assertThat(amount).isEqualTo(BigDecimal.ZERO.setScale(priceScale))
+        assertThat(amount).isEqualTo(BigDecimal.ZERO.setScale(amountScale))
     }
 
     @Test
     fun shouldReturnMaximumAmountWhenAboveMaximum() {
         // given
-        val originalAmount = maximum.plus(BigDecimal.ONE)
+        val originalAmount = maximumAmount.plus(BigDecimal.ONE)
         val originalPrice = BigDecimal("1.0")
-        val exchange = SupportedExchange.BITTREX
         // when
-        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
+        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPairMetadata)
         // then
-        assertThat(amount).isEqualTo(maximum.setScale(priceScale))
+        assertThat(amount).isEqualTo(maximumAmount.setScale(amountScale))
     }
 
     @Test
-    fun shouldReturnAmountWhenNoMaximumSet() {
+    fun shouldReturnAmountWhenBelowMaximum() {
         // given
-        val originalAmount = BigDecimal.valueOf(Long.MAX_VALUE)
+        val originalAmount = 1004.toBigDecimal()
         val originalPrice = BigDecimal("1.0")
         val currencyPairMetadata = CurrencyPairMetadata(
-                scale = priceScale,
-                minimumAmount = minimum,
-                maximumAmount = null
+                amountScale = amountScale,
+                priceScale = priceScale,
+                minimumAmount = minimumAmount,
+                maximumAmount = 5000.toBigDecimal(),
+                minimumOrderValue = minimumOrderValue,
+                maximumPriceMultiplierDown = maximumPriceMultiplierDown,
+                maximumPriceMultiplierUp = maximumPriceMultiplierUp
         )
-        val exchange = SupportedExchange.BITTREX
         // when
-        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
+        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPairMetadata)
         // then
-        assertThat(amount).isEqualTo(originalAmount.setScale(priceScale))
+        assertThat(amount).isEqualTo(originalAmount.setScale(amountScale))
     }
 
     @Test
-    fun shouldReturnAmountWhenNoMinimumSet() {
+    fun shouldReturnAmountWhenAboveMinimum() {
         // given
-        val originalAmount = BigDecimal("0.00000001")
+        val originalAmount = minimumAmount.multiply(2.toBigDecimal())
         val originalPrice = BigDecimal("1.0")
         val currencyPairMetadata = CurrencyPairMetadata(
-                scale = priceScale,
-                minimumAmount = null,
-                maximumAmount = maximum
+                amountScale = amountScale,
+                priceScale = priceScale,
+                minimumAmount = minimumAmount,
+                maximumAmount = maximumAmount,
+                minimumOrderValue = minimumAmount,
+                maximumPriceMultiplierDown = maximumPriceMultiplierDown,
+                maximumPriceMultiplierUp = maximumPriceMultiplierUp
         )
-        val exchange = SupportedExchange.BITTREX
         // when
-        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPair, currencyPairMetadata, exchange)
+        val amount = pairMetadataApplier.applyAmountScaleAndLimits(originalAmount, originalPrice, currencyPairMetadata)
         // then
-        assertThat(amount).isEqualTo(BigDecimal("0.00000"))
+        assertThat(amount).isEqualTo(originalAmount.setScale(amountScale))
+    }
+
+    @Test
+    fun shouldReturnPriceScaledAndRoundedDown() {
+        // given
+        val originalPrice = BigDecimal("1.0023456")
+        // when
+        val price = pairMetadataApplier.applyPriceScale(originalPrice, currencyPairMetadata)
+        // then
+        assertThat(price.scale()).isEqualTo(priceScale)
+        assertThat(price).isEqualTo(BigDecimal("1.0023"))
     }
 
 }

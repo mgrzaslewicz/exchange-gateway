@@ -62,7 +62,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
         logger.info { "Requesting cancel order $params" }
         val cancelOrderParams: CancelOrderParams = getCancelOrderParams(params)
         return try {
-            wrapped.cancelOrder(cancelOrderParams) && isOrderOnOpenOrdersList(params.currencyPair, params.orderId)
+            wrapped.cancelOrder(cancelOrderParams) && !isOrderStillOpen(params.currencyPair, params.orderId)
         } catch (e: Exception) {
             logger.error("Could not cancel order for $params. Exception: ${e.message}")
             false
@@ -91,14 +91,14 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
     override fun isOrderNotOpen(order: ExchangeOrder): Boolean {
         if (logger.isInfoEnabled) logger.info("Requesting open orders")
         return try {
-            !isOrderOnOpenOrdersList(order)
+            !isOrderStillOpen(order)
         } catch (e: Exception) {
             if (logger.isErrorEnabled) logger.error("Getting open orders failed: ${e.message}", e)
             false
         }
     }
 
-    private fun isOrderOnOpenOrdersList(order: ExchangeOrder): Boolean {
+    private fun isOrderStillOpen(order: ExchangeOrder): Boolean {
         val openOrders = wrapped.getOpenOrders(DefaultOpenOrdersParamCurrencyPair(order.currencyPair.toXchangeCurrencyPair()))
         logger.info { "$openOrders" }
         val orderIsOnOpenOrderList = openOrders.openOrders.any { order.orderId == it.id }
@@ -106,13 +106,13 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
         return orderIsOnOpenOrderList
     }
 
-    private fun isOrderOnOpenOrdersList(currencyPair: CurrencyPair, orderId: String): Boolean {
+    private fun isOrderStillOpen(currencyPair: CurrencyPair, orderId: String): Boolean {
         val openOrders = wrapped.getOpenOrders(DefaultOpenOrdersParamCurrencyPair(currencyPair.toXchangeCurrencyPair()))
         logger.info { "$openOrders" }
         val openOrderWithGivenId = openOrders.openOrders.find { orderId == it.id }
-        val orderCompleted = openOrderWithGivenId == null
-        logger.info { "Order $orderId completed: $orderCompleted" }
-        return orderCompleted
+        val isOrderStillOpen = openOrderWithGivenId != null
+        logger.info { "Order $orderId is still open: $isOrderStillOpen" }
+        return isOrderStillOpen
     }
 
     /**

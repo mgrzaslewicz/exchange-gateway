@@ -174,13 +174,13 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
 
     override fun createMetadataProvider(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeMetadataProvider {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(getXchange(supportedExchange, publicKey, secretKey, userName)))
+        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(supportedExchange, getXchange(supportedExchange, publicKey, secretKey, userName)))
     }
 
     override fun createMetadataProvider(exchangeName: String): UserExchangeMetadataProvider {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(getXchange(supportedExchange, exchangeSpec)))
+        return DefaultUserExchangeMetadataProvider(exchangeName, metadataFromExchange(supportedExchange, getXchange(supportedExchange, exchangeSpec)))
     }
 
     override fun createWalletService(exchangeName: String, publicKey: String, secretKey: String, userName: String?): UserExchangeWalletService {
@@ -230,10 +230,10 @@ class XchangeUserExchangeServicesFactory(private val xchangeFactory: XchangeFact
 
             // >> metadata implemented from static file only
             BITBAY, BITSTAMP -> {
-                // TODO manual fetch metadata file or provide pull request to Xchange, it has only static data in bitbay.json and no remoteInit() implemented. priceScale and scale vary so default metadata might not be ok
+                // TODO manual fetch metadata file or provide pull request to Xchange, it has only static data in bitbay.json and no remoteInit() implemented. priceScale and amountScale vary so default metadata might not be ok
             }
             POLONIEX -> {
-                // priceScale and scale is 8 everywhere so default metadata is fine
+                // priceScale and amountScale is 8 everywhere so default metadata is fine
                 exchangeSpec.isShouldLoadRemoteMetaData = false
             }
             // << metadata from static file only

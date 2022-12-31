@@ -14,7 +14,7 @@ class DefaultUserExchangeMetadataProvider(val exchangeName: String, override val
     override fun currencies() = exchangeMetadata.currencies()
     override fun getCurrencyPairMetadata(currencyPair: CurrencyPair): CurrencyPairMetadata {
         return if (exchangeMetadata.currencyPairMetadata.containsKey(currencyPair)) {
-            exchangeMetadata.currencyPairMetadata[currencyPair]!!
+            exchangeMetadata.currencyPairMetadata.getValue(currencyPair)
         } else throw IllegalArgumentException("Exchange $exchangeName has no $currencyPair in metadata")
     }
 }
