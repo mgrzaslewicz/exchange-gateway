@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>autocoin-exchange-api-rest</artifactId>
-    <version>1.0.10-SNAPSHOT</version>
+    <version>1.0.10</version>
     <packaging>jar</packaging>
 
     <name>autocoin-exchange-api-rest</name>
@@ -11,14 +11,14 @@
     <parent>
         <groupId>automate.profit</groupId>
         <artifactId>autocoin-exchange-engine</artifactId>
-        <version>1.0.10-SNAPSHOT</version>
+        <version>1.0.10</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>automate.profit</groupId>
             <artifactId>autocoin-exchange-api</artifactId>
-            <version>1.0.10-SNAPSHOT</version>
+            <version>1.0.10</version>
         </dependency>
         <!-- Kotlin -->
         <dependency>
