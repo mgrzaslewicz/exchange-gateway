@@ -7,8 +7,10 @@ class InvalidCurrencyPairException(currencyPair: CurrencyPair) : Exception(curre
 interface UserExchangeTickerService {
     @Throws(InvalidCurrencyPairException::class)
     fun getTicker(currencyPair: CurrencyPair): Ticker
+    fun getTickers(currencyPairs: Collection<CurrencyPair>): List<Ticker>
 }
 
 interface ExchangeTickerService {
     fun getTicker(exchangeName: String, currencyPair: CurrencyPair): Ticker
+    fun getTickers(exchangeName: String, currencyPairs: Collection<CurrencyPair>): List<Ticker>
 }

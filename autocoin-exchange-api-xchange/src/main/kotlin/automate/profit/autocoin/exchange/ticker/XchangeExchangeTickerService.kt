@@ -9,6 +9,11 @@ class XchangeExchangeTickerService(private val userExchangeServicesFactory: User
         val tickerService = userExchangeServicesFactory.createTickerService(exchangeName)
         return tickerService.getTicker(currencyPair)
     }
+
+    override fun getTickers(exchangeName: String, currencyPairs: Collection<CurrencyPair>): List<Ticker> {
+        val tickerService = userExchangeServicesFactory.createTickerService(exchangeName)
+        return tickerService.getTickers(currencyPairs)
+    }
 }
 
 class CachingXchangeExchangeTickerService(private val userExchangeServicesFactory: UserExchangeServicesFactory) : ExchangeTickerService {
@@ -18,5 +23,11 @@ class CachingXchangeExchangeTickerService(private val userExchangeServicesFactor
         return cache.computeIfAbsent(exchangeName.toLowerCase()) {
             userExchangeServicesFactory.createTickerService(exchangeName)
         }.getTicker(currencyPair)
+    }
+
+    override fun getTickers(exchangeName: String, currencyPairs: Collection<CurrencyPair>): List<Ticker> {
+        return cache.computeIfAbsent(exchangeName.toLowerCase()) {
+            userExchangeServicesFactory.createTickerService(exchangeName)
+        }.getTickers(currencyPairs)
     }
 }
