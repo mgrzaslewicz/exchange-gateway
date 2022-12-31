@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-        <xchange.version>4.3.18</xchange.version>
+        <xchange.version>4.3.19</xchange.version>
     </properties>
 
     <dependencies>
