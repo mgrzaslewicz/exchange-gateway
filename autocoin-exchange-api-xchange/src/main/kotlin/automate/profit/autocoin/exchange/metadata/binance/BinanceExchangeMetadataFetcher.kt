@@ -50,7 +50,7 @@ class BinanceExchangeMetadataFetcher(
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
         val exchangeSpec = XchangeExchangeSpecification(supportedExchange.toXchangeJavaClass())
         xchangeSpecificationApiKeyAssigner.assignKeys(SupportedExchange.BINANCE, exchangeSpec, apiKey)
-        preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
+        preventFromLoadingStaticXchangeMetadata(exchangeSpec)
         val exchange = exchangeFactory.createExchange(exchangeSpec)
         val binanceMetadata = binanceMetadataProvider(exchange)
 

@@ -2,6 +2,7 @@ package automate.profit.autocoin.exchange
 
 import automate.profit.autocoin.exchange.SupportedExchange.*
 import automate.profit.xchange.HitBtcExchangeFork
+import automate.profit.xchange.PoloniexExchangeFork
 import org.knowm.xchange.Exchange
 import org.knowm.xchange.bibox.BiboxExchange
 import org.knowm.xchange.binance.BinanceExchange
@@ -57,7 +58,7 @@ fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
         KUCOIN -> KucoinExchange::class.java
         LUNO -> LunoExchange::class.java
         LIVECOIN -> LivecoinExchange::class.java
-        POLONIEX -> PoloniexExchange::class.java
+        POLONIEX -> PoloniexExchangeFork::class.java
         TRADEOGRE -> TradeOgreExchange::class.java
         YOBIT -> YoBitExchange::class.java
         else -> throw IllegalArgumentException("Unknown exchange name: ${this.exchangeName}")
