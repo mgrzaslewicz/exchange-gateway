@@ -44,15 +44,15 @@ class DefaultTickerFetchScheduler(
     override fun fetchTickersThenNotifyListeners(exchange: SupportedExchange, currencyPairsWithListeners: Map<CurrencyPair, Set<TickerListener>>) {
         // TODO that's possibly subject to optimize and fetch all currency pairs with one exchange request where possible
         executorService.submit {
-            currencyPairsWithListeners.forEach { (currencyPair, orderBookListeners) ->
-                val orderBook = getTicker(exchange, currencyPair)
-                if (orderBook != null && isNew(orderBook, exchange, currencyPair)) {
-                    orderBookListeners.forEach {
-                        it.onTicker(exchange, currencyPair, orderBook)
+            currencyPairsWithListeners.forEach { (currencyPair, tickerListeners) ->
+                val ticker = getTicker(exchange, currencyPair)
+                if (ticker != null && isNew(ticker, exchange, currencyPair)) {
+                    tickerListeners.forEach {
+                        it.onTicker(exchange, currencyPair, ticker)
                     }
                 } else {
-                    orderBookListeners.forEach {
-                        it.onNoNewTicker(exchange, currencyPair, orderBook)
+                    tickerListeners.forEach {
+                        it.onNoNewTicker(exchange, currencyPair, ticker)
                     }
                 }
             }

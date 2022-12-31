@@ -7,7 +7,7 @@ import java.time.Instant
 
 data class TickerDto(
         val exchange: String,
-        val currencyPair: CurrencyPair,
+        val currencyPair: String,
         val ask: Double,
         val bid: Double,
         val baseCurrency24hVolume: Double,
@@ -15,7 +15,7 @@ data class TickerDto(
         val timestampMillis: Long?
 ) {
     fun toTicker() = Ticker(
-            currencyPair = currencyPair,
+            currencyPair = CurrencyPair.Companion.of(currencyPair),
             ask = ask.toBigDecimal(),
             bid = bid.toBigDecimal(),
             baseCurrency24hVolume = baseCurrency24hVolume.toBigDecimal(),
@@ -26,7 +26,7 @@ data class TickerDto(
 
 fun Ticker.toDto(exchange: SupportedExchange) = TickerDto(
         exchange = exchange.exchangeName,
-        currencyPair = currencyPair.toUpperCase(),
+        currencyPair = currencyPair.toString(),
         ask = ask.toDouble(),
         bid = bid.toDouble(),
         baseCurrency24hVolume = baseCurrency24hVolume.toDouble(),
