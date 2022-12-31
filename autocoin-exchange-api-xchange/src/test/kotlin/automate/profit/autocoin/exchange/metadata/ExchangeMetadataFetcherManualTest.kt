@@ -66,6 +66,12 @@ class ExchangeMetadataFetcherManualTest {
     }
 
     @Test
+    fun shouldFetchCexioBtcMetadata() {
+        val metadata = exchangeMetadataFetchers.getValue(CEXIO).fetchExchangeMetadata()
+        assertsFor(metadata)
+    }
+
+    @Test
     fun shouldFetchKrakenMetadata() {
         val fetcher = exchangeMetadataFetchers.getValue(KRAKEN)
         val metadata = fetcher.fetchExchangeMetadata()
