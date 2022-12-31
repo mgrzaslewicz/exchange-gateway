@@ -44,7 +44,6 @@ fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
         CEXIO -> CexIOExchange::class.java
         EXMO -> ExmoExchange::class.java
         COINBASEPRO -> CoinbaseProExchange::class.java
-        COINBENE -> CoinbeneExchange::class.java
         COINDEAL -> CoindealExchange::class.java
         COINEX -> CoinexExchange::class.java
         GATEIO -> GateioExchange::class.java
@@ -54,7 +53,6 @@ fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
         KRAKEN -> KrakenExchange::class.java
         KUCOIN -> KucoinExchange::class.java
         LUNO -> LunoExchange::class.java
-        LIVECOIN -> LivecoinExchange::class.java
         OKEX -> OkexExchange::class.java
         POLONIEX -> PoloniexExchangeFork::class.java
         TRADEOGRE -> TradeOgreExchange::class.java
