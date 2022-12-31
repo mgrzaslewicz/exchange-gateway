@@ -141,8 +141,8 @@ class DefaultExchangeMetadataFetcher(
         val currencies = exchange.exchangeMetaData.currencies?.map {
             it.key.currencyCode to CurrencyMetadata(
                 scale = getScaleOrDefault(it.key, it.value, metadataWarnings),
-                withdrawalFeeAmount = it.value.withdrawalFee,
-                minWithdrawalAmount = it.value.withdrawalFee
+                withdrawalFeeAmount = it.value?.withdrawalFee,
+                minWithdrawalAmount = it.value?.minWithdrawalAmount
             )
         }?.toMap() ?: emptyMap()
         if (currencies.isEmpty()) {
