@@ -6,13 +6,11 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArraySet
 import java.util.concurrent.ExecutorService
 
-interface TickerListenersVisitor {
-    fun fetchTickersThenNotifyListeners(exchange: SupportedExchange, currencyPairsWithListeners: Map<CurrencyPair, Set<TickerListener>>)
-}
-
 interface TickerRegistrationListener {
     fun onLastListenerDeregistered(exchange: SupportedExchange)
+    fun onListenerDeregistered(exchange: SupportedExchange, currencyPair: CurrencyPair)
     fun onFirstListenerRegistered(exchange: SupportedExchange)
+    fun onListenerRegistered(exchange: SupportedExchange, currencyPair: CurrencyPair)
 }
 
 interface TickerListeners {
@@ -20,7 +18,7 @@ interface TickerListeners {
     fun removeTickerListener(supportedExchange: SupportedExchange, currencyPair: CurrencyPair, listener: TickerListener): Boolean
     fun addTickerRegistrationListener(TickerRegistrationListener: TickerRegistrationListener)
     fun removeTickerRegistrationListener(TickerRegistrationListener: TickerRegistrationListener)
-    fun iterateOverEachExchangeAndAllCurrencyPairs(TickerListenersVisitor: TickerListenersVisitor)
+    fun getTickerListeners(supportedExchange: SupportedExchange): Map<CurrencyPair, Set<TickerListener>>
 }
 
 class DefaultTickerListeners(private val executorService: ExecutorService) : TickerListeners {
@@ -44,6 +42,9 @@ class DefaultTickerListeners(private val executorService: ExecutorService) : Tic
                 it.onFirstListenerRegistered(exchange)
             }
         }
+        tickerRegistrationListeners.forEach {
+            it.onListenerRegistered(exchange, currencyPair)
+        }
         return isListenerAdded
     }
 
@@ -66,6 +67,9 @@ class DefaultTickerListeners(private val executorService: ExecutorService) : Tic
                 }
             }
         }
+        tickerRegistrationListeners.forEach {
+            it.onListenerDeregistered(exchange, currencyPair)
+        }
         if (isLastListenerWithGivenExchangeRemoved) {
             tickerRegistrationListeners.forEach {
                 it.onLastListenerDeregistered(exchange)
@@ -82,12 +86,8 @@ class DefaultTickerListeners(private val executorService: ExecutorService) : Tic
         tickerRegistrationListeners.remove(TickerRegistrationListener)
     }
 
-    override fun iterateOverEachExchangeAndAllCurrencyPairs(tickerListenerVisitor: TickerListenersVisitor) {
-        listenersByExchangeAndCurrencyPair.forEach { (exchange, currencyPairsWithListeners) ->
-            executorService.submit {
-                tickerListenerVisitor.fetchTickersThenNotifyListeners(exchange, currencyPairsWithListeners)
-            }
-        }
+    override fun getTickerListeners(supportedExchange: SupportedExchange): Map<CurrencyPair, Set<TickerListener>> {
+        return listenersByExchangeAndCurrencyPair.getOrElse(supportedExchange, { mapOf() })
     }
 
 }
