@@ -2,6 +2,7 @@ package automate.profit.autocoin.exchange.peruser
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.*
+import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadataProvider
 import automate.profit.autocoin.exchange.order.UserExchangeOrderBookService
 import automate.profit.autocoin.exchange.order.XchangeUserExchangeOrderBookService
@@ -53,7 +54,8 @@ class XchangeFactory { // wrap in class to make it testable as original xchange 
 class XchangeUserExchangeServicesFactory(
         private val xchangeFactory: XchangeFactory,
         private val exchangeMetadataProvider: ExchangeMetadataProvider,
-        private val exchangeSpecificationVerifier: ExchangeSpecificationVerifier
+        private val exchangeSpecificationVerifier: ExchangeSpecificationVerifier,
+        private val serviceApiKeysProvider: ServiceApiKeysProvider
 ) : UserExchangeServicesFactory {
     private companion object : KLogging()
 
@@ -71,8 +73,16 @@ class XchangeUserExchangeServicesFactory(
 
     override fun createTickerService(exchangeName: String): UserExchangeTickerService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        return XchangeUserExchangeTickerService(getXchange(supportedExchange, exchangeSpec).marketDataService)
+        val apiKey = serviceApiKeysProvider.getApiKeys(supportedExchange)
+        return when {
+            apiKey != null -> {
+                createTickerService(exchangeName, apiKey.publicKey, apiKey.secretKey, apiKey.userName, apiKey.exchangeSpecificKeyParameters)
+            }
+             else -> {
+                 val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
+                 XchangeUserExchangeTickerService(getXchange(supportedExchange, exchangeSpec).marketDataService)
+             }
+        }
     }
 
     override fun createTickerService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTickerService {
@@ -82,8 +92,16 @@ class XchangeUserExchangeServicesFactory(
 
     override fun createOrderBookService(exchangeName: String): UserExchangeOrderBookService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        return XchangeUserExchangeOrderBookService(getXchange(supportedExchange, exchangeSpec).marketDataService, exchangeName)
+        val apiKey = serviceApiKeysProvider.getApiKeys(supportedExchange)
+        return when {
+            apiKey != null -> {
+                createOrderBookService(exchangeName, apiKey.publicKey, apiKey.secretKey, apiKey.userName, apiKey.exchangeSpecificKeyParameters)
+            }
+            else -> {
+                val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
+                return XchangeUserExchangeOrderBookService(getXchange(supportedExchange, exchangeSpec).marketDataService, exchangeName)
+            }
+        }
     }
 
     override fun createOrderBookService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeOrderBookService {

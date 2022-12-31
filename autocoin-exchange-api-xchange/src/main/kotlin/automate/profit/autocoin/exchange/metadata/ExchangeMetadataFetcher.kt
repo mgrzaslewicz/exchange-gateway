@@ -2,6 +2,7 @@ package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.*
+import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeClass
@@ -25,7 +26,7 @@ class XchangeMetadataJson(val json: String)
 
 interface ExchangeMetadataFetcher {
     val supportedExchange: SupportedExchange
-    fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata>
+    fun fetchExchangeMetadata(apiKey: ExchangeApiKey? = null): Pair<XchangeMetadataJson, ExchangeMetadata>
 }
 
 private val logger = KotlinLogging.logger {}
@@ -35,6 +36,13 @@ private val DEFAULT_SCALE = 8
 
 private fun numberOfDecimals(value: String): Int {
     return BigDecimal(value).stripTrailingZeros().scale()
+}
+
+private fun ExchangeSpecification.setApiKey(apiKey: ExchangeApiKey?) {
+    if (apiKey != null) {
+        this.apiKey = apiKey.publicKey
+        this.secretKey = apiKey.secretKey
+    }
 }
 
 private val emptyXchangeMetadataFile = """
@@ -68,7 +76,7 @@ private fun getScaleOrDefault(supportedExchange: SupportedExchange, currency: Cu
 /**
  * @see BaseExchange.applySpecification
  */
-private fun preventFromLoadingStaticJsonFile(es: ExchangeSpecification) {
+private fun preventFromLoadingDefaultXchangeMetadata(es: ExchangeSpecification) {
     es.metaDataJsonFileOverride = getEmptyXchangeMetadataFile().absolutePath
 }
 
@@ -77,9 +85,10 @@ class BittrexExchangeMetadataFetcher : ExchangeMetadataFetcher {
 
     override val supportedExchange = BITTREX
 
-    override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
+    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        preventFromLoadingStaticJsonFile(exchangeSpec)
+        exchangeSpec.setApiKey(apiKey)
+        preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
         val bittrexSymbols = (exchange.marketDataService as BittrexMarketDataServiceRaw).bittrexSymbols
         val currencyPairs = BittrexAdapters.adaptCurrencyPairs(bittrexSymbols)
@@ -135,9 +144,10 @@ class BinanceExchangeMetadataFetcher : ExchangeMetadataFetcher {
     private val logger = KotlinLogging.logger {}
 
 
-    override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
+    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        preventFromLoadingStaticJsonFile(exchangeSpec)
+        exchangeSpec.setApiKey(apiKey)
+        preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
         val xchangeMetadata = exchange.exchangeMetaData
 
@@ -231,9 +241,10 @@ class KucoinExchangeMetadataFetcher : ExchangeMetadataFetcher {
     private val logger = KotlinLogging.logger {}
     override val supportedExchange = KUCOIN
 
-    override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
+    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        preventFromLoadingStaticJsonFile(exchangeSpec)
+        exchangeSpec.setApiKey(apiKey)
+        preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
         val xchangeMetadata = exchange.exchangeMetaData
         val xchangeMetadataJson = xchangeMetadata.toJSONString()
@@ -280,12 +291,15 @@ class KucoinExchangeMetadataFetcher : ExchangeMetadataFetcher {
 }
 
 class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedExchange,
-                                     private val loadStaticXchangeJsonFile: Boolean = false,
-                                     private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap()) : ExchangeMetadataFetcher {
-    override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
+                                     private val preventFromLoadingDefaultXchangeMetadata: Boolean = true,
+                                     private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap()
+) : ExchangeMetadataFetcher {
+
+    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        if (!loadStaticXchangeJsonFile) {
-            preventFromLoadingStaticJsonFile(exchangeSpec)
+        exchangeSpec.setApiKey(apiKey)
+        if (preventFromLoadingDefaultXchangeMetadata) {
+            preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         }
         val exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
         val xchangeMetadata = exchange.exchangeMetaData
@@ -338,15 +352,16 @@ val overridenExchangeMetadataFetchers = listOf(
         BittrexExchangeMetadataFetcher(),
         BinanceExchangeMetadataFetcher(),
         KucoinExchangeMetadataFetcher(),
-        DefaultExchangeMetadataFetcher(BITBAY, loadStaticXchangeJsonFile = true),
-        DefaultExchangeMetadataFetcher(BITSTAMP, loadStaticXchangeJsonFile = true),
-        DefaultExchangeMetadataFetcher(COINDEAL, loadStaticXchangeJsonFile = true),
-        DefaultExchangeMetadataFetcher(GEMINI, loadStaticXchangeJsonFile = true),
+        DefaultExchangeMetadataFetcher(BITBAY, preventFromLoadingDefaultXchangeMetadata = false),
+        DefaultExchangeMetadataFetcher(BITSTAMP, preventFromLoadingDefaultXchangeMetadata = false),
+        DefaultExchangeMetadataFetcher(COINDEAL, preventFromLoadingDefaultXchangeMetadata = false),
+        DefaultExchangeMetadataFetcher(GEMINI, preventFromLoadingDefaultXchangeMetadata = false),
         DefaultExchangeMetadataFetcher(HITBTC, currencyPairRename = mapOf(
                 CurrencyPair.of("REP/USD") to CurrencyPair.of("REP/USDT"),
                 CurrencyPair.of("XRP/USD") to CurrencyPair.of("XRP/USDT")
         )),
-        DefaultExchangeMetadataFetcher(LUNO, loadStaticXchangeJsonFile = true)
+        DefaultExchangeMetadataFetcher(LUNO, preventFromLoadingDefaultXchangeMetadata = false),
+        DefaultExchangeMetadataFetcher(POLONIEX, preventFromLoadingDefaultXchangeMetadata = false)
 )
 
 val defaultExchangeMetadataFetchers = (SupportedExchange.values().toSet() - overridenExchangeMetadataFetchers.map { it.supportedExchange }.toSet())
