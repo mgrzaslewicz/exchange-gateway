@@ -3,7 +3,8 @@ package automate.profit.autocoin.exchange.orderbook
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.ExchangeWithCurrencyPairStringCache
 import automate.profit.autocoin.exchange.currency.CurrencyPair
-import mu.KLogging
+import mu.KLogger
+import mu.KotlinLogging
 import java.lang.ref.SoftReference
 import java.time.Duration
 import java.util.concurrent.*
@@ -13,15 +14,16 @@ interface SynchronousOrderBookFetchScheduler : OrderBookRegistrationListener {
 }
 
 class DefaultSynchronousOrderBookFetchScheduler(
-        private val allowedExchangeFetchFrequency: Map<SupportedExchange, Duration>,
-        private val exchangeOrderBookService: ExchangeOrderBookService,
-        private val orderBookListeners: OrderBookListeners,
-        /** preferably one thread per exchange - cached thread pool is a good fit */
-        private val scheduledExecutorService: ScheduledExecutorService,
-        /** preferably a few multiple threads, but not one per single currency pair as it might grow to thousands of threads. workStealingPool might be a good fit */
-        private val executorService: ExecutorService
+    private val allowedExchangeFetchFrequency: Map<SupportedExchange, Duration>,
+    private val exchangeOrderBookService: ExchangeOrderBookService,
+    private val orderBookListeners: OrderBookListeners,
+    /** preferably one thread per exchange - cached thread pool is a good fit */
+    private val scheduledExecutorService: ScheduledExecutorService,
+    /** preferably a few multiple threads, but not one per single currency pair as it might grow to thousands of threads. workStealingPool might be a good fit */
+    private val executorService: ExecutorService,
+    private val logger: KLogger = KotlinLogging.logger {},
+    private val getOrderBookFrequentErrorLogFunction: (messageFunction: () -> String) -> Unit = { messageFunction -> logger.error(messageFunction) },
 ) : SynchronousOrderBookFetchScheduler {
-    companion object : KLogging()
 
     private val lastOrderBooks = ConcurrentHashMap<String, SoftReference<OrderBook>>()
     private val scheduledFetchers = ConcurrentHashMap<SupportedExchange, ScheduledFuture<*>>()
@@ -75,7 +77,7 @@ class DefaultSynchronousOrderBookFetchScheduler(
         return try {
             exchangeOrderBookService.getOrderBook(exchange.exchangeName, currencyPair)
         } catch (e: Exception) {
-            logger.error { "[$exchange-$currencyPair] Error getting order book: ${e.message} (${e.stackTrace[0]})" }
+            getOrderBookFrequentErrorLogFunction { "[$exchange-$currencyPair] Error getting order book: ${e.message} (${e.stackTrace[0]})" }
             null
         }
     }
