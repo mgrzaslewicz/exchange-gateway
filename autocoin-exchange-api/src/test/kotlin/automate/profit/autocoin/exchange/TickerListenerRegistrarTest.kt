@@ -12,9 +12,9 @@ import java.time.Instant
 
 class TickerListenerRegistrarTest {
 
-    private val tickerService = mock<ExchangeTickerService>()
+    private val userExchangeTickerService = mock<UserExchangeTickerService>()
 
-    private val tickerListenerRegistrar: TickerListenerRegistrar = DefaultTickerListenerRegistrar(BITTREX, tickerService)
+    private val tickerListenerRegistrar: TickerListenerRegistrar = DefaultTickerListenerRegistrar(BITTREX, userExchangeTickerService)
 
     private val tickerListener: TickerListener = mock()
     private val tickerListener2: TickerListener = mock()
@@ -196,28 +196,28 @@ class TickerListenerRegistrarTest {
     }
 
     private fun newTickersEveryTime(currencyPair: CurrencyPair = bchBtcCurrencyPair) {
-        whenever(tickerService.getTicker(BITTREX, currencyPair)).thenAnswer { createTicker(currencyPair) }
+        whenever(userExchangeTickerService.getTicker(currencyPair)).thenAnswer { createTicker(currencyPair) }
     }
 
     private fun sameBchTickerEveryTime() {
-        whenever(tickerService.getTicker(BITTREX, bchBtcCurrencyPair)).thenReturn(bchBtcTicker)
+        whenever(userExchangeTickerService.getTicker(bchBtcCurrencyPair)).thenReturn(bchBtcTicker)
     }
 
     private fun sameBchTickerEveryTwiceButSecond10msecLater() {
-        whenever(tickerService.getTicker(BITTREX, bchBtcCurrencyPair)).thenReturn(bchBtcTicker, createTicker(bchBtcCurrencyPair, Instant.EPOCH.plusMillis(10)))
+        whenever(userExchangeTickerService.getTicker(bchBtcCurrencyPair)).thenReturn(bchBtcTicker, createTicker(bchBtcCurrencyPair, Instant.EPOCH.plusMillis(10)))
     }
 
     private fun twoNewBchTickersNoTimestamp() {
-        whenever(tickerService.getTicker(BITTREX, bchBtcCurrencyPair)).thenReturn(bchBtcTickerNoTimestamp, bchBtcTicker2NoTimestamp)
+        whenever(userExchangeTickerService.getTicker(bchBtcCurrencyPair)).thenReturn(bchBtcTickerNoTimestamp, bchBtcTicker2NoTimestamp)
     }
 
     private fun bchThenEthTickerNoTimestamp() {
-        whenever(tickerService.getTicker(BITTREX, bchBtcCurrencyPair)).thenReturn(bchBtcTickerNoTimestamp)
-        whenever(tickerService.getTicker(BITTREX, ethBtcCurrencyPair)).thenReturn(ethBtcTickerNoTimestamp)
+        whenever(userExchangeTickerService.getTicker(bchBtcCurrencyPair)).thenReturn(bchBtcTickerNoTimestamp)
+        whenever(userExchangeTickerService.getTicker(ethBtcCurrencyPair)).thenReturn(ethBtcTickerNoTimestamp)
     }
 
     private fun sameBchTickerEveryTimeNoTimestamp() {
-        whenever(tickerService.getTicker(BITTREX, bchBtcCurrencyPair)).thenReturn(bchBtcTickerNoTimestamp)
+        whenever(userExchangeTickerService.getTicker(bchBtcCurrencyPair)).thenReturn(bchBtcTickerNoTimestamp)
     }
 
     private companion object ValueGenerator {
