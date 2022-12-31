@@ -8,7 +8,14 @@ import java.util.function.Supplier
 
 interface TickerService {
     val exchangeName: ExchangeName
-    fun getTicker(apiKey: Supplier<ApiKey>?, currencyPair: CurrencyPair): Ticker
-    fun getTickers(apiKey: Supplier<ApiKey>?, currencyPairs: Collection<CurrencyPair>): List<Ticker>
+    fun getTicker(
+        apiKey: Supplier<ApiKey>?,
+        currencyPair: CurrencyPair,
+    ): Ticker
+
+    fun getTickers(
+        apiKey: Supplier<ApiKey>?,
+        currencyPairs: Collection<CurrencyPair>,
+    ): List<Ticker>
 }
 

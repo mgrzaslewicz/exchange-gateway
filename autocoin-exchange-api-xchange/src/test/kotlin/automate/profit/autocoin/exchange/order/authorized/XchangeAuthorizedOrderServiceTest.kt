@@ -1,6 +1,7 @@
 package automate.profit.autocoin.exchange.order.authorized
 
 import automate.profit.autocoin.api.exchange.ApiKey
+import automate.profit.autocoin.api.exchange.ApiKeySupplier
 import automate.profit.autocoin.api.exchange.currency.CurrencyPair
 import automate.profit.autocoin.api.exchange.order.Order
 import automate.profit.autocoin.exchange.currency.defaultCurrencyPairToXchange
@@ -86,9 +87,12 @@ class XchangeAuthorizedOrderServiceTest {
 
     @BeforeEach
     fun setUp() {
-        tested = XchangeAuthorizedOrderServiceFactory(
+        tested = XchangeAuthorizedOrderServiceFactory<String>(
             xchangeProvider = object : XchangeProvider {
-                override operator fun invoke(exchangeName: ExchangeName, apiKey: Supplier<SpiApiKey>?): Exchange {
+                override operator fun invoke(
+                    exchangeName: ExchangeName,
+                    apiKey: Supplier<SpiApiKey>?,
+                ): Exchange {
                     return mock<Exchange>().apply { whenever(tradeService).thenReturn(wrappedTradeService) }
                 }
 
@@ -96,12 +100,15 @@ class XchangeAuthorizedOrderServiceTest {
             clock = Clock.systemDefaultZone(),
         ).createAuthorizedOrderService(
             kucoin,
-            apiKey = {
-                ApiKey(
-                    publicKey = "public-key",
-                    secretKey = "secret-key",
-                )
-            },
+            apiKey = ApiKeySupplier(
+                id = "1-2-3",
+                supplier = {
+                    ApiKey(
+                        publicKey = "public-key",
+                        secretKey = "secret-key",
+                    )
+                },
+            ),
         )
     }
 

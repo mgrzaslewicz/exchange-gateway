@@ -1,38 +1,44 @@
 package automate.profit.autocoin.spi.exchange.order.gateway
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.order.CancelOrderParams
 import automate.profit.autocoin.spi.exchange.order.Order
 import automate.profit.autocoin.spi.exchange.order.service.OrderService
 import java.math.BigDecimal
 import java.util.*
-import java.util.function.Supplier
 
-class DelegateOrderServiceGateway(
-    private val orderServiceByExchange: Map<ExchangeName, OrderService>,
-) : OrderServiceGateway {
-    class Builder {
-        private val orderServiceByExchange = mutableMapOf<ExchangeName, OrderService>()
+class DelegateOrderServiceGateway<T>(
+    private val orderServiceByExchange: Map<ExchangeName, OrderService<T>>,
+) : OrderServiceGateway<T> {
+    class Builder<T> {
+        private val orderServiceByExchange = mutableMapOf<ExchangeName, OrderService<T>>()
 
-        fun withOrderService(orderService: OrderService): Builder {
+        fun withOrderService(orderService: OrderService<T>): Builder<T> {
             orderServiceByExchange[orderService.exchangeName] = orderService
             return this
         }
 
-        fun build(): DelegateOrderServiceGateway {
+        fun build(): DelegateOrderServiceGateway<T> {
             return DelegateOrderServiceGateway(Collections.unmodifiableMap(orderServiceByExchange))
         }
     }
 
-    override fun cancelOrder(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>, cancelOrderParams: CancelOrderParams): Boolean {
-        return orderServiceByExchange.getValue(exchangeName).cancelOrder(apiKey, cancelOrderParams)
+    override fun cancelOrder(
+        exchangeName: ExchangeName,
+        apiKey: ApiKeySupplier<T>,
+        cancelOrderParams: CancelOrderParams,
+    ): Boolean {
+        return orderServiceByExchange.getValue(exchangeName).cancelOrder(
+            apiKey,
+            cancelOrderParams,
+        )
     }
 
     override fun placeMarketBuyOrderWithCounterCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -48,7 +54,7 @@ class DelegateOrderServiceGateway(
 
     override fun placeMarketBuyOrderWithBaseCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -64,7 +70,7 @@ class DelegateOrderServiceGateway(
 
     override fun placeMarketSellOrderWithCounterCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -80,7 +86,7 @@ class DelegateOrderServiceGateway(
 
     override fun placeMarketSellOrderWithBaseCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -96,7 +102,7 @@ class DelegateOrderServiceGateway(
 
     override fun placeLimitBuyOrder(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         buyPrice: BigDecimal,
         amount: BigDecimal,
@@ -112,7 +118,7 @@ class DelegateOrderServiceGateway(
 
     override fun placeLimitSellOrder(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         sellPrice: BigDecimal,
         amount: BigDecimal,
@@ -128,7 +134,7 @@ class DelegateOrderServiceGateway(
 
     override fun getOpenOrders(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
     ): List<Order> {
         return orderServiceByExchange.getValue(exchangeName)
             .getOpenOrders(
@@ -138,7 +144,7 @@ class DelegateOrderServiceGateway(
 
     override fun getOpenOrders(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): List<Order> {
         return orderServiceByExchange.getValue(exchangeName)

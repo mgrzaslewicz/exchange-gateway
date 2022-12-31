@@ -11,14 +11,22 @@ class DelegateTickerServiceGateway(
     private val tickerServiceGateways: Map<ExchangeName, TickerService>,
 ) : TickerServiceGateway {
 
-    override fun getTicker(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?, currencyPair: CurrencyPair): Ticker {
+    override fun getTicker(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>?,
+        currencyPair: CurrencyPair,
+    ): Ticker {
         return tickerServiceGateways.getValue(exchangeName).getTicker(
             apiKey = apiKey,
             currencyPair = currencyPair,
         )
     }
 
-    override fun getTickers(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?, currencyPairs: Collection<CurrencyPair>): List<Ticker> {
+    override fun getTickers(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>?,
+        currencyPairs: Collection<CurrencyPair>,
+    ): List<Ticker> {
         return tickerServiceGateways.getValue(exchangeName).getTickers(
             apiKey = apiKey,
             currencyPairs = currencyPairs,

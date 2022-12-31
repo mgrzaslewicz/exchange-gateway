@@ -9,8 +9,17 @@ import java.util.function.Supplier
 class InvalidCurrencyPairException(currencyPair: CurrencyPair) : Exception(currencyPair.toString())
 
 interface TickerServiceGateway {
-    fun getTicker(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?, currencyPair: CurrencyPair): Ticker
-    fun getTickers(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?, currencyPairs: Collection<CurrencyPair>): List<Ticker>
+    fun getTicker(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>?,
+        currencyPair: CurrencyPair,
+    ): Ticker
+
+    fun getTickers(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>?,
+        currencyPairs: Collection<CurrencyPair>,
+    ): List<Ticker>
 }
 
 

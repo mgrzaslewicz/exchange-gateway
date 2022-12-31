@@ -1,14 +1,13 @@
 package automate.profit.autocoin.spi.exchange.order.service.authorized
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
-import java.util.function.Supplier
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 
-interface AuthorizedOrderServiceFactory {
+interface AuthorizedOrderServiceFactory<T> {
 
     fun createAuthorizedOrderService(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
     ): AuthorizedOrderService
 
 }

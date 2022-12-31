@@ -11,12 +11,12 @@ interface ExchangeRateLimiterGateway {
     fun acquirePermit(
         exchangeName: ExchangeName,
         rateLimitedEndpoint: RateLimitedEndpoint,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: Supplier<ApiKey?>,
     )
     fun tryAcquirePermit(
         exchangeName: ExchangeName,
         rateLimitedEndpoint: RateLimitedEndpoint,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: Supplier<ApiKey?>,
     ): Boolean
 }
 

@@ -2,6 +2,7 @@ package automate.profit.autocoin.api.exchange.order
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
 import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.order.CancelOrderParams
 import automate.profit.autocoin.spi.exchange.order.OrderSide
@@ -13,18 +14,30 @@ import java.util.function.Supplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair as SpiCurrencyPair
 import automate.profit.autocoin.spi.exchange.order.Order as SpiOrder
 
-class DemoOrderServiceGateway(private val clock: Clock) : OrderServiceGateway {
+class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway<T> {
 
-    override fun cancelOrder(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>, cancelOrderParams: CancelOrderParams): Boolean {
+    override fun cancelOrder(
+        exchangeName: ExchangeName,
+        apiKey: ApiKeySupplier<T>,
+        cancelOrderParams: CancelOrderParams,
+    ): Boolean {
         return true
     }
 
-    override fun getOpenOrders(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>): List<SpiOrder> = emptyList()
-    override fun getOpenOrders(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>, currencyPair: CurrencyPair): List<SpiOrder> = emptyList()
+    override fun getOpenOrders(
+        exchangeName: ExchangeName,
+        apiKey: ApiKeySupplier<T>,
+    ): List<SpiOrder> = emptyList()
+
+    override fun getOpenOrders(
+        exchangeName: ExchangeName,
+        apiKey: ApiKeySupplier<T>,
+        currencyPair: CurrencyPair,
+    ): List<SpiOrder> = emptyList()
 
     override fun placeLimitSellOrder(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: SpiCurrencyPair,
         sellPrice: BigDecimal,
         amount: BigDecimal,
@@ -46,7 +59,7 @@ class DemoOrderServiceGateway(private val clock: Clock) : OrderServiceGateway {
 
     override fun placeLimitBuyOrder(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: SpiCurrencyPair,
         buyPrice: BigDecimal,
         amount: BigDecimal,
@@ -68,7 +81,7 @@ class DemoOrderServiceGateway(private val clock: Clock) : OrderServiceGateway {
 
     override fun placeMarketBuyOrderWithCounterCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -90,7 +103,7 @@ class DemoOrderServiceGateway(private val clock: Clock) : OrderServiceGateway {
 
     override fun placeMarketBuyOrderWithBaseCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -112,7 +125,7 @@ class DemoOrderServiceGateway(private val clock: Clock) : OrderServiceGateway {
 
     override fun placeMarketSellOrderWithCounterCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -134,7 +147,7 @@ class DemoOrderServiceGateway(private val clock: Clock) : OrderServiceGateway {
 
     override fun placeMarketSellOrderWithBaseCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -153,6 +166,5 @@ class DemoOrderServiceGateway(private val clock: Clock) : OrderServiceGateway {
             side = OrderSide.ASK_SELL,
         )
     }
-
 
 }

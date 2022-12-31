@@ -22,7 +22,7 @@ class XchangeAuthorizedWalletService(
             currencyCode = currencyCode,
             amountAvailable = balance?.available ?: BigDecimal.ZERO,
             amountInOrders = balance?.frozen ?: BigDecimal.ZERO,
-            totalAmount = balance?.total ?: BigDecimal.ZERO
+            totalAmount = balance?.total ?: BigDecimal.ZERO,
         )
     }
 
@@ -35,8 +35,8 @@ class XchangeAuthorizedWalletService(
                     currencyCode = currency.currencyCode,
                     amountAvailable = balance.available,
                     amountInOrders = balance.frozen,
-                    totalAmount = balance.total
-                )
+                    totalAmount = balance.total,
+                ),
             )
         }
         return balances

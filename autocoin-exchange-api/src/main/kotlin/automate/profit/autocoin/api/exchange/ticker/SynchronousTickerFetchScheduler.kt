@@ -40,20 +40,29 @@ class DefaultSynchronousTickerFetchScheduler(
         }
     }
 
-    override fun onListenerDeregistered(exchangeName: ExchangeName, currencyPair: CurrencyPair) {
+    override fun onListenerDeregistered(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ) {
     }
 
     override fun onFirstListenerRegistered(exchangeName: ExchangeName) {
         if (!scheduledFetchers.containsKey(exchangeName)) {
             val exchangeFrequency = allowedExchangeFetchFrequency.getValue(exchangeName)
-            val scheduledFetcher = executorService.getValue(exchangeName).scheduleAtFixedRate({
-                fetchTickersThenNotifyListeners(exchangeName)
-            }, 0, exchangeFrequency.toMillis(), TimeUnit.MILLISECONDS)
+            val scheduledFetcher = executorService.getValue(exchangeName).scheduleAtFixedRate(
+                {
+                    fetchTickersThenNotifyListeners(exchangeName)
+                },
+                0, exchangeFrequency.toMillis(), TimeUnit.MILLISECONDS,
+            )
             scheduledFetchers[exchangeName] = scheduledFetcher
         }
     }
 
-    override fun onListenerRegistered(exchangeName: ExchangeName, currencyPair: CurrencyPair) {
+    override fun onListenerRegistered(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ) {
     }
 
     override fun fetchTickersThenNotifyListeners(exchangeName: ExchangeName) {
@@ -65,7 +74,8 @@ class DefaultSynchronousTickerFetchScheduler(
                     tickerListeners.forEach {
                         it.onTicker(exchangeName, currencyPair, ticker)
                     }
-                } else {
+                }
+                else {
                     tickerListeners.forEach {
                         it.onNoNewTicker(exchangeName, currencyPair, ticker)
                     }
@@ -74,7 +84,10 @@ class DefaultSynchronousTickerFetchScheduler(
         }
     }
 
-    private fun getTicker(exchangeName: ExchangeName, currencyPair: CurrencyPair): SpiTicker? {
+    private fun getTicker(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ): SpiTicker? {
         return try {
             tickerService.getTicker(
                 exchangeName = exchangeName,
@@ -87,7 +100,11 @@ class DefaultSynchronousTickerFetchScheduler(
         }
     }
 
-    private fun isNew(possiblyNewTicker: SpiTicker, exchangeName: ExchangeName, currencyPair: CurrencyPair): Boolean {
+    private fun isNew(
+        possiblyNewTicker: SpiTicker,
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ): Boolean {
         val key = ExchangeWithCurrencyPairStringCache.get(exchangeName.value + currencyPair)
         val isNew = when (val lastTicker = lastTickers[key]?.get()) {
             null -> true

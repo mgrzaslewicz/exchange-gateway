@@ -8,7 +8,7 @@ interface OrderBookServiceFactory {
 
     fun createOrderBookService(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: Supplier<ApiKey?>,
     ): OrderBookService
 
 }

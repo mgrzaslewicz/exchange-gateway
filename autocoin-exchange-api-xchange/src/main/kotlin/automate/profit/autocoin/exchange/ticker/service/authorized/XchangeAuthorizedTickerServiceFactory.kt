@@ -1,11 +1,11 @@
 package automate.profit.autocoin.exchange.ticker.service.authorized
 
 import automate.profit.autocoin.api.exchange.ticker.Ticker
-import automate.profit.autocoin.exchange.xchange.XchangeProvider
 import automate.profit.autocoin.exchange.currency.defaultCurrencyPairToXchange
 import automate.profit.autocoin.exchange.currency.defaultXchangeCurrencyPairTransformer
 import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformer
 import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformerWithCurrencyPair
+import automate.profit.autocoin.exchange.xchange.XchangeProvider
 import automate.profit.autocoin.spi.exchange.ExchangeName
 import automate.profit.autocoin.spi.exchange.apikey.ApiKey
 import automate.profit.autocoin.spi.exchange.ticker.service.authorized.AuthorizedTickerService
@@ -79,7 +79,10 @@ class XchangeAuthorizedTickerServiceFactory(
             }
     }
 
-    override fun createAuthorizedTickerService(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?): AuthorizedTickerService {
+    override fun createAuthorizedTickerService(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>?,
+    ): AuthorizedTickerService {
         val xchange = xchangeProvider(exchangeName = exchangeName, apiKey = apiKey)
         return XchangeAuthorizedTickerService(
             exchangeName = exchangeName,

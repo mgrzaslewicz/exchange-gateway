@@ -2,6 +2,7 @@ package automate.profit.autocoin.spi.exchange.order.gateway
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
 import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.order.CancelOrderParams
 import automate.profit.autocoin.spi.exchange.order.Order
@@ -9,13 +10,17 @@ import java.math.BigDecimal
 import java.util.function.Supplier
 
 
-interface OrderServiceGateway {
+interface OrderServiceGateway<T> {
 
-    fun cancelOrder(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>, cancelOrderParams: CancelOrderParams): Boolean
+    fun cancelOrder(
+        exchangeName: ExchangeName,
+        apiKey: ApiKeySupplier<T>,
+        cancelOrderParams: CancelOrderParams,
+    ): Boolean
 
     fun placeMarketBuyOrderWithCounterCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -23,7 +28,7 @@ interface OrderServiceGateway {
 
     fun placeMarketBuyOrderWithBaseCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -31,7 +36,7 @@ interface OrderServiceGateway {
 
     fun placeMarketSellOrderWithCounterCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -39,7 +44,7 @@ interface OrderServiceGateway {
 
     fun placeMarketSellOrderWithBaseCurrencyAmount(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
@@ -47,7 +52,7 @@ interface OrderServiceGateway {
 
     fun placeLimitBuyOrder(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         buyPrice: BigDecimal,
         amount: BigDecimal,
@@ -55,7 +60,7 @@ interface OrderServiceGateway {
 
     fun placeLimitSellOrder(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         sellPrice: BigDecimal,
         amount: BigDecimal,
@@ -63,12 +68,12 @@ interface OrderServiceGateway {
 
     fun getOpenOrders(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
     ): List<Order>
 
     fun getOpenOrders(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>,
+        apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): List<Order>
 

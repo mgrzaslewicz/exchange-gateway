@@ -5,5 +5,5 @@ import automate.profit.autocoin.spi.exchange.apikey.ApiKey
 import java.util.function.Supplier
 
 interface AuthorizedOrderBookServiceFactory {
-    fun createAuthorizedOrderBookService(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?): AuthorizedOrderBookService
+    fun createAuthorizedOrderBookService(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>): AuthorizedOrderBookService
 }

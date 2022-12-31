@@ -10,11 +10,11 @@ class DelegateMetadataServiceGateway(
     private val metadataServiceGateways: Map<ExchangeName, MetadataService>,
 ) : MetadataServiceGateway {
 
-    override fun refreshMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?) {
+    override fun refreshMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>) {
         metadataServiceGateways.getValue(exchangeName).refreshMetadata()
     }
 
-    override fun getMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?): ExchangeMetadata {
+    override fun getMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>): ExchangeMetadata {
         return metadataServiceGateways.getValue(exchangeName).getMetadata()
     }
 

@@ -6,10 +6,9 @@ import automate.profit.autocoin.exchange.order.defaultXchangeLimitOrderToOrderTr
 import automate.profit.autocoin.exchange.xchange.ExchangeNames.Companion.binance
 import automate.profit.autocoin.exchange.xchange.XchangeProvider
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
+import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.order.CancelOrderParams
-import automate.profit.autocoin.spi.exchange.order.service.authorized.AuthorizedOrderService
 import automate.profit.autocoin.spi.exchange.order.service.authorized.AuthorizedOrderServiceFactory
 import org.knowm.xchange.binance.service.BinanceCancelOrderParams
 import org.knowm.xchange.service.trade.params.DefaultCancelOrderParamId
@@ -17,12 +16,11 @@ import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurre
 import org.knowm.xchange.service.trade.params.orders.OpenOrdersParamCurrencyPair
 import java.time.Clock
 import java.util.function.Function
-import java.util.function.Supplier
 import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 import org.knowm.xchange.service.trade.params.CancelOrderParams as XchangeCancelOrderParams
 
 
-class XchangeAuthorizedOrderServiceFactory(
+class XchangeAuthorizedOrderServiceFactory<T>(
     private val xchangeProvider: XchangeProvider,
     private val clock: Clock,
     private val currencyPairToXchange: Function<CurrencyPair, XchangeCurrencyPair> = defaultCurrencyPairToXchange,
@@ -31,7 +29,7 @@ class XchangeAuthorizedOrderServiceFactory(
         currencyPairToXchange,
     ),
     private val xchangeLimitOrderToOrderTransformer: XchangeLimitOrderToOrderTransformer = defaultXchangeLimitOrderToOrderTransformer,
-) : AuthorizedOrderServiceFactory {
+) : AuthorizedOrderServiceFactory<T> {
     companion object {
         fun defaultCancelOrderParamsToXchangeParams(currencyPairToXchange: Function<CurrencyPair, XchangeCurrencyPair>): Function<CancelOrderParams, XchangeCancelOrderParams> =
             Function { params ->
@@ -48,8 +46,14 @@ class XchangeAuthorizedOrderServiceFactory(
 
     }
 
-    override fun createAuthorizedOrderService(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>): XchangeAuthorizedOrderService {
-        val xchange = xchangeProvider(exchangeName = exchangeName, apiKey = apiKey)
+    override fun createAuthorizedOrderService(
+        exchangeName: ExchangeName,
+        apiKey: ApiKeySupplier<T>,
+    ): XchangeAuthorizedOrderService {
+        val xchange = xchangeProvider(
+            exchangeName = exchangeName,
+            apiKey = apiKey.supplier,
+        )
 
         return XchangeAuthorizedOrderService(
             exchangeName = exchangeName,

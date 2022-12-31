@@ -11,7 +11,10 @@ class XchangeAuthorizedWalletServiceFactory(
     private val xchangeProvider: XchangeProvider,
     private val expectedTradingWalletNameWhenMultipleExist: String = "trade",
 ) : AuthorizedWalletServiceFactory {
-    override fun createAuthorizedWalletService(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>): AuthorizedWalletService {
+    override fun createAuthorizedWalletService(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>,
+    ): AuthorizedWalletService {
         val xchange = xchangeProvider(exchangeName = exchangeName, apiKey = apiKey)
         return XchangeAuthorizedWalletService(
             exchangeName = exchangeName,

@@ -7,7 +7,7 @@ import java.util.function.Supplier
 interface TickerServiceFactory {
     fun createTickerService(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: Supplier<ApiKey?>,
     ): TickerService
 
 }
