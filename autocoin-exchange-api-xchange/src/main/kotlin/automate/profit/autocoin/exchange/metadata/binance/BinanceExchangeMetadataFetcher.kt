@@ -103,13 +103,13 @@ class BinanceExchangeMetadataFetcher(
                     )
                     currenciesMap[pair.base.currencyCode] = CurrencyMetadata(
                         scale = basePrecision,
-                        withdrawalFee = binanceMetadata.currencies[pair.base]?.withdrawalFee,
-                        minWithdrawalAmount = binanceMetadata.currencies[pair.base]?.withdrawalFee
+                        withdrawalFeeAmount = binanceMetadata.currencies[pair.base]?.withdrawalFee,
+                        minWithdrawalAmount = binanceMetadata.currencies[pair.base]?.minWithdrawalAmount
                     )
                     currenciesMap[pair.counter.currencyCode] = CurrencyMetadata(
                         scale = counterPrecision,
-                        withdrawalFee = binanceMetadata.currencies[pair.counter]?.withdrawalFee,
-                        minWithdrawalAmount = binanceMetadata.currencies[pair.counter]?.withdrawalFee
+                        withdrawalFeeAmount = binanceMetadata.currencies[pair.counter]?.withdrawalFee,
+                        minWithdrawalAmount = binanceMetadata.currencies[pair.counter]?.minWithdrawalAmount
                     )
                 }
             }

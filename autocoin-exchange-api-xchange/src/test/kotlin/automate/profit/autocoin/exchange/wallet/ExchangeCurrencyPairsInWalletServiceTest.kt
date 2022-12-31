@@ -62,22 +62,22 @@ class ExchangeCurrencyPairsInWalletServiceTest {
             "ETH" to CurrencyMetadata(
                 scale = numberDoesNotMatter.scale(),
                 minWithdrawalAmount = "0.05".toBigDecimal(),
-                withdrawalFee = "0.0001".toBigDecimal()
+                withdrawalFeeAmount = "0.0001".toBigDecimal()
             ),
             "BTC" to CurrencyMetadata(
                 scale = numberDoesNotMatter.scale(),
                 minWithdrawalAmount = "0.06".toBigDecimal(),
-                withdrawalFee = "0.0002".toBigDecimal()
+                withdrawalFeeAmount = "0.0002".toBigDecimal()
             ),
             "THETA" to CurrencyMetadata(
                 scale = numberDoesNotMatter.scale(),
                 minWithdrawalAmount = "0.07".toBigDecimal(),
-                withdrawalFee = "0.0003".toBigDecimal()
+                withdrawalFeeAmount = "0.0003".toBigDecimal()
             ),
             "XRP" to CurrencyMetadata(
                 scale = numberDoesNotMatter.scale(),
                 minWithdrawalAmount = "0.08".toBigDecimal(),
-                withdrawalFee = "0.0004".toBigDecimal()
+                withdrawalFeeAmount = "0.0004".toBigDecimal()
             )
         ),
         debugWarnings = emptyList()

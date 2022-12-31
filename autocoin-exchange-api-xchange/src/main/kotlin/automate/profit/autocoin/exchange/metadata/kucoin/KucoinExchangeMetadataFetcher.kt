@@ -69,14 +69,14 @@ class KucoinExchangeMetadataFetcher(
             )
             currenciesMap[xchangeCurrencyPair.base.currencyCode] = CurrencyMetadata(
                 scale = DEFAULT_SCALE,
-                withdrawalFee = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.base]?.withdrawalFee ?: throw error("No withdrawalFee for currency ${xchangeCurrencyPair.base}"),
+                withdrawalFeeAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.base]?.withdrawalFee ?: throw error("No withdrawalFee for currency ${xchangeCurrencyPair.base}"),
                 minWithdrawalAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.base]?.minWithdrawalAmount
                     ?: throw error("No minWithdrawalAmount for currency ${xchangeCurrencyPair.base}")
 
             )
             currenciesMap[xchangeCurrencyPair.counter.currencyCode] = CurrencyMetadata(
                 scale = DEFAULT_SCALE,
-                withdrawalFee = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.counter]?.withdrawalFee ?: throw error("No withdrawalFee for currency ${xchangeCurrencyPair.counter}"),
+                withdrawalFeeAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.counter]?.withdrawalFee ?: throw error("No withdrawalFee for currency ${xchangeCurrencyPair.counter}"),
                 minWithdrawalAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.counter]?.minWithdrawalAmount
                     ?: throw error("No minWithdrawalAmount for currency ${xchangeCurrencyPair.counter}")
             )
