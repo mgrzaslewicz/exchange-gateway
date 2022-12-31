@@ -28,6 +28,11 @@ class ExchangeMetadataFetcherManualTest {
         val metadata = exchangeMetadataFetchers.getValue(BINANCE).fetchExchangeMetadata()
         assertsFor(metadata)
     }
+    @Test
+    fun shouldFetchFtxMetadata() {
+        val metadata = exchangeMetadataFetchers.getValue(FTX).fetchExchangeMetadata()
+        assertsFor(metadata)
+    }
 
     @Test
     fun shouldFetchGateioMetadata() {
