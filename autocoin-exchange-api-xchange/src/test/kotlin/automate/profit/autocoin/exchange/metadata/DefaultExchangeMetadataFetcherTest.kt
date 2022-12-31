@@ -19,7 +19,7 @@ class DefaultExchangeMetadataFetcherTest {
     @Test
     fun shouldOverrideCurrencyMetadata() {
         // given
-        val tested = DefaultExchangeMetadataFetcher(
+        val tested = DefaultExchangeMetadataFetcher.Builder(
             supportedExchange = mock(),
             exchangeFactory = mock<ExchangeFactory>().apply {
                 whenever(this.createExchange(any<ExchangeSpecification>())).thenReturn(mock())
@@ -33,7 +33,7 @@ class DefaultExchangeMetadataFetcherTest {
                     withdrawalFee = 10.0
                 )
             )
-        )
+        ).build()
         val noApiKey: ExchangeApiKey? = null
         // when
         val exchangeMetadata = tested.fetchExchangeMetadata(noApiKey)
