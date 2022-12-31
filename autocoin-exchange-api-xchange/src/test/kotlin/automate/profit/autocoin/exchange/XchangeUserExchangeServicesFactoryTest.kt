@@ -2,25 +2,43 @@ package automate.profit.autocoin.exchange
 
 import automate.profit.autocoin.exchange.SupportedExchange.BINANCE
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
-import automate.profit.autocoin.exchange.peruser.*
+import automate.profit.autocoin.exchange.metadata.ExchangeMetadataProvider
+import automate.profit.autocoin.exchange.metadata.FileExchangeMetadataRepository
+import automate.profit.autocoin.exchange.metadata.exchangeMetadataFetchers
+import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
+import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
+import automate.profit.autocoin.exchange.peruser.XchangeFactory
+import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeServicesFactory
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.rules.TemporaryFolder
 import kotlin.test.assertFailsWith
 
 class XchangeUserExchangeServicesFactoryTest {
-
+    private val tempFolder = TemporaryFolder()
     private lateinit var userExchangeServicesFactory: UserExchangeServicesFactory
     private lateinit var xchangeFactory: XchangeFactory
 
     @Before
     fun setup() {
+        tempFolder.create()
         xchangeFactory = spy(XchangeFactory())
-        userExchangeServicesFactory = XchangeUserExchangeServicesFactory(xchangeFactory, XchangeMetadataFile(), ExchangeSpecificationVerifier())
+        userExchangeServicesFactory = XchangeUserExchangeServicesFactory(
+                xchangeFactory,
+                ExchangeMetadataProvider(exchangeMetadataFetchers, FileExchangeMetadataRepository(tempFolder.root)),
+                ExchangeSpecificationVerifier()
+        )
+    }
+
+    @After
+    fun cleanup() {
+        tempFolder.delete()
     }
 
     @Test
@@ -57,14 +75,6 @@ class XchangeUserExchangeServicesFactoryTest {
         userExchangeServicesFactory.createTickerListenerRegistrar(BINANCE.exchangeName)
         // then
         verify(xchangeFactory, times(2)).createExchange(any())
-    }
-
-    @Test
-    fun shouldReturnMetadataProvider() {
-        // when
-        userExchangeServicesFactory.createMetadataProvider(BITTREX.exchangeName)
-        // then
-        verify(xchangeFactory, times(1)).createExchange(any())
     }
 
     @Test

@@ -1,20 +1,8 @@
 package automate.profit.autocoin.exchange.peruser
 
 import automate.profit.autocoin.exchange.SupportedExchange.*
-import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
-import automate.profit.autocoin.exchange.peruser.XchangeFactory
-import automate.profit.autocoin.exchange.peruser.XchangeMetadataFile
-import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeServicesFactory
-import com.nhaarman.mockito_kotlin.any
-import com.nhaarman.mockito_kotlin.spy
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
 import org.junit.Test
 import org.knowm.xchange.ExchangeSpecification
-import java.lang.IllegalArgumentException
-import kotlin.test.assertFailsWith
 
 class ExchangeSpecificationVerifierTest {
 
