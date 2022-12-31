@@ -35,7 +35,7 @@ class ExchangeMetadataProvider(
     private val fetchersMap = exchangeMetadataFetchers.associateBy { it.supportedExchange }
 
     fun getAndSaveExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadata {
-        logger.info { "[$supportedExchange] Getting  metadata" }
+        logger.info { "[$supportedExchange] Getting  exchange metadata" }
         val exchangeMetadataResult = exchangeMetadataRepository.getLatestExchangeMetadata(supportedExchange)
         return if (exchangeMetadataResult.hasMetadata()) {
             exchangeMetadataResult.exchangeMetadata!!
@@ -43,8 +43,8 @@ class ExchangeMetadataProvider(
             logGettingMetadataError(exchangeMetadataResult)
             logger.info { "[$supportedExchange] Fetching exchange metadata" }
             val apiKey = serviceApiKeysProvider.getApiKeys(supportedExchange)
-            val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata(apiKey)
-            exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
+            val freshExchangeMetadata = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata(apiKey)
+            exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata)
             return freshExchangeMetadata
         }
     }
@@ -52,20 +52,6 @@ class ExchangeMetadataProvider(
     private fun logGettingMetadataError(exchangeMetadataResult: ExchangeMetadataResult) {
         if (exchangeMetadataResult.hasException()) {
             logger.error(exchangeMetadataResult.exception) { "Exception during loading metadata from storage" }
-        }
-    }
-
-    fun getAndSaveXchangeMetadataFile(supportedExchange: SupportedExchange): File {
-        logger.info { "[$supportedExchange] Getting xchange metadata file" }
-        val exchangeMetadataFile = exchangeMetadataRepository.getLatestXchangeMetadataFile(supportedExchange)
-        return if (exchangeMetadataFile != null) {
-            exchangeMetadataFile
-        } else {
-            logger.info { "[$supportedExchange] Fetching xchange metadata file" }
-            val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata()
-            exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
-            return exchangeMetadataRepository.getLatestXchangeMetadataFile(supportedExchange)
-                ?: throw IllegalStateException("Something went wrong. $supportedExchange exchange metadata was just fetched, but it's not accessible")
         }
     }
 

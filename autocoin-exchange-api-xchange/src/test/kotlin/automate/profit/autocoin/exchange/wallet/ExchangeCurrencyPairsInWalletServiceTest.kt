@@ -63,7 +63,8 @@ class ExchangeCurrencyPairsInWalletServiceTest {
             "BTC" to CurrencyMetadata(numberDoesNotMatter.scale()),
             "THETA" to CurrencyMetadata(numberDoesNotMatter.scale()),
             "XRP" to CurrencyMetadata(numberDoesNotMatter.scale())
-        )
+        ),
+        debugWarnings = emptyList()
     )
 
     @Test

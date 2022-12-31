@@ -26,18 +26,24 @@ class KucoinExchangeMetadataFetcher(
     private val maxCurrencyPairsPerRequest = 10
     override val supportedExchange = SupportedExchange.KUCOIN
 
-    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
+    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
         xchangeSpecificationApiKeyAssigner.assignKeys(SupportedExchange.KUCOIN, exchangeSpec, apiKey)
         preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val xchangeExchange = exchangeFactory.createExchange(exchangeSpec)
         val xchangeMetadata = xchangeExchange.exchangeMetaData
-        val xchangeMetadataJson = xchangeMetadata.toJSONString()
         val kucoinMarketDataService = xchangeExchange.marketDataService as KucoinMarketDataService
         val kucoinSymbols = kucoinMarketDataService.kucoinSymbols
 
         val currencyPairsMap = mutableMapOf<CurrencyPair, CurrencyPairMetadata>()
         val currenciesMap = mutableMapOf<String, CurrencyMetadata>()
+
+        val debugWarnings = ArrayList<String>().apply {
+            add("Using hardcoded minimumOrderValue as it's not present in kucoin API")
+            add("Using hardcoded maximumPriceMultiplierUp as it's not present in kucoin API")
+            add("Using hardcoded maximumPriceMultiplierDown as it's not present in kucoin API")
+            add("Using hardcoded buyFeeMultiplier as it's not present in kucoin API")
+        }
 
         kucoinSymbols.forEach { symbol ->
 
@@ -70,15 +76,17 @@ class KucoinExchangeMetadataFetcher(
         }
         if (apiKey == null) {
             logger.warn { "[$supportedExchange] apiKey is missing, will not fetch trading fees" }
+            debugWarnings.add("apiKey is missing, will not fetch trading fees")
         } else {
             fillTradingFees(currencyPairsMap, kucoinMarketDataService)
         }
         val exchangeMetadata = ExchangeMetadata(
             currencyPairMetadata = currencyPairsMap,
-            currencyMetadata = currenciesMap.toMap()
+            currencyMetadata = currenciesMap.toMap(),
+            debugWarnings = debugWarnings
         )
 
-        return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
+        return exchangeMetadata
     }
 
     private fun fillTradingFees(currencyPairsMap: MutableMap<CurrencyPair, CurrencyPairMetadata>, kucoinMarketDataService: KucoinMarketDataService) {
@@ -86,35 +94,35 @@ class KucoinExchangeMetadataFetcher(
             .sortedBy { it.toString() } // make order deterministic for unit tests
             .chunked(maxCurrencyPairsPerRequest)
             .forEach { currencyPairSublist ->
-            val currencyPairsComaSeparated = currencyPairSublist.joinToString(",") { it.toStringWithSeparator('-') }
-            val kucoinTradeFee = kucoinMarketDataService.getKucoinTradeFee(currencyPairsComaSeparated)
-            kucoinTradeFee.forEach {
-                /* sample response
-        {
-            "symbol": "BTC-USDT",
-            "takerFeeRate": "0.001",
-            "makerFeeRate": "0.001"
-        },
-                 */
-                val currencyPair = KucoinAdapters.adaptCurrencyPair(it.symbol).toCurrencyPair()
-                currencyPairsMap[currencyPair] = currencyPairsMap.getValue(currencyPair).copy(
-                    transactionFeeRanges = TransactionFeeRanges(
-                        takerFees = listOf(
-                            TransactionFeeRange(
-                                beginAmount = BigDecimal.ZERO,
-                                fee = TransactionFee(percent = it.takerFeeRate.movePointLeft(1))
-                            )
-                        ),
-                        makerFees = listOf(
-                            TransactionFeeRange(
-                                beginAmount = BigDecimal.ZERO,
-                                fee = TransactionFee(percent = it.makerFeeRate.movePointLeft(1))
+                val currencyPairsComaSeparated = currencyPairSublist.joinToString(",") { it.toStringWithSeparator('-') }
+                val kucoinTradeFee = kucoinMarketDataService.getKucoinTradeFee(currencyPairsComaSeparated)
+                kucoinTradeFee.forEach {
+                    /* sample response
+            {
+                "symbol": "BTC-USDT",
+                "takerFeeRate": "0.001",
+                "makerFeeRate": "0.001"
+            },
+                     */
+                    val currencyPair = KucoinAdapters.adaptCurrencyPair(it.symbol).toCurrencyPair()
+                    currencyPairsMap[currencyPair] = currencyPairsMap.getValue(currencyPair).copy(
+                        transactionFeeRanges = TransactionFeeRanges(
+                            takerFees = listOf(
+                                TransactionFeeRange(
+                                    beginAmount = BigDecimal.ZERO,
+                                    fee = TransactionFee(percent = it.takerFeeRate.movePointLeft(1))
+                                )
+                            ),
+                            makerFees = listOf(
+                                TransactionFeeRange(
+                                    beginAmount = BigDecimal.ZERO,
+                                    fee = TransactionFee(percent = it.makerFeeRate.movePointLeft(1))
+                                )
                             )
                         )
                     )
-                )
+                }
             }
-        }
     }
 
 }

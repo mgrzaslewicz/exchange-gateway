@@ -19,11 +19,9 @@ import org.knowm.xchange.currency.Currency as XchangeCurrency
 import org.knowm.xchange.dto.meta.CurrencyMetaData as XchangeCurrencyMetaData
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData as XchangeCurrencyPairMetaData
 
-class XchangeMetadataJson(val json: String)
-
 interface ExchangeMetadataFetcher {
     val supportedExchange: SupportedExchange
-    fun fetchExchangeMetadata(apiKey: ExchangeApiKey? = null): Pair<XchangeMetadataJson, ExchangeMetadata>
+    fun fetchExchangeMetadata(apiKey: ExchangeApiKey? = null): ExchangeMetadata
 }
 
 private val logger = KotlinLogging.logger {}
@@ -98,7 +96,7 @@ class DefaultExchangeMetadataFetcher(
     private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap()
 ) : ExchangeMetadataFetcher {
 
-    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
+    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
         val exchangeSpec = XchangeExchangeSpecification(supportedExchange.toXchangeJavaClass())
         xchangeSpecificationApiKeyAssigner.assignKeys(supportedExchange, exchangeSpec, apiKey)
         if (preventFromLoadingDefaultXchangeMetadata) {
@@ -106,12 +104,12 @@ class DefaultExchangeMetadataFetcher(
         }
         val exchange = exchangeFactory.createExchange(exchangeSpec)
         val xchangeMetadata = exchange.exchangeMetaData
-        val xchangeMetadataJson = xchangeMetadata.toJSONString()
 
+        val metadataWarnings = ArrayList<String>()
         val currencyPairs = xchangeMetadata.currencyPairs
             .filter {
                 if (it.value == null) {
-                    logger.warn { "$supportedExchange-${it.key} no currency pair in metadata, skipping" }
+                    metadataWarnings.add("$supportedExchange-${it.key} no currency pair in metadata, skipping")
                 }
                 it.value != null
             }
@@ -119,10 +117,10 @@ class DefaultExchangeMetadataFetcher(
                 val currencyPairBeforeRename = it.key.toCurrencyPair()
                 val currencyPair = currencyPairRename.getOrDefault(currencyPairBeforeRename, currencyPairBeforeRename)
                 if (currencyPair != currencyPairBeforeRename) {
-                    logger.warn { "$supportedExchange-$currencyPairBeforeRename renamed to $currencyPair" }
+                    metadataWarnings.add("$currencyPairBeforeRename renamed to $currencyPair")
                 }
                 if (it.value.priceScale == null) {
-                    logger.warn { "$supportedExchange-${it.key} priceScale is not provided" }
+                    metadataWarnings.add("${it.key} priceScale is not provided")
                 }
                 currencyPair to CurrencyPairMetadata(
                     amountScale = it.value.priceScale ?: DEFAULT_SCALE,
@@ -142,13 +140,14 @@ class DefaultExchangeMetadataFetcher(
             )
         }?.toMap() ?: emptyMap()
         if (currencies.isEmpty()) {
-            logger.warn { "[$supportedExchange] Currency metadata is empty" }
+            metadataWarnings.add("Currency metadata is empty")
         }
         val exchangeMetadata = ExchangeMetadata(
             currencyPairMetadata = currencyPairs,
-            currencyMetadata = currencies
+            currencyMetadata = currencies,
+            debugWarnings = metadataWarnings
         )
-        return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
+        return exchangeMetadata
     }
 }
 

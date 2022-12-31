@@ -45,7 +45,8 @@ data class CurrencyMetadata(
 
 data class ExchangeMetadata(
     val currencyPairMetadata: Map<CurrencyPair, CurrencyPairMetadata>,
-    val currencyMetadata: Map<String, CurrencyMetadata>
+    val currencyMetadata: Map<String, CurrencyMetadata>,
+    val debugWarnings: List<String>// = emptyList()
 ) {
     fun currencies() = currencyMetadata.keys
 
