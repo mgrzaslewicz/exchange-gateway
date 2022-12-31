@@ -40,7 +40,7 @@ data class OrderBook(
      * @return null when order cannot be filled for given otherCurrencyAmount
      */
     fun getWeightedAverageBuyPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal): BigDecimal? {
-        val counterCurrencyAmountToSpend = otherCurrencyAmount.divide(otherCurrencyPrice, HALF_EVEN).setScale(16, HALF_EVEN)
+        val counterCurrencyAmountToSpend = otherCurrencyAmount.setScale(16, HALF_EVEN).divide(otherCurrencyPrice.setScale(16, HALF_EVEN), HALF_EVEN)
         return getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmountToSpend)
     }
 
