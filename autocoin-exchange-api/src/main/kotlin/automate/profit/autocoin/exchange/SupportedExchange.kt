@@ -1,9 +1,5 @@
 package automate.profit.autocoin.exchange
 
-/**
- * After adding new exchange remember to update:
- * SupportedExchange.toXchangeJavaClass
- */
 enum class SupportedExchange(val exchangeName: String, val comments: List<String> = emptyList()) {
     BIBOX("bibox"),
     BINANCE("binance"),
@@ -30,6 +26,7 @@ enum class SupportedExchange(val exchangeName: String, val comments: List<String
     LIVECOIN("livecoin"),
     POLONIEX("poloniex", listOf("Requires API key for reading ticker")),
     TRADEOGRE("tradeogre"),
+    OKEX("okex", listOf("Requires API key for reading currency list")),
     YOBIT("yobit");
 
     companion object {

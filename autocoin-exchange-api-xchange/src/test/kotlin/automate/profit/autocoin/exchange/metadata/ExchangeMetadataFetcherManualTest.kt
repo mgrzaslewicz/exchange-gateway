@@ -46,10 +46,12 @@ class ExchangeMetadataFetcherManualTest {
         val percentOfCurrencyPairsHavingTradingFeeRanges = currencyPairMetadata.count { it.value.transactionFeeRanges.takerFees.isNotEmpty() } * 100.0 / currencyPairMetadata.size
 
         SoftAssertions().apply {
-            assertThat(percentOfCurrenciesHavingWithdrawalFees).isGreaterThan(20.0)
-            assertThat(percentOfCurrencyPairsHavingTradingFeeRanges).isGreaterThan(20.0)
-            assertThat(percentOfCurrenciesHavingDepositEnabled).isGreaterThan(20.0)
-            assertThat(percentOfCurrenciesHavingWithdrawalsEnabled).isGreaterThan(20.0)
+            assertThat(currencyMetadata).withFailMessage { "No currency metadata present" }.isNotEmpty
+            assertThat(currencyPairMetadata).withFailMessage { "No currency pair metadata present" }.isNotEmpty
+            assertThat(percentOfCurrenciesHavingWithdrawalFees).withFailMessage { "Currencies with withdrawal fees below threshold" }.isGreaterThan(20.0)
+            assertThat(percentOfCurrencyPairsHavingTradingFeeRanges).withFailMessage { "Currency pairs with trading fees below threshold" }.isGreaterThan(20.0)
+            assertThat(percentOfCurrenciesHavingDepositEnabled).withFailMessage { "Currencies with deposit enabled below threshold" }.isGreaterThan(20.0)
+            assertThat(percentOfCurrenciesHavingWithdrawalsEnabled).withFailMessage { "Currencies with withdrawal enabled below threshold" }.isGreaterThan(20.0)
         }.assertAll()
     }
 
@@ -78,16 +80,30 @@ class ExchangeMetadataFetcherManualTest {
         assertsFor(metadata)
     }
 
+    @Test
+    fun shouldFetchOkexMetadata() {
+        val exchange = OKEX
+        val fetcher = exchangeMetadataFetchers.getValue(exchange)
+        val metadata = fetcher.fetchExchangeMetadata(exchangeApiKeyFromProperties(OKEX))
+        assertsFor(metadata)
+    }
+
     private fun exchangeApiKeyFromProperties(supportedExchange: SupportedExchange): ExchangeApiKey? {
         val exchangeName = supportedExchange.exchangeName
         val publicKeyPropertyName = "$exchangeName-publicKey"
         val secretKeyPropertyName = "$exchangeName-secretKey"
+        val passphrasePropertyName = "$exchangeName-passphrase"
+        val userNamePropertyName = "$exchangeName-userName"
         val publicKey: String? = getProperty(publicKeyPropertyName)
         val secretKey: String? = getProperty(secretKeyPropertyName)
+        val userName: String? = getProperty(userNamePropertyName)
+        val passphrase: String? = getProperty(passphrasePropertyName)
         return if (publicKey != null && secretKey != null) {
             ExchangeApiKey(
                 publicKey = publicKey,
-                secretKey = secretKey
+                secretKey = secretKey,
+                userName = userName,
+                exchangeSpecificKeyParameters = if (passphrase != null) mapOf("passphrase" to passphrase) else null
             )
         } else {
             null
