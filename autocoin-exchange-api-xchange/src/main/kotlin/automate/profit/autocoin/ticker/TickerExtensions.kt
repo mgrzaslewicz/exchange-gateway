@@ -8,16 +8,23 @@ import org.knowm.xchange.dto.marketdata.Ticker as XchangeTicker
 
 
 fun Ticker.toXchangeTicker(): XchangeTicker = XchangeTicker.Builder()
-        .currencyPair(this.currencyPair.toXchangeCurrencyPair())
-        .ask(this.ask)
-        .bid(this.bid)
-        .timestamp(this.timestamp?.toEpochMilli()?.let { Date(it) })
+        .currencyPair(currencyPair.toXchangeCurrencyPair())
+        .ask(ask)
+        .bid(bid)
+        .volume(baseCurrency24hVolume)
+        .quoteVolume(counterCurrency24hVolume)
+        .timestamp(timestamp?.toEpochMilli()?.let { Date(it) })
         .build()
 
 fun XchangeTicker.toTicker() = Ticker(
-        currencyPair = CurrencyPair(base = this.currencyPair.base.currencyCode, counter = this.currencyPair.counter.currencyCode),
-        ask = this.ask,
-        bid = this.bid,
+        currencyPair = CurrencyPair(
+                base = currencyPair.base.currencyCode,
+                counter = currencyPair.counter.currencyCode
+        ),
+        ask = ask,
+        bid = bid,
+        baseCurrency24hVolume = volume,
+        counterCurrency24hVolume = quoteVolume,
         timestamp = this.timestamp?.toInstant()
 )
 

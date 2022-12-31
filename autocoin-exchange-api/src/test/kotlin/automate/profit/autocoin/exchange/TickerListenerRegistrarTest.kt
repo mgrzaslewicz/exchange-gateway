@@ -245,6 +245,8 @@ class TickerListenerRegistrarTest {
                 currencyPair = currencyPair,
                 bid = BigDecimal(baseValue + 1.2),
                 ask = BigDecimal(baseValue + 1.1),
+                baseCurrency24hVolume = BigDecimal.ONE,
+                counterCurrency24hVolume = BigDecimal.ONE,
                 timestamp = timestamp
         )
     }
