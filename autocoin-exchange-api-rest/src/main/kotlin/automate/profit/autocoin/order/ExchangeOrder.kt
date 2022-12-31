@@ -8,7 +8,7 @@ fun ExchangeOrder.toOrderDto(exchangeName: String, exchangeId: String, exchangeU
         exchangeName = exchangeName,
         exchangeId = exchangeId,
         exchangeUserId = exchangeUserId,
-        orderId = orderId,
+        orderId = exchangeOrderId,
         baseCurrencyCode = currencyPair.base,
         counterCurrencyCode = currencyPair.counter,
         orderType = type.name,

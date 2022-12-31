@@ -23,6 +23,7 @@ enum class ExchangeOrderStatus {
  * Some exchanges require more parameters when canceling the order
  */
 data class ExchangeCancelOrderParams(
+    val exchangeName: String,
     val orderId: String,
     val orderType: ExchangeOrderType,
     val currencyPair: CurrencyPair

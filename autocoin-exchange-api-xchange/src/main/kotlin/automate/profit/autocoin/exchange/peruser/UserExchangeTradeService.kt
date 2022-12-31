@@ -1,10 +1,24 @@
 package automate.profit.autocoin.exchange.peruser
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.SupportedExchange.*
+import automate.profit.autocoin.exchange.SupportedExchange.BINANCE
+import automate.profit.autocoin.exchange.SupportedExchange.BITBAY
+import automate.profit.autocoin.exchange.SupportedExchange.BITMEX
+import automate.profit.autocoin.exchange.SupportedExchange.BITSTAMP
+import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
+import automate.profit.autocoin.exchange.SupportedExchange.GATEIO
+import automate.profit.autocoin.exchange.SupportedExchange.KRAKEN
+import automate.profit.autocoin.exchange.SupportedExchange.KUCOIN
+import automate.profit.autocoin.exchange.SupportedExchange.POLONIEX
+import automate.profit.autocoin.exchange.SupportedExchange.YOBIT
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.currency.toXchangeCurrencyPair
-import automate.profit.autocoin.exchange.order.*
+import automate.profit.autocoin.exchange.order.ExchangeCancelOrderParams
+import automate.profit.autocoin.exchange.order.ExchangeOrder
+import automate.profit.autocoin.exchange.order.ExchangeOrderStatus
+import automate.profit.autocoin.exchange.order.ExchangeOrderType
+import automate.profit.autocoin.exchange.order.toExchangeOrderStatus
+import automate.profit.autocoin.exchange.order.toExchangeOrderType
 import automate.profit.autocoin.exchange.orderbook.OrderBookExchangeOrder
 import automate.profit.autocoin.exchange.ratelimiter.ExchangeRateLimiter
 import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior
@@ -81,7 +95,7 @@ fun XchangeCurrencyPair.toCurrencyPair() = CurrencyPair.of(base = this.base.curr
 
 fun LimitOrder.toExchangeOrder(exchangeName: String, receivedAtMillis: Long) = ExchangeOrder(
     exchangeName = exchangeName,
-    orderId = this.id,
+    exchangeOrderId = this.id,
     type = this.type.toExchangeOrderType(),
     orderedAmount = this.originalAmount,
     filledAmount = cumulativeAmount,
@@ -105,6 +119,26 @@ fun LimitOrder.toOrderBookExchangeOrder(exchangeName: String, receivedAtMillis: 
 fun ExchangeCancelOrderParams.xchangeOrderType(): Order.OrderType = when (this.orderType) {
     ExchangeOrderType.ASK_SELL -> Order.OrderType.ASK
     ExchangeOrderType.BID_BUY -> Order.OrderType.BID
+}
+
+open class GettingOpenOrdersToVerifyCancelOrderTradeService(
+    private val exchangeRateLimiter: ExchangeRateLimiter,
+    private val decorated: UserExchangeTradeService
+) : UserExchangeTradeService by decorated {
+    companion object : KLogging()
+
+    override fun cancelOrder(params: ExchangeCancelOrderParams, rateLimiterBehaviour: RateLimiterBehavior): Boolean {
+        decorated.cancelOrder(params, rateLimiterBehaviour)
+        return isOrderStillOpen(params = params, rateLimiterBehaviour = rateLimiterBehaviour)
+    }
+
+    private fun isOrderStillOpen(params: ExchangeCancelOrderParams, rateLimiterBehaviour: RateLimiterBehavior): Boolean {
+        exchangeRateLimiter.acquireWith(rateLimiterBehaviour) { "[${params.exchangeName}] Could not acquire permit to isOrderStillOpen by orderId" }
+        val openOrders = decorated.getOpenOrders(params.currencyPair, rateLimiterBehaviour)
+        val isOrderStillOpen = openOrders.any { it.exchangeOrderId == params.orderId }
+        logger.info { "[${params.exchangeName}] Order ${params.orderId} is still open: $isOrderStillOpen" }
+        return isOrderStillOpen
+    }
 }
 
 open class XchangeUserExchangeTradeService(
@@ -138,11 +172,7 @@ open class XchangeUserExchangeTradeService(
         val cancelOrderParams: CancelOrderParams = getCancelOrderParams(params)
         return try {
             exchangeRateLimiter.acquireWith(rateLimiterBehaviour) { "[$exchangeName] Could not acquire permit to cancelOrder" }
-            wrapped.cancelOrder(cancelOrderParams) && !isOrderStillOpen(
-                currencyPair = params.currencyPair,
-                orderId = params.orderId,
-                rateLimiterBehaviour = rateLimiterBehaviour
-            )
+            return wrapped.cancelOrder(cancelOrderParams)
         } catch (e: Exception) {
             logger.error("Could not cancel order for $params. Exception: ${e.message}")
             false
@@ -181,19 +211,9 @@ open class XchangeUserExchangeTradeService(
         exchangeRateLimiter.acquireWith(rateLimiterBehaviour) { "[$exchangeName] Could not acquire permit to isOrderStillOpen" }
         val openOrders = wrapped.getOpenOrders(DefaultOpenOrdersParamCurrencyPair(order.currencyPair.toXchangeCurrencyPair()))
         logger.info { "$openOrders" }
-        val orderIsOnOpenOrderList = openOrders.openOrders.any { order.orderId == it.id }
-        logger.info { "${order.type} order ${order.orderId} on open order list: $orderIsOnOpenOrderList" }
+        val orderIsOnOpenOrderList = openOrders.openOrders.any { order.exchangeOrderId == it.id }
+        logger.info { "${order.type} order ${order.exchangeOrderId} on open order list: $orderIsOnOpenOrderList" }
         return orderIsOnOpenOrderList
-    }
-
-    private fun isOrderStillOpen(currencyPair: CurrencyPair, orderId: String, rateLimiterBehaviour: RateLimiterBehavior): Boolean {
-        exchangeRateLimiter.acquireWith(rateLimiterBehaviour) { "[$exchangeName] Could not acquire permit to isOrderStillOpen by orderId" }
-        val openOrders = wrapped.getOpenOrders(DefaultOpenOrdersParamCurrencyPair(currencyPair.toXchangeCurrencyPair()))
-        logger.info { "$openOrders" }
-        val openOrderWithGivenId = openOrders.openOrders.find { orderId == it.id }
-        val isOrderStillOpen = openOrderWithGivenId != null
-        logger.info { "Order $orderId is still open: $isOrderStillOpen" }
-        return isOrderStillOpen
     }
 
     /**
@@ -214,7 +234,7 @@ open class XchangeUserExchangeTradeService(
         logger.info { "Limit $exchangeName-limit-buy order created with id: $orderId" }
         return ExchangeOrder(
             exchangeName = exchangeName,
-            orderId = orderId,
+            exchangeOrderId = orderId,
             type = ExchangeOrderType.BID_BUY,
             orderedAmount = amount,
             filledAmount = BigDecimal.ZERO,
@@ -244,7 +264,7 @@ open class XchangeUserExchangeTradeService(
         logger.info { "Limit $exchangeName-limit-sell order created with id: $orderId" }
         return ExchangeOrder(
             exchangeName = exchangeName,
-            orderId = orderId,
+            exchangeOrderId = orderId,
             type = ExchangeOrderType.ASK_SELL,
             orderedAmount = amount,
             filledAmount = BigDecimal.ZERO,
@@ -275,7 +295,7 @@ open class XchangeUserExchangeTradeService(
         logger.info { "Limit $exchangeName-market-buy order created with id: $orderId" }
         return ExchangeOrder(
             exchangeName = exchangeName,
-            orderId = orderId,
+            exchangeOrderId = orderId,
             type = ExchangeOrderType.BID_BUY,
             orderedAmount = baseCurrencyAmount,
             filledAmount = BigDecimal.ZERO,
@@ -315,7 +335,7 @@ open class XchangeUserExchangeTradeService(
         logger.info { "Limit $exchangeName-market-sell order created with id: $orderId" }
         return ExchangeOrder(
             exchangeName = exchangeName,
-            orderId = orderId,
+            exchangeOrderId = orderId,
             type = ExchangeOrderType.BID_BUY,
             orderedAmount = baseCurrencyAmount,
             filledAmount = BigDecimal.ZERO,

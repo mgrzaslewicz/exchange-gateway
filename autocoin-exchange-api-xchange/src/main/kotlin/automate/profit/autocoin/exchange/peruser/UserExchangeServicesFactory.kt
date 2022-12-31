@@ -69,6 +69,7 @@ class XchangeUserExchangeServicesFactory(
     private val cachingXchangeProvider: CachingXchangeProvider,
     private val exchangeRateLimiters: ExchangeRateLimiters,
     private val clock: Clock,
+    private val getOpenOrdersToVerifyOrderIsCanceled: Boolean = true,
 ) : UserExchangeServicesFactory {
     private companion object : KLogging()
 
@@ -82,12 +83,19 @@ class XchangeUserExchangeServicesFactory(
     ): UserExchangeTradeService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         val xchange = cachingXchangeProvider.getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters)
+        val rateLimiter = exchangeRateLimiters.get(supportedExchange)
         return XchangeUserExchangeTradeService(
             exchangeName = exchangeName,
             wrapped = xchange.tradeService,
-            exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange),
+            exchangeRateLimiter = rateLimiter,
             clock = clock,
-        )
+        ).let {
+            if (getOpenOrdersToVerifyOrderIsCanceled) {
+                GettingOpenOrdersToVerifyCancelOrderTradeService(decorated = it, exchangeRateLimiter = rateLimiter)
+            } else {
+                it
+            }
+        }
     }
 
     override fun createWalletService(
@@ -112,6 +120,7 @@ class XchangeUserExchangeServicesFactory(
             apiKey != null -> {
                 createTickerService(exchangeName, apiKey.publicKey, apiKey.secretKey, apiKey.userName, apiKey.exchangeSpecificKeyParameters)
             }
+
             else -> {
                 val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
                 XchangeUserExchangeTickerService(
@@ -153,6 +162,7 @@ class XchangeUserExchangeServicesFactory(
             apiKey != null -> {
                 createOrderBookService(exchangeName, apiKey.publicKey, apiKey.secretKey, apiKey.userName, apiKey.exchangeSpecificKeyParameters)
             }
+
             else -> {
                 val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
                 return XchangeUserExchangeOrderBookService(
