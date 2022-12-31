@@ -53,7 +53,9 @@ class FileExchangeMetadataRepositoryTest {
             "ABC" to CurrencyMetadata(
                 scale = 3,
                 minWithdrawalAmount = "0.05".toBigDecimal(),
-                withdrawalFeeAmount = "0.0001".toBigDecimal()
+                withdrawalFeeAmount = "0.0001".toBigDecimal(),
+                depositEnabled = true,
+                withdrawalEnabled = false
             )
         ),
         debugWarnings = emptyList()
@@ -76,9 +78,9 @@ class FileExchangeMetadataRepositoryTest {
         val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder) { currentTimeMillis }
         exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
         // when
-        val savedExchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
+        val savedExchangeMetadataResult = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
         // then
-        assertThat(exchangeMetadataToSave).isEqualTo(savedExchangeMetadata.exchangeMetadata)
+        assertThat(exchangeMetadataToSave).isEqualTo(savedExchangeMetadataResult.exchangeMetadata)
     }
 
 
@@ -90,9 +92,9 @@ class FileExchangeMetadataRepositoryTest {
         exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
         exchangeMetadataRepository.saveExchangeMetadata(BITTREX, secondExchangeMetadataToSave)
         // when
-        val savedExchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
+        val savedExchangeMetadataResult = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
         // then
-        assertThat(savedExchangeMetadata.exchangeMetadata).isEqualTo(secondExchangeMetadataToSave)
+        assertThat(savedExchangeMetadataResult.exchangeMetadata).isEqualTo(secondExchangeMetadataToSave)
     }
 
     @Test

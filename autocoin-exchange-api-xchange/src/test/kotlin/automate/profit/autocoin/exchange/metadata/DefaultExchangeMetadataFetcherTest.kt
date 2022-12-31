@@ -60,4 +60,28 @@ class DefaultExchangeMetadataFetcherTest {
             )
     }
 
+    @Test
+    fun shouldCalculateWithdrawalStatus() {
+        // given
+        val tested = builder.build()
+        val exchangeMetadata = tested.fetchExchangeMetadata(noApiKey)
+        // then
+        assertThat(exchangeMetadata.currencyMetadata.getValue("BTC").withdrawalEnabled).isNull()
+        assertThat(exchangeMetadata.currencyMetadata.getValue("BCH").withdrawalEnabled).isFalse
+        assertThat(exchangeMetadata.currencyMetadata.getValue("ETH").withdrawalEnabled).isTrue
+        assertThat(exchangeMetadata.currencyMetadata.getValue("LTC").withdrawalEnabled).isFalse
+    }
+
+    @Test
+    fun shouldCalculateDepositStatus() {
+        // given
+        val tested = builder.build()
+        val exchangeMetadata = tested.fetchExchangeMetadata(noApiKey)
+        // then
+        assertThat(exchangeMetadata.currencyMetadata.getValue("BTC").depositEnabled).isNull()
+        assertThat(exchangeMetadata.currencyMetadata.getValue("BCH").depositEnabled).isFalse
+        assertThat(exchangeMetadata.currencyMetadata.getValue("ETH").depositEnabled).isFalse
+        assertThat(exchangeMetadata.currencyMetadata.getValue("LTC").depositEnabled).isTrue
+    }
+
 }

@@ -72,15 +72,18 @@ class KucoinExchangeMetadataFetcher(
                 withdrawalFeeAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.base]?.withdrawalFee
                     ?: throw error("No withdrawalFee for currency ${xchangeCurrencyPair.base}"),
                 minWithdrawalAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.base]?.minWithdrawalAmount
-                    ?: throw error("No minWithdrawalAmount for currency ${xchangeCurrencyPair.base}")
-
+                    ?: throw error("No minWithdrawalAmount for currency ${xchangeCurrencyPair.base}"),
+                withdrawalEnabled = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.base]?.walletHealth?.toWithdrawalEnabled(),
+                depositEnabled = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.base]?.walletHealth?.toDepositEnabled(),
             )
             currenciesMap[xchangeCurrencyPair.counter.currencyCode] = CurrencyMetadata(
                 scale = DEFAULT_SCALE,
                 withdrawalFeeAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.counter]?.withdrawalFee
                     ?: throw error("No withdrawalFee for currency ${xchangeCurrencyPair.counter}"),
                 minWithdrawalAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.counter]?.minWithdrawalAmount
-                    ?: throw error("No minWithdrawalAmount for currency ${xchangeCurrencyPair.counter}")
+                    ?: throw error("No minWithdrawalAmount for currency ${xchangeCurrencyPair.counter}"),
+                withdrawalEnabled = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.counter]?.walletHealth?.toWithdrawalEnabled(),
+                depositEnabled = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.counter]?.walletHealth?.toDepositEnabled(),
             )
         }
         if (apiKey == null) {

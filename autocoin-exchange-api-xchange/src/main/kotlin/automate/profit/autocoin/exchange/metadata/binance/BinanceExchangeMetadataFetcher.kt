@@ -104,12 +104,16 @@ class BinanceExchangeMetadataFetcher(
                     currenciesMap[pair.base.currencyCode] = CurrencyMetadata(
                         scale = basePrecision,
                         withdrawalFeeAmount = binanceMetadata.currencies[pair.base]?.withdrawalFee,
-                        minWithdrawalAmount = binanceMetadata.currencies[pair.base]?.minWithdrawalAmount
+                        minWithdrawalAmount = binanceMetadata.currencies[pair.base]?.minWithdrawalAmount,
+                        withdrawalEnabled = binanceMetadata.currencies[pair.base]?.walletHealth?.toWithdrawalEnabled(),
+                        depositEnabled = binanceMetadata.currencies[pair.base]?.walletHealth?.toDepositEnabled(),
                     )
                     currenciesMap[pair.counter.currencyCode] = CurrencyMetadata(
                         scale = counterPrecision,
                         withdrawalFeeAmount = binanceMetadata.currencies[pair.counter]?.withdrawalFee,
-                        minWithdrawalAmount = binanceMetadata.currencies[pair.counter]?.minWithdrawalAmount
+                        minWithdrawalAmount = binanceMetadata.currencies[pair.counter]?.minWithdrawalAmount,
+                        withdrawalEnabled = binanceMetadata.currencies[pair.counter]?.walletHealth?.toWithdrawalEnabled(),
+                        depositEnabled = binanceMetadata.currencies[pair.counter]?.walletHealth?.toDepositEnabled(),
                     )
                 }
             }
