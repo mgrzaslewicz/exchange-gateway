@@ -9,6 +9,7 @@ import automate.profit.autocoin.exchange.order.ExchangeOrderType.ASK_SELL
 import automate.profit.autocoin.exchange.order.ExchangeOrderType.BID_BUY
 import automate.profit.autocoin.exchange.order.toXchangeLimitOrder
 import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeTradeService
+import automate.profit.autocoin.exchange.ratelimiter.NoOpExchangeRateLimiter
 import com.nhaarman.mockitokotlin2.whenever
 import mu.KLogging
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
@@ -40,44 +41,48 @@ class XchangeUserExchangeTradeServiceTest {
     private val limitPriceBigDecimal = BigDecimal.ONE
 
     private val openBuyOrder1 = ExchangeOrder(
-            exchangeName = KUCOIN.exchangeName,
-            orderId = buyOrderId1,
-            type = BID_BUY,
-            orderedAmount = BigDecimal(5.5),
-            filledAmount = BigDecimal(3.5),
-            price = limitPriceBigDecimal,
-            currencyPair = currencyPair,
-            status = PARTIALLY_FILLED,
-            timestamp = null
+        exchangeName = KUCOIN.exchangeName,
+        orderId = buyOrderId1,
+        type = BID_BUY,
+        orderedAmount = BigDecimal(5.5),
+        filledAmount = BigDecimal(3.5),
+        price = limitPriceBigDecimal,
+        currencyPair = currencyPair,
+        status = PARTIALLY_FILLED,
+        timestamp = null
     )
 
     private val openBuyOrder2 = ExchangeOrder(
-            exchangeName = KUCOIN.exchangeName,
-            orderId = buyOrderId2,
-            type = BID_BUY,
-            orderedAmount = BigDecimal(5.5),
-            filledAmount = BigDecimal.ZERO,
-            price = limitPriceBigDecimal,
-            currencyPair = currencyPair,
-            status = NEW,
-            timestamp = null
+        exchangeName = KUCOIN.exchangeName,
+        orderId = buyOrderId2,
+        type = BID_BUY,
+        orderedAmount = BigDecimal(5.5),
+        filledAmount = BigDecimal.ZERO,
+        price = limitPriceBigDecimal,
+        currencyPair = currencyPair,
+        status = NEW,
+        timestamp = null
     )
 
     private val openSellOrder1 = ExchangeOrder(
-            exchangeName = KUCOIN.exchangeName,
-            orderId = sellOrderId1,
-            type = ASK_SELL,
-            orderedAmount = BigDecimal(45.5),
-            filledAmount = BigDecimal.ZERO,
-            price = limitPriceBigDecimal,
-            currencyPair = currencyPair,
-            status = NEW,
-            timestamp = null
+        exchangeName = KUCOIN.exchangeName,
+        orderId = sellOrderId1,
+        type = ASK_SELL,
+        orderedAmount = BigDecimal(45.5),
+        filledAmount = BigDecimal.ZERO,
+        price = limitPriceBigDecimal,
+        currencyPair = currencyPair,
+        status = NEW,
+        timestamp = null
     )
 
     @BeforeEach
     fun setUp() {
-        tested = XchangeUserExchangeTradeService(KUCOIN.exchangeName, wrappedTradeService)
+        tested = XchangeUserExchangeTradeService(
+            exchangeName = KUCOIN.exchangeName,
+            wrapped = wrappedTradeService,
+            exchangeRateLimiter = NoOpExchangeRateLimiter()
+        )
     }
 
     @Test
@@ -125,11 +130,26 @@ class XchangeUserExchangeTradeServiceTest {
     }
 
     private fun noCreatedIdInOpenOrders() {
-        whenever(wrappedTradeService.getOpenOrders(any(OpenOrdersParams::class.java))).thenReturn(OpenOrders(listOf(openBuyOrder1.toXchangeLimitOrder(), openSellOrder1.toXchangeLimitOrder())))
+        whenever(wrappedTradeService.getOpenOrders(any(OpenOrdersParams::class.java))).thenReturn(
+            OpenOrders(
+                listOf(
+                    openBuyOrder1.toXchangeLimitOrder(),
+                    openSellOrder1.toXchangeLimitOrder()
+                )
+            )
+        )
     }
 
     private fun createdIdInOpenOrders() {
-        whenever(wrappedTradeService.getOpenOrders(any(OpenOrdersParams::class.java))).thenReturn(OpenOrders(listOf(openBuyOrder1.toXchangeLimitOrder(), openBuyOrder2.toXchangeLimitOrder(), openSellOrder1.toXchangeLimitOrder())))
+        whenever(wrappedTradeService.getOpenOrders(any(OpenOrdersParams::class.java))).thenReturn(
+            OpenOrders(
+                listOf(
+                    openBuyOrder1.toXchangeLimitOrder(),
+                    openBuyOrder2.toXchangeLimitOrder(),
+                    openSellOrder1.toXchangeLimitOrder()
+                )
+            )
+        )
     }
 
 }

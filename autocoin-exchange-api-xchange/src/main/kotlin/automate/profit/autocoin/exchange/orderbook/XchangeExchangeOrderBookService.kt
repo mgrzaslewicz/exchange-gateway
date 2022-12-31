@@ -4,8 +4,10 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.currency.toXchangeCurrencyPair
 import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
 import automate.profit.autocoin.exchange.peruser.toOrderBookExchangeOrder
+import automate.profit.autocoin.exchange.ratelimiter.ExchangeRateLimiter
 import org.knowm.xchange.service.marketdata.MarketDataService
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.TimeUnit
 
 class XchangeExchangeOrderBookService(private val userExchangeServicesFactory: UserExchangeServicesFactory) : ExchangeOrderBookService {
     override fun getOrderBook(exchangeName: String, currencyPair: CurrencyPair): OrderBook {
@@ -24,14 +26,19 @@ class CachingXchangeExchangeOrderBookService(private val userExchangeServicesFac
     }
 }
 
-class XchangeUserExchangeOrderBookService(private val marketDataService: MarketDataService, private val exchangeName: String) : UserExchangeOrderBookService {
+class XchangeUserExchangeOrderBookService(
+    private val marketDataService: MarketDataService,
+    private val exchangeName: String,
+    private val exchangeRateLimiter: ExchangeRateLimiter,
+) : UserExchangeOrderBookService {
     override fun getOrderBook(currencyPair: CurrencyPair): OrderBook {
+        check(exchangeRateLimiter.tryAcquirePermit(250L, TimeUnit.MILLISECONDS)) { "[$exchangeName] Could not acquire permit for getting order book within 250ms" }
         return marketDataService.getOrderBook(currencyPair.toXchangeCurrencyPair()).toOrderBook(exchangeName)
     }
 
 }
 
 fun org.knowm.xchange.dto.marketdata.OrderBook.toOrderBook(exchangeName: String) = OrderBook(
-        buyOrders = bids.map { it.toOrderBookExchangeOrder(exchangeName) },
-        sellOrders = asks.map { it.toOrderBookExchangeOrder(exchangeName) }
+    buyOrders = bids.map { it.toOrderBookExchangeOrder(exchangeName) },
+    sellOrders = asks.map { it.toOrderBookExchangeOrder(exchangeName) }
 )

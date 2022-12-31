@@ -6,6 +6,7 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.currency.toXchangeCurrencyPair
 import automate.profit.autocoin.exchange.order.*
 import automate.profit.autocoin.exchange.orderbook.OrderBookExchangeOrder
+import automate.profit.autocoin.exchange.ratelimiter.ExchangeRateLimiter
 import mu.KLogging
 import org.knowm.xchange.binance.service.BinanceCancelOrderParams
 import org.knowm.xchange.dto.Order
@@ -15,6 +16,7 @@ import org.knowm.xchange.service.trade.params.DefaultCancelOrderParamId
 import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair
 import java.math.BigDecimal
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 import org.knowm.xchange.service.trade.TradeService as XchangeTradeService
 
@@ -31,24 +33,24 @@ interface UserExchangeTradeService {
 fun XchangeCurrencyPair.toCurrencyPair() = CurrencyPair.of(base = this.base.currencyCode, counter = this.counter.currencyCode)
 
 fun LimitOrder.toExchangeOrder(exchangeName: String) = ExchangeOrder(
-        exchangeName = exchangeName,
-        orderId = this.id,
-        type = this.type.toExchangeOrderType(),
-        orderedAmount = this.originalAmount,
-        filledAmount = cumulativeAmount,
-        price = this.averagePrice ?: this.limitPrice,
-        currencyPair = this.currencyPair.toCurrencyPair(),
-        status = this.status.toExchangeOrderStatus(),
-        timestamp = this.timestamp?.toInstant()
+    exchangeName = exchangeName,
+    orderId = this.id,
+    type = this.type.toExchangeOrderType(),
+    orderedAmount = this.originalAmount,
+    filledAmount = cumulativeAmount,
+    price = this.averagePrice ?: this.limitPrice,
+    currencyPair = this.currencyPair.toCurrencyPair(),
+    status = this.status.toExchangeOrderStatus(),
+    timestamp = this.timestamp?.toInstant()
 )
 
 fun LimitOrder.toOrderBookExchangeOrder(exchangeName: String) = OrderBookExchangeOrder(
-        exchangeName = exchangeName,
-        type = this.type.toExchangeOrderType(),
-        orderedAmount = this.originalAmount,
-        price = this.averagePrice ?: this.limitPrice,
-        currencyPair = this.currencyPair.toCurrencyPair(),
-        timestamp = this.timestamp?.toInstant()
+    exchangeName = exchangeName,
+    type = this.type.toExchangeOrderType(),
+    orderedAmount = this.originalAmount,
+    price = this.averagePrice ?: this.limitPrice,
+    currencyPair = this.currencyPair.toCurrencyPair(),
+    timestamp = this.timestamp?.toInstant()
 )
 
 fun ExchangeCancelOrderParams.xchangeOrderType(): Order.OrderType = when (this.orderType) {
@@ -56,20 +58,24 @@ fun ExchangeCancelOrderParams.xchangeOrderType(): Order.OrderType = when (this.o
     ExchangeOrderType.BID_BUY -> Order.OrderType.BID
 }
 
-open class XchangeUserExchangeTradeService(private val exchangeName: String,
-                                           private val wrapped: XchangeTradeService) : UserExchangeTradeService {
+open class XchangeUserExchangeTradeService(
+    private val exchangeName: String,
+    private val wrapped: XchangeTradeService,
+    private val exchangeRateLimiter: ExchangeRateLimiter,
+) : UserExchangeTradeService {
 
     override fun getOpenOrders() = wrapped.getOpenOrders()
+        .allOpenOrders
+        .filterIsInstance<LimitOrder>()
+        .map { it.toExchangeOrder(exchangeName) }
+
+    override fun getOpenOrders(currencyPair: CurrencyPair): List<ExchangeOrder> {
+        check(exchangeRateLimiter.tryAcquirePermit(250L, TimeUnit.MILLISECONDS)) { "[$exchangeName] Could not acquire permit to getOpenOrders within 250ms" }
+        val params = DefaultOpenOrdersParamCurrencyPair(currencyPair.toXchangeCurrencyPair())
+        return wrapped.getOpenOrders(params)
             .allOpenOrders
             .filterIsInstance<LimitOrder>()
             .map { it.toExchangeOrder(exchangeName) }
-
-    override fun getOpenOrders(currencyPair: CurrencyPair): List<ExchangeOrder> {
-        val params = DefaultOpenOrdersParamCurrencyPair(currencyPair.toXchangeCurrencyPair())
-        return wrapped.getOpenOrders(params)
-                .allOpenOrders
-                .filterIsInstance<LimitOrder>()
-                .map { it.toExchangeOrder(exchangeName) }
     }
 
     companion object : KLogging()
@@ -77,6 +83,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
     override fun cancelOrder(params: ExchangeCancelOrderParams): Boolean {
         logger.info { "Requesting cancel order $params" }
         val cancelOrderParams: CancelOrderParams = getCancelOrderParams(params)
+        check(exchangeRateLimiter.tryAcquirePermit(250L, TimeUnit.MILLISECONDS)) { "[$exchangeName] Could not acquire permit to cancelOrder within 250ms" }
         return try {
             wrapped.cancelOrder(cancelOrderParams) && !isOrderStillOpen(params.currencyPair, params.orderId)
         } catch (e: Exception) {
@@ -114,6 +121,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
     }
 
     private fun isOrderStillOpen(order: ExchangeOrder): Boolean {
+        check(exchangeRateLimiter.tryAcquirePermit(250L, TimeUnit.MILLISECONDS)) { "[$exchangeName] Could not acquire permit to isOrderStillOpen within 250ms" }
         val openOrders = wrapped.getOpenOrders(DefaultOpenOrdersParamCurrencyPair(order.currencyPair.toXchangeCurrencyPair()))
         logger.info { "$openOrders" }
         val orderIsOnOpenOrderList = openOrders.openOrders.any { order.orderId == it.id }
@@ -122,6 +130,7 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
     }
 
     private fun isOrderStillOpen(currencyPair: CurrencyPair, orderId: String): Boolean {
+        check(exchangeRateLimiter.tryAcquirePermit(250L, TimeUnit.MILLISECONDS)) { "[$exchangeName] Could not acquire permit to isOrderStillOpen (by orderId) within 250ms" }
         val openOrders = wrapped.getOpenOrders(DefaultOpenOrdersParamCurrencyPair(currencyPair.toXchangeCurrencyPair()))
         logger.info { "$openOrders" }
         val openOrderWithGivenId = openOrders.openOrders.find { orderId == it.id }
@@ -141,19 +150,20 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
             .build()
         logger.info { "Requesting limit buy order: $limitBuyOrder" }
 
+        check(exchangeRateLimiter.tryAcquirePermit(250L, TimeUnit.MILLISECONDS)) { "[$exchangeName] Could not acquire permit to placeBuyOrder within 250ms" }
         val orderId = wrapped.placeLimitOrder(limitBuyOrder)
 
         logger.info { "Limit $exchangeName-buy order created with id: $orderId" }
         return ExchangeOrder(
-                exchangeName = exchangeName,
-                orderId = orderId,
-                type = ExchangeOrderType.BID_BUY,
-                orderedAmount = amount,
-                filledAmount = BigDecimal.ZERO,
-                price = limitPrice,
-                currencyPair = currencyPair,
-                status = ExchangeOrderStatus.NEW,
-                timestamp = Instant.now()
+            exchangeName = exchangeName,
+            orderId = orderId,
+            type = ExchangeOrderType.BID_BUY,
+            orderedAmount = amount,
+            filledAmount = BigDecimal.ZERO,
+            price = limitPrice,
+            currencyPair = currencyPair,
+            status = ExchangeOrderStatus.NEW,
+            timestamp = Instant.now()
         )
     }
 
@@ -168,19 +178,20 @@ open class XchangeUserExchangeTradeService(private val exchangeName: String,
             .build()
         logger.info { "Requesting limit sell order: $limitSellOrder" }
 
+        check(exchangeRateLimiter.tryAcquirePermit(250L, TimeUnit.MILLISECONDS)) { "[$exchangeName] Could not acquire permit to placeSellOrder within 250ms" }
         val orderId = wrapped.placeLimitOrder(limitSellOrder)
 
         logger.info { "Limit $exchangeName-sell order created with id: $orderId" }
         return ExchangeOrder(
-                exchangeName = exchangeName,
-                orderId = orderId,
-                type = ExchangeOrderType.ASK_SELL,
-                orderedAmount = amount,
-                filledAmount = BigDecimal.ZERO,
-                price = limitPrice,
-                currencyPair = currencyPair,
-                status = ExchangeOrderStatus.NEW,
-                timestamp = Instant.now()
+            exchangeName = exchangeName,
+            orderId = orderId,
+            type = ExchangeOrderType.ASK_SELL,
+            orderedAmount = amount,
+            filledAmount = BigDecimal.ZERO,
+            price = limitPrice,
+            currencyPair = currencyPair,
+            status = ExchangeOrderStatus.NEW,
+            timestamp = Instant.now()
         )
     }
 

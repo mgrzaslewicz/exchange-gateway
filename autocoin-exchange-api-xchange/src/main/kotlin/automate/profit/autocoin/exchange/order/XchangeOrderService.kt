@@ -81,7 +81,6 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
                     val exchangeName = exchangeId2Name.getValue(exchangeId)
                     val exchangeKeysGroupedByByUser = exchangeKeys.groupBy { it.exchangeUserId }
                     exchangeKeysGroupedByByUser.forEach { (exchangeUserId, exchangeKeys) ->
-
                         openOrders += tryGetOpenOrders(exchangeName, exchangeUserId, currencyPairs, exchangeKeys)
                     }
                 }
