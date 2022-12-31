@@ -4,6 +4,7 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.cache.ExchangeWithCurrencyPairStringCache
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
+import java.lang.ref.SoftReference
 import java.time.Duration
 import java.util.concurrent.*
 
@@ -22,7 +23,7 @@ class DefaultSynchronousTickerFetchScheduler(
 ) : SynchronousTickerFetchScheduler {
     companion object : KLogging()
 
-    private val lastTicker = mutableMapOf<String, Ticker>()
+    private val lastTickers = mutableMapOf<String, SoftReference<Ticker>>()
     private val scheduledFetchers = ConcurrentHashMap<SupportedExchange, ScheduledFuture<*>>()
 
     override fun onLastListenerDeregistered(exchange: SupportedExchange) {
@@ -78,11 +79,11 @@ class DefaultSynchronousTickerFetchScheduler(
 
     private fun isNew(possiblyNewTicker: Ticker, exchange: SupportedExchange, currencyPair: CurrencyPair): Boolean {
         val key = ExchangeWithCurrencyPairStringCache.get(exchange.exchangeName + currencyPair)
-        val isNew = when (val lastTicker = lastTicker[key]) {
+        val isNew = when (val lastTicker = lastTickers[key]?.get()) {
             null -> true
             else -> possiblyNewTicker != lastTicker
         }
-        if (isNew) this.lastTicker[key] = possiblyNewTicker
+        if (isNew) lastTickers[key] = SoftReference(possiblyNewTicker)
         return isNew
     }
 }

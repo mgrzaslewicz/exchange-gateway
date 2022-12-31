@@ -4,6 +4,7 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.cache.ExchangeWithCurrencyPairStringCache
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
+import java.lang.ref.SoftReference
 import java.time.Duration
 import java.util.concurrent.*
 
@@ -22,7 +23,7 @@ class DefaultSynchronousOrderBookFetchScheduler(
 ) : SynchronousOrderBookFetchScheduler {
     companion object : KLogging()
 
-    private val lastOrderBook = mutableMapOf<String, OrderBook>()
+    private val lastOrderBooks = ConcurrentHashMap<String, SoftReference<OrderBook>>()
     private val scheduledFetchers = ConcurrentHashMap<SupportedExchange, ScheduledFuture<*>>()
 
     override fun onListenerDeregistered(exchange: SupportedExchange, currencyPair: CurrencyPair) {
@@ -79,13 +80,17 @@ class DefaultSynchronousOrderBookFetchScheduler(
         }
     }
 
+    /**
+     * Using SoftReference might result in a false positive - because reference might become null when too less available memory.
+     * That will lead to recalculating order book based data, so the only down side might be slightly bigger CPU usage.
+     */
     private fun isNew(possiblyNewOrderBook: OrderBook, exchange: SupportedExchange, currencyPair: CurrencyPair): Boolean {
         val key = ExchangeWithCurrencyPairStringCache.get(exchange.exchangeName + currencyPair)
-        val isNew = when (val lastOrderBook = lastOrderBook[key]) {
+        val isNew = when (val lastOrderBook = lastOrderBooks[key]?.get()) {
             null -> true
             else -> !possiblyNewOrderBook.deepEquals(lastOrderBook)
         }
-        if (isNew) this.lastOrderBook[key] = possiblyNewOrderBook
+        if (isNew) lastOrderBooks[key] = SoftReference(possiblyNewOrderBook)
         return isNew
     }
 }
