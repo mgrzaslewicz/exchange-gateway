@@ -1,10 +1,12 @@
 package automate.profit.autocoin.ticker
 
+import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.ticker.Ticker
 import java.time.Instant
 
 data class TickerDto(
+        val exchange: String,
         val currencyPair: CurrencyPair,
         val ask: Double,
         val bid: Double,
@@ -22,7 +24,8 @@ data class TickerDto(
     )
 }
 
-fun Ticker.toDto() = TickerDto(
+fun Ticker.toDto(exchange: SupportedExchange) = TickerDto(
+        exchange = exchange.exchangeName,
         currencyPair = currencyPair.toUpperCase(),
         ask = ask.toDouble(),
         bid = bid.toDouble(),

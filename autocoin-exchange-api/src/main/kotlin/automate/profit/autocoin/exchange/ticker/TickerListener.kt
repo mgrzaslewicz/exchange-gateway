@@ -18,15 +18,12 @@ data class Ticker(
 
 interface TickerListener {
 
-    fun onTicker(ticker: Ticker)
+    fun onTicker(exchange: SupportedExchange, currencyPair: CurrencyPair, ticker: Ticker)
 
     /**
      * There was no new ticker on exchange but time has passed
      * @param ticker might be the same that was already fetched from exchange or none
      */
-    fun onNoNewTicker(ticker: Ticker?) {}
+    fun onNoNewTicker(exchange: SupportedExchange, currencyPair: CurrencyPair, ticker: Ticker?) {}
 
-    fun currencyPair(): CurrencyPair
-
-    fun exchange(): SupportedExchange
 }

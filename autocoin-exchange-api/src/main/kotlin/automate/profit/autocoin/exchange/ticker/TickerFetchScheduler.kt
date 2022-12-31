@@ -1,27 +1,26 @@
-package automate.profit.autocoin.exchange.orderbook
+package automate.profit.autocoin.exchange.ticker
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
-import automate.profit.autocoin.exchange.order.ExchangeOrderBookService
 import mu.KLogging
 import java.time.Duration
 import java.util.concurrent.*
 
-interface OrderBookFetchScheduler : OrderBookRegistrationListener, OrderBookListenersVisitor {
+interface TickerFetchScheduler : TickerRegistrationListener, TickerListenersVisitor {
 }
 
-class DefaultOrderBookFetchScheduler(
+class DefaultTickerFetchScheduler(
         private val allowedExchangeFetchFrequency: Map<SupportedExchange, Duration>,
-        private val exchangeOrderBookService: ExchangeOrderBookService,
-        private val orderBookListeners: OrderBookListeners,
+        private val exchangeTickerService: ExchangeTickerService,
+        private val tickerListeners: TickerListeners,
         /** preferably one thread per exchange - cached thread pool is a good fit */
         private val scheduledExecutorService: ScheduledExecutorService,
         /** preferably a few multiple threads, but not one per single currency pair as it might grow to thousands of threads. workStealingPool might be a good fit */
         private val executorService: ExecutorService
-) : OrderBookFetchScheduler {
+) : TickerFetchScheduler {
     companion object : KLogging()
 
-    private val lastOrderBook = mutableMapOf<String, OrderBook>()
+    private val lastTicker = mutableMapOf<String, Ticker>()
     private val scheduledFetchers = ConcurrentHashMap<SupportedExchange, ScheduledFuture<*>>()
 
     override fun onLastListenerDeregistered(exchange: SupportedExchange) {
@@ -36,46 +35,46 @@ class DefaultOrderBookFetchScheduler(
         if (!scheduledFetchers.containsKey(exchange)) {
             val exchangeFrequency = allowedExchangeFetchFrequency.getValue(exchange)
             val scheduledFetcher = scheduledExecutorService.scheduleAtFixedRate({
-                orderBookListeners.iterateOverEachExchangeAndAllCurrencyPairs(this)
+                tickerListeners.iterateOverEachExchangeAndAllCurrencyPairs(this)
             }, 0, exchangeFrequency.toMillis(), TimeUnit.MILLISECONDS)
             scheduledFetchers[exchange] = scheduledFetcher
         }
     }
 
-    override fun fetchOrderBooksThenNotifyListeners(exchange: SupportedExchange, currencyPairsWithListeners: Map<CurrencyPair, Set<OrderBookListener>>) {
+    override fun fetchTickersThenNotifyListeners(exchange: SupportedExchange, currencyPairsWithListeners: Map<CurrencyPair, Set<TickerListener>>) {
         // TODO that's possibly subject to optimize and fetch all currency pairs with one exchange request where possible
         executorService.submit {
             currencyPairsWithListeners.forEach { (currencyPair, orderBookListeners) ->
-                val orderBook = getOrderBook(exchange, currencyPair)
+                val orderBook = getTicker(exchange, currencyPair)
                 if (orderBook != null && isNew(orderBook, exchange, currencyPair)) {
                     orderBookListeners.forEach {
-                        it.onOrderBook(exchange, currencyPair, orderBook)
+                        it.onTicker(exchange, currencyPair, orderBook)
                     }
                 } else {
                     orderBookListeners.forEach {
-                        it.onNoNewOrderBook(exchange, currencyPair, orderBook)
+                        it.onNoNewTicker(exchange, currencyPair, orderBook)
                     }
                 }
             }
         }
     }
 
-    private fun getOrderBook(exchange: SupportedExchange, currencyPair: CurrencyPair): OrderBook? {
+    private fun getTicker(exchange: SupportedExchange, currencyPair: CurrencyPair): Ticker? {
         return try {
-            exchangeOrderBookService.getOrderBook(exchange.exchangeName, currencyPair)
+            exchangeTickerService.getTicker(exchange.exchangeName, currencyPair)
         } catch (e: Exception) {
-            logger.error { "[$exchange-$currencyPair] Error getting order book: ${e.message} (${e.stackTrace[0]})" }
+            logger.error { "[$exchange-$currencyPair] Error getting ticker: ${e.message} (${e.stackTrace[0]})" }
             null
         }
     }
 
-    private fun isNew(possiblyNewOrderBook: OrderBook, exchange: SupportedExchange, currencyPair: CurrencyPair): Boolean {
+    private fun isNew(possiblyNewTicker: Ticker, exchange: SupportedExchange, currencyPair: CurrencyPair): Boolean {
         val key = exchange.exchangeName + currencyPair
-        val isNew = when (val lastOrderBook = lastOrderBook[key]) {
+        val isNew = when (val lastTicker = lastTicker[key]) {
             null -> true
-            else -> possiblyNewOrderBook != lastOrderBook
+            else -> possiblyNewTicker != lastTicker
         }
-        if (isNew) this.lastOrderBook[key] = possiblyNewOrderBook
+        if (isNew) this.lastTicker[key] = possiblyNewTicker
         return isNew
     }
 }
