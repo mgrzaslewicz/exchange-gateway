@@ -1,5 +1,6 @@
 package automate.profit.autocoin.exchange.order
 
+import automate.profit.autocoin.exchange.apikey.ExchangeKeyDto
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 
@@ -37,10 +38,21 @@ data class ExchangeOpenOrders(
 interface ExchangeOrderService {
 
     fun cancelOrder(exchangeName: String, exchangeUserId: String, cancelOrderParams: ExchangeCancelOrderParams): Boolean
+    fun cancelOrder(exchangeName: String, exchangeKey: ExchangeKeyDto, cancelOrderParams: ExchangeCancelOrderParams): Boolean
 
     fun placeLimitBuyOrder(
         exchangeName: String,
         exchangeUserId: String,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        buyPrice: BigDecimal,
+        amount: BigDecimal,
+        isDemoOrder: Boolean = false
+    ): ExchangeOrder
+
+    fun placeLimitBuyOrder(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
         baseCurrencyCode: String,
         counterCurrencyCode: String,
         buyPrice: BigDecimal,
@@ -58,7 +70,20 @@ interface ExchangeOrderService {
         isDemoOrder: Boolean = false
     ): ExchangeOrder
 
+    fun placeLimitSellOrder(
+        exchangeName: String,
+        exchangeKey: ExchangeKeyDto,
+        baseCurrencyCode: String,
+        counterCurrencyCode: String,
+        sellPrice: BigDecimal,
+        amount: BigDecimal,
+        isDemoOrder: Boolean = false
+    ): ExchangeOrder
+
     fun getOpenOrders(exchangeName: String, exchangeUserId: String): List<ExchangeOrder>
+
+    fun getOpenOrders(exchangeName: String, exchangeKey: ExchangeKeyDto): List<ExchangeOrder>
+
 
     fun getOpenOrdersForAllExchangeKeys(): List<ExchangeOpenOrders> = getOpenOrdersForAllExchangeKeys(emptyList())
 
