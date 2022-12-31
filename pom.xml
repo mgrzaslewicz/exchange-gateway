@@ -4,7 +4,7 @@
 
     <groupId>automate.profit</groupId>
     <artifactId>autocoin-exchange-engine</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEAutocoinExchangesTesncoding>UTF-8</project.reporting.outputEAutocoinExchangesTesncoding>
         <java.version>1.8</java.version>
-        <kotlin.version>1.3.20</kotlin.version>
+        <kotlin.version>1.3.21</kotlin.version>
     </properties>
 
     <modules>
