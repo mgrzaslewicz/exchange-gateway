@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-        <xchange.version>4.3.19</xchange.version>
+        <xchange.version>4.3.21</xchange.version>
     </properties>
 
     <dependencies>
@@ -144,9 +144,7 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <version>${kotlin.version}</version>
                 <configuration>
-                    <compilerPlugins>
-                        <plugin>spring</plugin>
-                    </compilerPlugins>
+                    <jvmTarget>1.8</jvmTarget>
                 </configuration>
                 <executions>
                     <execution>
