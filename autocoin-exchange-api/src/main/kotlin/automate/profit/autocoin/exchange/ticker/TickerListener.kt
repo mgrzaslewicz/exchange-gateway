@@ -3,16 +3,15 @@ package automate.profit.autocoin.exchange.ticker
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
-import java.time.Instant
 
 data class Ticker(
-        val currencyPair: CurrencyPair,
-        val ask: BigDecimal,
-        val bid: BigDecimal,
-        val baseCurrency24hVolume: BigDecimal,
-        val counterCurrency24hVolume: BigDecimal,
-        val receivedAtMillis: Long,
-        val exchangeTimestampMillis: Long?,
+    val currencyPair: CurrencyPair,
+    val ask: BigDecimal,
+    val bid: BigDecimal,
+    val baseCurrency24hVolume: BigDecimal,
+    val counterCurrency24hVolume: BigDecimal,
+    val receivedAtMillis: Long,
+    val exchangeTimestampMillis: Long?,
 ) {
     fun hasTimestamp() = this.exchangeTimestampMillis != null
 }

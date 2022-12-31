@@ -8,7 +8,6 @@ import automate.profit.autocoin.exchange.metadata.ExchangeMetadataService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import mu.KLogging
-import mu.KotlinLogging
 
 interface ExchangeCurrencyPairsInWalletService {
     fun generateFromWalletIfGivenEmpty(exchangeName: String, exchangeUserId: String, currencyPairs: List<CurrencyPair>): List<CurrencyPair>
@@ -19,8 +18,8 @@ interface ExchangeCurrencyPairsInWalletService {
  * TODO Verify this mechanism is working on production, for now it does not matter as it's not used by most important supported exchanges
  */
 class DefaultExchangeCurrencyPairsInWalletService(
-        private val exchangeMetadataService: ExchangeMetadataService,
-        private val exchangeWalletService: XchangeExchangeWalletService
+    private val exchangeMetadataService: ExchangeMetadataService,
+    private val exchangeWalletService: XchangeExchangeWalletService
 ) : ExchangeCurrencyPairsInWalletService {
 
     companion object : KLogging()

@@ -3,8 +3,6 @@ package automate.profit.autocoin.exchange.orderbook
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.currency.ExchangeWithCurrencyPairStringCache
-import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior
-import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior.WAIT_WITHOUT_TIMEOUT
 import mu.KLogger
 import mu.KotlinLogging
 import java.lang.ref.SoftReference
@@ -19,8 +17,8 @@ interface SynchronousOrderBookFetchScheduler : OrderBookRegistrationListener {
 class DefaultSynchronousOrderBookFetchScheduler(
     private val exchangeOrderBookService: ExchangeOrderBookService,
     private val orderBookListeners: OrderBookListeners,
-    /** preferably a few multiple threads, but not one per single currency pair as it might grow to thousands of threads. workStealingPool might be a good fit */
-    private val executorService: ExecutorService,
+    /** Avoid using shared threads between never-ending jobs. When used fixed thread pool with the size of SupportedExchange.values().size it caused unnecessary delays and fetching was under rate limit*/
+    private val executorService: Map<SupportedExchange, ExecutorService>,
     private val logger: KLogger = KotlinLogging.logger {},
     private val getOrderBookFrequentErrorLogFunction: (messageFunction: () -> String) -> Unit = { messageFunction -> logger.error(messageFunction) },
 ) : SynchronousOrderBookFetchScheduler {
@@ -40,15 +38,15 @@ class DefaultSynchronousOrderBookFetchScheduler(
     }
 
     /**
-     * Current synchronous fetcher implementation has to to nothing on currency pair registration as it fetches all currency pairs from exchange at one go
+     * Current synchronous fetcher implementation has to do nothing on currency pair registration as it fetches all currency pairs from exchange at one go
      */
     override fun onListenerRegistered(exchange: SupportedExchange, currencyPair: CurrencyPair) {
     }
 
     override fun onFirstListenerRegistered(exchange: SupportedExchange) {
         if (!runningFetchers.containsKey(exchange)) {
-            val fetcher = executorService.submit {
-                while (true) {
+            val fetcher = executorService.getValue(exchange).submit {
+                while (!Thread.currentThread().isInterrupted) {
                     fetchOrderBooksThenNotifyListeners(exchange)
                 }
             }

@@ -5,8 +5,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.knowm.xchange.ExchangeSpecification
 import org.knowm.xchange.binance.BinanceExchange
-import org.knowm.xchange.bittrex.BittrexExchange
-import org.knowm.xchange.gateio.GateioExchange
 
 class ExchangeSpecificationVerifierTest {
 

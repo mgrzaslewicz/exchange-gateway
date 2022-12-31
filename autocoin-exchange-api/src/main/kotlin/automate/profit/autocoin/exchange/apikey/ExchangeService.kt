@@ -1,9 +1,9 @@
 package automate.profit.autocoin.exchange.apikey
 
 data class ExchangeDto(
-        val id: String,
-        val name: String,
-        val enabled: Boolean
+    val id: String,
+    val name: String,
+    val enabled: Boolean
 )
 
 interface ExchangeService {

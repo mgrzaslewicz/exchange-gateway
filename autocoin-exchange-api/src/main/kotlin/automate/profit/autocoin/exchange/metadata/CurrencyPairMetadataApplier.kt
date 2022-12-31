@@ -30,7 +30,12 @@ class CurrencyPairMetadataApplier {
     }
 
 
-    fun adjustBuyAmount(baseCurrencyAmount: BigDecimal, price: BigDecimal, currencyPairMetadata: CurrencyPairMetadata, availableCounterCurrency: BigDecimal = MAX_AMOUNT): BigDecimal {
+    fun adjustBuyAmount(
+        baseCurrencyAmount: BigDecimal,
+        price: BigDecimal,
+        currencyPairMetadata: CurrencyPairMetadata,
+        availableCounterCurrency: BigDecimal = MAX_AMOUNT
+    ): BigDecimal {
         val availableCounterCurrencyMinusFee = availableCounterCurrency - availableCounterCurrency * currencyPairMetadata.buyFeeMultiplier
         val currencyToBuyValue = baseCurrencyAmount * price
         val baseCurrencyAmountMinusFee = when {

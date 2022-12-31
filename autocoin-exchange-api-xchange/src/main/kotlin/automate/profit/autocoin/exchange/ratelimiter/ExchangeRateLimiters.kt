@@ -2,7 +2,6 @@ package automate.profit.autocoin.exchange.ratelimiter
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import java.time.Duration
-import java.time.temporal.ChronoUnit
 import java.time.temporal.ChronoUnit.MINUTES
 import java.time.temporal.ChronoUnit.SECONDS
 
@@ -72,7 +71,7 @@ class ExchangeRateLimiters(
         // https://futures-docs.poloniex.com/#introduction
         SupportedExchange.POLONIEX to RateLimit(180L, Duration.of(1L, MINUTES)),
 
-    )
+        )
 
     private val rateLimiters = SupportedExchange
         .values()

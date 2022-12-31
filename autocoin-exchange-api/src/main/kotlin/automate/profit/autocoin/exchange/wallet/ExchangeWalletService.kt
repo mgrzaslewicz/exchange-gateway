@@ -3,8 +3,8 @@ package automate.profit.autocoin.exchange.wallet
 import automate.profit.autocoin.exchange.currency.CurrencyBalance
 
 data class ExchangeWithErrorMessage(
-        val exchangeName: String,
-        val errorMessage: String?
+    val exchangeName: String,
+    val errorMessage: String?
 ) {
     fun hasNoError() = errorMessage == null
 }

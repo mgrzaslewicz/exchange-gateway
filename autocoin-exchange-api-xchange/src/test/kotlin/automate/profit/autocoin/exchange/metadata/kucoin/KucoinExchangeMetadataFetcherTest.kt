@@ -11,12 +11,12 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.knowm.xchange.Exchange
-import org.knowm.xchange.ExchangeFactory as XchangeExchangeFactory
-import org.knowm.xchange.ExchangeSpecification as XchangeExchangeSpecification
 import org.knowm.xchange.dto.meta.ExchangeMetaData
 import org.knowm.xchange.kucoin.KucoinMarketDataService
 import org.knowm.xchange.kucoin.dto.response.SymbolResponse
 import org.knowm.xchange.kucoin.dto.response.TradeFeeResponse
+import org.knowm.xchange.ExchangeFactory as XchangeExchangeFactory
+import org.knowm.xchange.ExchangeSpecification as XchangeExchangeSpecification
 
 class KucoinExchangeMetadataFetcherTest {
     private val kucoinSymbolsJson = this::class.java.getResource("/metadata/kucoin/kucoin-symbols-response.json").readText()

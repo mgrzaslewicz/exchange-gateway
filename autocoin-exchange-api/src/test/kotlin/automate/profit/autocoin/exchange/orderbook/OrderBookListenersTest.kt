@@ -29,12 +29,16 @@ class OrderBookListenersTest {
         tested.addOrderBookListener(BITTREX, currencyPair_AB, orderBookListener)
         tested.addOrderBookListener(BINANCE, currencyPair_CD, orderBookListener)
         // then
-        assertThat(tested.getOrderBookListeners(BITTREX)).isEqualTo(mapOf(
+        assertThat(tested.getOrderBookListeners(BITTREX)).isEqualTo(
+            mapOf(
                 currencyPair_AB to setOf(orderBookListener)
-        ))
-        assertThat(tested.getOrderBookListeners(BINANCE)).isEqualTo(mapOf(
+            )
+        )
+        assertThat(tested.getOrderBookListeners(BINANCE)).isEqualTo(
+            mapOf(
                 currencyPair_CD to setOf(orderBookListener)
-        ))
+            )
+        )
     }
 
     @Test
@@ -43,10 +47,12 @@ class OrderBookListenersTest {
         tested.addOrderBookListener(BITTREX, currencyPair_AB, orderBookListener)
         tested.addOrderBookListener(BITTREX, currencyPair_CD, orderBookListener)
         // then
-        assertThat(tested.getOrderBookListeners(BITTREX)).isEqualTo(mapOf(
+        assertThat(tested.getOrderBookListeners(BITTREX)).isEqualTo(
+            mapOf(
                 currencyPair_AB to setOf(orderBookListener),
                 currencyPair_CD to setOf(orderBookListener)
-        ))
+            )
+        )
     }
 
     @Test
@@ -57,9 +63,11 @@ class OrderBookListenersTest {
         tested.removeOrderBookListener(BITTREX, currencyPair_AB, orderBookListener)
         // then
         assertThat(tested.getOrderBookListeners(BITTREX)).isEmpty()
-        assertThat(tested.getOrderBookListeners(BINANCE)).isEqualTo(mapOf(
+        assertThat(tested.getOrderBookListeners(BINANCE)).isEqualTo(
+            mapOf(
                 currencyPair_CD to setOf(orderBookListener)
-        ))
+            )
+        )
     }
 
     @Test

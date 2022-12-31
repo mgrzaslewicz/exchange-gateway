@@ -1,25 +1,27 @@
 package automate.profit.autocoin.exchange.ticker
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.currency.ExchangeWithCurrencyPairStringCache
 import automate.profit.autocoin.exchange.currency.CurrencyPair
+import automate.profit.autocoin.exchange.currency.ExchangeWithCurrencyPairStringCache
 import mu.KLogging
 import java.lang.ref.SoftReference
 import java.time.Duration
-import java.util.concurrent.*
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledFuture
+import java.util.concurrent.TimeUnit
 
 interface SynchronousTickerFetchScheduler : TickerRegistrationListener {
     fun fetchTickersThenNotifyListeners(exchange: SupportedExchange)
 }
 
 class DefaultSynchronousTickerFetchScheduler(
-        private val allowedExchangeFetchFrequency: Map<SupportedExchange, Duration>,
-        private val exchangeTickerService: ExchangeTickerService,
-        private val tickerListeners: TickerListeners,
-        /** preferably one thread per exchange - cached thread pool is a good fit */
-        private val scheduledExecutorService: ScheduledExecutorService,
-        /** preferably a few multiple threads, but not one per single currency pair as it might grow to thousands of threads. workStealingPool might be a good fit */
-        private val executorService: ExecutorService
+    private val allowedExchangeFetchFrequency: Map<SupportedExchange, Duration>,
+    private val exchangeTickerService: ExchangeTickerService,
+    private val tickerListeners: TickerListeners,
+    /** Not 100% sure if separate threads are needed here in the same way as for fetching order books.
+     * However, it proved to work well there so using it here too.*/
+    private val executorService: Map<SupportedExchange, ScheduledExecutorService>,
 ) : SynchronousTickerFetchScheduler {
     companion object : KLogging()
 
@@ -40,7 +42,7 @@ class DefaultSynchronousTickerFetchScheduler(
     override fun onFirstListenerRegistered(exchange: SupportedExchange) {
         if (!scheduledFetchers.containsKey(exchange)) {
             val exchangeFrequency = allowedExchangeFetchFrequency.getValue(exchange)
-            val scheduledFetcher = scheduledExecutorService.scheduleAtFixedRate({
+            val scheduledFetcher = executorService.getValue(exchange).scheduleAtFixedRate({
                 fetchTickersThenNotifyListeners(exchange)
             }, 0, exchangeFrequency.toMillis(), TimeUnit.MILLISECONDS)
             scheduledFetchers[exchange] = scheduledFetcher
@@ -52,7 +54,7 @@ class DefaultSynchronousTickerFetchScheduler(
 
     override fun fetchTickersThenNotifyListeners(exchange: SupportedExchange) {
         // TODO that's possibly subject to optimize and fetch all currency pairs with one exchange request where possible
-        executorService.submit {
+        executorService.getValue(exchange).submit {
             tickerListeners.getTickerListeners(exchange).forEach { (currencyPair, tickerListeners) ->
                 val ticker = getTicker(exchange, currencyPair)
                 if (ticker != null && isNew(ticker, exchange, currencyPair)) {
