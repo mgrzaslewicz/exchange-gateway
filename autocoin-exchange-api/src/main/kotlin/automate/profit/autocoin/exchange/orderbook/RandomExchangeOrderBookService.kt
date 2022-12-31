@@ -2,6 +2,7 @@ package automate.profit.autocoin.exchange.orderbook
 
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.order.ExchangeOrderType
+import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.Instant
@@ -10,7 +11,7 @@ import java.time.Instant
  * Random order books for testing purposes
  */
 class RandomExchangeOrderBookService : ExchangeOrderBookService {
-    override fun getOrderBook(exchangeName: String, currencyPair: CurrencyPair): OrderBook {
+    override fun getOrderBook(exchangeName: String, currencyPair: CurrencyPair, rateLimiterBehaviour: RateLimiterBehavior): OrderBook {
         return OrderBook(
                 buyOrders =
                 (1..100).map {

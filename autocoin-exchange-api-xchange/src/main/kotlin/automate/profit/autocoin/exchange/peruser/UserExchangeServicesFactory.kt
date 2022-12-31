@@ -1,7 +1,7 @@
 package automate.profit.autocoin.exchange.peruser
 
-import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.CachingXchangeProvider
+import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
 import automate.profit.autocoin.exchange.orderbook.UserExchangeOrderBookService
 import automate.profit.autocoin.exchange.orderbook.XchangeUserExchangeOrderBookService
@@ -96,8 +96,9 @@ class XchangeUserExchangeServicesFactory(
     ): UserExchangeWalletService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         return XchangeUserExchangeWalletService(
-            supportedExchange,
-            cachingXchangeProvider.getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).accountService
+            supportedExchange = supportedExchange,
+            wrapped = cachingXchangeProvider.getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).accountService,
+            exchangeRateLimiter = exchangeRateLimiters.get(supportedExchange)
         )
     }
 
