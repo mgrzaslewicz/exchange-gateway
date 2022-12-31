@@ -2,7 +2,6 @@ package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.metadata.bittrex.BittrexExchangeMetadataFetcher
-import automate.profit.autocoin.exchange.time.SystemTimeMillisProvider
 import automate.profit.autocoin.keyvalue.FileKeyValueRepository
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
@@ -12,6 +11,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
+import java.time.Clock
 
 class DefaultExchangeMetadataServiceTest {
 
@@ -22,7 +22,7 @@ class DefaultExchangeMetadataServiceTest {
         debugWarnings = emptyList()
     )
 
-    private val fileKeyValueRepository = FileKeyValueRepository(timeMillisProvider = SystemTimeMillisProvider())
+    private val fileKeyValueRepository = FileKeyValueRepository(clock = Clock.systemDefaultZone())
     @Test
     fun shouldFetchMetadataWhenRepositoryEmpty(@TempDir tempFolder: File) {
         val expectedExchangeMetadata = emptyMetadata

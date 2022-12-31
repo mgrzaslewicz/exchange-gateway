@@ -1,5 +1,8 @@
 package automate.profit.autocoin.exchange.time
 
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 import java.util.*
 
 
@@ -12,19 +15,22 @@ class SystemTimeMillisProvider : TimeMillisProvider
 /**
  * Cannot be moved to maven submodule due to cyclic dependency automate.profit:autocoin-exchange-api --> automate.profit:autocoin-exchange-api-test --> automate.profit:autocoin-exchange-api
  */
-class TestQueueTimeMillisProvider(private val timeMillisList: List<Long>) : TimeMillisProvider {
+class QueueClock(timeMillisList: List<Long>) : Clock() {
     private val timeMillisQueue: ArrayDeque<Long> = ArrayDeque(timeMillisList)
-    override fun now(): Long {
-        return timeMillisQueue.poll()
+
+    override fun getZone(): ZoneId = ZoneId.systemDefault()
+
+    override fun withZone(zone: ZoneId?): Clock {
+        TODO("Not yet implemented")
+    }
+
+    override fun instant(): Instant {
+        return Instant.ofEpochMilli(timeMillisQueue.poll())
     }
 
     fun assertNoUnnecessaryTimeWasProvided() {
         assert(timeMillisQueue.isEmpty())
     }
+
 }
 
-class TestFixedTimeMillisProvider(var currentTimeMs: Long) : TimeMillisProvider {
-    override fun now(): Long {
-        return currentTimeMs
-    }
-}

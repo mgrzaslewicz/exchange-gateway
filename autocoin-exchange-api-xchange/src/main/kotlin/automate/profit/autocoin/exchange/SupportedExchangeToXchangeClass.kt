@@ -15,7 +15,6 @@ import org.knowm.xchange.bittrex.BittrexExchange
 import org.knowm.xchange.bleutrade.BleutradeExchange
 import org.knowm.xchange.cexio.CexIOExchange
 import org.knowm.xchange.coinbasepro.CoinbaseProExchange
-import org.knowm.xchange.coinbene.CoinbeneExchange
 import org.knowm.xchange.coindeal.CoindealExchange
 import org.knowm.xchange.coinex.CoinexExchange
 import org.knowm.xchange.exmo.ExmoExchange
@@ -25,9 +24,8 @@ import org.knowm.xchange.gemini.v1.GeminiExchange
 import org.knowm.xchange.idex.IdexExchange
 import org.knowm.xchange.kraken.KrakenExchange
 import org.knowm.xchange.kucoin.KucoinExchange
-import org.knowm.xchange.livecoin.LivecoinExchange
 import org.knowm.xchange.luno.LunoExchange
-import org.knowm.xchange.okex.v5.OkexExchange
+import org.knowm.xchange.okex.OkexExchange
 import org.knowm.xchange.tradeogre.TradeOgreExchange
 import org.knowm.xchange.yobit.YoBitExchange
 

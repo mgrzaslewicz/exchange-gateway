@@ -10,7 +10,6 @@ import automate.profit.autocoin.exchange.ratelimiter.ExchangeRateLimiter
 import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior
 import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior.WAIT_WITHOUT_TIMEOUT
 import automate.profit.autocoin.exchange.ratelimiter.acquireWith
-import automate.profit.autocoin.exchange.time.TimeMillisProvider
 import mu.KLogging
 import org.knowm.xchange.binance.service.BinanceCancelOrderParams
 import org.knowm.xchange.dto.Order
@@ -19,6 +18,7 @@ import org.knowm.xchange.service.trade.params.CancelOrderParams
 import org.knowm.xchange.service.trade.params.DefaultCancelOrderParamId
 import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParamCurrencyPair
 import java.math.BigDecimal
+import java.time.Clock
 import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 import org.knowm.xchange.service.trade.TradeService as XchangeTradeService
 
@@ -81,7 +81,7 @@ open class XchangeUserExchangeTradeService(
     private val exchangeName: String,
     private val wrapped: XchangeTradeService,
     private val exchangeRateLimiter: ExchangeRateLimiter,
-    private val timeMillisProvider: TimeMillisProvider,
+    private val clock: Clock,
 ) : UserExchangeTradeService {
 
     override fun getOpenOrders(rateLimiterBehaviour: RateLimiterBehavior): List<ExchangeOrder> {
@@ -89,7 +89,7 @@ open class XchangeUserExchangeTradeService(
         return wrapped.getOpenOrders()
             .allOpenOrders
             .filterIsInstance<LimitOrder>()
-            .map { it.toExchangeOrder(exchangeName, timeMillisProvider.now()) }
+            .map { it.toExchangeOrder(exchangeName, clock.millis()) }
     }
 
     override fun getOpenOrders(currencyPair: CurrencyPair, rateLimiterBehaviour: RateLimiterBehavior): List<ExchangeOrder> {
@@ -98,7 +98,7 @@ open class XchangeUserExchangeTradeService(
         return wrapped.getOpenOrders(params)
             .allOpenOrders
             .filterIsInstance<LimitOrder>()
-            .map { it.toExchangeOrder(exchangeName, timeMillisProvider.now()) }
+            .map { it.toExchangeOrder(exchangeName, clock.millis()) }
     }
 
     companion object : KLogging()
@@ -179,7 +179,7 @@ open class XchangeUserExchangeTradeService(
 
         exchangeRateLimiter.acquireWith(rateLimiterBehaviour) { "[$exchangeName] Could not acquire permit to placeBuyOrder" }
         val orderId = wrapped.placeLimitOrder(limitBuyOrder)
-        val receivedAtMillis = timeMillisProvider.now()
+        val receivedAtMillis = clock.millis()
 
         logger.info { "Limit $exchangeName-buy order created with id: $orderId" }
         return ExchangeOrder(
@@ -209,7 +209,7 @@ open class XchangeUserExchangeTradeService(
 
         exchangeRateLimiter.acquireWith(rateLimiterBehaviour) { "[$exchangeName] Could not acquire permit to placeSellOrder" }
         val orderId = wrapped.placeLimitOrder(limitSellOrder)
-        val receivedAtMillis = timeMillisProvider.now()
+        val receivedAtMillis = clock.millis()
 
         logger.info { "Limit $exchangeName-sell order created with id: $orderId" }
         return ExchangeOrder(

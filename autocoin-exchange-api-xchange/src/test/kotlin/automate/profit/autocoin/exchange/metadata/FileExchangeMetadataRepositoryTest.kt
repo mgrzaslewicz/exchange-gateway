@@ -1,118 +1,103 @@
 package automate.profit.autocoin.exchange.metadata
 
-import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
-import automate.profit.autocoin.exchange.currency.CurrencyPair
-import automate.profit.autocoin.exchange.time.SystemTimeMillisProvider
+import automate.profit.autocoin.exchange.time.QueueClock
 import automate.profit.autocoin.keyvalue.FileKeyValueRepository
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
-import java.math.BigDecimal
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneId
 
-class FileExchangeMetadataRepositoryTest {
+
+class FileKeyValueRepositoryTest {
 
     @TempDir
     lateinit var tempFolder: File
 
-    private val exchangeMetadataToSave = ExchangeMetadata(
-        exchange = BITTREX,
-        currencyPairMetadata = mapOf(
-            CurrencyPair.of("ABC/BCD") to CurrencyPairMetadata(
-                amountScale = 23,
-                priceScale = 2,
-                minimumAmount = BigDecimal("23.4567"),
-                maximumAmount = BigDecimal("101.123"),
-                minimumOrderValue = BigDecimal.ZERO,
-                maximumPriceMultiplierUp = BigDecimal("0.2"),
-                maximumPriceMultiplierDown = BigDecimal("0.15"),
-                buyFeeMultiplier = BigDecimal("0.0015"),
-                transactionFeeRanges = TransactionFeeRanges(
-                    makerFees = listOf(
-                        TransactionFeeRange(
-                            beginAmount = "0.05".toBigDecimal(),
-                            feeAmount = "0.02".toBigDecimal()
-                        ),
-                        TransactionFeeRange(
-                            beginAmount = "0.25".toBigDecimal(),
-                            feeAmount = "0.01".toBigDecimal()
-                        )
-                    ),
-                    takerFees = listOf(
-                        TransactionFeeRange(
-                            beginAmount = "0.05".toBigDecimal(),
-                            feeAmount = "0.03".toBigDecimal()
-                        ),
-                        TransactionFeeRange(
-                            beginAmount = "0.35".toBigDecimal(),
-                            feeAmount = "0.02".toBigDecimal()
-                        )
-                    )
-                )
-            )
-        ),
-        currencyMetadata = mapOf(
-            "ABC" to CurrencyMetadata(
-                scale = 3,
-                minWithdrawalAmount = "0.05".toBigDecimal(),
-                withdrawalFeeAmount = "0.0001".toBigDecimal(),
-                depositEnabled = true,
-                withdrawalEnabled = false
-            )
-        ),
-        debugWarnings = emptyList()
-    )
-
-    private val fileKeyValueRepository = FileKeyValueRepository(timeMillisProvider = SystemTimeMillisProvider())
-    private lateinit var tested: FileExchangeMetadataRepository
+    private lateinit var tested: FileKeyValueRepository
 
     @BeforeEach
     fun setup() {
-        tested = FileExchangeMetadataRepository(tempFolder, fileKeyValueRepository)
+        tested = FileKeyValueRepository(clock = Clock.systemDefaultZone())
     }
 
     @Test
-    fun shouldReturnNoMetadataWhenNothingSavedBefore() {
+    fun shouldReturnNullWhenNothingSavedBefore() {
         // when
-        val savedExchangeMetadataResult = tested.getLatestExchangeMetadata(BITTREX)
+        val latestVersion = tested.getLatestVersion(tempFolder, key = "test")
         // then
-        assertThat(savedExchangeMetadataResult.hasMetadata()).isFalse
+        assertThat(latestVersion).isNull()
     }
 
     @Test
-    fun shouldReadMetadataFromFileWhenAfterOneSave() {
+    fun shouldReadLatestVersionFromFileWhenAfterOneSave() {
         // given
-        tested.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
+        tested.saveNewVersion(directory = tempFolder, key = "test", value = "value1")
         // when
-        val savedExchangeMetadataResult = tested.getLatestExchangeMetadata(BITTREX)
+        val latestVersion = tested.getLatestVersion(directory = tempFolder, key = "test")
         // then
-        assertThat(exchangeMetadataToSave).isEqualTo(savedExchangeMetadataResult.exchangeMetadata)
+        assertThat(latestVersion).isNotNull
+        assertThat(latestVersion!!.value).isEqualTo("value1")
     }
 
 
     @Test
-    fun shouldReadLatestMetadataFromFileAfterTwoSaves() {
+    fun shouldReadLatestVersionFromFileAfterTwoSaves() {
         // given
-        val secondExchangeMetadataToSave = exchangeMetadataToSave.copy(currencyMetadata = emptyMap())
-        tested.saveExchangeMetadata(BITTREX, exchangeMetadataToSave)
-        tested.saveExchangeMetadata(BITTREX, secondExchangeMetadataToSave)
+        tested.saveNewVersion(directory = tempFolder, key = "test", value = "value1")
+        tested.saveNewVersion(directory = tempFolder, key = "test", value = "value2")
         // when
-        val savedExchangeMetadataResult = tested.getLatestExchangeMetadata(BITTREX)
+        val latestVersion = tested.getLatestVersion(directory = tempFolder, key = "test")
         // then
-        assertThat(savedExchangeMetadataResult.exchangeMetadata).isEqualTo(secondExchangeMetadataToSave)
+        assertThat(latestVersion).isNotNull
+        assertThat(latestVersion!!.value).isEqualTo("value2")
     }
 
     @Test
-    fun shouldKeepLastNBackups() {
-        val fileKeyValueRepository: FileKeyValueRepository = mock()
-        val tested = FileExchangeMetadataRepository(metadataDirectory = tempFolder, fileKeyValueRepository = fileKeyValueRepository)
+    fun shouldCreateFileWithProperNameAndContent() {
+        // given
+        val currentTimeMillis = 19L
+        val tested = FileKeyValueRepository(clock = Clock.fixed(Instant.ofEpochMilli(currentTimeMillis), ZoneId.systemDefault()), fileExtension = ".json")
+        val currentTimeMillisAsDateTimeString = "19700101010000019"
         // when
-        tested.keepLastNBackups(BITTREX, 2)
+        tested.saveNewVersion(directory = tempFolder, key = "test", value = "value1")
         // then
-        verify(fileKeyValueRepository).keepLastNVersions(tempFolder.resolve(BITTREX.exchangeName), BITTREX.exchangeName, 2)
+        val savedFile = tempFolder.resolve("test_$currentTimeMillisAsDateTimeString.json")
+        assertThat(savedFile).exists()
+        assertThat(savedFile.readText()).isEqualTo("value1")
+    }
+
+    @Test
+    fun shouldKeepLastNVersions() {
+        val tested = FileKeyValueRepository(clock = QueueClock(listOf(1L, 2L, 3L, 4L)), fileExtension = ".json")
+        tested.saveNewVersion(directory = tempFolder, key = "test", "value1")
+        tested.saveNewVersion(directory = tempFolder, key = "test", "value2")
+        tested.saveNewVersion(directory = tempFolder, key = "test", "value3")
+        tested.saveNewVersion(directory = tempFolder, key = "test", "value4")
+        // when
+        tested.keepLastNVersions(tempFolder, key = "test", maxVersions = 2)
+        // then
+        assertThat(tempFolder.resolve("test_19700101010000001.json")).doesNotExist()
+        assertThat(tempFolder.resolve("test_19700101010000002.json")).doesNotExist()
+        assertThat(tempFolder.resolve("test_19700101010000003.json")).exists()
+        assertThat(tempFolder.resolve("test_19700101010000004.json")).exists()
+    }
+
+    @Test
+    fun shouldNotRemoveOtherKeysWhenKeepLastNVersions() {
+        val tested = FileKeyValueRepository(clock = QueueClock(listOf(1L, 2L, 3L)), fileExtension = ".json")
+        tested.saveNewVersion(directory = tempFolder, key = "test", "value1")
+        tested.saveNewVersion(directory = tempFolder, key = "test", "value2")
+        tested.saveNewVersion(directory = tempFolder, key = "test2", "value3")
+        // when
+        tested.keepLastNVersions(tempFolder, key = "test", maxVersions = 1)
+        // then
+        assertThat(tempFolder.resolve("test_19700101010000001.json")).doesNotExist()
+        assertThat(tempFolder.resolve("test_19700101010000002.json")).exists()
+        assertThat(tempFolder.resolve("test2_19700101010000003.json")).exists()
     }
 
 }

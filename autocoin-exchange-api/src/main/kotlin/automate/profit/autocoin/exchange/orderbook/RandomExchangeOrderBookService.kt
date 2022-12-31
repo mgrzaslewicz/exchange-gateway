@@ -3,14 +3,14 @@ package automate.profit.autocoin.exchange.orderbook
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.order.ExchangeOrderType
 import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior
-import automate.profit.autocoin.exchange.time.TimeMillisProvider
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.Clock
 
 /**
  * Random order books for testing purposes
  */
-class RandomExchangeOrderBookService(private val timeMillisProvider: TimeMillisProvider) : ExchangeOrderBookService {
+class RandomExchangeOrderBookService(private val clock: Clock) : ExchangeOrderBookService {
     override fun getOrderBook(exchangeName: String, currencyPair: CurrencyPair, rateLimiterBehaviour: RateLimiterBehavior): OrderBook {
         return OrderBook(
             buyOrders =
@@ -21,7 +21,7 @@ class RandomExchangeOrderBookService(private val timeMillisProvider: TimeMillisP
                     price = BigDecimal(Math.random()).abs().setScale(8, RoundingMode.HALF_EVEN),
                     currencyPair = currencyPair,
                     orderedAmount = BigDecimal(Math.random()).abs().setScale(8, RoundingMode.HALF_EVEN),
-                    receivedAtMillis = timeMillisProvider.now(),
+                    receivedAtMillis = clock.millis(),
                     exchangeTimestampMillis = null,
                 )
             },
@@ -32,11 +32,11 @@ class RandomExchangeOrderBookService(private val timeMillisProvider: TimeMillisP
                     price = BigDecimal(Math.random()).abs().setScale(8, RoundingMode.HALF_EVEN),
                     currencyPair = currencyPair,
                     orderedAmount = BigDecimal(Math.random()).abs().setScale(8, RoundingMode.HALF_EVEN),
-                    receivedAtMillis = timeMillisProvider.now(),
+                    receivedAtMillis = clock.millis(),
                     exchangeTimestampMillis = null,
                 )
             },
-            receivedAtMillis = timeMillisProvider.now(),
+            receivedAtMillis = clock.millis(),
             exchangeTimestampMillis = null,
         )
     }
