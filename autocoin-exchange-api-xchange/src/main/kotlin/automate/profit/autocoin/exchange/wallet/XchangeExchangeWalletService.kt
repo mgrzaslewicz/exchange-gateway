@@ -19,7 +19,7 @@ class XchangeExchangeWalletService(
 
     companion object : KLogging()
 
-    fun getCurrencyBalances(exchangeName: String, exchangeKey: ExchangeKeyDto): List<ExchangeCurrencyBalance> {
+    override fun getCurrencyBalances(exchangeName: String, exchangeKey: ExchangeKeyDto): List<ExchangeCurrencyBalance> {
         val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeKey)
         return userExchangeWalletService.getCurrencyBalances()
     }
@@ -35,7 +35,7 @@ class XchangeExchangeWalletService(
         return userExchangeWalletService.getCurrencyBalance(currencyCode)
     }
 
-    fun getCurrencyBalance(exchangeName: String, exchangeKey: ExchangeKeyDto, currencyCode: String): ExchangeCurrencyBalance {
+    override fun getCurrencyBalance(exchangeName: String, exchangeKey: ExchangeKeyDto, currencyCode: String): ExchangeCurrencyBalance {
         val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeKey)
         return userExchangeWalletService.getCurrencyBalance(currencyCode)
     }
@@ -65,7 +65,7 @@ class XchangeExchangeWalletService(
 
     }
 
-    fun getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchangeName: Map<String, List<ExchangeKeyDto>>): Map<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>> {
+    override fun getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchangeName: Map<String, List<ExchangeKeyDto>>): Map<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>> {
         val result = mutableMapOf<ExchangeWithErrorMessage, List<ExchangeCurrencyBalance>>()
         runBlocking {
             exchangeKeysGroupedByExchangeName.forEach {
