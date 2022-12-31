@@ -13,9 +13,6 @@ interface TickerListenerRegistrars {
     fun fetchTickersAndNotifyListeners()
 }
 
-interface TickerListenerRegistrarProvider {
-    fun createTickerListenerRegistrar(exchangeName: SupportedExchange): TickerListenerRegistrar
-}
 
 class DefaultTickerListenerRegistrars(
         initialTickerListenerRegistrarList: List<TickerListenerRegistrar>,

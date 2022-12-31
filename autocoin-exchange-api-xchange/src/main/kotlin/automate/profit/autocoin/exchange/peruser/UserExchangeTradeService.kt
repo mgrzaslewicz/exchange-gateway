@@ -5,6 +5,7 @@ import automate.profit.autocoin.exchange.SupportedExchange.*
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.currency.toXchangeCurrencyPair
 import automate.profit.autocoin.exchange.order.*
+import automate.profit.autocoin.exchange.orderbook.OrderBookExchangeOrder
 import mu.KLogging
 import org.knowm.xchange.binance.service.BinanceCancelOrderParams
 import org.knowm.xchange.dto.Order
