@@ -159,6 +159,17 @@ class TickerListenerRegistrarTest {
     }
 
     @Test
+    fun shouldNotifyNoNewTicker() {
+        // given
+        sameBchTickerEveryTimeNoTimestamp()
+        registerTickerListener()
+        // when
+        fetchTickersTwice()
+        // then
+        verify(tickerListener, times(1)).onNoNewTicker()
+    }
+
+    @Test
     fun shouldGetListenersOfClass() {
         // given
         class A : TickerListener {
