@@ -28,17 +28,20 @@ class BinanceExchangeMetadataFetcher(
 
     private val logger = KotlinLogging.logger {}
 
+    /**
+     * @see <a href="https://www.binance.com/en/fee/schedule">binance fees</a>
+     */
     private val defaultTransactionFeeRanges = TransactionFeeRanges(
         makerFees = listOf(
             TransactionFeeRange(
                 beginAmount = BigDecimal.ZERO,
-                fee = TransactionFee(percent = "0.1".toBigDecimal())
+                fee = TransactionFee(rate = "0.001".toBigDecimal())
             )
         ),
         takerFees = listOf(
             TransactionFeeRange(
                 beginAmount = BigDecimal.ZERO,
-                fee = TransactionFee(percent = "0.1".toBigDecimal())
+                fee = TransactionFee(rate = "0.001".toBigDecimal())
             )
         )
     )

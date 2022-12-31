@@ -4,7 +4,7 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 
 data class TransactionFee(
-    val percent: BigDecimal
+    val rate: BigDecimal
 )
 
 data class TransactionFeeRange(
@@ -19,7 +19,7 @@ data class TransactionFeeRanges(
     private val takerFeesSortedAscending = takerFees.sortedBy { it.beginAmount }
 
     fun takerPercentForBaseCurrency(baseCurrencyAmount: BigDecimal): BigDecimal {
-        return takerFeesSortedAscending.find { it.beginAmount >= baseCurrencyAmount }?.fee?.percent ?: BigDecimal.ZERO
+        return takerFeesSortedAscending.find { it.beginAmount >= baseCurrencyAmount }?.fee?.rate ?: BigDecimal.ZERO
     }
 }
 

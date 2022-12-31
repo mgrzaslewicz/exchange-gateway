@@ -80,13 +80,13 @@ internal fun XchangeCurrencyPairMetaData.getTransactionFeeRanges(
         takerFees = this.feeTiers?.map { feeTier ->
             TransactionFeeRange(
                 beginAmount = feeTier.beginQuantity,
-                fee = TransactionFee(percent = feeTier.fee.takerFee)
+                fee = TransactionFee(rate = feeTier.fee.takerFee)
             )
         } ?: defaultTakerFees,
         makerFees = this.feeTiers?.map { feeTier ->
             TransactionFeeRange(
                 beginAmount = feeTier.beginQuantity,
-                fee = TransactionFee(percent = feeTier.fee.makerFee)
+                fee = TransactionFee(rate = feeTier.fee.makerFee)
             )
         } ?: defaultMakerFees
     )

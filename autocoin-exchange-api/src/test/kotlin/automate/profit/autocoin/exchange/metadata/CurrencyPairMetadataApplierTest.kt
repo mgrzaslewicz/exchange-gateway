@@ -26,21 +26,21 @@ class CurrencyPairMetadataApplierTest {
         makerFees = listOf(
             TransactionFeeRange(
                 beginAmount = "0.05".toBigDecimal(),
-                fee = TransactionFee(percent = "0.2".toBigDecimal())
+                fee = TransactionFee(rate = "0.02".toBigDecimal())
             ),
             TransactionFeeRange(
                 beginAmount = "0.25".toBigDecimal(),
-                fee = TransactionFee(percent = "0.1".toBigDecimal())
+                fee = TransactionFee(rate = "0.01".toBigDecimal())
             )
         ),
         takerFees = listOf(
             TransactionFeeRange(
                 beginAmount = "0.05".toBigDecimal(),
-                fee = TransactionFee(percent = "0.3".toBigDecimal())
+                fee = TransactionFee(rate = "0.03".toBigDecimal())
             ),
             TransactionFeeRange(
                 beginAmount = "0.35".toBigDecimal(),
-                fee = TransactionFee(percent = "0.2".toBigDecimal())
+                fee = TransactionFee(rate = "0.02".toBigDecimal())
             )
         )
     )
