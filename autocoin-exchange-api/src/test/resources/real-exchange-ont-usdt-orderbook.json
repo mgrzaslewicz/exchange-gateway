@@ -1,0 +1,548 @@
+{
+  "exchangeName": "realExchange",
+  "buyOrders": [
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 4122.705602575,
+      "price": "0.551",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 722.109,
+      "price": "0.55",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 5601.1401759559,
+      "price": "0.548",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 59515.0,
+      "price": "0.547",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 7262.0,
+      "price": "0.546",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 23028.5163247309,
+      "price": "0.542",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 11493.0,
+      "price": "0.541",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 2109.66,
+      "price": "0.539",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 172.81402434,
+      "price": "0.536",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 40.83,
+      "price": "0.535",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 11839.0,
+      "price": "0.533",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 274.53552,
+      "price": "0.532",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 500.0,
+      "price": "0.531",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 2.0,
+      "price": "0.53",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 1.893,
+      "price": "0.528",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 2.0,
+      "price": "0.526",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 2111.427,
+      "price": "0.523",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 2272.557,
+      "price": "0.521",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 2.0,
+      "price": "0.517",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 7717.47,
+      "price": "0.516",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 500.0,
+      "price": "0.514",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 7.0,
+      "price": "0.511",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 100.0,
+      "price": "0.507",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 4281.133,
+      "price": "0.506",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 4938.084,
+      "price": "0.505",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 6332.977,
+      "price": "0.504",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 7380.9476,
+      "price": "0.502",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 9712.425,
+      "price": "0.501",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 21173.88999464,
+      "price": "0.5",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "BID_BUY",
+      "orderedAmount": 300.0,
+      "price": "0.499",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    }
+  ],
+  "sellOrders": [
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 3852.5825,
+      "price": "0.553",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 11329.596,
+      "price": "0.555",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 59514.0,
+      "price": "0.556",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 3.603,
+      "price": "0.557",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 118.34,
+      "price": "0.558",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 2.0,
+      "price": "0.56",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 11492.0,
+      "price": "0.564",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 2.0,
+      "price": "0.569",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 3298.370704,
+      "price": "0.57",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 12170.232121,
+      "price": "0.571",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 2.0,
+      "price": "0.572",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 2.0,
+      "price": "0.575",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 613.73,
+      "price": "0.58",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 4762.293537,
+      "price": "0.583",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 682.0,
+      "price": "0.585",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 50.0,
+      "price": "0.588",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 45.18039,
+      "price": "0.589",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 234.3122368,
+      "price": "0.59",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 6.712548,
+      "price": "0.591",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 2946.34,
+      "price": "0.592",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 2047.104,
+      "price": "0.598",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 198.37435801,
+      "price": "0.599",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 8517.145408,
+      "price": "0.6",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 1645.548736,
+      "price": "0.602",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 2443.986616,
+      "price": "0.603",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 6.0,
+      "price": "0.604",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 6.0,
+      "price": "0.605",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 6696.832,
+      "price": "0.61",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 6696.82,
+      "price": "0.612",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    },
+    {
+      "exchangeName": "realExchange",
+      "side": "ASK_SELL",
+      "orderedAmount": 20.0,
+      "price": "0.613",
+      "baseCurrency": "ONT",
+      "counterCurrency": "USDT",
+      "timestamp": null
+    }
+  ],
+  "errorMessage": null
+}

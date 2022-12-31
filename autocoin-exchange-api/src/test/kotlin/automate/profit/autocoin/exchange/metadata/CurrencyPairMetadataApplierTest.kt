@@ -1,5 +1,9 @@
 package automate.profit.autocoin.exchange.metadata
 
+import automate.profit.autocoin.api.exchange.metadata.CurrencyPairMetadata
+import automate.profit.autocoin.api.exchange.metadata.CurrencyPairMetadataApplier
+import automate.profit.autocoin.api.exchange.metadata.FeeRange
+import automate.profit.autocoin.api.exchange.metadata.FeeRanges
 import mu.KLogging
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -22,23 +26,23 @@ class CurrencyPairMetadataApplierTest {
     private val maximumPriceMultiplierDown = 0.1.toBigDecimal()
     private val maximumPriceMultiplierUp = BigDecimal.TEN
     private val buyFeeMultiplier = BigDecimal.ZERO
-    private val transactionFeeRanges = TransactionFeeRanges(
+    private val feeRanges = FeeRanges(
         makerFees = listOf(
-            TransactionFeeRange(
+            FeeRange(
                 beginAmount = "0.05".toBigDecimal(),
                 feeAmount = "0.02".toBigDecimal()
             ),
-            TransactionFeeRange(
+            FeeRange(
                 beginAmount = "0.25".toBigDecimal(),
                 feeAmount = "0.01".toBigDecimal()
             )
         ),
         takerFees = listOf(
-            TransactionFeeRange(
+            FeeRange(
                 beginAmount = "0.05".toBigDecimal(),
                 feeAmount = "0.03".toBigDecimal()
             ),
-            TransactionFeeRange(
+            FeeRange(
                 beginAmount = "0.35".toBigDecimal(),
                 feeAmount = "0.02".toBigDecimal()
             )
@@ -54,7 +58,7 @@ class CurrencyPairMetadataApplierTest {
         maximumPriceMultiplierDown = maximumPriceMultiplierUp,
         maximumPriceMultiplierUp = maximumPriceMultiplierDown,
         buyFeeMultiplier = buyFeeMultiplier,
-        transactionFeeRanges = transactionFeeRanges
+        transactionFeeRanges = feeRanges,
     )
 
     @Test
@@ -168,7 +172,7 @@ class CurrencyPairMetadataApplierTest {
             maximumPriceMultiplierDown = maximumPriceMultiplierDown,
             maximumPriceMultiplierUp = maximumPriceMultiplierUp,
             buyFeeMultiplier = buyFeeMultiplier,
-            transactionFeeRanges = transactionFeeRanges
+            transactionFeeRanges = feeRanges,
         )
         // when
         val amount = pairMetadataApplier.adjustAmount(originalAmount, originalPrice, currencyPairMetadata)
@@ -190,7 +194,7 @@ class CurrencyPairMetadataApplierTest {
             maximumPriceMultiplierDown = maximumPriceMultiplierDown,
             maximumPriceMultiplierUp = maximumPriceMultiplierUp,
             buyFeeMultiplier = buyFeeMultiplier,
-            transactionFeeRanges = transactionFeeRanges
+            transactionFeeRanges = feeRanges,
         )
         // when
         val amount = pairMetadataApplier.adjustAmount(originalAmount, originalPrice, currencyPairMetadata)

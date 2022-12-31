@@ -1,0 +1,7 @@
+root = true
+[*]
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+ij_kotlin_else_on_new_line = true
+ij_kotlin_keep_blank_lines_before_right_brace = 1
+
