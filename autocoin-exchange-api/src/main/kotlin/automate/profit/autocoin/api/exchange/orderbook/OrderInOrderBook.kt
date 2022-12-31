@@ -1,7 +1,7 @@
 package automate.profit.autocoin.api.exchange.orderbook
 
-import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.ExchangeName
+import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.currency.ExchangeCache
 import automate.profit.autocoin.spi.exchange.order.OrderSide
 import java.math.BigDecimal
@@ -21,7 +21,7 @@ data class OrderInOrderBook private constructor(
     override val currencyPair: CurrencyPair,
     override val receivedAtMillis: Long,
     override val exchangeTimestampMillis: Long?,
-): SpiOrderInOrderBook {
+) : SpiOrderInOrderBook {
 
     companion object {
         operator fun invoke(

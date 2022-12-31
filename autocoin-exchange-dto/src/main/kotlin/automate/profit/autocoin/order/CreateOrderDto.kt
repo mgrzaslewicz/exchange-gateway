@@ -11,7 +11,7 @@ data class CreateOrderDto(
     val counterCurrencyCode: String,
     val price: String,
     val amount: String,
-): SerializableToJson {
+) : SerializableToJson {
 
     override fun appendJson(builder: StringBuilder) = builder
         .append("{")

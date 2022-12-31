@@ -8,7 +8,10 @@ import java.util.function.Supplier
 
 interface OrderBookService {
     val exchangeName: ExchangeName
-    fun getOrderBook(apiKey: Supplier<ApiKey?>, currencyPair: CurrencyPair): OrderBook
+    fun getOrderBook(
+        apiKey: Supplier<ApiKey?>,
+        currencyPair: CurrencyPair,
+    ): OrderBook
 }
 
 

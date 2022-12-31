@@ -8,9 +8,16 @@ import java.util.function.Supplier
 
 interface WalletServiceGateway {
 
-    fun getCurrencyBalance(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>, currencyCode: String): CurrencyBalance
+    fun getCurrencyBalance(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>,
+        currencyCode: String,
+    ): CurrencyBalance
 
-    fun getCurrencyBalances(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>): List<CurrencyBalance>
+    fun getCurrencyBalances(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>,
+    ): List<CurrencyBalance>
 
 }
 

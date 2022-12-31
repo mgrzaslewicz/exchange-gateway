@@ -10,7 +10,10 @@ class CachingMetadataServiceGateway(private val decorated: MetadataServiceGatewa
     private val locks = ConcurrentHashMap<ExchangeName, Any>()
     private val cache = ConcurrentHashMap<ExchangeName, ExchangeMetadata>()
 
-    override fun refreshMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>) {
+    override fun refreshMetadata(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey?>,
+    ) {
         synchronized(locks.computeIfAbsent(exchangeName) { Any() }) {
             cache.remove(exchangeName)
             getMetadata(
@@ -20,7 +23,10 @@ class CachingMetadataServiceGateway(private val decorated: MetadataServiceGatewa
         }
     }
 
-    override fun getMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>): ExchangeMetadata {
+    override fun getMetadata(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey?>,
+    ): ExchangeMetadata {
         synchronized(locks.computeIfAbsent(exchangeName) { Any() }) {
             return cache.computeIfAbsent(exchangeName) {
                 decorated.getMetadata(

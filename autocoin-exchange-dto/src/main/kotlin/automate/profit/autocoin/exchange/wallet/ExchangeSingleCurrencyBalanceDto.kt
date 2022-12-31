@@ -6,7 +6,7 @@ import automate.profit.autocoin.api.exchange.currency.CurrencyBalance
 data class SingleCurrencyBalanceDto(
     val exchangeName: String,
     val currencyBalance: CurrencyBalanceDto?,
-    val errorMessage: String?
+    val errorMessage: String?,
 ) {
     fun toCurrencyBalance() = CurrencyBalance(
         currencyCode = currencyBalance!!.currencyCode,

@@ -31,18 +31,20 @@ class HitBtcExchangeFork : HitbtcExchange() {
                 CurrencyMetaData(null, hitBtcCurrency.payoutFee, null, walletHealth)
             }
 
-        val currencyPairs = hitbtcSymbols.associateBy({ hitbtcSymbol: HitbtcSymbol ->
-            CurrencyPair(
-                Currency(hitbtcSymbol.baseCurrency),
-                Currency(hitbtcSymbol.quoteCurrency)
-            )
-        }) { hitbtcSymbol: HitbtcSymbol ->
+        val currencyPairs = hitbtcSymbols.associateBy(
+            { hitbtcSymbol: HitbtcSymbol ->
+                CurrencyPair(
+                    Currency(hitbtcSymbol.baseCurrency),
+                    Currency(hitbtcSymbol.quoteCurrency),
+                )
+            },
+        ) { hitbtcSymbol: HitbtcSymbol ->
             CurrencyPairMetaData(
                 null as BigDecimal?,
                 hitbtcSymbol.quantityIncrement,
                 null as BigDecimal?,
                 hitbtcSymbol.tickSize.scale(),
-                null as Array<FeeTier?>?
+                null as Array<FeeTier?>?,
             )
         }
         exchangeMetaData = HitbtcAdapters.adaptToExchangeMetaData(hitbtcSymbols, currencies, currencyPairs)

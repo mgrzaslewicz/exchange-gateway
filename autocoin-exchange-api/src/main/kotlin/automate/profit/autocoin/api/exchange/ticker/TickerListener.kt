@@ -14,4 +14,4 @@ data class Ticker(
     override val counterCurrency24hVolume: BigDecimal,
     override val receivedAtMillis: Long,
     override val exchangeTimestampMillis: Long?,
-): SpiTicker
+) : SpiTicker

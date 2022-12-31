@@ -32,7 +32,11 @@ val defaultXchangeTypeToOrderSide: Function<XchangeOrder.OrderType, OrderSide> =
 }
 
 val defaultXchangeLimitOrderToOrderTransformer = object : XchangeLimitOrderToOrderTransformer {
-    override fun invoke(exchangeName: ExchangeName, xchangeLimitOrder: LimitOrder, receivedAtMillis: Long): SpiOrder {
+    override fun invoke(
+        exchangeName: ExchangeName,
+        xchangeLimitOrder: LimitOrder,
+        receivedAtMillis: Long,
+    ): SpiOrder {
         return Order(
             exchangeName = exchangeName,
             exchangeOrderId = xchangeLimitOrder.id,

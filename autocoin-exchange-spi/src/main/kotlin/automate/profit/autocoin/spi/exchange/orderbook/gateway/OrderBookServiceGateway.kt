@@ -5,6 +5,9 @@ import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.orderbook.OrderBook
 
 interface OrderBookServiceGateway {
-    fun getOrderBook(exchangeName: ExchangeName, currencyPair: CurrencyPair): OrderBook
+    fun getOrderBook(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ): OrderBook
 }
 

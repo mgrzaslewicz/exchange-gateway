@@ -9,11 +9,18 @@ import java.util.function.Supplier
 class DelegateWalletServiceGateway(
     private val walletServices: Map<ExchangeName, WalletService>,
 ) : WalletServiceGateway {
-    override fun getCurrencyBalance(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>, currencyCode: String): CurrencyBalance {
+    override fun getCurrencyBalance(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>,
+        currencyCode: String,
+    ): CurrencyBalance {
         return walletServices.getValue(exchangeName).getCurrencyBalance(apiKey, currencyCode)
     }
 
-    override fun getCurrencyBalances(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>): List<CurrencyBalance> {
+    override fun getCurrencyBalances(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>,
+    ): List<CurrencyBalance> {
         return walletServices.getValue(exchangeName).getCurrencyBalances(apiKey)
     }
 

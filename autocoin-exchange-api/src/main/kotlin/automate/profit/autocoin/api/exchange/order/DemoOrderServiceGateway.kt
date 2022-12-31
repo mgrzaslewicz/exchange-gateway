@@ -1,7 +1,6 @@
 package automate.profit.autocoin.api.exchange.order
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
 import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.order.CancelOrderParams
@@ -10,7 +9,6 @@ import automate.profit.autocoin.spi.exchange.order.OrderStatus
 import automate.profit.autocoin.spi.exchange.order.gateway.OrderServiceGateway
 import java.math.BigDecimal
 import java.time.Clock
-import java.util.function.Supplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair as SpiCurrencyPair
 import automate.profit.autocoin.spi.exchange.order.Order as SpiOrder
 

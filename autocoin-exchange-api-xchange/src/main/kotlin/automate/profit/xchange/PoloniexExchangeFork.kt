@@ -20,7 +20,7 @@ class PoloniexExchangeFork : PoloniexExchange() {
         val poloniexMarketDataMap = poloniexMarketDataServiceRaw.allPoloniexTickers
 
         exchangeMetaData = PoloniexAdapters.adaptToExchangeMetaData(
-            poloniexCurrencyInfoMap, poloniexMarketDataMap, exchangeMetaData
+            poloniexCurrencyInfoMap, poloniexMarketDataMap, exchangeMetaData,
         )
         removeNoLongerExistingCurrencyPairs(poloniexMarketDataMap)
     }

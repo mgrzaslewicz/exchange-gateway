@@ -35,14 +35,18 @@ class FileKeyValueRepository(
         return exchangeNameAndDateTime[1].toLong()
     }
 
-    fun getLatestVersion(directory: File, key: String): LatestVersion? {
+    fun getLatestVersion(
+        directory: File,
+        key: String,
+    ): LatestVersion? {
         val fileName = directory.ensureDirectory().list()!!.filter {
             it.startsWith(key) && it.endsWith(fileExtension)
         }.maxByOrNull { getNumberFrom(it) }
         return if (fileName != null) {
             val file = directory.resolve(fileName)
             return LatestVersion(file = directory.resolve(fileName).toPath(), value = file.readText())
-        } else {
+        }
+        else {
             null
         }
     }
@@ -54,7 +58,11 @@ class FileKeyValueRepository(
         return this
     }
 
-    fun keepLastNVersions(directory: File, key: String, maxVersions: Int) {
+    fun keepLastNVersions(
+        directory: File,
+        key: String,
+        maxVersions: Int,
+    ) {
         logger.debug { "Keeping max $maxVersions in $directory" }
         val allFiles = directory.ensureDirectory().list()
             ?.filter { it.startsWith(key) && it.endsWith(fileExtension) }
@@ -69,7 +77,11 @@ class FileKeyValueRepository(
      * Saves value with file name as key + version (timestamp)
      * @return path of file in directory to which value was saved
      */
-    fun saveNewVersion(directory: File, key: String, value: String): Path {
+    fun saveNewVersion(
+        directory: File,
+        key: String,
+        value: String,
+    ): Path {
         val version = getCurrentDateTimeAsString()
 
         val newFileName = "${key}_$version$fileExtension"

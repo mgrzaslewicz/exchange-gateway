@@ -47,7 +47,8 @@ class XchangeAuthorizedWalletService(
         val wallets = accountInfo.wallets
         return if (wallets.size > 1) {
             wallets.getValue(expectedTradingWalletNameWhenMultipleExist)
-        } else {
+        }
+        else {
             accountInfo.wallet
         }
     }

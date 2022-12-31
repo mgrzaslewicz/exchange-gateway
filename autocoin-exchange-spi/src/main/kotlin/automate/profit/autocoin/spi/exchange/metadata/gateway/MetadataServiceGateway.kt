@@ -6,8 +6,14 @@ import automate.profit.autocoin.spi.exchange.metadata.ExchangeMetadata
 import java.util.function.Supplier
 
 interface MetadataServiceGateway {
-    fun refreshMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>)
+    fun refreshMetadata(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey?>,
+    )
 
-    fun getMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>): ExchangeMetadata
+    fun getMetadata(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey?>,
+    ): ExchangeMetadata
 
 }

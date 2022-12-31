@@ -19,6 +19,9 @@ interface CurrencyPairMetadataApplier {
     ): BigDecimal
 
 
-    fun applyPriceScale(price: BigDecimal, currencyPairMetadata: CurrencyPairMetadata): BigDecimal
+    fun applyPriceScale(
+        price: BigDecimal,
+        currencyPairMetadata: CurrencyPairMetadata,
+    ): BigDecimal
 
 }

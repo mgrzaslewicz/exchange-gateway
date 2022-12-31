@@ -8,7 +8,10 @@ import java.util.function.Supplier
 interface WalletService {
     val exchangeName: ExchangeName
 
-    fun getCurrencyBalance(apiKey: Supplier<ApiKey>, currencyCode: String): CurrencyBalance
+    fun getCurrencyBalance(
+        apiKey: Supplier<ApiKey>,
+        currencyCode: String,
+    ): CurrencyBalance
 
     fun getCurrencyBalances(apiKey: Supplier<ApiKey>): List<CurrencyBalance>
 

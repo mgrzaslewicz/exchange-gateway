@@ -14,7 +14,11 @@ class DefaultTickerListeners : TickerListeners {
     private val listenersByExchangeAndCurrencyPair = ConcurrentHashMap<ExchangeName, ConcurrentHashMap<CurrencyPair, MutableSet<TickerListener>>>()
     private val tickerRegistrationListeners = mutableListOf<TickerRegistrationListener>()
 
-    override fun addTickerListener(exchangeName: ExchangeName, currencyPair: CurrencyPair, listener: TickerListener): Boolean {
+    override fun addTickerListener(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+        listener: TickerListener,
+    ): Boolean {
         var isFirstListenerWithGivenExchangeAdded = false
         val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair.computeIfAbsent(exchangeName) {
             val map = ConcurrentHashMap<CurrencyPair, MutableSet<TickerListener>>()
@@ -36,7 +40,11 @@ class DefaultTickerListeners : TickerListeners {
         return isListenerAdded
     }
 
-    override fun removeTickerListener(exchangeName: ExchangeName, currencyPair: CurrencyPair, listener: TickerListener): Boolean {
+    override fun removeTickerListener(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+        listener: TickerListener,
+    ): Boolean {
         var isLastListenerWithGivenExchangeRemoved = false
         var isRemoved = false
         val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair[exchangeName]

@@ -5,7 +5,11 @@ import automate.profit.autocoin.spi.exchange.currency.CurrencyStringCache
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair as SpiCurrencyPair
 
 object CurrencyPairCache : Cache<String, CurrencyPair>() {
-    fun get(base: String, counter: String, valueFunction: () -> CurrencyPair): CurrencyPair {
+    fun get(
+        base: String,
+        counter: String,
+        valueFunction: () -> CurrencyPair,
+    ): CurrencyPair {
         val currencyPairString = CurrencyStringCache.get(base + counter)
         return super.get(currencyPairString, valueFunction)
     }
@@ -24,7 +28,10 @@ data class CurrencyPair private constructor(
 
     companion object {
 
-        fun of(base: String, counter: String): CurrencyPair {
+        fun of(
+            base: String,
+            counter: String,
+        ): CurrencyPair {
             val baseUpper = base.uppercase()
             val counterUpper = counter.uppercase()
             return CurrencyPairCache.get(baseUpper, counterUpper) { CurrencyPair(baseUpper, counterUpper) }

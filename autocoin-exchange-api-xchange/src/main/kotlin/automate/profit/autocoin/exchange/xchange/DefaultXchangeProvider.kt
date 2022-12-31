@@ -102,7 +102,10 @@ class DefaultXchangeProvider(
         }
     }
 
-    override operator fun invoke(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?): XchangeExchange {
+    override operator fun invoke(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>?,
+    ): XchangeExchange {
         val exchangeSpec = ExchangeSpecification(exchangeNameToXchangeClass.apply(exchangeName))
         if (apiKey != null) {
             xchangeSpecificationApiKeyAssigner.assignKeys(

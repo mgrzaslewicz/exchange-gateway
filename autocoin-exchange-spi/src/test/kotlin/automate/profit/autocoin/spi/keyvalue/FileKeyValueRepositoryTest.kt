@@ -1,6 +1,5 @@
 package automate.profit.autocoin.spi.keyvalue
 
-import automate.profit.autocoin.spi.exchange.clock.QueueClock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

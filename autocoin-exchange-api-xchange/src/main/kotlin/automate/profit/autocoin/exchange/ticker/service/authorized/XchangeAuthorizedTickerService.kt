@@ -1,12 +1,12 @@
 package automate.profit.autocoin.exchange.ticker.service.authorized
 
+import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformer
+import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformerWithCurrencyPair
 import automate.profit.autocoin.spi.exchange.ExchangeName
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.ticker.Ticker
 import automate.profit.autocoin.spi.exchange.ticker.gateway.InvalidCurrencyPairException
 import automate.profit.autocoin.spi.exchange.ticker.service.authorized.AuthorizedTickerService
-import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformer
-import automate.profit.autocoin.exchange.ticker.XchangeTickerTransformerWithCurrencyPair
 import org.knowm.xchange.exceptions.CurrencyPairNotValidException
 import org.knowm.xchange.service.marketdata.MarketDataService
 import org.knowm.xchange.service.marketdata.params.CurrencyPairsParam

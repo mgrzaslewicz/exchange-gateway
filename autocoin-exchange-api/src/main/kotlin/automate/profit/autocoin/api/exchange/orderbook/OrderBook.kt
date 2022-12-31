@@ -31,7 +31,8 @@ data class OrderBook(
                 }
             }
             true
-        } else {
+        }
+        else {
             false
         }
     }
@@ -46,7 +47,10 @@ data class OrderBook(
         return getWeightedAveragePrice(baseCurrencyAmount, sellOrders)
     }
 
-    private fun getWeightedAveragePrice(baseCurrencyAmount: BigDecimal, orders: List<OrderInOrderBook>): SpiOrderBookAveragePrice? {
+    private fun getWeightedAveragePrice(
+        baseCurrencyAmount: BigDecimal,
+        orders: List<OrderInOrderBook>,
+    ): SpiOrderBookAveragePrice? {
         var baseCurrencyToUseAmountLeft = baseCurrencyAmount
         var sum = BigDecimal.ZERO
         run loop@{
@@ -62,29 +66,43 @@ data class OrderBook(
         return if (baseCurrencyToUseAmountLeft <= BigDecimal.ZERO) {
             return OrderBookAveragePrice(
                 averagePrice = sum.setScale(8, HALF_EVEN).divide(baseCurrencyAmount, HALF_EVEN).setScale(8, HALF_EVEN),
-                baseCurrencyAmount = baseCurrencyAmount.setScale(8, HALF_EVEN)
+                baseCurrencyAmount = baseCurrencyAmount.setScale(8, HALF_EVEN),
             )
-        } else {
+        }
+        else {
             null
         }
     }
 
-    override fun getWeightedAverageBuyPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal): SpiOrderBookAveragePrice? {
+    override fun getWeightedAverageBuyPrice(
+        otherCurrencyAmount: BigDecimal,
+        otherCurrencyPrice: BigDecimal,
+    ): SpiOrderBookAveragePrice? {
         val counterCurrencyAmountToSpend = otherCurrencyAmount.setScale(16, HALF_EVEN).divide(otherCurrencyPrice.setScale(16, HALF_EVEN), HALF_EVEN)
         return getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmountToSpend, buyOrders)
     }
 
-    override fun getWeightedAverageSellPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal): SpiOrderBookAveragePrice? {
+    override fun getWeightedAverageSellPrice(
+        otherCurrencyAmount: BigDecimal,
+        otherCurrencyPrice: BigDecimal,
+    ): SpiOrderBookAveragePrice? {
         val counterCurrencyAmountToSpend = otherCurrencyAmount.setScale(16, HALF_EVEN).divide(otherCurrencyPrice.setScale(16, HALF_EVEN), HALF_EVEN)
         return getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmountToSpend, sellOrders)
     }
 
-    private fun getWeightedAverageBuyPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal, orders: List<OrderInOrderBook>): SpiOrderBookAveragePrice? {
+    private fun getWeightedAverageBuyPrice(
+        otherCurrencyAmount: BigDecimal,
+        otherCurrencyPrice: BigDecimal,
+        orders: List<OrderInOrderBook>,
+    ): SpiOrderBookAveragePrice? {
         val counterCurrencyAmountToSpend = otherCurrencyAmount.setScale(16, HALF_EVEN).divide(otherCurrencyPrice.setScale(16, HALF_EVEN), HALF_EVEN)
         return getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmountToSpend, orders)
     }
 
-    private fun getWeightedAveragePriceWithCounterCurrencyAmount(counterCurrencyAmount: BigDecimal, orders: List<OrderInOrderBook>): SpiOrderBookAveragePrice? {
+    private fun getWeightedAveragePriceWithCounterCurrencyAmount(
+        counterCurrencyAmount: BigDecimal,
+        orders: List<OrderInOrderBook>,
+    ): SpiOrderBookAveragePrice? {
         var counterCurrencyAmountToUseLeft = counterCurrencyAmount
 
         var sumAmountBaseCurrrencyUsed = BigDecimal.ZERO
@@ -103,9 +121,10 @@ data class OrderBook(
         return if (counterCurrencyAmountToUseLeft <= BigDecimal.ZERO) {
             return OrderBookAveragePrice(
                 averagePrice = counterCurrencyAmount.divide(sumAmountBaseCurrrencyUsed, HALF_EVEN).setScale(8, HALF_EVEN),
-                baseCurrencyAmount = sumAmountBaseCurrrencyUsed.setScale(8, HALF_EVEN)
+                baseCurrencyAmount = sumAmountBaseCurrrencyUsed.setScale(8, HALF_EVEN),
             )
-        } else {
+        }
+        else {
             null
         }
     }

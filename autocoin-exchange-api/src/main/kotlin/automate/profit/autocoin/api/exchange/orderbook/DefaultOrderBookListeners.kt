@@ -14,7 +14,11 @@ class DefaultOrderBookListeners : OrderBookListeners {
     private val listenersByExchangeAndCurrencyPair = ConcurrentHashMap<ExchangeName, ConcurrentHashMap<CurrencyPair, MutableSet<OrderBookListener>>>()
     private val orderBookRegistrationListeners = mutableListOf<OrderBookRegistrationListener>()
 
-    override fun addOrderBookListener(exchangeName: ExchangeName, currencyPair: CurrencyPair, listener: OrderBookListener): Boolean {
+    override fun addOrderBookListener(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+        listener: OrderBookListener,
+    ): Boolean {
         var isFirstListenerWithGivenExchangeAdded = false
         val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair.computeIfAbsent(exchangeName) {
             val map = ConcurrentHashMap<CurrencyPair, MutableSet<OrderBookListener>>()
@@ -36,7 +40,11 @@ class DefaultOrderBookListeners : OrderBookListeners {
         return isListenerAdded
     }
 
-    override fun removeOrderBookListener(exchangeName: ExchangeName, currencyPair: CurrencyPair, listener: OrderBookListener): Boolean {
+    override fun removeOrderBookListener(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+        listener: OrderBookListener,
+    ): Boolean {
         var isLastListenerWithGivenExchangeRemoved = false
         var isRemoved = false
         val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair[exchangeName]

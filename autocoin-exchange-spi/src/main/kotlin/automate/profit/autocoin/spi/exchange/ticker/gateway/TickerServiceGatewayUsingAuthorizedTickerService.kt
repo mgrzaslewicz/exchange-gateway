@@ -11,14 +11,22 @@ class TickerServiceGatewayUsingAuthorizedTickerService(
     private val authorizedTickerServiceFactory: AuthorizedTickerServiceFactory,
 ) : TickerServiceGateway {
 
-    override fun getTicker(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?, currencyPair: CurrencyPair): Ticker {
+    override fun getTicker(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>?,
+        currencyPair: CurrencyPair,
+    ): Ticker {
         return authorizedTickerServiceFactory.createAuthorizedTickerService(
             exchangeName = exchangeName,
             apiKey = apiKey,
         ).getTicker(currencyPair = currencyPair)
     }
 
-    override fun getTickers(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?, currencyPairs: Collection<CurrencyPair>): List<Ticker> {
+    override fun getTickers(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>?,
+        currencyPairs: Collection<CurrencyPair>,
+    ): List<Ticker> {
         return authorizedTickerServiceFactory.createAuthorizedTickerService(
             exchangeName = exchangeName,
             apiKey = apiKey,

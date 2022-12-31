@@ -13,6 +13,7 @@ interface ExchangeRateLimiterGateway {
         rateLimitedEndpoint: RateLimitedEndpoint,
         apiKey: Supplier<ApiKey?>,
     )
+
     fun tryAcquirePermit(
         exchangeName: ExchangeName,
         rateLimitedEndpoint: RateLimitedEndpoint,

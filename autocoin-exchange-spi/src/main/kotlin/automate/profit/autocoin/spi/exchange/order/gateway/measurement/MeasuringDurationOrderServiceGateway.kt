@@ -44,7 +44,7 @@ interface OnPlaceMarketBuyOrderWithCounterCurrencyAmount<T> {
     )
 }
 
-interface OnPlaceMarketBuyOrderWithBaseCurrencyAmount <T>{
+interface OnPlaceMarketBuyOrderWithBaseCurrencyAmount<T> {
     operator fun invoke(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
@@ -56,7 +56,7 @@ interface OnPlaceMarketBuyOrderWithBaseCurrencyAmount <T>{
     )
 }
 
-interface OnPlaceMarketSellOrderWithCounterCurrencyAmount <T>{
+interface OnPlaceMarketSellOrderWithCounterCurrencyAmount<T> {
     operator fun invoke(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
@@ -68,7 +68,7 @@ interface OnPlaceMarketSellOrderWithCounterCurrencyAmount <T>{
     )
 }
 
-interface OnPlaceMarketSellOrderWithBaseCurrencyAmount <T>{
+interface OnPlaceMarketSellOrderWithBaseCurrencyAmount<T> {
     operator fun invoke(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
@@ -102,7 +102,7 @@ interface OnGetOpenOrders<T> {
     )
 }
 
-interface OnGetOpenOrdersWithCurrencyPair <T>{
+interface OnGetOpenOrdersWithCurrencyPair<T> {
     operator fun invoke(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
@@ -285,7 +285,13 @@ class MeasuringDurationOrderServiceGateway<T>(
         return result
     }
 
-    override fun placeLimitBuyOrder(exchangeName: ExchangeName, apiKey: ApiKeySupplier<T>, currencyPair: CurrencyPair, buyPrice: BigDecimal, amount: BigDecimal): Order {
+    override fun placeLimitBuyOrder(
+        exchangeName: ExchangeName,
+        apiKey: ApiKeySupplier<T>,
+        currencyPair: CurrencyPair,
+        buyPrice: BigDecimal,
+        amount: BigDecimal,
+    ): Order {
         val result: Order
         val duration = Duration.ofMillis(
             measureTimeMillis {

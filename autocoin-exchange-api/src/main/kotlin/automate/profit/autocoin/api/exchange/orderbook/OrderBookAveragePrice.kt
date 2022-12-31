@@ -6,4 +6,4 @@ import automate.profit.autocoin.spi.exchange.orderbook.OrderBookAveragePrice as 
 data class OrderBookAveragePrice(
     override val averagePrice: BigDecimal,
     override val baseCurrencyAmount: BigDecimal,
-): SpiOrderBookAveragePrice
+) : SpiOrderBookAveragePrice

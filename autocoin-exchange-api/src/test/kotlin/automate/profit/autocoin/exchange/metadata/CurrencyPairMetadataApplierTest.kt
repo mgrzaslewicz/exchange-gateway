@@ -30,23 +30,23 @@ class CurrencyPairMetadataApplierTest {
         makerFees = listOf(
             FeeRange(
                 beginAmount = "0.05".toBigDecimal(),
-                feeAmount = "0.02".toBigDecimal()
+                feeAmount = "0.02".toBigDecimal(),
             ),
             FeeRange(
                 beginAmount = "0.25".toBigDecimal(),
-                feeAmount = "0.01".toBigDecimal()
-            )
+                feeAmount = "0.01".toBigDecimal(),
+            ),
         ),
         takerFees = listOf(
             FeeRange(
                 beginAmount = "0.05".toBigDecimal(),
-                feeAmount = "0.03".toBigDecimal()
+                feeAmount = "0.03".toBigDecimal(),
             ),
             FeeRange(
                 beginAmount = "0.35".toBigDecimal(),
-                feeAmount = "0.02".toBigDecimal()
-            )
-        )
+                feeAmount = "0.02".toBigDecimal(),
+            ),
+        ),
     )
 
     private val currencyPairMetadata = CurrencyPairMetadata(
@@ -89,7 +89,7 @@ class CurrencyPairMetadataApplierTest {
     fun shouldDecreaseBuyAmountByFeeWhenNotEnoughCounterCurrencyAvailable() {
         // given
         val currencyPairMetadataWithBuyFee = currencyPairMetadata.copy(
-            buyFeeMultiplier = BigDecimal("0.0025")
+            buyFeeMultiplier = BigDecimal("0.0025"),
         )
         val originalAmount = BigDecimal("3000.123456")
         val originalPrice = BigDecimal("0.015")

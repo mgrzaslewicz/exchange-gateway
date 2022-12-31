@@ -20,7 +20,10 @@ fun ExchangeMetadata.asJson() = metadataObjectMapper.writerWithDefaultPrettyPrin
 
 private class CurrencyPairDeserializer : KeyDeserializer() {
     @Throws(IOException::class, JsonProcessingException::class)
-    override fun deserializeKey(key: String, ctxt: DeserializationContext): SpiCurrencyPair {
+    override fun deserializeKey(
+        key: String,
+        ctxt: DeserializationContext,
+    ): SpiCurrencyPair {
         return CurrencyPair.of(key)
     }
 }
@@ -32,7 +35,8 @@ private val exchangeMetadataModule = SimpleModule().apply {
 fun exchangeMetadataFromJson(json: String): ExchangeMetadata = metadataObjectMapper.readValue(json, ExchangeMetadata::class.java)
 
 data class ExchangeMetadataResult(
-    val exchangeMetadata: ExchangeMetadata? = null, val exception: Exception? = null,
+    val exchangeMetadata: ExchangeMetadata? = null,
+    val exception: Exception? = null,
 ) {
     fun hasMetadata() = exchangeMetadata != null
     fun hasException() = exception != null
@@ -44,8 +48,15 @@ internal val metadataObjectMapper = jacksonObjectMapper().configure(Serializatio
 
 interface ExchangeMetadataRepository {
     fun getLatestExchangeMetadata(exchangeName: ExchangeName): ExchangeMetadataResult
-    fun saveExchangeMetadata(exchangeName: ExchangeName, exchangeMetadata: ExchangeMetadata)
-    fun keepLastNBackups(exchangeName: ExchangeName, maxBackups: Int)
+    fun saveExchangeMetadata(
+        exchangeName: ExchangeName,
+        exchangeMetadata: ExchangeMetadata,
+    )
+
+    fun keepLastNBackups(
+        exchangeName: ExchangeName,
+        maxBackups: Int,
+    )
 }
 
 class FileExchangeMetadataRepository(
@@ -54,7 +65,10 @@ class FileExchangeMetadataRepository(
 ) : ExchangeMetadataRepository {
     private companion object : KLogging()
 
-    override fun saveExchangeMetadata(exchangeName: ExchangeName, exchangeMetadata: ExchangeMetadata) {
+    override fun saveExchangeMetadata(
+        exchangeName: ExchangeName,
+        exchangeMetadata: ExchangeMetadata,
+    ) {
         logger.info { "[$exchangeName] Saving exchange metadata" }
         val newVersion = fileKeyValueRepository.saveNewVersion(
             directory = exchangeName.directory(),
@@ -82,7 +96,10 @@ class FileExchangeMetadataRepository(
 
     private fun ExchangeName.directory() = metadataDirectory.resolve(this.value)
 
-    override fun keepLastNBackups(exchangeName: ExchangeName, maxBackups: Int) {
+    override fun keepLastNBackups(
+        exchangeName: ExchangeName,
+        maxBackups: Int,
+    ) {
         logger.debug { "[$exchangeName] Keeping max $maxBackups exchange metadata files" }
         fileKeyValueRepository.keepLastNVersions(
             directory = exchangeName.directory(),

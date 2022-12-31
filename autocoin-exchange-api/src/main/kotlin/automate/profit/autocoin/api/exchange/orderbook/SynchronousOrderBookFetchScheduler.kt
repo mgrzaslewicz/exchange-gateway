@@ -3,9 +3,9 @@ package automate.profit.autocoin.api.exchange.orderbook
 import automate.profit.autocoin.spi.exchange.ExchangeName
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.currency.ExchangeWithCurrencyPairStringCache
+import automate.profit.autocoin.spi.exchange.orderbook.gateway.OrderBookServiceGateway
 import automate.profit.autocoin.spi.exchange.orderbook.listener.OrderBookListeners
 import automate.profit.autocoin.spi.exchange.orderbook.listener.OrderBookRegistrationListener
-import automate.profit.autocoin.spi.exchange.orderbook.gateway.OrderBookServiceGateway
 import mu.KLogger
 import mu.KotlinLogging
 import java.lang.ref.SoftReference
@@ -30,7 +30,10 @@ class DefaultSynchronousOrderBookFetchScheduler(
     private val lastOrderBooks = ConcurrentHashMap<String, SoftReference<SpiOrderBook>>()
     private val runningFetchers = ConcurrentHashMap<ExchangeName, Future<*>>()
 
-    override fun onListenerDeregistered(exchangeName: ExchangeName, currencyPair: CurrencyPair) {
+    override fun onListenerDeregistered(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ) {
     }
 
     override fun onLastListenerDeregistered(exchangeName: ExchangeName) {
@@ -44,7 +47,10 @@ class DefaultSynchronousOrderBookFetchScheduler(
     /**
      * Current synchronous fetcher implementation has to do nothing on currency pair registration as it fetches all currency pairs from exchange at one go
      */
-    override fun onListenerRegistered(exchangeName: ExchangeName, currencyPair: CurrencyPair) {
+    override fun onListenerRegistered(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ) {
     }
 
     override fun onFirstListenerRegistered(exchangeName: ExchangeName) {
@@ -65,7 +71,8 @@ class DefaultSynchronousOrderBookFetchScheduler(
                 orderBookListeners.forEach {
                     it.onOrderBook(exchangeName, currencyPair, orderBook)
                 }
-            } else {
+            }
+            else {
                 orderBookListeners.forEach {
                     it.onNoNewOrderBook(exchangeName, currencyPair, orderBook)
                 }
@@ -73,7 +80,10 @@ class DefaultSynchronousOrderBookFetchScheduler(
         }
     }
 
-    private fun getOrderBook(exchangeName: ExchangeName, currencyPair: CurrencyPair): SpiOrderBook? {
+    private fun getOrderBook(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ): SpiOrderBook? {
         return try {
             orderBookServiceGateway.getOrderBook(exchangeName, currencyPair)
         } catch (e: Exception) {
@@ -86,7 +96,11 @@ class DefaultSynchronousOrderBookFetchScheduler(
      * Using SoftReference might result in a false positive - because reference might become null when too less available memory.
      * That will lead to recalculating order book based data, so the only down side might be slightly bigger CPU usage.
      */
-    private fun isNew(possiblyNewOrderBook: SpiOrderBook, exchangeName: ExchangeName, currencyPair: CurrencyPair): Boolean {
+    private fun isNew(
+        possiblyNewOrderBook: SpiOrderBook,
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ): Boolean {
         val key = ExchangeWithCurrencyPairStringCache.get(exchangeName.value + currencyPair)
         val isNew = when (val lastOrderBook = lastOrderBooks[key]?.get()) {
             null -> true

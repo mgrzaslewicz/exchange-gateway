@@ -11,17 +11,22 @@ class CachingXchangeProvider(private val decorated: XchangeProvider) : XchangePr
     private val cache = mutableMapOf<String, XchangeExchange>()
 
     private fun String?.md5(): String {
-        return if (this == null) "null" else {
+        return if (this == null) "null"
+        else {
             val md = MessageDigest.getInstance("MD5")
             DigestUtils.bytesToHex(md.digest(toByteArray()))
         }
     }
 
-    override fun invoke(exchangeName: ExchangeName, apiKey: Supplier<ApiKey>?): XchangeExchange {
+    override fun invoke(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey>?,
+    ): XchangeExchange {
         val key = apiKey?.get()
         val cacheKey = if (key != null) {
             "$exchangeName:${key.secretKey.md5()}:${key.secretKey.md5()}"
-        } else {
+        }
+        else {
             exchangeName.value
         }
         return cache.getOrPut(cacheKey) {

@@ -33,7 +33,10 @@ class XchangeApiKeyVerifierGateway(
         }
     }
 
-    override fun verifyApiKey(exchangeName: ExchangeName, apiKey: ApiKey) {
+    override fun verifyApiKey(
+        exchangeName: ExchangeName,
+        apiKey: ApiKey,
+    ) {
         apiKeyVerifier.accept(apiKey)
         exchangeSpecificApiKeyVerifier.apply(exchangeName)?.accept(apiKey)
     }

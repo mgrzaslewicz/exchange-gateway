@@ -17,7 +17,12 @@ import org.mockito.junit.jupiter.MockitoExtension
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair as SpiCurrencyPair
 
 class TestTickerListener : TickerListener {
-    override fun onTicker(exchangeName: ExchangeName, currencyPair: SpiCurrencyPair, ticker: Ticker) {}
+    override fun onTicker(
+        exchangeName: ExchangeName,
+        currencyPair: SpiCurrencyPair,
+        ticker: Ticker,
+    ) {
+    }
 }
 
 
@@ -43,13 +48,13 @@ class DefaultTickerListenersTest {
         // then
         assertThat(tested.getTickerListeners(bittrex)).isEqualTo(
             mapOf(
-                currencyPair_AB to setOf(tickerListener)
-            )
+                currencyPair_AB to setOf(tickerListener),
+            ),
         )
         assertThat(tested.getTickerListeners(binance)).isEqualTo(
             mapOf(
-                currencyPair_CD to setOf(tickerListener)
-            )
+                currencyPair_CD to setOf(tickerListener),
+            ),
         )
     }
 
@@ -62,8 +67,8 @@ class DefaultTickerListenersTest {
         assertThat(tested.getTickerListeners(bittrex)).isEqualTo(
             mapOf(
                 currencyPair_AB to setOf(tickerListener),
-                currencyPair_CD to setOf(tickerListener)
-            )
+                currencyPair_CD to setOf(tickerListener),
+            ),
         )
     }
 
@@ -77,8 +82,8 @@ class DefaultTickerListenersTest {
         assertThat(tested.getTickerListeners(bittrex)).isEqualTo(emptyMap<CurrencyPair, Set<TickerListener>>())
         assertThat(tested.getTickerListeners(binance)).isEqualTo(
             mapOf(
-                currencyPair_CD to setOf(tickerListener)
-            )
+                currencyPair_CD to setOf(tickerListener),
+            ),
         )
     }
 

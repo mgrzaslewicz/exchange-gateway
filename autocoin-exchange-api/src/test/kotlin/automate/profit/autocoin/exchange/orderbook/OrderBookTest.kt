@@ -839,8 +839,8 @@ class OrderBookTest {
                 price = BigDecimal("0.00000011"),
                 currencyPair = trxBtcCurrencyPair,
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
-            )
-        )
+            ),
+        ),
     )
 
     /**
@@ -1092,8 +1092,8 @@ class OrderBookTest {
                 price = BigDecimal("0.000185"),
                 currencyPair = xtzBtcCurrencyPair,
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
-            )
-        )
+            ),
+        ),
     )
     private val sampleBuyOrders = listOf(
         OrderInOrderBook(
@@ -1127,15 +1127,19 @@ class OrderBookTest {
             price = 1.37.toBigDecimal(),
             currencyPair = currencyPair,
             receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
-        )
+        ),
     )
 
     private class NullableConverter : SimpleArgumentConverter() {
         @Throws(ArgumentConversionException::class)
-        override fun convert(source: Any, targetType: Class<*>?): Any? {
+        override fun convert(
+            source: Any,
+            targetType: Class<*>?,
+        ): Any? {
             return if ("null" == source) {
                 null
-            } else DefaultArgumentConverter.INSTANCE.convert(source, targetType)
+            }
+            else DefaultArgumentConverter.INSTANCE.convert(source, targetType)
         }
     }
 
@@ -1146,12 +1150,12 @@ class OrderBookTest {
             "1.50000000, 10.0",
             "1.48333333, 15.0", // 'avg = (10.0 * 1.5 + 5 * 1.45) / 15.0 = 1.48(3)'
             "1.41533333, 75", // whole order book
-            "null, 76" // more than in order book
-        ]
+            "null, 76", // more than in order book
+        ],
     )
     fun shouldCalculateWeightedAverageBuyPrice(
         @ConvertWith(NullableConverter::class) expectedWeightedAveragePrice: BigDecimal?,
-        amount: BigDecimal
+        amount: BigDecimal,
     ) {
         val orderBook = OrderBook(
             exchangeName = sampleBuyOrders.first().exchangeName,
@@ -1174,14 +1178,14 @@ class OrderBookTest {
             "1.50000000, 10.00000000, 8.0, 120.0", // 15 units of currencyY
             "1.48333333, 15.00000000, 10.0, 222.5", // 22.25 units
             "1.41533333, 75.00000000, 10.0, 1061.5", // 106.15 units, whole order book
-            "null, null, 10.0, 1061.6" // more than in order book
-        ]
+            "null, null, 10.0, 1061.6", // more than in order book
+        ],
     )
     fun shouldCalculateWeightedAverageBuyPriceInUsd(
         @ConvertWith(NullableConverter::class) expectedAveragePrice: BigDecimal?,
         @ConvertWith(NullableConverter::class) expectedBaseCurrencyAmount: BigDecimal?,
         usdPrice: BigDecimal,
-        usdAmount: BigDecimal
+        usdAmount: BigDecimal,
     ) {
         val orderBook = OrderBook(
             exchangeName = sampleBuyOrders.first().exchangeName,

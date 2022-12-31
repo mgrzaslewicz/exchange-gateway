@@ -24,8 +24,8 @@ class XchangeAuthorizedOrderService(
     val delegate: XchangeTradeService,
     private val cancelOrderParamsToXchangeParams: Function<CancelOrderParams, XchangeCancelOrderParams>,
     private val openOrdersCurrencyPairParamsToXchangeParams: Function<CurrencyPair, OpenOrdersParamCurrencyPair>,
-    private val currencyPairToXchange: Function<CurrencyPair, org.knowm.xchange.currency.CurrencyPair> ,
-    private val xchangeLimitOrderToOrderTransformer: XchangeLimitOrderToOrderTransformer ,
+    private val currencyPairToXchange: Function<CurrencyPair, org.knowm.xchange.currency.CurrencyPair>,
+    private val xchangeLimitOrderToOrderTransformer: XchangeLimitOrderToOrderTransformer,
     private val clock: Clock,
 ) : AuthorizedOrderService {
     override fun cancelOrder(cancelOrderParams: CancelOrderParams): Boolean {
@@ -33,11 +33,19 @@ class XchangeAuthorizedOrderService(
         return delegate.cancelOrder(xchangeCancelOrderParams)
     }
 
-    override fun placeMarketBuyOrderWithCounterCurrencyAmount(currencyPair: CurrencyPair, counterCurrencyAmount: BigDecimal, currentPrice: BigDecimal): SpiOrder {
+    override fun placeMarketBuyOrderWithCounterCurrencyAmount(
+        currencyPair: CurrencyPair,
+        counterCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+    ): SpiOrder {
         TODO("Implement it for exchanges that supports this kind of order")
     }
 
-    override fun placeMarketBuyOrderWithBaseCurrencyAmount(currencyPair: CurrencyPair, baseCurrencyAmount: BigDecimal, currentPrice: BigDecimal): Order {
+    override fun placeMarketBuyOrderWithBaseCurrencyAmount(
+        currencyPair: CurrencyPair,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+    ): Order {
         val marketBuyOrder = MarketOrder.Builder(org.knowm.xchange.dto.Order.OrderType.BID, currencyPairToXchange.apply(currencyPair))
             .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
             .originalAmount(baseCurrencyAmount)
@@ -60,11 +68,19 @@ class XchangeAuthorizedOrderService(
         )
     }
 
-    override fun placeMarketSellOrderWithCounterCurrencyAmount(currencyPair: CurrencyPair, counterCurrencyAmount: BigDecimal, currentPrice: BigDecimal): SpiOrder {
+    override fun placeMarketSellOrderWithCounterCurrencyAmount(
+        currencyPair: CurrencyPair,
+        counterCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+    ): SpiOrder {
         TODO("Implement it for exchanges that supports this kind of order")
     }
 
-    override fun placeMarketSellOrderWithBaseCurrencyAmount(currencyPair: CurrencyPair, baseCurrencyAmount: BigDecimal, currentPrice: BigDecimal): Order {
+    override fun placeMarketSellOrderWithBaseCurrencyAmount(
+        currencyPair: CurrencyPair,
+        baseCurrencyAmount: BigDecimal,
+        currentPrice: BigDecimal,
+    ): Order {
         val marketSellOrder = MarketOrder.Builder(org.knowm.xchange.dto.Order.OrderType.ASK, currencyPairToXchange.apply(currencyPair))
             .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
             .originalAmount(baseCurrencyAmount)
@@ -114,7 +130,11 @@ class XchangeAuthorizedOrderService(
             }
     }
 
-    override fun placeLimitBuyOrder(currencyPair: CurrencyPair, buyPrice: BigDecimal, amount: BigDecimal): Order {
+    override fun placeLimitBuyOrder(
+        currencyPair: CurrencyPair,
+        buyPrice: BigDecimal,
+        amount: BigDecimal,
+    ): Order {
         val limitBuyOrder = LimitOrder.Builder(org.knowm.xchange.dto.Order.OrderType.BID, currencyPairToXchange.apply(currencyPair))
             .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
             .limitPrice(buyPrice)
@@ -137,7 +157,11 @@ class XchangeAuthorizedOrderService(
         )
     }
 
-    override fun placeLimitSellOrder(currencyPair: CurrencyPair, sellPrice: BigDecimal, amount: BigDecimal): Order {
+    override fun placeLimitSellOrder(
+        currencyPair: CurrencyPair,
+        sellPrice: BigDecimal,
+        amount: BigDecimal,
+    ): Order {
         val limitSellOrder = LimitOrder.Builder(org.knowm.xchange.dto.Order.OrderType.ASK, currencyPairToXchange.apply(currencyPair))
             .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
             .limitPrice(sellPrice)

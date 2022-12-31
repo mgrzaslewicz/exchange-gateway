@@ -47,8 +47,14 @@ interface OrderBook {
      * @param otherCurrencyPrice price of counterCurrency/otherCurrency
      * @return null when order cannot be filled for given otherCurrencyAmount
      */
-    fun getWeightedAverageBuyPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal): OrderBookAveragePrice?
+    fun getWeightedAverageBuyPrice(
+        otherCurrencyAmount: BigDecimal,
+        otherCurrencyPrice: BigDecimal,
+    ): OrderBookAveragePrice?
 
-    fun getWeightedAverageSellPrice(otherCurrencyAmount: BigDecimal, otherCurrencyPrice: BigDecimal): OrderBookAveragePrice?
+    fun getWeightedAverageSellPrice(
+        otherCurrencyAmount: BigDecimal,
+        otherCurrencyPrice: BigDecimal,
+    ): OrderBookAveragePrice?
 
 }

@@ -13,7 +13,10 @@ import automate.profit.autocoin.spi.exchange.orderbook.OrderBook as SpiOrderBook
  * Random order books for testing purposes
  */
 class RandomOrderBookServiceGateway(private val clock: Clock) : OrderBookServiceGateway {
-    override fun getOrderBook(exchangeName: ExchangeName, currencyPair: CurrencyPair): SpiOrderBook {
+    override fun getOrderBook(
+        exchangeName: ExchangeName,
+        currencyPair: CurrencyPair,
+    ): SpiOrderBook {
         return OrderBook(
             exchangeName = exchangeName,
             currencyPair = currencyPair,

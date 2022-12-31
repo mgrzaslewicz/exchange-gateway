@@ -1,13 +1,11 @@
 package automate.profit.autocoin.spi.exchange.order.gateway
 
 import automate.profit.autocoin.spi.exchange.ExchangeName
-import automate.profit.autocoin.spi.exchange.apikey.ApiKey
 import automate.profit.autocoin.spi.exchange.apikey.ApiKeySupplier
 import automate.profit.autocoin.spi.exchange.currency.CurrencyPair
 import automate.profit.autocoin.spi.exchange.order.CancelOrderParams
 import automate.profit.autocoin.spi.exchange.order.Order
 import java.math.BigDecimal
-import java.util.function.Supplier
 
 
 interface OrderServiceGateway<T> {

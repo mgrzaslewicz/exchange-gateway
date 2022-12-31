@@ -26,6 +26,7 @@ data class TickerDto(
         receivedAtMillis = receivedAtMillis,
         exchangeTimestampMillis = exchangeTimestampMillis,
     )
+
     override fun appendJson(builder: StringBuilder) = builder
         .append("""{"exchange":"""")
         .append(exchange)

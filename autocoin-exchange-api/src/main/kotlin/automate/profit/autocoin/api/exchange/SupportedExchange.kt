@@ -1,6 +1,9 @@
 package automate.profit.autocoin.api.exchange
 
-enum class SupportedExchange2(val exchangeName: String, val comments: List<String> = emptyList()) {
+enum class SupportedExchange2(
+    val exchangeName: String,
+    val comments: List<String> = emptyList(),
+) {
     BIBOX("bibox"),
     BINANCE("binance"),
     BITBAY("bitbay"),

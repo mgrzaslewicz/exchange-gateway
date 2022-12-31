@@ -17,16 +17,23 @@ class FileCachedMetadataServiceGateway(
 
     companion object : KLogging()
 
-    override fun getMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>): ExchangeMetadata {
+    override fun getMetadata(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey?>,
+    ): ExchangeMetadata {
         return getAndSaveExchangeMetadata(exchangeName, apiKey)
     }
 
-    private fun getAndSaveExchangeMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>): ExchangeMetadata {
+    private fun getAndSaveExchangeMetadata(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey?>,
+    ): ExchangeMetadata {
         logger.debug { "[$exchangeName] Getting exchange metadata" }
         val result = exchangeMetadataRepository.getLatestExchangeMetadata(exchangeName)
         return if (result.hasMetadata()) {
             result.exchangeMetadata!!
-        } else {
+        }
+        else {
             logGettingMetadataError(result)
             logger.info { "[$exchangeName] Fetching exchange metadata" }
             return fetchAndSaveExchangeMetadata(
@@ -36,7 +43,10 @@ class FileCachedMetadataServiceGateway(
         }
     }
 
-    private fun fetchAndSaveExchangeMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>): ExchangeMetadata {
+    private fun fetchAndSaveExchangeMetadata(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey?>,
+    ): ExchangeMetadata {
         val freshExchangeMetadata = decorated.getMetadata(
             exchangeName = exchangeName,
             apiKey = apiKey,
@@ -51,7 +61,10 @@ class FileCachedMetadataServiceGateway(
         }
     }
 
-    override fun refreshMetadata(exchangeName: ExchangeName, apiKey: Supplier<ApiKey?>) {
+    override fun refreshMetadata(
+        exchangeName: ExchangeName,
+        apiKey: Supplier<ApiKey?>,
+    ) {
         logger.info { "[$exchangeName] Refreshing exchange metadata" }
         fetchAndSaveExchangeMetadata(
             exchangeName = exchangeName,
