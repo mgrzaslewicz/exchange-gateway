@@ -5,7 +5,7 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 import java.time.Instant
 

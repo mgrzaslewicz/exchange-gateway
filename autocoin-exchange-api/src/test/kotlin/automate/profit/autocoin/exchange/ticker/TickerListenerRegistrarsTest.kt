@@ -6,10 +6,11 @@ import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.junit.jupiter.MockitoExtension
 
 class TestTickerListener(private val currencyPair: CurrencyPair, private val supportedExchange: SupportedExchange) : TickerListener {
     override fun onTicker(ticker: Ticker) {}
@@ -18,7 +19,7 @@ class TestTickerListener(private val currencyPair: CurrencyPair, private val sup
 }
 
 
-@RunWith(MockitoJUnitRunner::class)
+@ExtendWith(MockitoExtension::class)
 class TickerListenerRegistrarsTest {
 
     private lateinit var bittrexTickerListenerRegistrar: TickerListenerRegistrar
@@ -28,7 +29,7 @@ class TickerListenerRegistrarsTest {
     private lateinit var tickerListenerRegistrars: TickerListenerRegistrars
     private val btcLtc = CurrencyPair.of("BTC/LTC")
 
-    @Before
+    @BeforeEach
     fun setup() {
         bittrexTickerListenerRegistrar = spy(DefaultTickerListenerRegistrar(BITTREX, mock()))
         bitbayTickerListenerRegistrar = spy(DefaultTickerListenerRegistrar(BITBAY, mock()))
@@ -84,9 +85,12 @@ class TickerListenerRegistrarsTest {
         verify(bittrexTickerListenerRegistrar).removeTickerListener(listener)
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun shouldFailWhenAddingExchangeDuplicates() {
-        DefaultTickerListenerRegistrars(listOf(bittrexTickerListenerRegistrar, bitbayTickerListenerRegistrar, bitbayTickerListenerRegistrar), mock())
+        assertThrows<IllegalArgumentException> {
+            DefaultTickerListenerRegistrars(listOf(bittrexTickerListenerRegistrar, bitbayTickerListenerRegistrar, bitbayTickerListenerRegistrar), mock())
+        }
+
     }
 
 }

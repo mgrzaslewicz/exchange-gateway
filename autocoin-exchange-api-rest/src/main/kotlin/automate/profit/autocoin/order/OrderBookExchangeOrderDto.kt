@@ -1,7 +1,10 @@
 package automate.profit.autocoin.order
 
+import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.order.ExchangeOrderType
 import automate.profit.autocoin.exchange.orderbook.OrderBookExchangeOrder
+import java.math.BigDecimal
+import java.time.Instant
 
 data class OrderBookExchangeOrderDto(
         val exchangeName: String,
@@ -11,7 +14,16 @@ data class OrderBookExchangeOrderDto(
         val baseCurrency: String,
         val counterCurrency: String,
         val timestamp: Long?
-)
+) {
+    fun toOrderBookExchangeOrder() = OrderBookExchangeOrder(
+            exchangeName = exchangeName,
+            type = type,
+            orderedAmount = orderedAmount.toBigDecimal(),
+            price = BigDecimal(price),
+            currencyPair = CurrencyPair(baseCurrency, counterCurrency),
+            timestamp = if (timestamp != null) Instant.ofEpochMilli(timestamp) else null
+    )
+}
 
 fun OrderBookExchangeOrder.toOrderBookExchangeOrderDto() = OrderBookExchangeOrderDto(
         exchangeName = exchangeName,

@@ -1,28 +1,19 @@
 package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.io.File
 
 class ExchangeMetadataProviderTest {
-    private val tempFolder = TemporaryFolder()
-
-    @Before
-    fun setup() {
-        tempFolder.create()
-    }
-
-    @After
-    fun cleanup() {
-        tempFolder.delete()
-    }
 
     @Test
-    fun shouldFetchMetadataWhenRepositoryEmpty() {
+    fun shouldFetchMetadataWhenRepositoryEmpty(@TempDir tempFolder: File) {
         val expectedExchangeMetadata = ExchangeMetadata(emptyMap(), emptyMap())
         val expectedXchangeMetadata = XchangeMetadataJson("{}")
         val bittrexMetadataFetcher = mock<BittrexExchangeMetadataFetcher>().apply {
@@ -30,7 +21,7 @@ class ExchangeMetadataProviderTest {
             whenever(this.fetchExchangeMetadata()).thenReturn(Pair(expectedXchangeMetadata, expectedExchangeMetadata))
         }
 
-        val metadataRepository = FileExchangeMetadataRepository(tempFolder.root)
+        val metadataRepository = FileExchangeMetadataRepository(tempFolder)
         val metadataProvider = ExchangeMetadataProvider(listOf(bittrexMetadataFetcher), metadataRepository)
         // when
         val exchangeMetadata = metadataProvider.getAndSaveExchangeMetadata(BITTREX)

@@ -1,14 +1,15 @@
 package automate.profit.autocoin.exchange.peruser
 
 import automate.profit.autocoin.exchange.SupportedExchange.*
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.knowm.xchange.ExchangeSpecification
 
 class ExchangeSpecificationVerifierTest {
 
     private var exchangeSpecificationVerifier = ExchangeSpecificationVerifier()
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun shouldRejectTheSameApiAndSecretKey() {
         // given
         val exchangeSpecification = ExchangeSpecification("some exchange").apply {
@@ -16,10 +17,13 @@ class ExchangeSpecificationVerifierTest {
             secretKey = "some-api-key"
         }
         // when
-        exchangeSpecificationVerifier.verifyKeys(BITTREX, exchangeSpecification)
+        assertThrows<IllegalArgumentException> {
+            exchangeSpecificationVerifier.verifyKeys(BITTREX, exchangeSpecification)
+        }
+
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun shouldRejectBitstampWithoutUsername() {
         // given
         val exchangeSpecification = ExchangeSpecification("some exchange").apply {
@@ -27,7 +31,9 @@ class ExchangeSpecificationVerifierTest {
             secretKey = "some-api-secret"
         }
         // when
-        exchangeSpecificationVerifier.verifyKeys(BITSTAMP, exchangeSpecification)
+        assertThrows<IllegalArgumentException> {
+            exchangeSpecificationVerifier.verifyKeys(BITSTAMP, exchangeSpecification)
+        }
     }
 
     @Test
@@ -43,7 +49,7 @@ class ExchangeSpecificationVerifierTest {
         // then no exception thrown
     }
 
-    @Test(expected = IllegalArgumentException::class)
+    @Test
     fun shouldRejectKucoinWithoutPassphrase() {
         // given
         val exchangeSpecification = ExchangeSpecification("some exchange").apply {
@@ -51,7 +57,9 @@ class ExchangeSpecificationVerifierTest {
             secretKey = "some-api-secret"
         }
         // when
-        exchangeSpecificationVerifier.verifyKeys(KUCOIN, exchangeSpecification)
+        assertThrows<IllegalArgumentException> {
+            exchangeSpecificationVerifier.verifyKeys(KUCOIN, exchangeSpecification)
+        }
     }
 
     @Test

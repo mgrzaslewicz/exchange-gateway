@@ -3,15 +3,16 @@ package automate.profit.autocoin.exchange.metadata
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.After
-import org.junit.Before
-import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.io.TempDir
+import java.io.File
 import java.math.BigDecimal
 
 class FileExchangeMetadataRepositoryTest {
 
-    private val tempFolder = TemporaryFolder()
+    @TempDir
+    lateinit var tempFolder: File
+
     private val exchangeMetadataToSave = ExchangeMetadata(
             currencyPairMetadata = mapOf(
                     CurrencyPair.of("ABC/BCD") to CurrencyPairMetadata(
@@ -34,20 +35,10 @@ class FileExchangeMetadataRepositoryTest {
     )
     private val xchangeMetadataJson = XchangeMetadataJson("{}")
 
-    @Before
-    fun setup() {
-        tempFolder.create()
-    }
-
-    @After
-    fun cleanup() {
-        tempFolder.delete()
-    }
-
     @Test
     fun shouldReturnNoMetadataWhenNothingSavedBefore() {
         // given
-        val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder.root) { 19 }
+        val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder) { 19 }
         // when
         val savedExchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
         // then
@@ -58,7 +49,7 @@ class FileExchangeMetadataRepositoryTest {
     fun shouldReadMetadataFromFileWhenAfterOneSave() {
         // given
         val currentTimeMillis = 19L
-        val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder.root) { currentTimeMillis }
+        val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder) { currentTimeMillis }
         exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave, xchangeMetadataJson)
         // when
         val savedExchangeMetadata = exchangeMetadataRepository.getLatestExchangeMetadata(BITTREX)
@@ -71,7 +62,7 @@ class FileExchangeMetadataRepositoryTest {
     fun shouldReadLatestMetadataFromFileAfterTwoSaves() {
         // given
         val secondExchangeMetadataToSave = exchangeMetadataToSave.copy(currencyMetadata = emptyMap())
-        val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder.root)
+        val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder)
         exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave, xchangeMetadataJson)
         exchangeMetadataRepository.saveExchangeMetadata(BITTREX, secondExchangeMetadataToSave, xchangeMetadataJson)
         // when
@@ -85,10 +76,10 @@ class FileExchangeMetadataRepositoryTest {
         // given
         val currentTimeMillis = 19L
         val currentTimeMillisAsDateTimeString = "19700101010000019"
-        val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder.root) { currentTimeMillis }
+        val exchangeMetadataRepository = FileExchangeMetadataRepository(tempFolder) { currentTimeMillis }
         exchangeMetadataRepository.saveExchangeMetadata(BITTREX, exchangeMetadataToSave, xchangeMetadataJson)
         // when
-        val savedFile = tempFolder.root.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_$currentTimeMillisAsDateTimeString.json")
+        val savedFile = tempFolder.resolve(BITTREX.exchangeName).resolve("${BITTREX.exchangeName}_$currentTimeMillisAsDateTimeString.json")
         // then
         assertThat(savedFile).exists()
         assertThat(savedFile.readText()).isEqualTo(metadataObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(exchangeMetadataToSave))
