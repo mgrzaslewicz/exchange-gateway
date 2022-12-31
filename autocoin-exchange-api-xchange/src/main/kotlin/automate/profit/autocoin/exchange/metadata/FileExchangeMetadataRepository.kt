@@ -53,7 +53,7 @@ class FileExchangeMetadataRepository(
     private fun getCurrentDateTimeAsString() = dateTimeFormatter.format(Instant.ofEpochMilli(currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDateTime())
 
     fun saveExchangeMetadata(supportedExchange: SupportedExchange, exchangeMetadata: ExchangeMetadata, xchangeMetadataJson: XchangeMetadataJson) {
-        logger.info { "Saving $supportedExchange metadata" }
+        logger.info { "[$supportedExchange] Saving  metadata" }
         val exchangeDirectory = getOrCreateDirectory(supportedExchange)
 
         val currentDateTime = getCurrentDateTimeAsString()
@@ -64,9 +64,9 @@ class FileExchangeMetadataRepository(
         val newXchangeMetadataFile = exchangeDirectory.resolve(newXchangeMetadataFileName)
         updateLock.lock()
         try {
-            logger.info { "Writing $supportedExchange metadata to file ${newMetadataFile.absolutePath}" }
+            logger.info { "[$supportedExchange] Writing metadata to file ${newMetadataFile.absolutePath}" }
             newMetadataFile.writeText(exchangeMetadata.asJson())
-            logger.info { "Writing $supportedExchange xchange metadata to file ${newXchangeMetadataFile.absolutePath}" }
+            logger.info { "[$supportedExchange] Writing xchange metadata to file ${newXchangeMetadataFile.absolutePath}" }
             newXchangeMetadataFile.writeText(xchangeMetadataJson.json)
         } finally {
             updateLock.unlock()
@@ -86,7 +86,7 @@ class FileExchangeMetadataRepository(
                 .sortedByDescending { getNumberFromName(it) }.firstOrNull()
         updateLock.unlock()
         return if (latestMetadataFileName != null) {
-            logger.info { "Found $supportedExchange metadata file $latestMetadataFileName" }
+            logger.info { "[$supportedExchange] Found metadata file $latestMetadataFileName" }
             val latestMetadataFile = exchangeDirectory.resolve(latestMetadataFileName)
             return exchangeMetadataFromJson(latestMetadataFile.readText())
         } else null
@@ -99,7 +99,7 @@ class FileExchangeMetadataRepository(
                 .filter { it.contains("${supportedExchange.exchangeName}-xchange") }
                 .sortedByDescending { getNumberFromName(it) }.firstOrNull()
         return if (latestMetadataFileName != null) {
-            logger.info { "Found $supportedExchange xchange metadata file $latestMetadataFileName" }
+            logger.info { "[$supportedExchange] Found xchange metadata file $latestMetadataFileName" }
             exchangeDirectory.resolve(latestMetadataFileName)
         } else null
     }
