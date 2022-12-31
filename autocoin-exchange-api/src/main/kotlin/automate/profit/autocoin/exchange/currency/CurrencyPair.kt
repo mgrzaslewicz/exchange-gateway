@@ -12,13 +12,18 @@ data class CurrencyPair(
             }
             val base = currencyPair.substring(0, split)
             val counter = currencyPair.substring(split + 1)
-            return CurrencyPair(base, counter)
+            return CurrencyPair(base, counter).toUpperCase()
         }
     }
 
     fun contains(currency: String): Boolean = base == currency || counter == currency
 
-    override fun toString(): String = "$base/$counter"
+    fun toUpperCase() = copy(
+            base = base.toUpperCase(),
+            counter = counter.toUpperCase()
+    )
+
+    override fun toString(): String = "${base.toUpperCase()}/${counter.toUpperCase()}"
 
 }
 
