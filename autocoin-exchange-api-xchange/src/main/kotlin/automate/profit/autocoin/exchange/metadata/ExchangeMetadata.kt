@@ -7,12 +7,14 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import mu.KotlinLogging
 import org.knowm.xchange.Exchange
+import org.knowm.xchange.currency.Currency
+import org.knowm.xchange.dto.meta.CurrencyMetaData
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData
 import java.math.BigDecimal
 
 private fun BigDecimal?.orMax() = this ?: BigDecimal.valueOf(Long.MAX_VALUE)
 private val logger = KotlinLogging.logger {}
-
+private const val DEFAULT_CURRENCY_SCALE = 8
 private fun BigDecimal?.orMin() = this ?: 0.00000001.toBigDecimal()
 
 fun metadataFromExchange(supportedExchange: SupportedExchange, exchange: Exchange): ExchangeMetadata {
@@ -31,10 +33,19 @@ fun metadataFromExchange(supportedExchange: SupportedExchange, exchange: Exchang
             }.toMap(),
             currencyMetadata = exchange.exchangeMetaData.currencies.map {
                 it.key.currencyCode to CurrencyMetadata(
-                        scale = it.value.scale
+                        scale = getScaleOrDefault(supportedExchange, it.key, it.value)
                 )
             }.toMap()
     )
+}
+
+fun getScaleOrDefault(supportedExchange: SupportedExchange, currency: Currency, currencyMetaData: CurrencyMetaData?): Int {
+    return if (currencyMetaData?.scale == null) {
+        logger.warn { "$supportedExchange-$currency scale is null, returning default=$DEFAULT_CURRENCY_SCALE" }
+        DEFAULT_CURRENCY_SCALE
+    } else {
+        currencyMetaData.scale
+    }
 }
 
 fun getBuyFeeMultiplier(supportedExchange: SupportedExchange): BigDecimal {
