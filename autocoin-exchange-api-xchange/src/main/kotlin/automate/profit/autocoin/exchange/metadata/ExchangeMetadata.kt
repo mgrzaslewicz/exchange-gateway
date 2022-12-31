@@ -9,7 +9,8 @@ fun metadataFromExchange(exchange: Exchange): ExchangeMetadata {
             currencyPairMetadata = exchange.exchangeMetaData.currencyPairs.map {
                 it.key.toCurrencyPair() to CurrencyPairMetadata(
                         scale = it.value.priceScale,
-                        minimumAmount = it.value.minimumAmount
+                        minimumAmount = it.value.minimumAmount,
+                        maximumAmount = it.value.maximumAmount
                 )
             }.toMap(),
             currencyMetadata = exchange.exchangeMetaData.currencies.map {

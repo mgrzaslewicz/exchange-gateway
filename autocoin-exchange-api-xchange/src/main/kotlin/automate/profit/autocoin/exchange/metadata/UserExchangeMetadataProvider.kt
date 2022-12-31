@@ -10,7 +10,11 @@ interface UserExchangeMetadataProvider {
 }
 
 val defaultCurrencyMetaData = CurrencyMetadata(8)
-val defaultCurrencyPairMetaData = CurrencyPairMetadata(scale = 8, minimumAmount = 0.00000001.toBigDecimal())
+val defaultCurrencyPairMetaData = CurrencyPairMetadata(
+        scale = 8,
+        minimumAmount = 0.00000001.toBigDecimal(),
+        maximumAmount = 100.toBigDecimal()
+)
 
 class DefaultUserExchangeMetadataProvider(val exchangeName: String, private val exchangeMetadata: ExchangeMetadata) : UserExchangeMetadataProvider {
     private companion object : KLogging()
