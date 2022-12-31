@@ -15,6 +15,7 @@ data class CreateOrderDto(
 
 data class ExchangeCurrencyBalancesDto(
     val exchangeUserId: String,
+    val exchangeUserName: String,
     val exchangeBalances: List<ExchangeBalanceDto>
 )
 

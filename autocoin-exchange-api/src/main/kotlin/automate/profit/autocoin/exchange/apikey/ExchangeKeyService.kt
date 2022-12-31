@@ -1,10 +1,15 @@
 package automate.profit.autocoin.exchange.apikey
 
 data class ExchangeKeyDto(
+    val exchangeId: String,
+    val exchangeName: String,
+
+    val exchangeUserId: String,
+    val exchangeUserName: String,
+
     val apiKey: String,
     val secretKey: String,
-    val exchangeId: String,
-    val exchangeUserId: String,
+
     val userName: String? = null,
     val exchangeSpecificKeyParameters: Map<String, String>?
 )
