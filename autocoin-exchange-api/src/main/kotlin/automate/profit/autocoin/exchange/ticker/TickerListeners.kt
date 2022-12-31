@@ -4,7 +4,6 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArraySet
-import java.util.concurrent.ExecutorService
 
 interface TickerRegistrationListener {
     fun onLastListenerDeregistered(exchange: SupportedExchange)
@@ -21,7 +20,7 @@ interface TickerListeners {
     fun getTickerListeners(supportedExchange: SupportedExchange): Map<CurrencyPair, Set<TickerListener>>
 }
 
-class DefaultTickerListeners(private val executorService: ExecutorService) : TickerListeners {
+class DefaultTickerListeners : TickerListeners {
 
     private val listenersByExchangeAndCurrencyPair = ConcurrentHashMap<SupportedExchange, ConcurrentHashMap<CurrencyPair, MutableSet<TickerListener>>>()
     private val tickerRegistrationListeners = mutableListOf<TickerRegistrationListener>()
