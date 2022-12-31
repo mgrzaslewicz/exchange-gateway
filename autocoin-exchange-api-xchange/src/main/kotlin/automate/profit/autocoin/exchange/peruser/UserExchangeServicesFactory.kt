@@ -3,6 +3,8 @@ package automate.profit.autocoin.exchange.peruser
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.*
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadataProvider
+import automate.profit.autocoin.exchange.order.UserExchangeOrderBookService
+import automate.profit.autocoin.exchange.order.XchangeUserExchangeOrderBookService
 import automate.profit.autocoin.exchange.ticker.DefaultTickerListenerRegistrar
 import automate.profit.autocoin.exchange.ticker.TickerListenerRegistrar
 import automate.profit.autocoin.exchange.ticker.UserExchangeTickerService
@@ -29,6 +31,9 @@ fun String?.md5(): String {
 interface UserExchangeServicesFactory {
     fun createTickerService(exchangeName: String): UserExchangeTickerService
     fun createTickerService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTickerService
+
+    fun createOrderBookService(exchangeName: String): UserExchangeOrderBookService
+    fun createOrderBookService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeOrderBookService
 
     fun createTickerListenerRegistrar(exchangeName: String): TickerListenerRegistrar
     fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): TickerListenerRegistrar
@@ -73,6 +78,17 @@ class XchangeUserExchangeServicesFactory(
     override fun createTickerService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeTickerService {
         val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
         return XchangeUserExchangeTickerService(getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService)
+    }
+
+    override fun createOrderBookService(exchangeName: String): UserExchangeOrderBookService {
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
+        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
+        return XchangeUserExchangeOrderBookService(getXchange(supportedExchange, exchangeSpec).marketDataService, exchangeName)
+    }
+
+    override fun createOrderBookService(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): UserExchangeOrderBookService {
+        val supportedExchange = SupportedExchange.fromExchangeName(exchangeName)
+        return XchangeUserExchangeOrderBookService(getXchange(supportedExchange, publicKey, secretKey, userName, exchangeSpecificKeyParameters).marketDataService, exchangeName)
     }
 
     override fun createTickerListenerRegistrar(exchangeName: String, publicKey: String, secretKey: String, userName: String?, exchangeSpecificKeyParameters: Map<String, String>?): TickerListenerRegistrar {

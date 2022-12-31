@@ -28,19 +28,6 @@ data class ExchangeCancelOrderParams(
         val currencyPair: CurrencyPair
 )
 
-data class ExchangeOrder(
-        val exchangeName: String,
-        /** id at external exchange **/
-        val orderId: String,
-        val type: ExchangeOrderType,
-        val orderedAmount: BigDecimal,
-        val filledAmount: BigDecimal?,
-        val price: BigDecimal,
-        val currencyPair: CurrencyPair,
-        val status: ExchangeOrderStatus,
-        val timestamp: Instant?
-)
-
 data class ExchangeOpenOrders(
         val exchangeName: String,
         val exchangeUserId: String,
