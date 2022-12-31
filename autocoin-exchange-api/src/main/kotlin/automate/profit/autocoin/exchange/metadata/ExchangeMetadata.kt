@@ -11,7 +11,7 @@ import java.math.BigDecimal
 data class CurrencyPairMetadata(
         val scale: Int,
         val minimumAmount: BigDecimal,
-        val maximumAmount: BigDecimal
+        val maximumAmount: BigDecimal?
 )
 
 data class CurrencyMetadata(

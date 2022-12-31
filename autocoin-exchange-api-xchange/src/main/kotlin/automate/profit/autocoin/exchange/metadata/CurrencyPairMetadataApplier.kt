@@ -20,7 +20,12 @@ class CurrencyPairMetadataApplier {
      */
     fun getMinimumAmountForPrice(price: BigDecimal, ccyPair: CurrencyPair, metadata: CurrencyPairMetaData, exchange: SupportedExchange): BigDecimal {
         var minAmount = metadata.minimumAmount?.stripTrailingZeros() ?: ZERO
-        if (exchange == SupportedExchange.BINANCE) {
+
+        // This can happen e.g. on Binance where you can have currencies in wallet which are not traded yet and are reported with price 0e-8
+        if (price == ZERO)
+            minAmount = ZERO
+
+        else if (exchange == SupportedExchange.BINANCE) {
             // So called MIN_NOTIONAL condition. This will work only for BTC (0.001) based currency pairs. Would need to adjust to other ccy pairs.
             val minNotionalAmount = BigDecimal(getMinNotionalValue(ccyPair)).divide(price, minAmount.scale(), RoundingMode.UP)
             if (minNotionalAmount > minAmount) {
@@ -31,9 +36,10 @@ class CurrencyPairMetadataApplier {
     }
 
     fun applyAmountScaleAndLimits(amount: BigDecimal, price: BigDecimal, currencyPair: CurrencyPair, currencyPairMetadata: CurrencyPairMetaData, exchange: SupportedExchange): BigDecimal {
+        val minAmount = getMinimumAmountForPrice(price, currencyPair, currencyPairMetadata, exchange).orMin()
         val resultAmount = when {
-            amount < getMinimumAmountForPrice(price, currencyPair, currencyPairMetadata, exchange).orMin() -> ZERO.also { logger.info("amount $amount below minimum ${currencyPairMetadata.minimumAmount}, cutting down to 0") }
-            amount > currencyPairMetadata.maximumAmount.orMax() -> currencyPairMetadata.maximumAmount.also { logger.info("amount $amount above maximum ${currencyPairMetadata.maximumAmount}, cutting down to ${currencyPairMetadata.maximumAmount}") }
+            amount < minAmount -> ZERO.also { logger.warn("Amount $amount below minimum $minAmount. Cutting it down to 0.") }
+            amount > currencyPairMetadata.maximumAmount.orMax() -> currencyPairMetadata.maximumAmount.also { logger.info("Amount $amount above maximum ${currencyPairMetadata.maximumAmount}. Cutting down to ${currencyPairMetadata.maximumAmount}.") }
             else -> amount
         }.stripTrailingZeros()
         val scale = when {
