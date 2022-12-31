@@ -1,7 +1,7 @@
 package automate.profit.autocoin.exchange.peruser
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.currency.CurrencyBalance
+import automate.profit.autocoin.exchange.currency.ExchangeCurrencyBalance
 import automate.profit.autocoin.exchange.ratelimiter.ExchangeRateLimiter
 import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior
 import automate.profit.autocoin.exchange.ratelimiter.RateLimiterBehavior.WAIT_WITHOUT_TIMEOUT
@@ -14,10 +14,10 @@ import org.knowm.xchange.service.account.AccountService as XchangeAccountService
 
 interface UserExchangeWalletService {
     fun getAvailableAmountOfCurrency(currencyCode: String, rateLimiterBehavior: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT): BigDecimal =
-        getCurrencyBalance(currencyCode, rateLimiterBehavior).available
+        getCurrencyBalance(currencyCode, rateLimiterBehavior).amountAvailable
 
-    fun getCurrencyBalance(currencyCode: String, rateLimiterBehavior: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT): CurrencyBalance
-    fun getCurrencyBalances(rateLimiterBehavior: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT): List<CurrencyBalance>
+    fun getCurrencyBalance(currencyCode: String, rateLimiterBehavior: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT): ExchangeCurrencyBalance
+    fun getCurrencyBalances(rateLimiterBehavior: RateLimiterBehavior = WAIT_WITHOUT_TIMEOUT): List<ExchangeCurrencyBalance>
 }
 
 open class XchangeUserExchangeWalletService(
@@ -28,15 +28,15 @@ open class XchangeUserExchangeWalletService(
 
     companion object : KLogging()
 
-    override fun getCurrencyBalance(currencyCode: String, rateLimiterBehaviour: RateLimiterBehavior): CurrencyBalance {
+    override fun getCurrencyBalance(currencyCode: String, rateLimiterBehaviour: RateLimiterBehavior): ExchangeCurrencyBalance {
         logger.info("Requesting currency balance for $supportedExchange-$currencyCode")
         val wallet = getTradingWallet(rateLimiterBehaviour)
         val balance = wallet.getBalance(Currency(currencyCode))
-        return CurrencyBalance(
+        return ExchangeCurrencyBalance(
             currencyCode = currencyCode,
-            available = balance?.available ?: BigDecimal.ZERO,
-            frozen = balance?.frozen ?: BigDecimal.ZERO,
-            total = balance?.total ?: BigDecimal.ZERO
+            amountAvailable = balance?.available ?: BigDecimal.ZERO,
+            amountInOrders = balance?.frozen ?: BigDecimal.ZERO,
+            totalAmount = balance?.total ?: BigDecimal.ZERO
         ).also {
             logger.info("[$supportedExchange] Available $currencyCode balance: $it")
         }
@@ -57,17 +57,17 @@ open class XchangeUserExchangeWalletService(
         }
     }
 
-    override fun getCurrencyBalances(rateLimiterBehaviour: RateLimiterBehavior): List<CurrencyBalance> {
+    override fun getCurrencyBalances(rateLimiterBehaviour: RateLimiterBehavior): List<ExchangeCurrencyBalance> {
         logger.info("[$supportedExchange] Requesting currency balances")
         val wallet = getTradingWallet(rateLimiterBehaviour)
-        val balances = mutableListOf<CurrencyBalance>()
+        val balances = mutableListOf<ExchangeCurrencyBalance>()
         wallet.balances.forEach { (currency, balance) ->
             balances.add(
-                CurrencyBalance(
+                ExchangeCurrencyBalance(
                     currencyCode = currency.currencyCode,
-                    available = balance.available,
-                    frozen = balance.frozen,
-                    total = balance.total
+                    amountAvailable = balance.available,
+                    amountInOrders = balance.frozen,
+                    totalAmount = balance.total
                 )
             )
         }

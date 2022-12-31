@@ -1,6 +1,6 @@
 package automate.profit.autocoin.exchange.wallet
 
-import automate.profit.autocoin.exchange.currency.CurrencyBalance
+import automate.profit.autocoin.exchange.currency.ExchangeCurrencyBalance
 import automate.profit.autocoin.exchange.order.ExchangeOrderType
 
 data class CreateOrderDto(
@@ -13,14 +13,14 @@ data class CreateOrderDto(
     val amount: Double
 )
 
-data class CurrencyBalancesDto(
+data class ExchangeCurrencyBalancesDto(
     val exchangeUserId: String,
     val exchangeBalances: List<ExchangeBalanceDto>
 )
 
-fun CurrencyBalance.toDto() = CurrencyBalanceDto(
+fun ExchangeCurrencyBalance.toDto() = ExchangeCurrencyBalanceDto(
     currencyCode = this.currencyCode,
-    available = this.available.toDouble(),
-    total = this.total.toDouble(),
-    frozen = this.frozen.toDouble()
+    amountAvailable = this.amountAvailable.toPlainString(),
+    totalAmount = this.totalAmount.toPlainString(),
+    amountInOrders = this.amountInOrders.toPlainString(),
 )
