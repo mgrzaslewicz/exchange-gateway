@@ -11,7 +11,7 @@ import automate.profit.autocoin.exchange.metadata.kucoin.KucoinExchangeMetadataF
 import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeJavaClass
-import biboxOverridenCurrencyMetadata
+import biboxCurrencyMetadata
 import biboxOverridenCurrencyPairMetadata
 import org.knowm.xchange.Exchange
 import org.knowm.xchange.dto.meta.ExchangeMetaData
@@ -110,14 +110,14 @@ internal fun XchangeCurrencyPairMetaData.getTransactionFeeRanges(
 }
 
 data class CurrencyMetadataOverride(
-    val withdrawalFee: Double?,
+    val withdrawalFeeAmount: Double?,
     val minWithdrawalAmount: Double? = null,
     val isWithdrawalEnabled: Boolean? = null,
     val isDepositEnabled: Boolean? = null,
 ) {
     fun override(currencyMetadata: CurrencyMetadata): CurrencyMetadata {
         return currencyMetadata.copy(
-            withdrawalFeeAmount = withdrawalFee?.toBigDecimal() ?: currencyMetadata.withdrawalFeeAmount,
+            withdrawalFeeAmount = withdrawalFeeAmount?.toBigDecimal() ?: currencyMetadata.withdrawalFeeAmount,
             minWithdrawalAmount = minWithdrawalAmount?.toBigDecimal() ?: currencyMetadata.minWithdrawalAmount,
             withdrawalEnabled = isWithdrawalEnabled ?: currencyMetadata.withdrawalEnabled,
             depositEnabled = isDepositEnabled ?: currencyMetadata.depositEnabled,
@@ -160,6 +160,10 @@ class DefaultExchangeMetadataFetcher private constructor(
     private val currencyPairRename: Map<CurrencyPair, CurrencyPair>,
     private val overridenCurrencyMetadata: Map<String, CurrencyMetadataOverride>,
     private val overridenCurrencyPairMetadata: Map<CurrencyPair, CurrencyPairMetadataOverride>,
+    /**
+     * Used when xchange has no currency metadata at all
+     */
+    private val defaultCurrencyMetadata: Map<String, CurrencyMetadata>,
 ) : ExchangeMetadataFetcher {
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
@@ -214,7 +218,7 @@ class DefaultExchangeMetadataFetcher private constructor(
                     withdrawalEnabled = it.value?.walletHealth?.toWithdrawalEnabled()
                 )
             )
-        }?.toMap() ?: emptyMap()
+        }?.toMap() ?: defaultCurrencyMetadata
         if (currencies.isEmpty()) {
             metadataWarnings.add("Currency metadata is empty")
         }
@@ -253,6 +257,7 @@ class DefaultExchangeMetadataFetcher private constructor(
         var currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap(),
         var overridenCurrencyMetadata: Map<String, CurrencyMetadataOverride> = emptyMap(),
         var overridenCurrencyPairMetadata: Map<CurrencyPair, CurrencyPairMetadataOverride> = emptyMap(),
+        var defaultCurrencyMetadata: Map<String, CurrencyMetadata> = emptyMap(),
     ) {
 
         fun build(): DefaultExchangeMetadataFetcher {
@@ -265,6 +270,7 @@ class DefaultExchangeMetadataFetcher private constructor(
                 currencyPairRename = currencyPairRename,
                 overridenCurrencyMetadata = overridenCurrencyMetadata,
                 overridenCurrencyPairMetadata = overridenCurrencyPairMetadata,
+                defaultCurrencyMetadata = defaultCurrencyMetadata,
             )
         }
     }
@@ -281,7 +287,7 @@ fun overridenExchangeMetadataFetchers(
     return listOf(
         defaultBuilder.copy(
             supportedExchange = BIBOX,
-            overridenCurrencyMetadata = biboxOverridenCurrencyMetadata,
+            defaultCurrencyMetadata = biboxCurrencyMetadata,
             overridenCurrencyPairMetadata = biboxOverridenCurrencyPairMetadata,
         ).build(),
         BittrexExchangeMetadataFetcher(
