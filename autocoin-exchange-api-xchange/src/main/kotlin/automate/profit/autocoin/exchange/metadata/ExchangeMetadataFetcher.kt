@@ -11,7 +11,8 @@ import automate.profit.autocoin.exchange.metadata.kucoin.KucoinExchangeMetadataF
 import automate.profit.autocoin.exchange.peruser.ExchangeSpecificationVerifier
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeJavaClass
-import mu.KotlinLogging
+import biboxOverridenCurrencyMetadata
+import biboxOverridenCurrencyPairMetadata
 import org.knowm.xchange.Exchange
 import org.knowm.xchange.dto.meta.ExchangeMetaData
 import org.knowm.xchange.dto.meta.WalletHealth
@@ -28,7 +29,6 @@ interface ExchangeMetadataFetcher {
     fun fetchExchangeMetadata(apiKey: ExchangeApiKey? = null): ExchangeMetadata
 }
 
-private val logger = KotlinLogging.logger {}
 internal fun BigDecimal?.orDefaultMin() = this ?: 0.00000001.toBigDecimal()
 internal fun BigDecimal?.orDefaultMax() = this ?: BigDecimal.valueOf(Long.MAX_VALUE)
 internal val DEFAULT_SCALE = 8
@@ -111,10 +111,29 @@ internal fun XchangeCurrencyPairMetaData.getTransactionFeeRanges(
 
 data class CurrencyMetadataOverride(
     val withdrawalFee: Double?,
-    val minWithdrawalAmount: Double?,
+    val minWithdrawalAmount: Double? = null,
     val isWithdrawalEnabled: Boolean? = null,
     val isDepositEnabled: Boolean? = null,
-)
+) {
+    fun override(currencyMetadata: CurrencyMetadata): CurrencyMetadata {
+        return currencyMetadata.copy(
+            withdrawalFeeAmount = withdrawalFee?.toBigDecimal() ?: currencyMetadata.withdrawalFeeAmount,
+            minWithdrawalAmount = minWithdrawalAmount?.toBigDecimal() ?: currencyMetadata.minWithdrawalAmount,
+            withdrawalEnabled = isWithdrawalEnabled ?: currencyMetadata.withdrawalEnabled,
+            depositEnabled = isDepositEnabled ?: currencyMetadata.depositEnabled,
+        )
+    }
+}
+
+data class CurrencyPairMetadataOverride(
+    val transactionFeeRanges: TransactionFeeRanges?,
+) {
+    fun override(currencyPairMetadata: CurrencyPairMetadata): CurrencyPairMetadata {
+        return currencyPairMetadata.copy(
+            transactionFeeRanges = transactionFeeRanges ?: currencyPairMetadata.transactionFeeRanges,
+        )
+    }
+}
 
 fun WalletHealth.toDepositEnabled(): Boolean? {
     return when {
@@ -139,7 +158,8 @@ class DefaultExchangeMetadataFetcher private constructor(
     private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner,
     private val xchangeMetadataProvider: (exchange: Exchange) -> ExchangeMetaData,
     private val currencyPairRename: Map<CurrencyPair, CurrencyPair>,
-    private val overridenCurrencies: Map<String, CurrencyMetadataOverride>,
+    private val overridenCurrencyMetadata: Map<String, CurrencyMetadataOverride>,
+    private val overridenCurrencyPairMetadata: Map<CurrencyPair, CurrencyPairMetadataOverride>,
 ) : ExchangeMetadataFetcher {
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): ExchangeMetadata {
@@ -168,16 +188,19 @@ class DefaultExchangeMetadataFetcher private constructor(
                 if (it.value.priceScale == null) {
                     metadataWarnings.add("${it.key} priceScale is not provided")
                 }
-                currencyPair to CurrencyPairMetadata(
-                    amountScale = it.value.priceScale ?: DEFAULT_SCALE,
-                    priceScale = it.value.priceScale ?: DEFAULT_SCALE,
-                    minimumAmount = it.value.minimumAmount.orDefaultMin(),
-                    maximumAmount = it.value.maximumAmount.orDefaultMax(),
-                    minimumOrderValue = BigDecimal.ZERO,
-                    maximumPriceMultiplierUp = 10.toBigDecimal(),
-                    maximumPriceMultiplierDown = 0.1.toBigDecimal(),
-                    buyFeeMultiplier = BigDecimal.ZERO,
-                    transactionFeeRanges = it.value.getTransactionFeeRanges()
+                currencyPair to overrideCurrencyPairMetadataIfNeeded(
+                    currencyPair = currencyPair,
+                    currencyPairMetadata = CurrencyPairMetadata(
+                        amountScale = it.value.priceScale ?: DEFAULT_SCALE,
+                        priceScale = it.value.priceScale ?: DEFAULT_SCALE,
+                        minimumAmount = it.value.minimumAmount.orDefaultMin(),
+                        maximumAmount = it.value.maximumAmount.orDefaultMax(),
+                        minimumOrderValue = BigDecimal.ZERO,
+                        maximumPriceMultiplierUp = 10.toBigDecimal(),
+                        maximumPriceMultiplierDown = 0.1.toBigDecimal(),
+                        buyFeeMultiplier = BigDecimal.ZERO,
+                        transactionFeeRanges = it.value.getTransactionFeeRanges()
+                    )
                 )
             }.toMap()
         val currencies = xchangeMetadata.currencies?.map {
@@ -204,16 +227,20 @@ class DefaultExchangeMetadataFetcher private constructor(
     }
 
     private fun overrideCurrencyMetadataIfNeeded(currencyCode: String, currencyMetadata: CurrencyMetadata): CurrencyMetadata {
-        return if (overridenCurrencies.containsKey(currencyCode)) {
-            val overridenCurrencyMetadata = overridenCurrencies.getValue(currencyCode)
-            return currencyMetadata.copy(
-                withdrawalFeeAmount = overridenCurrencyMetadata.withdrawalFee?.toBigDecimal() ?: currencyMetadata.withdrawalFeeAmount,
-                minWithdrawalAmount = overridenCurrencyMetadata.minWithdrawalAmount?.toBigDecimal() ?: currencyMetadata.minWithdrawalAmount,
-                withdrawalEnabled = overridenCurrencyMetadata.isWithdrawalEnabled ?: currencyMetadata.withdrawalEnabled,
-                depositEnabled = overridenCurrencyMetadata.isDepositEnabled ?: currencyMetadata.depositEnabled,
-            )
+        return if (overridenCurrencyMetadata.containsKey(currencyCode)) {
+            val overridenCurrencyMetadata = overridenCurrencyMetadata.getValue(currencyCode)
+            return overridenCurrencyMetadata.override(currencyMetadata)
         } else {
             currencyMetadata
+        }
+    }
+
+    private fun overrideCurrencyPairMetadataIfNeeded(currencyPair: CurrencyPair, currencyPairMetadata: CurrencyPairMetadata): CurrencyPairMetadata {
+        return if (overridenCurrencyPairMetadata.containsKey(currencyPair)) {
+            val overridenCurrencyPairMetadata = overridenCurrencyPairMetadata.getValue(currencyPair)
+            return overridenCurrencyPairMetadata.override(currencyPairMetadata)
+        } else {
+            currencyPairMetadata
         }
     }
 
@@ -224,7 +251,8 @@ class DefaultExchangeMetadataFetcher private constructor(
         var xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner = XchangeSpecificationApiKeyAssigner(ExchangeSpecificationVerifier()),
         var xchangeMetadataProvider: (exchange: Exchange) -> ExchangeMetaData = { exchange -> exchange.exchangeMetaData },
         var currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap(),
-        var overridenCurrencies: Map<String, CurrencyMetadataOverride> = emptyMap(),
+        var overridenCurrencyMetadata: Map<String, CurrencyMetadataOverride> = emptyMap(),
+        var overridenCurrencyPairMetadata: Map<CurrencyPair, CurrencyPairMetadataOverride> = emptyMap(),
     ) {
 
         fun build(): DefaultExchangeMetadataFetcher {
@@ -235,7 +263,8 @@ class DefaultExchangeMetadataFetcher private constructor(
                 xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
                 xchangeMetadataProvider = xchangeMetadataProvider,
                 currencyPairRename = currencyPairRename,
-                overridenCurrencies = overridenCurrencies
+                overridenCurrencyMetadata = overridenCurrencyMetadata,
+                overridenCurrencyPairMetadata = overridenCurrencyPairMetadata,
             )
         }
     }
@@ -250,6 +279,11 @@ fun overridenExchangeMetadataFetchers(
         xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner,
     )
     return listOf(
+        defaultBuilder.copy(
+            supportedExchange = BIBOX,
+            overridenCurrencyMetadata = biboxOverridenCurrencyMetadata,
+            overridenCurrencyPairMetadata = biboxOverridenCurrencyPairMetadata,
+        ).build(),
         BittrexExchangeMetadataFetcher(
             exchangeFactory = exchangeFactory,
             xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
@@ -282,7 +316,7 @@ fun overridenExchangeMetadataFetchers(
         ).build(),
         defaultBuilder.copy(
             supportedExchange = KRAKEN,
-            overridenCurrencies = krakenOverridenCurrenciesMetadata
+            overridenCurrencyMetadata = krakenOverridenCurrencyMetadata
         ).build(),
         defaultBuilder.copy(
             exchangeFactory = exchangeFactory,
