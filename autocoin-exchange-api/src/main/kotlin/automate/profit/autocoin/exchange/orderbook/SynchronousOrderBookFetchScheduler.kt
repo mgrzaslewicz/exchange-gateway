@@ -1,7 +1,7 @@
 package automate.profit.autocoin.exchange.orderbook
 
 import automate.profit.autocoin.exchange.SupportedExchange
-import automate.profit.autocoin.exchange.cache.ExchangeWithCurrencyPairStringCache
+import automate.profit.autocoin.exchange.currency.ExchangeWithCurrencyPairStringCache
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
 import java.lang.ref.SoftReference
