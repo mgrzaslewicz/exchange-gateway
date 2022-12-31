@@ -5,8 +5,8 @@ import java.math.BigDecimal
 import java.time.Instant
 
 enum class ExchangeOrderType {
-    ASK,
-    BID
+    ASK_SELL,
+    BID_BUY
 }
 
 enum class ExchangeOrderStatus {
@@ -52,9 +52,25 @@ interface ExchangeOrderService {
 
     fun cancelOrder(exchangeName: String, exchangeUserId: String, cancelOrderParams: ExchangeCancelOrderParams): Boolean
 
-    fun placeLimitBuyOrder(exchangeName: String, exchangeUserId: String, baseCurrencyCode: String, counterCurrencyCode: String, buyPrice: BigDecimal, amount: BigDecimal): ExchangeOrder
+    fun placeLimitBuyOrder(
+            exchangeName: String,
+            exchangeUserId: String,
+            baseCurrencyCode: String,
+            counterCurrencyCode: String,
+            buyPrice: BigDecimal,
+            amount: BigDecimal,
+            isDemoOrder: Boolean = false
+    ): ExchangeOrder
 
-    fun placeLimitSellOrder(exchangeName: String, exchangeUserId: String, baseCurrencyCode: String, counterCurrencyCode: String, sellPrice: BigDecimal, amount: BigDecimal): ExchangeOrder
+    fun placeLimitSellOrder(
+            exchangeName: String,
+            exchangeUserId: String,
+            baseCurrencyCode: String,
+            counterCurrencyCode: String,
+            sellPrice: BigDecimal,
+            amount: BigDecimal,
+            isDemoOrder: Boolean = false
+    ): ExchangeOrder
 
     fun getOpenOrders(exchangeName: String, exchangeUserId: String): List<ExchangeOrder>
 

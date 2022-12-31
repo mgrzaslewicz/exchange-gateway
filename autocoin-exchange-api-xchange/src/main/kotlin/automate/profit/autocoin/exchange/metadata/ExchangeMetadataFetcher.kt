@@ -12,14 +12,14 @@ import org.knowm.xchange.binance.service.BinanceMarketDataService
 import org.knowm.xchange.bittrex.BittrexAdapters
 import org.knowm.xchange.bittrex.service.BittrexMarketDataServiceRaw
 import org.knowm.xchange.currency.Currency
-import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 import org.knowm.xchange.dto.meta.CurrencyMetaData
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData
 import org.knowm.xchange.kucoin.KucoinAdapters
 import org.knowm.xchange.kucoin.KucoinMarketDataService
 import java.io.File
 import java.math.BigDecimal
-import java.math.BigDecimal.ROUND_HALF_UP
+import java.math.RoundingMode
+import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 
 class XchangeMetadataJson(val json: String)
 
@@ -88,7 +88,7 @@ class BittrexExchangeMetadataFetcher : ExchangeMetadataFetcher {
         currencyPairs.forEach { currencyPair ->
             xchangeMetadata.currencyPairs[currencyPair] = CurrencyPairMetaData(
                     null,
-                    BigDecimal(bittrexSymbols.first { XchangeCurrencyPair(it.marketCurrency, it.baseCurrency) == currencyPair }.minTradeSize.toDouble()).setScale(8, ROUND_HALF_UP),
+                    BigDecimal(bittrexSymbols.first { XchangeCurrencyPair(it.marketCurrency, it.baseCurrency) == currencyPair }.minTradeSize.toDouble()).setScale(8, RoundingMode.HALF_UP),
                     null,
                     bittrexPriceScale,
                     null

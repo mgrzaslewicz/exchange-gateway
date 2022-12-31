@@ -2,7 +2,8 @@ package automate.profit.autocoin.exchange.metadata
 
 import mu.KLogging
 import java.math.BigDecimal
-import java.math.BigDecimal.*
+import java.math.BigDecimal.ZERO
+import java.math.BigDecimal.valueOf
 import java.math.RoundingMode
 
 class CurrencyPairMetadataApplier {
@@ -58,6 +59,6 @@ class CurrencyPairMetadataApplier {
         return applyScale(price, currencyPairMetadata.priceScale)
     }
 
-    private fun applyScale(value: BigDecimal, scale: Int) = value.setScale(scale, ROUND_DOWN).also { logger.debug { "applyScale($value, $scale) = $it" } }
+    private fun applyScale(value: BigDecimal, scale: Int) = value.setScale(scale, RoundingMode.DOWN).also { logger.debug { "applyScale($value, $scale) = $it" } }
 
 }

@@ -5,8 +5,8 @@ import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.order.ExchangeOrder
 import automate.profit.autocoin.exchange.order.ExchangeOrderStatus.NEW
 import automate.profit.autocoin.exchange.order.ExchangeOrderStatus.PARTIALLY_FILLED
-import automate.profit.autocoin.exchange.order.ExchangeOrderType.ASK
-import automate.profit.autocoin.exchange.order.ExchangeOrderType.BID
+import automate.profit.autocoin.exchange.order.ExchangeOrderType.ASK_SELL
+import automate.profit.autocoin.exchange.order.ExchangeOrderType.BID_BUY
 import automate.profit.autocoin.exchange.order.toXchangeLimitOrder
 import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeTradeService
 import com.nhaarman.mockitokotlin2.whenever
@@ -42,7 +42,7 @@ class XchangeUserExchangeTradeServiceTest {
     private val openBuyOrder1 = ExchangeOrder(
             exchangeName = KUCOIN.exchangeName,
             orderId = buyOrderId1,
-            type = BID,
+            type = BID_BUY,
             orderedAmount = BigDecimal(5.5),
             filledAmount = BigDecimal(3.5),
             price = limitPriceBigDecimal,
@@ -54,7 +54,7 @@ class XchangeUserExchangeTradeServiceTest {
     private val openBuyOrder2 = ExchangeOrder(
             exchangeName = KUCOIN.exchangeName,
             orderId = buyOrderId2,
-            type = BID,
+            type = BID_BUY,
             orderedAmount = BigDecimal(5.5),
             filledAmount = BigDecimal.ZERO,
             price = limitPriceBigDecimal,
@@ -66,7 +66,7 @@ class XchangeUserExchangeTradeServiceTest {
     private val openSellOrder1 = ExchangeOrder(
             exchangeName = KUCOIN.exchangeName,
             orderId = sellOrderId1,
-            type = ASK,
+            type = ASK_SELL,
             orderedAmount = BigDecimal(45.5),
             filledAmount = BigDecimal.ZERO,
             price = limitPriceBigDecimal,
