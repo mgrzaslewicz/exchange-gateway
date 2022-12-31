@@ -9,9 +9,9 @@ data class TransactionFeeRange(
     val feeRatio: BigDecimal? = null,
 ) {
     init {
-       if (feeAmount == null && feeRatio == null) {
-           throw error("Both feeAmount and feeRatio are null. One of them needs to be provided")
-       }
+        if (feeAmount == null && feeRatio == null) {
+            throw error("Both feeAmount and feeRatio are null. One of them needs to be provided")
+        }
     }
 }
 
@@ -19,10 +19,10 @@ data class TransactionFeeRanges(
     val makerFees: List<TransactionFeeRange> = emptyList(),
     val takerFees: List<TransactionFeeRange> = emptyList()
 ) {
-    private val takerFeesSortedAscending = takerFees.sortedBy { it.beginAmount }
+    private val takerFeesSortedAscending: List<TransactionFeeRange> by lazy { takerFees.sortedBy { it.beginAmount } }
 
-    fun takerRatioForBaseCurrency(baseCurrencyAmount: BigDecimal): BigDecimal {
-        return takerFeesSortedAscending.find { it.beginAmount >= baseCurrencyAmount }?.feeAmount ?: BigDecimal.ZERO
+    fun takerFeeRange(baseCurrencyAmount: BigDecimal): TransactionFeeRange? {
+        return takerFeesSortedAscending.find { baseCurrencyAmount >= it.beginAmount }
     }
 }
 

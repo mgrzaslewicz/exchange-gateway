@@ -2,7 +2,6 @@ package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.apikey.ServiceApiKeysProvider
-import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
 
 /**
@@ -25,10 +24,6 @@ class DefaultExchangeMetadataService(
 
     override fun getMetadata(exchangeName: String): ExchangeMetadata {
         return getAndSaveExchangeMetadata(SupportedExchange.fromExchangeName(exchangeName))
-    }
-
-    override fun getMetadata(exchangeName: String, currencyPair: CurrencyPair): CurrencyPairMetadata {
-        return getAndSaveExchangeMetadata(SupportedExchange.fromExchangeName(exchangeName)).currencyPairMetadata.getValue(currencyPair)
     }
 
     private val fetchersMap = exchangeMetadataFetchers.associateBy { it.supportedExchange }
