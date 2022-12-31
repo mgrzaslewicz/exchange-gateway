@@ -97,8 +97,8 @@ class BittrexExchangeMetadataFetcher(
             currencyMetadata = xchangeMetadata.currencies.map {
                 it.key.currencyCode to CurrencyMetadata(
                     scale = getScaleOrDefault(it.key, it.value, debugWarnings),
-                    withdrawalFeeAmount = it?.value?.withdrawalFee,
-                    minWithdrawalAmount = it?.value?.minWithdrawalAmount
+                    withdrawalFeeAmount = it.value?.withdrawalFee,
+                    minWithdrawalAmount = it.value?.minWithdrawalAmount
 
                 )
             }.toMap(),
