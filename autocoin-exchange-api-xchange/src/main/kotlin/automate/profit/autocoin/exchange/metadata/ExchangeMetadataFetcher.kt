@@ -223,6 +223,7 @@ class DefaultExchangeMetadataFetcher private constructor(
             metadataWarnings.add("Currency metadata is empty")
         }
         val exchangeMetadata = ExchangeMetadata(
+            exchange = supportedExchange,
             currencyPairMetadata = currencyPairs,
             currencyMetadata = currencies,
             debugWarnings = metadataWarnings

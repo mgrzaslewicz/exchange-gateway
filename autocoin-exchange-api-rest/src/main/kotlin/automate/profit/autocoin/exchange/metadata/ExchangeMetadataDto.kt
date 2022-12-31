@@ -1,5 +1,6 @@
 package automate.profit.autocoin.exchange.metadata
 
+import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 
 data class CurrencyPairMetadataDto(
@@ -70,11 +71,13 @@ data class CurrencyMetadataDto(
 }
 
 data class ExchangeMetadataDto(
+    val exchange: String,
     val currencyPairMetadata: Map<CurrencyPair, CurrencyPairMetadataDto>,
     val currencyMetadata: Map<String, CurrencyMetadataDto>,
     val debugWarnings: List<String>
 ) {
     fun toExchangeMetadata() = ExchangeMetadata(
+        exchange= SupportedExchange.fromExchangeName(exchange),
         currencyPairMetadata = currencyPairMetadata.mapValues { it.value.toCurrencyPairMetadata() },
         currencyMetadata = currencyMetadata.mapValues { it.value.toCurrencyMetadata() },
         debugWarnings = debugWarnings
@@ -82,6 +85,7 @@ data class ExchangeMetadataDto(
 }
 
 fun ExchangeMetadata.toDto(includeDebugWarnings: Boolean) = ExchangeMetadataDto(
+    exchange = this.exchange.exchangeName,
     currencyMetadata = currencyMetadata.mapValues { it.value.toDto() },
     currencyPairMetadata = currencyPairMetadata.mapValues { it.value.toDto() },
     debugWarnings = if (includeDebugWarnings) this.debugWarnings else emptyList()

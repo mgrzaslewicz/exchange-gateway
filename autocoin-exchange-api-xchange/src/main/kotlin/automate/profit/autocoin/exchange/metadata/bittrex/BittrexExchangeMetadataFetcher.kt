@@ -72,6 +72,7 @@ class BittrexExchangeMetadataFetcher(
         }
 
         val exchangeMetadata = ExchangeMetadata(
+            exchange = supportedExchange,
             currencyPairMetadata = xchangeMetadata.currencyPairs
                 .filter {
                     if (it.value == null) {
