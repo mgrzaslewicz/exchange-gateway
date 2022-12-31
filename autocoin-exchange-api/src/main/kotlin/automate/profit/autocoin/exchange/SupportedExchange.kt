@@ -13,7 +13,6 @@ enum class SupportedExchange(val exchangeName: String, val comments: List<String
     BITSO("bitso", comments = listOf("Needs update in xchange library to use v3 api")),
     BITSTAMP("bitstamp"),
     BITTREX("bittrex"),
-    BITZ("bitz", comments = listOf("Requires API key for reading ticker")),
     BLEUTRADE("bleutrade"),
     HITBTC("hitbtc"),
     CEXIO("cexio"),
@@ -35,7 +34,13 @@ enum class SupportedExchange(val exchangeName: String, val comments: List<String
 
     companion object {
         fun fromExchangeName(exchangeName: String): SupportedExchange =
-                values().find { it.exchangeName.lowercase() == exchangeName }
-                        ?: throw IllegalArgumentException("Unknown exchange name: $exchangeName")
+            values().find { it.exchangeName.lowercase() == exchangeName }
+                ?: throw IllegalArgumentException("Unknown exchange name: $exchangeName")
+
+        fun hasExchange(exchangeName: String): Boolean {
+            return values().any { it.exchangeName.lowercase() == exchangeName }
+        }
+
     }
+
 }
