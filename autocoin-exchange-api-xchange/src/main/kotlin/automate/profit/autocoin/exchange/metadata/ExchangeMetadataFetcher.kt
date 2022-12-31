@@ -4,23 +4,19 @@ import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.*
 import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.currency.CurrencyPair
+import automate.profit.autocoin.exchange.metadata.binance.BinanceExchangeMetadataFetcher
+import automate.profit.autocoin.exchange.metadata.bittrex.BittrexExchangeMetadataFetcher
+import automate.profit.autocoin.exchange.metadata.kucoin.KucoinExchangeMetadataFetcher
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KotlinLogging
-import org.knowm.xchange.ExchangeFactory
-import org.knowm.xchange.ExchangeSpecification
-import org.knowm.xchange.binance.service.BinanceMarketDataService
-import org.knowm.xchange.bittrex.BittrexAdapters
-import org.knowm.xchange.bittrex.service.BittrexMarketDataServiceRaw
-import org.knowm.xchange.currency.Currency
-import org.knowm.xchange.dto.meta.CurrencyMetaData
-import org.knowm.xchange.dto.meta.CurrencyPairMetaData
-import org.knowm.xchange.kucoin.KucoinAdapters
-import org.knowm.xchange.kucoin.KucoinMarketDataService
+import org.knowm.xchange.ExchangeFactory as XchangeExchangeFactory
+import org.knowm.xchange.ExchangeSpecification as XchangeExchangeSpecification
+import org.knowm.xchange.currency.Currency as XchangeCurrency
+import org.knowm.xchange.dto.meta.CurrencyMetaData as XchangeCurrencyMetaData
+import org.knowm.xchange.dto.meta.CurrencyPairMetaData as XchangeCurrencyPairMetaData
 import java.io.File
 import java.math.BigDecimal
-import java.math.RoundingMode
-import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 
 class XchangeMetadataJson(val json: String)
 
@@ -30,15 +26,15 @@ interface ExchangeMetadataFetcher {
 }
 
 private val logger = KotlinLogging.logger {}
-private fun BigDecimal?.orMin() = this ?: 0.00000001.toBigDecimal()
-private fun BigDecimal?.orMax() = this ?: BigDecimal.valueOf(Long.MAX_VALUE)
-private val DEFAULT_SCALE = 8
+internal fun BigDecimal?.orMin() = this ?: 0.00000001.toBigDecimal()
+internal fun BigDecimal?.orMax() = this ?: BigDecimal.valueOf(Long.MAX_VALUE)
+internal val DEFAULT_SCALE = 8
 
-private fun numberOfDecimals(value: String): Int {
+internal fun numberOfDecimals(value: String): Int {
     return BigDecimal(value).stripTrailingZeros().scale()
 }
 
-private fun ExchangeSpecification.setApiKey(apiKey: ExchangeApiKey?) {
+internal fun XchangeExchangeSpecification.setApiKey(apiKey: ExchangeApiKey?) {
     if (apiKey != null) {
         this.apiKey = apiKey.publicKey
         this.secretKey = apiKey.secretKey
@@ -64,7 +60,7 @@ private fun getEmptyXchangeMetadataFile(): File {
     return emptyMetadataFile
 }
 
-private fun getScaleOrDefault(supportedExchange: SupportedExchange, currency: Currency, currencyMetaData: CurrencyMetaData?): Int {
+internal fun getScaleOrDefault(supportedExchange: SupportedExchange, currency: XchangeCurrency, currencyMetaData: XchangeCurrencyMetaData?): Int {
     return if (currencyMetaData?.scale == null) {
         logger.warn { "$supportedExchange-$currency scale is null, returning default=$DEFAULT_SCALE" }
         DEFAULT_SCALE
@@ -76,232 +72,39 @@ private fun getScaleOrDefault(supportedExchange: SupportedExchange, currency: Cu
 /**
  * @see BaseExchange.applySpecification
  */
-private fun preventFromLoadingDefaultXchangeMetadata(es: ExchangeSpecification) {
+internal fun preventFromLoadingDefaultXchangeMetadata(es: XchangeExchangeSpecification) {
     es.metaDataJsonFileOverride = getEmptyXchangeMetadataFile().absolutePath
 }
 
-class BittrexExchangeMetadataFetcher(private val exchangeFactory: ExchangeFactory) : ExchangeMetadataFetcher {
-    private val logger = KotlinLogging.logger {}
-
-    override val supportedExchange = BITTREX
-
-    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
-        exchangeSpec.setApiKey(apiKey)
-        preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
-        val exchange = exchangeFactory.createExchange(exchangeSpec)
-        val bittrexSymbols = (exchange.marketDataService as BittrexMarketDataServiceRaw).bittrexSymbols
-        val currencyPairs = BittrexAdapters.adaptCurrencyPairs(bittrexSymbols)
-        val xchangeMetadata = exchange.exchangeMetaData
-        val bittrexPriceScale = DEFAULT_SCALE
-        currencyPairs.forEach { currencyPair ->
-            xchangeMetadata.currencyPairs[currencyPair] = CurrencyPairMetaData(
-                null,
-                BigDecimal(bittrexSymbols.first { XchangeCurrencyPair(it.quoteCurrencySymbol, it.baseCurrencySymbol) == currencyPair }.minTradeSize.toDouble()).setScale(
-                    8,
-                    RoundingMode.HALF_UP
-                ),
-                null,
-                bittrexPriceScale,
-                null
+internal fun XchangeCurrencyPairMetaData.getTransactionFeeRanges(
+    defaultTakerFees: List<TransactionFeeRange> = emptyList(),
+    defaultMakerFees: List<TransactionFeeRange> = emptyList()
+): TransactionFeeRanges {
+    return TransactionFeeRanges(
+        takerFees = this.feeTiers?.map { feeTier ->
+            TransactionFeeRange(
+                beginAmount = feeTier.beginQuantity,
+                fee = TransactionFee(percent = feeTier.fee.takerFee)
             )
-            xchangeMetadata.currencies[currencyPair.base] = null
-            xchangeMetadata.currencies[currencyPair.counter] = null
-        }
-
-        val xchangeMetadataJson = xchangeMetadata.toJSONString()
-        val exchangeMetadata = ExchangeMetadata(
-            currencyPairMetadata = xchangeMetadata.currencyPairs
-                .filter {
-                    if (it.value == null) {
-                        logger.warn { "$supportedExchange-${it.key} no currency pair in metadata, skipping" }
-                    }
-                    it.value != null
-                }
-                .map {
-                    it.key.toCurrencyPair() to CurrencyPairMetadata(
-                        amountScale = it.value.priceScale,
-                        priceScale = it.value.priceScale,
-                        minimumAmount = it.value.minimumAmount.orMin(),
-                        maximumAmount = it.value.maximumAmount.orMax(),
-                        minimumOrderValue = BigDecimal.ZERO,
-                        maximumPriceMultiplierUp = 10.toBigDecimal(),
-                        maximumPriceMultiplierDown = 0.1.toBigDecimal(),
-                        buyFeeMultiplier = BigDecimal("0.0025") // https://bittrex.zendesk.com/hc/en-us/articles/115000199651-What-fees-does-Bittrex-charge-
-                    )
-                }.toMap(),
-            currencyMetadata = exchange.exchangeMetaData.currencies.map {
-                it.key.currencyCode to CurrencyMetadata(
-                    scale = getScaleOrDefault(supportedExchange, it.key, it.value)
-                )
-            }.toMap()
-        )
-        return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
-    }
-
-}
-
-class BinanceExchangeMetadataFetcher(private val exchangeFactory: ExchangeFactory) : ExchangeMetadataFetcher {
-    override val supportedExchange = BINANCE
-
-    private val logger = KotlinLogging.logger {}
-
-
-    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
-        exchangeSpec.setApiKey(apiKey)
-        preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
-        val exchange = exchangeFactory.createExchange(exchangeSpec)
-        val xchangeMetadata = exchange.exchangeMetaData
-
-        val marketDataService = exchange.marketDataService as BinanceMarketDataService
-        val exchangeInfo = marketDataService.exchangeInfo
-        val symbols = exchangeInfo.symbols
-        val currencyPairsMap = mutableMapOf<CurrencyPair, CurrencyPairMetadata>()
-        val currenciesMap = mutableMapOf<String, CurrencyMetadata>()
-
-        for (price in marketDataService.tickerAllPrices()) {
-            val pair = price.currencyPair
-
-            for (symbol in symbols) {
-                if (symbol.symbol == pair.base.currencyCode + pair.counter.currencyCode) {
-
-                    val basePrecision = Integer.parseInt(symbol.baseAssetPrecision)
-                    val counterPrecision = Integer.parseInt(symbol.quotePrecision)
-                    var pairPrecision = 8
-                    var amountPrecision = 8
-
-                    var minQty: BigDecimal? = null
-                    var maxQty: BigDecimal? = null
-                    var stepSize: BigDecimal? = null
-
-                    val filters = symbol.filters
-
-                    for (filter in filters) {
-                        if (filter.filterType == "PRICE_FILTER") {
-                            pairPrecision = Math.min(pairPrecision, numberOfDecimals(filter.tickSize))
-                        } else if (filter.filterType == "LOT_SIZE") {
-                            amountPrecision = Math.min(amountPrecision, numberOfDecimals(filter.minQty))
-                            minQty = BigDecimal(filter.minQty).stripTrailingZeros()
-                            maxQty = BigDecimal(filter.maxQty).stripTrailingZeros()
-                            stepSize = BigDecimal(filter.stepSize).stripTrailingZeros()
-                        }
-                    }
-                    val currencyPair = price.currencyPair.toCurrencyPair()
-                    currencyPairsMap[currencyPair] = CurrencyPairMetadata(
-                        amountScale = amountPrecision,
-                        priceScale = pairPrecision,
-                        minimumAmount = minQty.orMin(),
-                        maximumAmount = maxQty.orMax(),
-                        minimumOrderValue = getMinimumOrderValue(currencyPair),
-                        maximumPriceMultiplierUp = 1.2.toBigDecimal(),
-                        maximumPriceMultiplierDown = 0.8.toBigDecimal(),
-                        buyFeeMultiplier = BigDecimal.ZERO
-                    )
-                    currenciesMap[pair.base.currencyCode] = CurrencyMetadata(
-                        scale = basePrecision
-                    )
-                    currenciesMap[pair.counter.currencyCode] = CurrencyMetadata(
-                        scale = counterPrecision
-                    )
-                }
-            }
-        }
-        val exchangeMetadata = ExchangeMetadata(
-            currencyPairMetadata = currencyPairsMap,
-            currencyMetadata = currenciesMap.toMap()
-        )
-        val xchangeMetadataJson = xchangeMetadata.toJSONString()
-        return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
-    }
-
-
-    private fun getMinimumOrderValue(currencyPair: CurrencyPair): BigDecimal {
-        /**
-         * Based on https://support.binance.com/hc/en-us/articles/115000594711-Trading-Rule
-         * It's "filterType": "MIN_NOTIONAL" in exchange metadata
-         */
-        return when (currencyPair.counter) {
-            "USDT" -> 10.0.toBigDecimal()
-            "PAX" -> 10.0.toBigDecimal()
-            "TUSD" -> 10.0.toBigDecimal()
-            "USDC" -> 10.0.toBigDecimal()
-            "USDS" -> 10.0.toBigDecimal()
-            "BTC" -> 0.001.toBigDecimal()
-            "ETH" -> 0.01.toBigDecimal()
-            "BNB" -> 1.0.toBigDecimal()
-            else -> {
-                val defaultValue = 0.001.toBigDecimal()
-                logger.error { "Unable to identify minimum order value for currency pair $currencyPair, will return default value $defaultValue. Mapping should be updated" }
-                defaultValue
-            }
-        }
-    }
-
-}
-
-class KucoinExchangeMetadataFetcher(private val exchangeFactory: ExchangeFactory) : ExchangeMetadataFetcher {
-    private val logger = KotlinLogging.logger {}
-    override val supportedExchange = KUCOIN
-
-    override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
-        exchangeSpec.setApiKey(apiKey)
-        preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
-        val exchange = exchangeFactory.createExchange(exchangeSpec)
-        val xchangeMetadata = exchange.exchangeMetaData
-        val xchangeMetadataJson = xchangeMetadata.toJSONString()
-        val kucoinSymbols = (exchange.marketDataService as KucoinMarketDataService).kucoinSymbols
-
-        val currencyPairsMap = mutableMapOf<CurrencyPair, CurrencyPairMetadata>()
-        val currenciesMap = mutableMapOf<String, CurrencyMetadata>()
-        kucoinSymbols.forEach { symbol ->
-
-            val pair = KucoinAdapters.adaptCurrencyPair(symbol.symbol)
-
-            val minSize = symbol.baseMinSize
-            val maxSize = symbol.baseMaxSize
-            val priceScale = symbol.priceIncrement.stripTrailingZeros().scale()
-
-            val amountScale = symbol.baseIncrement.stripTrailingZeros().scale()
-            val currencyPair = pair.toCurrencyPair()
-
-            currencyPairsMap[currencyPair] = CurrencyPairMetadata(
-                amountScale = amountScale,
-                priceScale = priceScale,
-                minimumAmount = minSize.orMin(),
-                maximumAmount = maxSize.orMax(),
-                minimumOrderValue = BigDecimal.ZERO, // not present in kucoin api
-                maximumPriceMultiplierUp = 1.2.toBigDecimal(), // not present in kucoin api
-                maximumPriceMultiplierDown = 0.8.toBigDecimal(), // not present in kucoin api
-                buyFeeMultiplier = BigDecimal("0.001") // 0.1% https://www.kucoin.com/news/en-fee
+        } ?: defaultTakerFees,
+        makerFees = this.feeTiers?.map { feeTier ->
+            TransactionFeeRange(
+                beginAmount = feeTier.beginQuantity,
+                fee = TransactionFee(percent = feeTier.fee.makerFee)
             )
-            currenciesMap[pair.base.currencyCode] = CurrencyMetadata(
-                scale = DEFAULT_SCALE
-            )
-            currenciesMap[pair.counter.currencyCode] = CurrencyMetadata(
-                scale = DEFAULT_SCALE
-            )
-        }
-        val exchangeMetadata = ExchangeMetadata(
-            currencyPairMetadata = currencyPairsMap,
-            currencyMetadata = currenciesMap.toMap()
-        )
-
-        return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
-    }
-
+        } ?: defaultMakerFees
+    )
 }
 
 class DefaultExchangeMetadataFetcher(
     override val supportedExchange: SupportedExchange,
-    private val exchangeFactory: ExchangeFactory,
+    private val exchangeFactory: XchangeExchangeFactory,
     private val preventFromLoadingDefaultXchangeMetadata: Boolean = true,
     private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap()
 ) : ExchangeMetadataFetcher {
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
-        val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
+        val exchangeSpec = XchangeExchangeSpecification(supportedExchange.toXchangeJavaClass())
         exchangeSpec.setApiKey(apiKey)
         if (preventFromLoadingDefaultXchangeMetadata) {
             preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
@@ -334,7 +137,8 @@ class DefaultExchangeMetadataFetcher(
                     minimumOrderValue = BigDecimal.ZERO,
                     maximumPriceMultiplierUp = 10.toBigDecimal(),
                     maximumPriceMultiplierDown = 0.1.toBigDecimal(),
-                    buyFeeMultiplier = BigDecimal.ZERO
+                    buyFeeMultiplier = BigDecimal.ZERO,
+                    transactionFeeRanges = it.value.getTransactionFeeRanges()
                 )
             }.toMap()
         val currencies = exchange.exchangeMetaData.currencies?.map {
@@ -353,7 +157,7 @@ class DefaultExchangeMetadataFetcher(
     }
 }
 
-fun overridenExchangeMetadataFetchers(exchangeFactory: ExchangeFactory) = listOf(
+fun overridenExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory) = listOf(
     BittrexExchangeMetadataFetcher(exchangeFactory),
     BinanceExchangeMetadataFetcher(exchangeFactory),
     KucoinExchangeMetadataFetcher(exchangeFactory),
@@ -361,6 +165,7 @@ fun overridenExchangeMetadataFetchers(exchangeFactory: ExchangeFactory) = listOf
     DefaultExchangeMetadataFetcher(supportedExchange = BITSTAMP, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
     DefaultExchangeMetadataFetcher(supportedExchange = COINDEAL, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
     DefaultExchangeMetadataFetcher(supportedExchange = GEMINI, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
+    DefaultExchangeMetadataFetcher(supportedExchange = IDEX, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
     DefaultExchangeMetadataFetcher(
         exchangeFactory = exchangeFactory,
         supportedExchange = HITBTC, currencyPairRename = mapOf(
@@ -372,9 +177,10 @@ fun overridenExchangeMetadataFetchers(exchangeFactory: ExchangeFactory) = listOf
     DefaultExchangeMetadataFetcher(POLONIEX, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false)
 )
 
-fun defaultExchangeMetadataFetchers(exchangeFactory: ExchangeFactory) =
+fun defaultExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory) =
     (SupportedExchange.values().toSet() - overridenExchangeMetadataFetchers(exchangeFactory)
         .map { it.supportedExchange }.toSet())
         .map { DefaultExchangeMetadataFetcher(supportedExchange = it, exchangeFactory = exchangeFactory) }
 
-fun exchangeMetadataFetchers(exchangeFactory: ExchangeFactory = ExchangeFactory.INSTANCE) = overridenExchangeMetadataFetchers(exchangeFactory) + defaultExchangeMetadataFetchers(exchangeFactory)
+fun exchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory = XchangeExchangeFactory.INSTANCE) =
+    overridenExchangeMetadataFetchers(exchangeFactory) + defaultExchangeMetadataFetchers(exchangeFactory)

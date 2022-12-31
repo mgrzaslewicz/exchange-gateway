@@ -22,16 +22,39 @@ class CurrencyPairMetadataApplierTest {
     private val maximumPriceMultiplierDown = 0.1.toBigDecimal()
     private val maximumPriceMultiplierUp = BigDecimal.TEN
     private val buyFeeMultiplier = BigDecimal.ZERO
+    private val transactionFeeRanges = TransactionFeeRanges(
+        makerFees = listOf(
+            TransactionFeeRange(
+                beginAmount = "0.05".toBigDecimal(),
+                fee = TransactionFee(percent = "0.2".toBigDecimal())
+            ),
+            TransactionFeeRange(
+                beginAmount = "0.25".toBigDecimal(),
+                fee = TransactionFee(percent = "0.1".toBigDecimal())
+            )
+        ),
+        takerFees = listOf(
+            TransactionFeeRange(
+                beginAmount = "0.05".toBigDecimal(),
+                fee = TransactionFee(percent = "0.3".toBigDecimal())
+            ),
+            TransactionFeeRange(
+                beginAmount = "0.35".toBigDecimal(),
+                fee = TransactionFee(percent = "0.2".toBigDecimal())
+            )
+        )
+    )
 
     private val currencyPairMetadata = CurrencyPairMetadata(
-            amountScale = amountScale,
-            priceScale = 4,
-            minimumAmount = minimumAmount,
-            maximumAmount = maximumAmount,
-            minimumOrderValue = minimumOrderValue,
-            maximumPriceMultiplierDown = maximumPriceMultiplierUp,
-            maximumPriceMultiplierUp = maximumPriceMultiplierDown,
-            buyFeeMultiplier = buyFeeMultiplier
+        amountScale = amountScale,
+        priceScale = 4,
+        minimumAmount = minimumAmount,
+        maximumAmount = maximumAmount,
+        minimumOrderValue = minimumOrderValue,
+        maximumPriceMultiplierDown = maximumPriceMultiplierUp,
+        maximumPriceMultiplierUp = maximumPriceMultiplierDown,
+        buyFeeMultiplier = buyFeeMultiplier,
+        transactionFeeRanges = transactionFeeRanges
     )
 
     @Test
@@ -62,7 +85,7 @@ class CurrencyPairMetadataApplierTest {
     fun shouldDecreaseBuyAmountByFeeWhenNotEnoughCounterCurrencyAvailable() {
         // given
         val currencyPairMetadataWithBuyFee = currencyPairMetadata.copy(
-                buyFeeMultiplier = BigDecimal("0.0025")
+            buyFeeMultiplier = BigDecimal("0.0025")
         )
         val originalAmount = BigDecimal("3000.123456")
         val originalPrice = BigDecimal("0.015")
@@ -137,14 +160,15 @@ class CurrencyPairMetadataApplierTest {
         val originalAmount = 1004.toBigDecimal()
         val originalPrice = BigDecimal("1.0")
         val currencyPairMetadata = CurrencyPairMetadata(
-                amountScale = amountScale,
-                priceScale = priceScale,
-                minimumAmount = minimumAmount,
-                maximumAmount = 5000.toBigDecimal(),
-                minimumOrderValue = minimumOrderValue,
-                maximumPriceMultiplierDown = maximumPriceMultiplierDown,
-                maximumPriceMultiplierUp = maximumPriceMultiplierUp,
-                buyFeeMultiplier = buyFeeMultiplier
+            amountScale = amountScale,
+            priceScale = priceScale,
+            minimumAmount = minimumAmount,
+            maximumAmount = 5000.toBigDecimal(),
+            minimumOrderValue = minimumOrderValue,
+            maximumPriceMultiplierDown = maximumPriceMultiplierDown,
+            maximumPriceMultiplierUp = maximumPriceMultiplierUp,
+            buyFeeMultiplier = buyFeeMultiplier,
+            transactionFeeRanges = transactionFeeRanges
         )
         // when
         val amount = pairMetadataApplier.adjustAmount(originalAmount, originalPrice, currencyPairMetadata)
@@ -158,14 +182,15 @@ class CurrencyPairMetadataApplierTest {
         val originalAmount = minimumAmount.multiply(2.toBigDecimal())
         val originalPrice = BigDecimal("1.0")
         val currencyPairMetadata = CurrencyPairMetadata(
-                amountScale = amountScale,
-                priceScale = priceScale,
-                minimumAmount = minimumAmount,
-                maximumAmount = maximumAmount,
-                minimumOrderValue = minimumAmount,
-                maximumPriceMultiplierDown = maximumPriceMultiplierDown,
-                maximumPriceMultiplierUp = maximumPriceMultiplierUp,
-                buyFeeMultiplier = buyFeeMultiplier
+            amountScale = amountScale,
+            priceScale = priceScale,
+            minimumAmount = minimumAmount,
+            maximumAmount = maximumAmount,
+            minimumOrderValue = minimumAmount,
+            maximumPriceMultiplierDown = maximumPriceMultiplierDown,
+            maximumPriceMultiplierUp = maximumPriceMultiplierUp,
+            buyFeeMultiplier = buyFeeMultiplier,
+            transactionFeeRanges = transactionFeeRanges
         )
         // when
         val amount = pairMetadataApplier.adjustAmount(originalAmount, originalPrice, currencyPairMetadata)

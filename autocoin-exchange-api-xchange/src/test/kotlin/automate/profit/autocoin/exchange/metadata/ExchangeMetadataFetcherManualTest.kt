@@ -1,6 +1,9 @@
 package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
+import automate.profit.autocoin.exchange.metadata.binance.BinanceExchangeMetadataFetcher
+import automate.profit.autocoin.exchange.metadata.bittrex.BittrexExchangeMetadataFetcher
+import automate.profit.autocoin.exchange.metadata.kucoin.KucoinExchangeMetadataFetcher
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.knowm.xchange.ExchangeFactory

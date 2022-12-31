@@ -1,0 +1,7386 @@
+[
+  {
+    "price": 0.08216400,
+    "symbol": "ETH/BTC"
+  },
+  {
+    "price": 0.00315800,
+    "symbol": "LTC/BTC"
+  },
+  {
+    "price": 0.01081000,
+    "symbol": "BNB/BTC"
+  },
+  {
+    "price": 0.00054000,
+    "symbol": "NEO/BTC"
+  },
+  {
+    "price": 0.00228500,
+    "symbol": "QTUM/ETH"
+  },
+  {
+    "price": 0.00081900,
+    "symbol": "EOS/ETH"
+  },
+  {
+    "price": 0.00001772,
+    "symbol": "SNT/ETH"
+  },
+  {
+    "price": 0.00082700,
+    "symbol": "BNT/ETH"
+  },
+  {
+    "price": 0.07908100,
+    "symbol": "BCC/BTC"
+  },
+  {
+    "price": 0.00011800,
+    "symbol": "GAS/BTC"
+  },
+  {
+    "price": 0.13160000,
+    "symbol": "BNB/ETH"
+  },
+  {
+    "price": 48719.97000000,
+    "symbol": "BTC/USDT"
+  },
+  {
+    "price": 4003.12000000,
+    "symbol": "ETH/USDT"
+  },
+  {
+    "price": 0.00041400,
+    "symbol": "HSR/BTC"
+  },
+  {
+    "price": 0.00017780,
+    "symbol": "OAX/ETH"
+  },
+  {
+    "price": 0.00002801,
+    "symbol": "DNT/ETH"
+  },
+  {
+    "price": 0.00577200,
+    "symbol": "MCO/ETH"
+  },
+  {
+    "price": 0.00166300,
+    "symbol": "ICN/ETH"
+  },
+  {
+    "price": 0.00021140,
+    "symbol": "MCO/BTC"
+  },
+  {
+    "price": 0.00002018,
+    "symbol": "WTC/BTC"
+  },
+  {
+    "price": 0.00023700,
+    "symbol": "WTC/ETH"
+  },
+  {
+    "price": 0.00004317,
+    "symbol": "LRC/BTC"
+  },
+  {
+    "price": 0.00052516,
+    "symbol": "LRC/ETH"
+  },
+  {
+    "price": 0.00018810,
+    "symbol": "QTUM/BTC"
+  },
+  {
+    "price": 3.7E-7,
+    "symbol": "YOYO/BTC"
+  },
+  {
+    "price": 0.00012430,
+    "symbol": "OMG/BTC"
+  },
+  {
+    "price": 0.00151500,
+    "symbol": "OMG/ETH"
+  },
+  {
+    "price": 0.00001593,
+    "symbol": "ZRX/BTC"
+  },
+  {
+    "price": 0.00019380,
+    "symbol": "ZRX/ETH"
+  },
+  {
+    "price": 0.00003085,
+    "symbol": "STRAT/BTC"
+  },
+  {
+    "price": 0.00105300,
+    "symbol": "STRAT/ETH"
+  },
+  {
+    "price": 1.3E-7,
+    "symbol": "SNGLS/BTC"
+  },
+  {
+    "price": 0.00005306,
+    "symbol": "SNGLS/ETH"
+  },
+  {
+    "price": 0.00008703,
+    "symbol": "BQX/BTC"
+  },
+  {
+    "price": 0.00126350,
+    "symbol": "BQX/ETH"
+  },
+  {
+    "price": 0.00002602,
+    "symbol": "KNC/BTC"
+  },
+  {
+    "price": 0.00031680,
+    "symbol": "KNC/ETH"
+  },
+  {
+    "price": 2.9E-7,
+    "symbol": "FUN/BTC"
+  },
+  {
+    "price": 0.00000257,
+    "symbol": "FUN/ETH"
+  },
+  {
+    "price": 0.00000525,
+    "symbol": "SNM/BTC"
+  },
+  {
+    "price": 0.00004986,
+    "symbol": "SNM/ETH"
+  },
+  {
+    "price": 0.00658000,
+    "symbol": "NEO/ETH"
+  },
+  {
+    "price": 0.00002404,
+    "symbol": "IOTA/BTC"
+  },
+  {
+    "price": 0.00029240,
+    "symbol": "IOTA/ETH"
+  },
+  {
+    "price": 0.00039210,
+    "symbol": "LINK/BTC"
+  },
+  {
+    "price": 0.00476900,
+    "symbol": "LINK/ETH"
+  },
+  {
+    "price": 3.5E-7,
+    "symbol": "XVG/BTC"
+  },
+  {
+    "price": 0.00000426,
+    "symbol": "XVG/ETH"
+  },
+  {
+    "price": 0.00004250,
+    "symbol": "SALT/BTC"
+  },
+  {
+    "price": 0.00113800,
+    "symbol": "SALT/ETH"
+  },
+  {
+    "price": 0.00001146,
+    "symbol": "MDA/BTC"
+  },
+  {
+    "price": 0.00181150,
+    "symbol": "MDA/ETH"
+  },
+  {
+    "price": 0.00004362,
+    "symbol": "MTL/BTC"
+  },
+  {
+    "price": 0.00052970,
+    "symbol": "MTL/ETH"
+  },
+  {
+    "price": 0.00000457,
+    "symbol": "SUB/BTC"
+  },
+  {
+    "price": 0.00012334,
+    "symbol": "SUB/ETH"
+  },
+  {
+    "price": 0.00006740,
+    "symbol": "EOS/BTC"
+  },
+  {
+    "price": 0.00000145,
+    "symbol": "SNT/BTC"
+  },
+  {
+    "price": 0.00877000,
+    "symbol": "ETC/ETH"
+  },
+  {
+    "price": 0.00072200,
+    "symbol": "ETC/BTC"
+  },
+  {
+    "price": 6.4E-7,
+    "symbol": "MTH/BTC"
+  },
+  {
+    "price": 0.00004135,
+    "symbol": "MTH/ETH"
+  },
+  {
+    "price": 0.00006200,
+    "symbol": "ENG/BTC"
+  },
+  {
+    "price": 0.00186480,
+    "symbol": "ENG/ETH"
+  },
+  {
+    "price": 0.00000270,
+    "symbol": "DNT/BTC"
+  },
+  {
+    "price": 0.00325800,
+    "symbol": "ZEC/BTC"
+  },
+  {
+    "price": 0.03964000,
+    "symbol": "ZEC/ETH"
+  },
+  {
+    "price": 0.00006796,
+    "symbol": "BNT/BTC"
+  },
+  {
+    "price": 0.00000592,
+    "symbol": "AST/BTC"
+  },
+  {
+    "price": 0.00006960,
+    "symbol": "AST/ETH"
+  },
+  {
+    "price": 0.00268500,
+    "symbol": "DASH/BTC"
+  },
+  {
+    "price": 0.03269000,
+    "symbol": "DASH/ETH"
+  },
+  {
+    "price": 0.00000393,
+    "symbol": "OAX/BTC"
+  },
+  {
+    "price": 0.00005742,
+    "symbol": "ICN/BTC"
+  },
+  {
+    "price": 0.00087500,
+    "symbol": "BTG/BTC"
+  },
+  {
+    "price": 0.05274500,
+    "symbol": "BTG/ETH"
+  },
+  {
+    "price": 0.00000591,
+    "symbol": "EVX/BTC"
+  },
+  {
+    "price": 0.00062490,
+    "symbol": "EVX/ETH"
+  },
+  {
+    "price": 0.00000753,
+    "symbol": "REQ/BTC"
+  },
+  {
+    "price": 0.00004995,
+    "symbol": "REQ/ETH"
+  },
+  {
+    "price": 8.7E-7,
+    "symbol": "VIB/BTC"
+  },
+  {
+    "price": 0.00001045,
+    "symbol": "VIB/ETH"
+  },
+  {
+    "price": 0.01247400,
+    "symbol": "HSR/ETH"
+  },
+  {
+    "price": 0.00000160,
+    "symbol": "TRX/BTC"
+  },
+  {
+    "price": 0.00001959,
+    "symbol": "TRX/ETH"
+  },
+  {
+    "price": 0.00000903,
+    "symbol": "POWR/BTC"
+  },
+  {
+    "price": 0.00011020,
+    "symbol": "POWR/ETH"
+  },
+  {
+    "price": 0.00002489,
+    "symbol": "ARK/BTC"
+  },
+  {
+    "price": 0.00104600,
+    "symbol": "ARK/ETH"
+  },
+  {
+    "price": 0.00005828,
+    "symbol": "YOYO/ETH"
+  },
+  {
+    "price": 0.00001831,
+    "symbol": "XRP/BTC"
+  },
+  {
+    "price": 0.00022280,
+    "symbol": "XRP/ETH"
+  },
+  {
+    "price": 0.00004280,
+    "symbol": "MOD/BTC"
+  },
+  {
+    "price": 0.00116700,
+    "symbol": "MOD/ETH"
+  },
+  {
+    "price": 0.00004925,
+    "symbol": "ENJ/BTC"
+  },
+  {
+    "price": 0.00059970,
+    "symbol": "ENJ/ETH"
+  },
+  {
+    "price": 0.00003628,
+    "symbol": "STORJ/BTC"
+  },
+  {
+    "price": 0.00029910,
+    "symbol": "STORJ/ETH"
+  },
+  {
+    "price": 526.50000000,
+    "symbol": "BNB/USDT"
+  },
+  {
+    "price": 0.14920000,
+    "symbol": "VEN/BNB"
+  },
+  {
+    "price": 0.00059800,
+    "symbol": "YOYO/BNB"
+  },
+  {
+    "price": 0.00385000,
+    "symbol": "POWR/BNB"
+  },
+  {
+    "price": 0.00013928,
+    "symbol": "VEN/BTC"
+  },
+  {
+    "price": 0.00325194,
+    "symbol": "VEN/ETH"
+  },
+  {
+    "price": 0.00001443,
+    "symbol": "KMD/BTC"
+  },
+  {
+    "price": 0.00017560,
+    "symbol": "KMD/ETH"
+  },
+  {
+    "price": 0.01257000,
+    "symbol": "NULS/BNB"
+  },
+  {
+    "price": 7.4E-7,
+    "symbol": "RCN/BTC"
+  },
+  {
+    "price": 0.00037604,
+    "symbol": "RCN/ETH"
+  },
+  {
+    "price": 0.00347300,
+    "symbol": "RCN/BNB"
+  },
+  {
+    "price": 0.00001888,
+    "symbol": "NULS/BTC"
+  },
+  {
+    "price": 0.00051926,
+    "symbol": "NULS/ETH"
+  },
+  {
+    "price": 0.00000635,
+    "symbol": "RDN/BTC"
+  },
+  {
+    "price": 0.00071530,
+    "symbol": "RDN/ETH"
+  },
+  {
+    "price": 0.00623000,
+    "symbol": "RDN/BNB"
+  },
+  {
+    "price": 0.00390800,
+    "symbol": "XMR/BTC"
+  },
+  {
+    "price": 0.04760000,
+    "symbol": "XMR/ETH"
+  },
+  {
+    "price": 0.00240000,
+    "symbol": "DLT/BNB"
+  },
+  {
+    "price": 0.00180500,
+    "symbol": "WTC/BNB"
+  },
+  {
+    "price": 7.1E-7,
+    "symbol": "DLT/BTC"
+  },
+  {
+    "price": 0.00016807,
+    "symbol": "DLT/ETH"
+  },
+  {
+    "price": 6.1E-7,
+    "symbol": "AMB/BTC"
+  },
+  {
+    "price": 0.00004100,
+    "symbol": "AMB/ETH"
+  },
+  {
+    "price": 0.00068500,
+    "symbol": "AMB/BNB"
+  },
+  {
+    "price": 2.47246000,
+    "symbol": "BCC/ETH"
+  },
+  {
+    "price": 448.70000000,
+    "symbol": "BCC/USDT"
+  },
+  {
+    "price": 54.29000000,
+    "symbol": "BCC/BNB"
+  },
+  {
+    "price": 0.00002357,
+    "symbol": "BAT/BTC"
+  },
+  {
+    "price": 0.00028670,
+    "symbol": "BAT/ETH"
+  },
+  {
+    "price": 0.00183100,
+    "symbol": "BAT/BNB"
+  },
+  {
+    "price": 4.8E-7,
+    "symbol": "BCPT/BTC"
+  },
+  {
+    "price": 0.00008181,
+    "symbol": "BCPT/ETH"
+  },
+  {
+    "price": 0.00116200,
+    "symbol": "BCPT/BNB"
+  },
+  {
+    "price": 0.00000761,
+    "symbol": "ARN/BTC"
+  },
+  {
+    "price": 0.00029362,
+    "symbol": "ARN/ETH"
+  },
+  {
+    "price": 0.00001792,
+    "symbol": "GVT/BTC"
+  },
+  {
+    "price": 0.00384600,
+    "symbol": "GVT/ETH"
+  },
+  {
+    "price": 0.00000317,
+    "symbol": "CDT/BTC"
+  },
+  {
+    "price": 0.00005119,
+    "symbol": "CDT/ETH"
+  },
+  {
+    "price": 0.00004213,
+    "symbol": "GXS/BTC"
+  },
+  {
+    "price": 0.00051290,
+    "symbol": "GXS/ETH"
+  },
+  {
+    "price": 26.33000000,
+    "symbol": "NEO/USDT"
+  },
+  {
+    "price": 0.05000000,
+    "symbol": "NEO/BNB"
+  },
+  {
+    "price": 5E-8,
+    "symbol": "POE/BTC"
+  },
+  {
+    "price": 0.00000664,
+    "symbol": "POE/ETH"
+  },
+  {
+    "price": 8.7E-7,
+    "symbol": "QSP/BTC"
+  },
+  {
+    "price": 0.00001048,
+    "symbol": "QSP/ETH"
+  },
+  {
+    "price": 0.00052350,
+    "symbol": "QSP/BNB"
+  },
+  {
+    "price": 7.1E-7,
+    "symbol": "BTS/BTC"
+  },
+  {
+    "price": 0.00009498,
+    "symbol": "BTS/ETH"
+  },
+  {
+    "price": 0.00144800,
+    "symbol": "BTS/BNB"
+  },
+  {
+    "price": 0.00013550,
+    "symbol": "XZC/BTC"
+  },
+  {
+    "price": 0.00310000,
+    "symbol": "XZC/ETH"
+  },
+  {
+    "price": 0.26750000,
+    "symbol": "XZC/BNB"
+  },
+  {
+    "price": 0.00004823,
+    "symbol": "LSK/BTC"
+  },
+  {
+    "price": 0.00058800,
+    "symbol": "LSK/ETH"
+  },
+  {
+    "price": 0.06494000,
+    "symbol": "LSK/BNB"
+  },
+  {
+    "price": 0.00000261,
+    "symbol": "TNT/BTC"
+  },
+  {
+    "price": 0.00000920,
+    "symbol": "TNT/ETH"
+  },
+  {
+    "price": 2.6E-7,
+    "symbol": "FUEL/BTC"
+  },
+  {
+    "price": 0.00002221,
+    "symbol": "FUEL/ETH"
+  },
+  {
+    "price": 0.00006675,
+    "symbol": "MANA/BTC"
+  },
+  {
+    "price": 0.00081220,
+    "symbol": "MANA/ETH"
+  },
+  {
+    "price": 0.00002626,
+    "symbol": "BCD/BTC"
+  },
+  {
+    "price": 0.00251000,
+    "symbol": "BCD/ETH"
+  },
+  {
+    "price": 0.00393100,
+    "symbol": "DGD/BTC"
+  },
+  {
+    "price": 0.19260000,
+    "symbol": "DGD/ETH"
+  },
+  {
+    "price": 0.00222200,
+    "symbol": "IOTA/BNB"
+  },
+  {
+    "price": 0.00001156,
+    "symbol": "ADX/BTC"
+  },
+  {
+    "price": 0.00014040,
+    "symbol": "ADX/ETH"
+  },
+  {
+    "price": 0.00492900,
+    "symbol": "ADX/BNB"
+  },
+  {
+    "price": 0.00002612,
+    "symbol": "ADA/BTC"
+  },
+  {
+    "price": 0.00031780,
+    "symbol": "ADA/ETH"
+  },
+  {
+    "price": 0.00001855,
+    "symbol": "PPT/BTC"
+  },
+  {
+    "price": 0.00141000,
+    "symbol": "PPT/ETH"
+  },
+  {
+    "price": 2.8E-7,
+    "symbol": "CMT/BTC"
+  },
+  {
+    "price": 0.00000625,
+    "symbol": "CMT/ETH"
+  },
+  {
+    "price": 0.00057700,
+    "symbol": "CMT/BNB"
+  },
+  {
+    "price": 0.00000541,
+    "symbol": "XLM/BTC"
+  },
+  {
+    "price": 0.00006580,
+    "symbol": "XLM/ETH"
+  },
+  {
+    "price": 0.00050110,
+    "symbol": "XLM/BNB"
+  },
+  {
+    "price": 2.4E-7,
+    "symbol": "CND/BTC"
+  },
+  {
+    "price": 0.00002599,
+    "symbol": "CND/ETH"
+  },
+  {
+    "price": 0.00033990,
+    "symbol": "CND/BNB"
+  },
+  {
+    "price": 0.00004512,
+    "symbol": "LEND/BTC"
+  },
+  {
+    "price": 0.00137174,
+    "symbol": "LEND/ETH"
+  },
+  {
+    "price": 0.00000409,
+    "symbol": "WABI/BTC"
+  },
+  {
+    "price": 0.00040308,
+    "symbol": "WABI/ETH"
+  },
+  {
+    "price": 0.00037800,
+    "symbol": "WABI/BNB"
+  },
+  {
+    "price": 0.03846000,
+    "symbol": "LTC/ETH"
+  },
+  {
+    "price": 153.90000000,
+    "symbol": "LTC/USDT"
+  },
+  {
+    "price": 0.29190000,
+    "symbol": "LTC/BNB"
+  },
+  {
+    "price": 7E-8,
+    "symbol": "TNB/BTC"
+  },
+  {
+    "price": 0.00000752,
+    "symbol": "TNB/ETH"
+  },
+  {
+    "price": 0.00032990,
+    "symbol": "WAVES/BTC"
+  },
+  {
+    "price": 0.00401700,
+    "symbol": "WAVES/ETH"
+  },
+  {
+    "price": 0.03057000,
+    "symbol": "WAVES/BNB"
+  },
+  {
+    "price": 0.00000119,
+    "symbol": "GTO/BTC"
+  },
+  {
+    "price": 0.00003197,
+    "symbol": "GTO/ETH"
+  },
+  {
+    "price": 0.00035200,
+    "symbol": "GTO/BNB"
+  },
+  {
+    "price": 0.00002587,
+    "symbol": "ICX/BTC"
+  },
+  {
+    "price": 0.00031480,
+    "symbol": "ICX/ETH"
+  },
+  {
+    "price": 0.00465400,
+    "symbol": "ICX/BNB"
+  },
+  {
+    "price": 3.2E-7,
+    "symbol": "OST/BTC"
+  },
+  {
+    "price": 0.00000225,
+    "symbol": "OST/ETH"
+  },
+  {
+    "price": 0.00052500,
+    "symbol": "OST/BNB"
+  },
+  {
+    "price": 0.00000761,
+    "symbol": "ELF/BTC"
+  },
+  {
+    "price": 0.00009230,
+    "symbol": "ELF/ETH"
+  },
+  {
+    "price": 0.00000294,
+    "symbol": "AION/BTC"
+  },
+  {
+    "price": 0.00003584,
+    "symbol": "AION/ETH"
+  },
+  {
+    "price": 0.00261300,
+    "symbol": "AION/BNB"
+  },
+  {
+    "price": 0.00002232,
+    "symbol": "NEBL/BTC"
+  },
+  {
+    "price": 0.00026870,
+    "symbol": "NEBL/ETH"
+  },
+  {
+    "price": 0.01356000,
+    "symbol": "NEBL/BNB"
+  },
+  {
+    "price": 0.00001801,
+    "symbol": "BRD/BTC"
+  },
+  {
+    "price": 0.00021940,
+    "symbol": "BRD/ETH"
+  },
+  {
+    "price": 0.00247000,
+    "symbol": "BRD/BNB"
+  },
+  {
+    "price": 0.26837000,
+    "symbol": "MCO/BNB"
+  },
+  {
+    "price": 0.00005609,
+    "symbol": "EDO/BTC"
+  },
+  {
+    "price": 0.00226600,
+    "symbol": "EDO/ETH"
+  },
+  {
+    "price": 0.00001193,
+    "symbol": "WING/SBTC"
+  },
+  {
+    "price": 0.00033460,
+    "symbol": "WING/SETH"
+  },
+  {
+    "price": 0.00000701,
+    "symbol": "NAV/BTC"
+  },
+  {
+    "price": 0.00011870,
+    "symbol": "NAV/ETH"
+  },
+  {
+    "price": 0.00423700,
+    "symbol": "NAV/BNB"
+  },
+  {
+    "price": 0.00008510,
+    "symbol": "LUN/BTC"
+  },
+  {
+    "price": 0.00489100,
+    "symbol": "LUN/ETH"
+  },
+  {
+    "price": 0.00001980,
+    "symbol": "TRIG/BTC"
+  },
+  {
+    "price": 0.00059400,
+    "symbol": "TRIG/ETH"
+  },
+  {
+    "price": 0.01218000,
+    "symbol": "TRIG/BNB"
+  },
+  {
+    "price": 8.9E-7,
+    "symbol": "APPC/BTC"
+  },
+  {
+    "price": 0.00014600,
+    "symbol": "APPC/ETH"
+  },
+  {
+    "price": 0.00189100,
+    "symbol": "APPC/BNB"
+  },
+  {
+    "price": 4.2E-7,
+    "symbol": "VIB/EBTC"
+  },
+  {
+    "price": 0.00005720,
+    "symbol": "VIB/EETH"
+  },
+  {
+    "price": 0.00006013,
+    "symbol": "RLC/BTC"
+  },
+  {
+    "price": 0.00073000,
+    "symbol": "RLC/ETH"
+  },
+  {
+    "price": 0.03344000,
+    "symbol": "RLC/BNB"
+  },
+  {
+    "price": 0.00000618,
+    "symbol": "INS/BTC"
+  },
+  {
+    "price": 0.00050100,
+    "symbol": "INS/ETH"
+  },
+  {
+    "price": 0.00001070,
+    "symbol": "PIVX/BTC"
+  },
+  {
+    "price": 0.00013000,
+    "symbol": "PIVX/ETH"
+  },
+  {
+    "price": 0.01660000,
+    "symbol": "PIVX/BNB"
+  },
+  {
+    "price": 6.3E-7,
+    "symbol": "IOST/BTC"
+  },
+  {
+    "price": 0.00000757,
+    "symbol": "IOST/ETH"
+  },
+  {
+    "price": 0.00000195,
+    "symbol": "CHAT/BTC"
+  },
+  {
+    "price": 0.00006585,
+    "symbol": "CHAT/ETH"
+  },
+  {
+    "price": 0.00000855,
+    "symbol": "STEEM/BTC"
+  },
+  {
+    "price": 0.00010420,
+    "symbol": "STEEM/ETH"
+  },
+  {
+    "price": 0.00448000,
+    "symbol": "STEEM/BNB"
+  },
+  {
+    "price": 0.00007110,
+    "symbol": "NANO/BTC"
+  },
+  {
+    "price": 0.00086400,
+    "symbol": "NANO/ETH"
+  },
+  {
+    "price": 0.05589000,
+    "symbol": "NANO/BNB"
+  },
+  {
+    "price": 0.00000681,
+    "symbol": "VIA/BTC"
+  },
+  {
+    "price": 0.00085600,
+    "symbol": "VIA/ETH"
+  },
+  {
+    "price": 0.00958000,
+    "symbol": "VIA/BNB"
+  },
+  {
+    "price": 0.00000477,
+    "symbol": "BLZ/BTC"
+  },
+  {
+    "price": 0.00005808,
+    "symbol": "BLZ/ETH"
+  },
+  {
+    "price": 0.00062190,
+    "symbol": "BLZ/BNB"
+  },
+  {
+    "price": 0.00000292,
+    "symbol": "AE/BTC"
+  },
+  {
+    "price": 0.00021900,
+    "symbol": "AE/ETH"
+  },
+  {
+    "price": 0.00777000,
+    "symbol": "AE/BNB"
+  },
+  {
+    "price": 0.00000224,
+    "symbol": "RPX/BTC"
+  },
+  {
+    "price": 0.00005449,
+    "symbol": "RPX/ETH"
+  },
+  {
+    "price": 0.00145700,
+    "symbol": "RPX/BNB"
+  },
+  {
+    "price": 5E-8,
+    "symbol": "NCASH/BTC"
+  },
+  {
+    "price": 4.6E-7,
+    "symbol": "NCASH/ETH"
+  },
+  {
+    "price": 0.00006790,
+    "symbol": "NCASH/BNB"
+  },
+  {
+    "price": 4.1E-7,
+    "symbol": "POA/BTC"
+  },
+  {
+    "price": 0.00004891,
+    "symbol": "POA/ETH"
+  },
+  {
+    "price": 0.00092100,
+    "symbol": "POA/BNB"
+  },
+  {
+    "price": 0.00000125,
+    "symbol": "ZIL/BTC"
+  },
+  {
+    "price": 0.00001521,
+    "symbol": "ZIL/ETH"
+  },
+  {
+    "price": 0.00011550,
+    "symbol": "ZIL/BNB"
+  },
+  {
+    "price": 0.00001423,
+    "symbol": "ONT/BTC"
+  },
+  {
+    "price": 0.00017290,
+    "symbol": "ONT/ETH"
+  },
+  {
+    "price": 0.00246200,
+    "symbol": "ONT/BNB"
+  },
+  {
+    "price": 3.5E-7,
+    "symbol": "STORM/BTC"
+  },
+  {
+    "price": 0.00001398,
+    "symbol": "STORM/ETH"
+  },
+  {
+    "price": 0.00006550,
+    "symbol": "STORM/BNB"
+  },
+  {
+    "price": 0.09597000,
+    "symbol": "QTUM/BNB"
+  },
+  {
+    "price": 9.16000000,
+    "symbol": "QTUM/USDT"
+  },
+  {
+    "price": 0.00000262,
+    "symbol": "XEM/BTC"
+  },
+  {
+    "price": 0.00003188,
+    "symbol": "XEM/ETH"
+  },
+  {
+    "price": 0.00244100,
+    "symbol": "XEM/BNB"
+  },
+  {
+    "price": 0.00001367,
+    "symbol": "WAN/BTC"
+  },
+  {
+    "price": 0.00016660,
+    "symbol": "WAN/ETH"
+  },
+  {
+    "price": 0.00181000,
+    "symbol": "WAN/BNB"
+  },
+  {
+    "price": 2.7E-7,
+    "symbol": "WPR/BTC"
+  },
+  {
+    "price": 0.00004020,
+    "symbol": "WPR/ETH"
+  },
+  {
+    "price": 8.1E-7,
+    "symbol": "QLC/BTC"
+  },
+  {
+    "price": 0.00000970,
+    "symbol": "QLC/ETH"
+  },
+  {
+    "price": 0.00001474,
+    "symbol": "SYS/BTC"
+  },
+  {
+    "price": 0.00011047,
+    "symbol": "SYS/ETH"
+  },
+  {
+    "price": 0.00163500,
+    "symbol": "SYS/BNB"
+  },
+  {
+    "price": 0.00092200,
+    "symbol": "QLC/BNB"
+  },
+  {
+    "price": 0.00001530,
+    "symbol": "GRS/BTC"
+  },
+  {
+    "price": 0.00076455,
+    "symbol": "GRS/ETH"
+  },
+  {
+    "price": 1.27200000,
+    "symbol": "ADA/USDT"
+  },
+  {
+    "price": 0.00241900,
+    "symbol": "ADA/BNB"
+  },
+  {
+    "price": 0.00015550,
+    "symbol": "CLOAK/BTC"
+  },
+  {
+    "price": 0.00414200,
+    "symbol": "CLOAK/ETH"
+  },
+  {
+    "price": 0.00000678,
+    "symbol": "GNT/BTC"
+  },
+  {
+    "price": 0.00022071,
+    "symbol": "GNT/ETH"
+  },
+  {
+    "price": 0.00243900,
+    "symbol": "GNT/BNB"
+  },
+  {
+    "price": 0.00000179,
+    "symbol": "LOOM/BTC"
+  },
+  {
+    "price": 0.00002166,
+    "symbol": "LOOM/ETH"
+  },
+  {
+    "price": 0.00088500,
+    "symbol": "LOOM/BNB"
+  },
+  {
+    "price": 0.89190000,
+    "symbol": "XRP/USDT"
+  },
+  {
+    "price": 2.2E-7,
+    "symbol": "BCN/BTC"
+  },
+  {
+    "price": 0.00000707,
+    "symbol": "BCN/ETH"
+  },
+  {
+    "price": 0.00002000,
+    "symbol": "BCN/BNB"
+  },
+  {
+    "price": 0.00034320,
+    "symbol": "REP/BTC"
+  },
+  {
+    "price": 0.00418300,
+    "symbol": "REP/ETH"
+  },
+  {
+    "price": 0.44670000,
+    "symbol": "REP/BNB"
+  },
+  {
+    "price": 48699.31000000,
+    "symbol": "BTC/TUSD"
+  },
+  {
+    "price": 0.00025971,
+    "symbol": "TUSD/BTC"
+  },
+  {
+    "price": 4003.36000000,
+    "symbol": "ETH/TUSD"
+  },
+  {
+    "price": 0.00762097,
+    "symbol": "TUSD/ETH"
+  },
+  {
+    "price": 0.06777000,
+    "symbol": "TUSD/BNB"
+  },
+  {
+    "price": 0.00129400,
+    "symbol": "ZEN/BTC"
+  },
+  {
+    "price": 0.01574000,
+    "symbol": "ZEN/ETH"
+  },
+  {
+    "price": 0.11950000,
+    "symbol": "ZEN/BNB"
+  },
+  {
+    "price": 0.00000829,
+    "symbol": "SKY/BTC"
+  },
+  {
+    "price": 0.00222000,
+    "symbol": "SKY/ETH"
+  },
+  {
+    "price": 0.03022000,
+    "symbol": "SKY/BNB"
+  },
+  {
+    "price": 3.28100000,
+    "symbol": "EOS/USDT"
+  },
+  {
+    "price": 0.00623000,
+    "symbol": "EOS/BNB"
+  },
+  {
+    "price": 0.00000672,
+    "symbol": "CVC/BTC"
+  },
+  {
+    "price": 0.00008170,
+    "symbol": "CVC/ETH"
+  },
+  {
+    "price": 0.00211200,
+    "symbol": "CVC/BNB"
+  },
+  {
+    "price": 0.00008410,
+    "symbol": "THETA/BTC"
+  },
+  {
+    "price": 0.00102500,
+    "symbol": "THETA/ETH"
+  },
+  {
+    "price": 0.00779000,
+    "symbol": "THETA/BNB"
+  },
+  {
+    "price": 0.00169200,
+    "symbol": "XRP/BNB"
+  },
+  {
+    "price": 0.99970000,
+    "symbol": "TUSD/USDT"
+  },
+  {
+    "price": 1.17130000,
+    "symbol": "IOTA/USDT"
+  },
+  {
+    "price": 0.26370000,
+    "symbol": "XLM/USDT"
+  },
+  {
+    "price": 0.00000256,
+    "symbol": "IOTX/BTC"
+  },
+  {
+    "price": 0.00003113,
+    "symbol": "IOTX/ETH"
+  },
+  {
+    "price": 4.1E-7,
+    "symbol": "QKC/BTC"
+  },
+  {
+    "price": 0.00000491,
+    "symbol": "QKC/ETH"
+  },
+  {
+    "price": 0.00000668,
+    "symbol": "AGI/BTC"
+  },
+  {
+    "price": 0.00007363,
+    "symbol": "AGI/ETH"
+  },
+  {
+    "price": 0.00077200,
+    "symbol": "AGI/BNB"
+  },
+  {
+    "price": 0.00001099,
+    "symbol": "NXS/BTC"
+  },
+  {
+    "price": 0.00077300,
+    "symbol": "NXS/ETH"
+  },
+  {
+    "price": 0.01087000,
+    "symbol": "NXS/BNB"
+  },
+  {
+    "price": 0.00455000,
+    "symbol": "ENJ/BNB"
+  },
+  {
+    "price": 0.00000242,
+    "symbol": "DATA/BTC"
+  },
+  {
+    "price": 0.00002952,
+    "symbol": "DATA/ETH"
+  },
+  {
+    "price": 0.69300000,
+    "symbol": "ONT/USDT"
+  },
+  {
+    "price": 0.00014890,
+    "symbol": "TRX/BNB"
+  },
+  {
+    "price": 0.07839000,
+    "symbol": "TRX/USDT"
+  },
+  {
+    "price": 35.12000000,
+    "symbol": "ETC/USDT"
+  },
+  {
+    "price": 0.06660000,
+    "symbol": "ETC/BNB"
+  },
+  {
+    "price": 1.25900000,
+    "symbol": "ICX/USDT"
+  },
+  {
+    "price": 3.2E-7,
+    "symbol": "SC/BTC"
+  },
+  {
+    "price": 0.00000387,
+    "symbol": "SC/ETH"
+  },
+  {
+    "price": 0.00002947,
+    "symbol": "SC/BNB"
+  },
+  {
+    "price": 3E-8,
+    "symbol": "NPXS/BTC"
+  },
+  {
+    "price": 0.00000345,
+    "symbol": "NPXS/ETH"
+  },
+  {
+    "price": 0.00010000,
+    "symbol": "VEN/USDT"
+  },
+  {
+    "price": 1.3E-7,
+    "symbol": "KEY/BTC"
+  },
+  {
+    "price": 0.00000299,
+    "symbol": "KEY/ETH"
+  },
+  {
+    "price": 0.00000670,
+    "symbol": "NAS/BTC"
+  },
+  {
+    "price": 0.00008180,
+    "symbol": "NAS/ETH"
+  },
+  {
+    "price": 0.02337000,
+    "symbol": "NAS/BNB"
+  },
+  {
+    "price": 8E-8,
+    "symbol": "MFT/BTC"
+  },
+  {
+    "price": 0.00000214,
+    "symbol": "MFT/ETH"
+  },
+  {
+    "price": 0.00001623,
+    "symbol": "MFT/BNB"
+  },
+  {
+    "price": 4E-8,
+    "symbol": "DENT/BTC"
+  },
+  {
+    "price": 8.6E-7,
+    "symbol": "DENT/ETH"
+  },
+  {
+    "price": 0.00000468,
+    "symbol": "ARDR/BTC"
+  },
+  {
+    "price": 0.00018870,
+    "symbol": "ARDR/ETH"
+  },
+  {
+    "price": 0.00316800,
+    "symbol": "ARDR/BNB"
+  },
+  {
+    "price": 0.91900000,
+    "symbol": "NULS/USDT"
+  },
+  {
+    "price": 2E-8,
+    "symbol": "HOT/BTC"
+  },
+  {
+    "price": 0.00000199,
+    "symbol": "HOT/ETH"
+  },
+  {
+    "price": 0.00000167,
+    "symbol": "VET/BTC"
+  },
+  {
+    "price": 0.00002044,
+    "symbol": "VET/ETH"
+  },
+  {
+    "price": 0.08172000,
+    "symbol": "VET/USDT"
+  },
+  {
+    "price": 0.00015530,
+    "symbol": "VET/BNB"
+  },
+  {
+    "price": 0.00000138,
+    "symbol": "DOCK/BTC"
+  },
+  {
+    "price": 0.00003283,
+    "symbol": "DOCK/ETH"
+  },
+  {
+    "price": 0.00001029,
+    "symbol": "POLY/BTC"
+  },
+  {
+    "price": 0.00145900,
+    "symbol": "POLY/BNB"
+  },
+  {
+    "price": 0.00000180,
+    "symbol": "PHX/BTC"
+  },
+  {
+    "price": 0.00005617,
+    "symbol": "PHX/ETH"
+  },
+  {
+    "price": 0.00045600,
+    "symbol": "PHX/BNB"
+  },
+  {
+    "price": 0.00002000,
+    "symbol": "HC/BTC"
+  },
+  {
+    "price": 0.00513400,
+    "symbol": "HC/ETH"
+  },
+  {
+    "price": 7.2E-7,
+    "symbol": "GO/BTC"
+  },
+  {
+    "price": 0.00069230,
+    "symbol": "GO/BNB"
+  },
+  {
+    "price": 0.00025175,
+    "symbol": "PAX/BTC"
+  },
+  {
+    "price": 0.20121000,
+    "symbol": "PAX/BNB"
+  },
+  {
+    "price": 0.99960000,
+    "symbol": "PAX/USDT"
+  },
+  {
+    "price": 0.00888047,
+    "symbol": "PAX/ETH"
+  },
+  {
+    "price": 0.00000173,
+    "symbol": "RVN/BTC"
+  },
+  {
+    "price": 0.00015950,
+    "symbol": "RVN/BNB"
+  },
+  {
+    "price": 0.00147300,
+    "symbol": "DCR/BTC"
+  },
+  {
+    "price": 0.78100000,
+    "symbol": "DCR/BNB"
+  },
+  {
+    "price": 0.21755000,
+    "symbol": "USDC/BNB"
+  },
+  {
+    "price": 0.00000127,
+    "symbol": "MITH/BTC"
+  },
+  {
+    "price": 0.00011690,
+    "symbol": "MITH/BNB"
+  },
+  {
+    "price": 0.02933000,
+    "symbol": "BCH/ABCBTC"
+  },
+  {
+    "price": 0.01117900,
+    "symbol": "BCH/SVBTC"
+  },
+  {
+    "price": 220.08000000,
+    "symbol": "BCHABC/USDT"
+  },
+  {
+    "price": 58.90000000,
+    "symbol": "BCHSV/USDT"
+  },
+  {
+    "price": 495.10000000,
+    "symbol": "BNB/PAX"
+  },
+  {
+    "price": 51529.15000000,
+    "symbol": "BTC/PAX"
+  },
+  {
+    "price": 3904.41000000,
+    "symbol": "ETH/PAX"
+  },
+  {
+    "price": 0.88960000,
+    "symbol": "XRP/PAX"
+  },
+  {
+    "price": 2.58450000,
+    "symbol": "EOS/PAX"
+  },
+  {
+    "price": 0.04221000,
+    "symbol": "XLM/PAX"
+  },
+  {
+    "price": 0.00001092,
+    "symbol": "REN/BTC"
+  },
+  {
+    "price": 0.00458500,
+    "symbol": "REN/BNB"
+  },
+  {
+    "price": 526.60000000,
+    "symbol": "BNB/TUSD"
+  },
+  {
+    "price": 0.89440000,
+    "symbol": "XRP/TUSD"
+  },
+  {
+    "price": 4.11590000,
+    "symbol": "EOS/TUSD"
+  },
+  {
+    "price": 0.06833000,
+    "symbol": "XLM/TUSD"
+  },
+  {
+    "price": 526.90000000,
+    "symbol": "BNB/USDC"
+  },
+  {
+    "price": 48747.82000000,
+    "symbol": "BTC/USDC"
+  },
+  {
+    "price": 4004.40000000,
+    "symbol": "ETH/USDC"
+  },
+  {
+    "price": 0.89300000,
+    "symbol": "XRP/USDC"
+  },
+  {
+    "price": 3.28300000,
+    "symbol": "EOS/USDC"
+  },
+  {
+    "price": 0.04970000,
+    "symbol": "XLM/USDC"
+  },
+  {
+    "price": 0.99960000,
+    "symbol": "USDC/USDT"
+  },
+  {
+    "price": 1.27400000,
+    "symbol": "ADA/TUSD"
+  },
+  {
+    "price": 0.07845000,
+    "symbol": "TRX/TUSD"
+  },
+  {
+    "price": 11.81800000,
+    "symbol": "NEO/TUSD"
+  },
+  {
+    "price": 0.08749000,
+    "symbol": "TRX/XRP"
+  },
+  {
+    "price": 20.79200000,
+    "symbol": "XZC/XRP"
+  },
+  {
+    "price": 0.99950000,
+    "symbol": "PAX/TUSD"
+  },
+  {
+    "price": 1.00000000,
+    "symbol": "USDC/TUSD"
+  },
+  {
+    "price": 1.00020000,
+    "symbol": "USDC/PAX"
+  },
+  {
+    "price": 19.09000000,
+    "symbol": "LINK/USDT"
+  },
+  {
+    "price": 28.87000000,
+    "symbol": "LINK/TUSD"
+  },
+  {
+    "price": 3.98340000,
+    "symbol": "LINK/PAX"
+  },
+  {
+    "price": 19.14000000,
+    "symbol": "LINK/USDC"
+  },
+  {
+    "price": 16.07000000,
+    "symbol": "WAVES/USDT"
+  },
+  {
+    "price": 1.07200000,
+    "symbol": "WAVES/TUSD"
+  },
+  {
+    "price": 0.80290000,
+    "symbol": "WAVES/PAX"
+  },
+  {
+    "price": 1.20360000,
+    "symbol": "WAVES/USDC"
+  },
+  {
+    "price": 220.20000000,
+    "symbol": "BCHABC/TUSD"
+  },
+  {
+    "price": 221.20000000,
+    "symbol": "BCHABC/PAX"
+  },
+  {
+    "price": 220.30000000,
+    "symbol": "BCHABC/USDC"
+  },
+  {
+    "price": 59.17000000,
+    "symbol": "BCHSV/TUSD"
+  },
+  {
+    "price": 58.18000000,
+    "symbol": "BCHSV/PAX"
+  },
+  {
+    "price": 57.50000000,
+    "symbol": "BCHSV/USDC"
+  },
+  {
+    "price": 150.10000000,
+    "symbol": "LTC/TUSD"
+  },
+  {
+    "price": 171.13000000,
+    "symbol": "LTC/PAX"
+  },
+  {
+    "price": 154.10000000,
+    "symbol": "LTC/USDC"
+  },
+  {
+    "price": 0.07661000,
+    "symbol": "TRX/PAX"
+  },
+  {
+    "price": 0.07842000,
+    "symbol": "TRX/USDC"
+  },
+  {
+    "price": 5E-8,
+    "symbol": "BTT/BTC"
+  },
+  {
+    "price": 0.00000506,
+    "symbol": "BTT/BNB"
+  },
+  {
+    "price": 0.00266700,
+    "symbol": "BTT/USDT"
+  },
+  {
+    "price": 22.27880000,
+    "symbol": "BNB/USDS"
+  },
+  {
+    "price": 9604.59000000,
+    "symbol": "BTC/USDS"
+  },
+  {
+    "price": 0.99680000,
+    "symbol": "USDS/USDT"
+  },
+  {
+    "price": 1.00020000,
+    "symbol": "USDS/PAX"
+  },
+  {
+    "price": 1.00000000,
+    "symbol": "USDS/TUSD"
+  },
+  {
+    "price": 1.00000000,
+    "symbol": "USDS/USDC"
+  },
+  {
+    "price": 0.00038660,
+    "symbol": "BTT/PAX"
+  },
+  {
+    "price": 0.00266700,
+    "symbol": "BTT/TUSD"
+  },
+  {
+    "price": 0.00266800,
+    "symbol": "BTT/USDC"
+  },
+  {
+    "price": 0.00545000,
+    "symbol": "ONG/BNB"
+  },
+  {
+    "price": 0.00001559,
+    "symbol": "ONG/BTC"
+  },
+  {
+    "price": 0.76040000,
+    "symbol": "ONG/USDT"
+  },
+  {
+    "price": 0.00001517,
+    "symbol": "HOT/BNB"
+  },
+  {
+    "price": 0.00799500,
+    "symbol": "HOT/USDT"
+  },
+  {
+    "price": 0.06087000,
+    "symbol": "ZIL/USDT"
+  },
+  {
+    "price": 0.01045000,
+    "symbol": "ZRX/BNB"
+  },
+  {
+    "price": 0.77550000,
+    "symbol": "ZRX/USDT"
+  },
+  {
+    "price": 0.00101700,
+    "symbol": "FET/BNB"
+  },
+  {
+    "price": 0.00001099,
+    "symbol": "FET/BTC"
+  },
+  {
+    "price": 0.53510000,
+    "symbol": "FET/USDT"
+  },
+  {
+    "price": 1.14840000,
+    "symbol": "BAT/USDT"
+  },
+  {
+    "price": 0.36120000,
+    "symbol": "XMR/BNB"
+  },
+  {
+    "price": 190.40000000,
+    "symbol": "XMR/USDT"
+  },
+  {
+    "price": 0.30060000,
+    "symbol": "ZEC/BNB"
+  },
+  {
+    "price": 158.70000000,
+    "symbol": "ZEC/USDT"
+  },
+  {
+    "price": 42.10000000,
+    "symbol": "ZEC/PAX"
+  },
+  {
+    "price": 51.48000000,
+    "symbol": "ZEC/TUSD"
+  },
+  {
+    "price": 158.20000000,
+    "symbol": "ZEC/USDC"
+  },
+  {
+    "price": 0.00005760,
+    "symbol": "IOST/BNB"
+  },
+  {
+    "price": 0.03029000,
+    "symbol": "IOST/USDT"
+  },
+  {
+    "price": 0.00013953,
+    "symbol": "CELR/BNB"
+  },
+  {
+    "price": 0.00000150,
+    "symbol": "CELR/BTC"
+  },
+  {
+    "price": 0.07323000,
+    "symbol": "CELR/USDT"
+  },
+  {
+    "price": 0.03257000,
+    "symbol": "ADA/PAX"
+  },
+  {
+    "price": 1.27300000,
+    "symbol": "ADA/USDC"
+  },
+  {
+    "price": 11.12200000,
+    "symbol": "NEO/PAX"
+  },
+  {
+    "price": 28.27000000,
+    "symbol": "NEO/USDC"
+  },
+  {
+    "price": 0.24820000,
+    "symbol": "DASH/BNB"
+  },
+  {
+    "price": 130.80000000,
+    "symbol": "DASH/USDT"
+  },
+  {
+    "price": 3.46400000,
+    "symbol": "NANO/USDT"
+  },
+  {
+    "price": 0.03938000,
+    "symbol": "OMG/BNB"
+  },
+  {
+    "price": 6.05800000,
+    "symbol": "OMG/USDT"
+  },
+  {
+    "price": 4.10200000,
+    "symbol": "THETA/USDT"
+  },
+  {
+    "price": 2.40000000,
+    "symbol": "ENJ/USDT"
+  },
+  {
+    "price": 0.06141000,
+    "symbol": "MITH/USDT"
+  },
+  {
+    "price": 0.00446500,
+    "symbol": "MATIC/BNB"
+  },
+  {
+    "price": 0.00004829,
+    "symbol": "MATIC/BTC"
+  },
+  {
+    "price": 2.35300000,
+    "symbol": "MATIC/USDT"
+  },
+  {
+    "price": 0.04340000,
+    "symbol": "ATOM/BNB"
+  },
+  {
+    "price": 0.00046750,
+    "symbol": "ATOM/BTC"
+  },
+  {
+    "price": 22.78000000,
+    "symbol": "ATOM/USDT"
+  },
+  {
+    "price": 22.80000000,
+    "symbol": "ATOM/USDC"
+  },
+  {
+    "price": 3.17800000,
+    "symbol": "ATOM/PAX"
+  },
+  {
+    "price": 2.59800000,
+    "symbol": "ATOM/TUSD"
+  },
+  {
+    "price": 4.71000000,
+    "symbol": "ETC/USDC"
+  },
+  {
+    "price": 4.83800000,
+    "symbol": "ETC/PAX"
+  },
+  {
+    "price": 3.79500000,
+    "symbol": "ETC/TUSD"
+  },
+  {
+    "price": 0.63130000,
+    "symbol": "BAT/USDC"
+  },
+  {
+    "price": 0.25560000,
+    "symbol": "BAT/PAX"
+  },
+  {
+    "price": 0.22220000,
+    "symbol": "BAT/TUSD"
+  },
+  {
+    "price": 0.00013700,
+    "symbol": "PHB/BNB"
+  },
+  {
+    "price": 0.00000979,
+    "symbol": "PHB/BTC"
+  },
+  {
+    "price": 0.00587000,
+    "symbol": "PHB/USDC"
+  },
+  {
+    "price": 0.47800000,
+    "symbol": "PHB/TUSD"
+  },
+  {
+    "price": 0.00639000,
+    "symbol": "PHB/PAX"
+  },
+  {
+    "price": 0.00012590,
+    "symbol": "TFUEL/BNB"
+  },
+  {
+    "price": 0.00000399,
+    "symbol": "TFUEL/BTC"
+  },
+  {
+    "price": 0.19410000,
+    "symbol": "TFUEL/USDT"
+  },
+  {
+    "price": 0.00356500,
+    "symbol": "TFUEL/USDC"
+  },
+  {
+    "price": 0.00307700,
+    "symbol": "TFUEL/TUSD"
+  },
+  {
+    "price": 0.00348700,
+    "symbol": "TFUEL/PAX"
+  },
+  {
+    "price": 0.00045810,
+    "symbol": "ONE/BNB"
+  },
+  {
+    "price": 0.00000496,
+    "symbol": "ONE/BTC"
+  },
+  {
+    "price": 0.24114000,
+    "symbol": "ONE/USDT"
+  },
+  {
+    "price": 0.00472000,
+    "symbol": "ONE/TUSD"
+  },
+  {
+    "price": 0.00496000,
+    "symbol": "ONE/PAX"
+  },
+  {
+    "price": 0.00520000,
+    "symbol": "ONE/USDC"
+  },
+  {
+    "price": 0.00271080,
+    "symbol": "FTM/BNB"
+  },
+  {
+    "price": 0.00002934,
+    "symbol": "FTM/BTC"
+  },
+  {
+    "price": 1.42870000,
+    "symbol": "FTM/USDT"
+  },
+  {
+    "price": 0.01095000,
+    "symbol": "FTM/TUSD"
+  },
+  {
+    "price": 0.01028000,
+    "symbol": "FTM/PAX"
+  },
+  {
+    "price": 0.01107000,
+    "symbol": "FTM/USDC"
+  },
+  {
+    "price": 1.00000000,
+    "symbol": "BTC/BBTC"
+  },
+  {
+    "price": 0.02606000,
+    "symbol": "BCPT/TUSD"
+  },
+  {
+    "price": 0.02761000,
+    "symbol": "BCPT/PAX"
+  },
+  {
+    "price": 0.02728000,
+    "symbol": "BCPT/USDC"
+  },
+  {
+    "price": 0.00253900,
+    "symbol": "ALGO/BNB"
+  },
+  {
+    "price": 0.00002744,
+    "symbol": "ALGO/BTC"
+  },
+  {
+    "price": 1.33760000,
+    "symbol": "ALGO/USDT"
+  },
+  {
+    "price": 1.01700000,
+    "symbol": "ALGO/TUSD"
+  },
+  {
+    "price": 0.20390000,
+    "symbol": "ALGO/PAX"
+  },
+  {
+    "price": 0.23800000,
+    "symbol": "ALGO/USDC"
+  },
+  {
+    "price": 0.99970000,
+    "symbol": "USDS/BUSDT"
+  },
+  {
+    "price": 0.99990000,
+    "symbol": "USDS/BUSDS"
+  },
+  {
+    "price": 0.05802000,
+    "symbol": "GTO/USDT"
+  },
+  {
+    "price": 0.01361000,
+    "symbol": "GTO/PAX"
+  },
+  {
+    "price": 0.01236000,
+    "symbol": "GTO/TUSD"
+  },
+  {
+    "price": 0.01196000,
+    "symbol": "GTO/USDC"
+  },
+  {
+    "price": 0.00083273,
+    "symbol": "ERD/BNB"
+  },
+  {
+    "price": 0.00000168,
+    "symbol": "ERD/BTC"
+  },
+  {
+    "price": 0.01971000,
+    "symbol": "ERD/USDT"
+  },
+  {
+    "price": 0.00125270,
+    "symbol": "ERD/PAX"
+  },
+  {
+    "price": 0.00135730,
+    "symbol": "ERD/USDC"
+  },
+  {
+    "price": 0.00015270,
+    "symbol": "DOGE/BNB"
+  },
+  {
+    "price": 0.00000348,
+    "symbol": "DOG/EBTC"
+  },
+  {
+    "price": 0.16950000,
+    "symbol": "DOGE/USDT"
+  },
+  {
+    "price": 0.00216820,
+    "symbol": "DOGE/PAX"
+  },
+  {
+    "price": 0.00212770,
+    "symbol": "DOGE/USDC"
+  },
+  {
+    "price": 0.00118000,
+    "symbol": "DUSK/BNB"
+  },
+  {
+    "price": 0.00001107,
+    "symbol": "DUSK/BTC"
+  },
+  {
+    "price": 0.53890000,
+    "symbol": "DUSK/USDT"
+  },
+  {
+    "price": 0.01790000,
+    "symbol": "DUSK/USDC"
+  },
+  {
+    "price": 0.01890000,
+    "symbol": "DUSK/PAX"
+  },
+  {
+    "price": 1.39000000,
+    "symbol": "BGBP/USDC"
+  },
+  {
+    "price": 0.00019470,
+    "symbol": "ANKR/BNB"
+  },
+  {
+    "price": 0.00000210,
+    "symbol": "ANKR/BTC"
+  },
+  {
+    "price": 0.10226000,
+    "symbol": "ANKR/USDT"
+  },
+  {
+    "price": 0.00212800,
+    "symbol": "ANKR/TUSD"
+  },
+  {
+    "price": 0.00209300,
+    "symbol": "ANKR/PAX"
+  },
+  {
+    "price": 0.00209700,
+    "symbol": "ANKR/USDC"
+  },
+  {
+    "price": 0.84510000,
+    "symbol": "ONT/PAX"
+  },
+  {
+    "price": 0.57080000,
+    "symbol": "ONT/USDC"
+  },
+  {
+    "price": 8.6E-7,
+    "symbol": "WIN/BNB"
+  },
+  {
+    "price": 1E-8,
+    "symbol": "WIN/BTC"
+  },
+  {
+    "price": 0.00045670,
+    "symbol": "WIN/USDT"
+  },
+  {
+    "price": 0.00045710,
+    "symbol": "WIN/USDC"
+  },
+  {
+    "price": 0.00004878,
+    "symbol": "COS/BNB"
+  },
+  {
+    "price": 5.3E-7,
+    "symbol": "COS/BTC"
+  },
+  {
+    "price": 0.02570000,
+    "symbol": "COS/USDT"
+  },
+  {
+    "price": 0.99750000,
+    "symbol": "TUSD/BTUSD"
+  },
+  {
+    "price": 0.00703010,
+    "symbol": "NPXS/USDT"
+  },
+  {
+    "price": 0.00017020,
+    "symbol": "NPXS/USDC"
+  },
+  {
+    "price": 0.00458800,
+    "symbol": "COCOS/BNB"
+  },
+  {
+    "price": 3E-8,
+    "symbol": "COCO/SBTC"
+  },
+  {
+    "price": 2.41910000,
+    "symbol": "COCOS/USDT"
+  },
+  {
+    "price": 2.12500000,
+    "symbol": "MTL/USDT"
+  },
+  {
+    "price": 0.03255000,
+    "symbol": "TOMO/BNB"
+  },
+  {
+    "price": 0.00003772,
+    "symbol": "TOMO/BTC"
+  },
+  {
+    "price": 1.83800000,
+    "symbol": "TOMO/USDT"
+  },
+  {
+    "price": 0.36700000,
+    "symbol": "TOMO/USDC"
+  },
+  {
+    "price": 0.00016220,
+    "symbol": "PERL/BNB"
+  },
+  {
+    "price": 0.00000175,
+    "symbol": "PERL/BTC"
+  },
+  {
+    "price": 0.02447000,
+    "symbol": "PERL/USDC"
+  },
+  {
+    "price": 0.08540000,
+    "symbol": "PERL/USDT"
+  },
+  {
+    "price": 0.00343800,
+    "symbol": "DENT/USDT"
+  },
+  {
+    "price": 0.00856500,
+    "symbol": "MFT/USDT"
+  },
+  {
+    "price": 0.01197900,
+    "symbol": "KEY/USDT"
+  },
+  {
+    "price": 0.00339700,
+    "symbol": "STORM/USDT"
+  },
+  {
+    "price": 0.06750000,
+    "symbol": "DOCK/USDT"
+  },
+  {
+    "price": 0.66590000,
+    "symbol": "WAN/USDT"
+  },
+  {
+    "price": 0.01027000,
+    "symbol": "FUN/USDT"
+  },
+  {
+    "price": 0.32750000,
+    "symbol": "CVC/USDT"
+  },
+  {
+    "price": 0.03398000,
+    "symbol": "BTT/TRX"
+  },
+  {
+    "price": 0.00584600,
+    "symbol": "WIN/TRX"
+  },
+  {
+    "price": 0.00052140,
+    "symbol": "CHZ/BNB"
+  },
+  {
+    "price": 0.00000565,
+    "symbol": "CHZ/BTC"
+  },
+  {
+    "price": 0.27460000,
+    "symbol": "CHZ/USDT"
+  },
+  {
+    "price": 0.02248000,
+    "symbol": "BAND/BNB"
+  },
+  {
+    "price": 0.00010860,
+    "symbol": "BAND/BTC"
+  },
+  {
+    "price": 5.28500000,
+    "symbol": "BAND/USDT"
+  },
+  {
+    "price": 526.90000000,
+    "symbol": "BNB/BUSD"
+  },
+  {
+    "price": 48739.92000000,
+    "symbol": "BTC/BUSD"
+  },
+  {
+    "price": 0.99970000,
+    "symbol": "BUSD/USDT"
+  },
+  {
+    "price": 0.02177000,
+    "symbol": "BEAM/BNB"
+  },
+  {
+    "price": 0.00001232,
+    "symbol": "BEAM/BTC"
+  },
+  {
+    "price": 0.60010000,
+    "symbol": "BEAM/USDT"
+  },
+  {
+    "price": 0.00798200,
+    "symbol": "XTZ/BNB"
+  },
+  {
+    "price": 0.00008630,
+    "symbol": "XTZ/BTC"
+  },
+  {
+    "price": 4.20100000,
+    "symbol": "XTZ/USDT"
+  },
+  {
+    "price": 0.53040000,
+    "symbol": "REN/USDT"
+  },
+  {
+    "price": 0.08414000,
+    "symbol": "RVN/USDT"
+  },
+  {
+    "price": 0.84230000,
+    "symbol": "HCU/SDT"
+  },
+  {
+    "price": 0.00058650,
+    "symbol": "HBAR/BNB"
+  },
+  {
+    "price": 0.00000634,
+    "symbol": "HBAR/BTC"
+  },
+  {
+    "price": 0.30920000,
+    "symbol": "HBAR/USDT"
+  },
+  {
+    "price": 0.00074700,
+    "symbol": "NKN/BNB"
+  },
+  {
+    "price": 0.00000704,
+    "symbol": "NKN/BTC"
+  },
+  {
+    "price": 0.34350000,
+    "symbol": "NKN/USDT"
+  },
+  {
+    "price": 0.89240000,
+    "symbol": "XRP/BUSD"
+  },
+  {
+    "price": 4004.46000000,
+    "symbol": "ETH/BUSD"
+  },
+  {
+    "price": 220.16000000,
+    "symbol": "BCHABC/BUSD"
+  },
+  {
+    "price": 153.90000000,
+    "symbol": "LTC/BUSD"
+  },
+  {
+    "price": 19.12000000,
+    "symbol": "LINK/BUSD"
+  },
+  {
+    "price": 35.14000000,
+    "symbol": "ETC/BUSD"
+  },
+  {
+    "price": 0.00397100,
+    "symbol": "STX/BNB"
+  },
+  {
+    "price": 0.00004300,
+    "symbol": "STX/BTC"
+  },
+  {
+    "price": 2.09500000,
+    "symbol": "STX/USDT"
+  },
+  {
+    "price": 0.00674000,
+    "symbol": "KAVA/BNB"
+  },
+  {
+    "price": 0.00007280,
+    "symbol": "KAVA/BTC"
+  },
+  {
+    "price": 3.53900000,
+    "symbol": "KAVA/USDT"
+  },
+  {
+    "price": 462.64000000,
+    "symbol": "BUSD/NGN"
+  },
+  {
+    "price": 43608.00000000,
+    "symbol": "BNB/NGN"
+  },
+  {
+    "price": 27846517.00000000,
+    "symbol": "BTC/NGN"
+  },
+  {
+    "price": 0.00018560,
+    "symbol": "ARPA/BNB"
+  },
+  {
+    "price": 0.00000201,
+    "symbol": "ARPA/BTC"
+  },
+  {
+    "price": 0.09773000,
+    "symbol": "ARPA/USDT"
+  },
+  {
+    "price": 0.07843000,
+    "symbol": "TRX/BUSD"
+  },
+  {
+    "price": 3.28500000,
+    "symbol": "EOS/BUSD"
+  },
+  {
+    "price": 0.12441000,
+    "symbol": "IOTX/USDT"
+  },
+  {
+    "price": 2.92600000,
+    "symbol": "RLC/USDT"
+  },
+  {
+    "price": 2.74400000,
+    "symbol": "MCO/USDT"
+  },
+  {
+    "price": 0.26400000,
+    "symbol": "XLM/BUSD"
+  },
+  {
+    "price": 1.27300000,
+    "symbol": "ADA/BUSD"
+  },
+  {
+    "price": 0.00412200,
+    "symbol": "CTXC/BNB"
+  },
+  {
+    "price": 0.00000875,
+    "symbol": "CTXC/BTC"
+  },
+  {
+    "price": 0.42730000,
+    "symbol": "CTXC/USDT"
+  },
+  {
+    "price": 0.82900000,
+    "symbol": "BCH/BNB"
+  },
+  {
+    "price": 0.00896000,
+    "symbol": "BCH/BTC"
+  },
+  {
+    "price": 436.20000000,
+    "symbol": "BCH/USDT"
+  },
+  {
+    "price": 436.70000000,
+    "symbol": "BCH/USDC"
+  },
+  {
+    "price": 630.00000000,
+    "symbol": "BCH/TUSD"
+  },
+  {
+    "price": 617.72000000,
+    "symbol": "BCH/PAX"
+  },
+  {
+    "price": 436.60000000,
+    "symbol": "BCH/BUSD"
+  },
+  {
+    "price": 3604898.00000000,
+    "symbol": "BTC/RUB"
+  },
+  {
+    "price": 295992.80000000,
+    "symbol": "ETH/RUB"
+  },
+  {
+    "price": 66.06000000,
+    "symbol": "XRP/RUB"
+  },
+  {
+    "price": 38951.34000000,
+    "symbol": "BNB/RUB"
+  },
+  {
+    "price": 0.00001937,
+    "symbol": "TROY/BNB"
+  },
+  {
+    "price": 1.8E-7,
+    "symbol": "TROY/BTC"
+  },
+  {
+    "price": 0.01022300,
+    "symbol": "TROY/USDT"
+  },
+  {
+    "price": 73.96000000,
+    "symbol": "BUSD/RUB"
+  },
+  {
+    "price": 9.15900000,
+    "symbol": "QTUM/BUSD"
+  },
+  {
+    "price": 0.08175000,
+    "symbol": "VET/BUSD"
+  },
+  {
+    "price": 0.00070700,
+    "symbol": "VITE/BNB"
+  },
+  {
+    "price": 0.00000174,
+    "symbol": "VITE/BTC"
+  },
+  {
+    "price": 0.08463000,
+    "symbol": "VITE/USDT"
+  },
+  {
+    "price": 0.07970000,
+    "symbol": "FTT/BNB"
+  },
+  {
+    "price": 0.00086180,
+    "symbol": "FTT/BTC"
+  },
+  {
+    "price": 41.99000000,
+    "symbol": "FTT/USDT"
+  },
+  {
+    "price": 671564.00000000,
+    "symbol": "BTC/TRY"
+  },
+  {
+    "price": 7257.00000000,
+    "symbol": "BNB/TRY"
+  },
+  {
+    "price": 13.77800000,
+    "symbol": "BUSD/TRY"
+  },
+  {
+    "price": 55243.00000000,
+    "symbol": "ETH/TRY"
+  },
+  {
+    "price": 12.29000000,
+    "symbol": "XRP/TRY"
+  },
+  {
+    "price": 13.77000000,
+    "symbol": "USDT/TRY"
+  },
+  {
+    "price": 73.97000000,
+    "symbol": "USDT/RUB"
+  },
+  {
+    "price": 43213.62000000,
+    "symbol": "BTC/EUR"
+  },
+  {
+    "price": 3550.72000000,
+    "symbol": "ETH/EUR"
+  },
+  {
+    "price": 467.20000000,
+    "symbol": "BNB/EUR"
+  },
+  {
+    "price": 0.79090000,
+    "symbol": "XRP/EUR"
+  },
+  {
+    "price": 1.12800000,
+    "symbol": "EUR/BUSD"
+  },
+  {
+    "price": 1.12800000,
+    "symbol": "EUR/USDT"
+  },
+  {
+    "price": 0.00118400,
+    "symbol": "OGN/BNB"
+  },
+  {
+    "price": 0.00001281,
+    "symbol": "OGN/BTC"
+  },
+  {
+    "price": 0.62330000,
+    "symbol": "OGN/USDT"
+  },
+  {
+    "price": 0.00009380,
+    "symbol": "DREP/BNB"
+  },
+  {
+    "price": 0.00001672,
+    "symbol": "DREP/BTC"
+  },
+  {
+    "price": 0.81080000,
+    "symbol": "DREP/USDT"
+  },
+  {
+    "price": 1370.28000000,
+    "symbol": "BULL/USDT"
+  },
+  {
+    "price": 1368.56000000,
+    "symbol": "BULL/BUSD"
+  },
+  {
+    "price": 11.16000000,
+    "symbol": "BEAR/USDT"
+  },
+  {
+    "price": 11.14000000,
+    "symbol": "BEAR/BUSD"
+  },
+  {
+    "price": 79.18000000,
+    "symbol": "ETHBULL/USDT"
+  },
+  {
+    "price": 78.46000000,
+    "symbol": "ETHBULL/BUSD"
+  },
+  {
+    "price": 12.20000000,
+    "symbol": "ETHBEAR/USDT"
+  },
+  {
+    "price": 12.24000000,
+    "symbol": "ETHBEAR/BUSD"
+  },
+  {
+    "price": 0.00041860,
+    "symbol": "TCT/BNB"
+  },
+  {
+    "price": 6.9E-7,
+    "symbol": "TCT/BTC"
+  },
+  {
+    "price": 0.03376000,
+    "symbol": "TCT/USDT"
+  },
+  {
+    "price": 0.00205100,
+    "symbol": "WRX/BNB"
+  },
+  {
+    "price": 0.00002224,
+    "symbol": "WRX/BTC"
+  },
+  {
+    "price": 1.08300000,
+    "symbol": "WRX/USDT"
+  },
+  {
+    "price": 1.25900000,
+    "symbol": "ICX/BUSD"
+  },
+  {
+    "price": 0.03445000,
+    "symbol": "BTS/USDT"
+  },
+  {
+    "price": 0.01930000,
+    "symbol": "BTS/BUSD"
+  },
+  {
+    "price": 2.34300000,
+    "symbol": "LSK/USDT"
+  },
+  {
+    "price": 3.30900000,
+    "symbol": "BNT/USDT"
+  },
+  {
+    "price": 3.31100000,
+    "symbol": "BNT/BUSD"
+  },
+  {
+    "price": 0.00248000,
+    "symbol": "LTO/BNB"
+  },
+  {
+    "price": 0.00000722,
+    "symbol": "LTO/BTC"
+  },
+  {
+    "price": 0.35170000,
+    "symbol": "LTO/USDT"
+  },
+  {
+    "price": 22.80000000,
+    "symbol": "ATOM/BUSD"
+  },
+  {
+    "price": 130.70000000,
+    "symbol": "DASH/BUSD"
+  },
+  {
+    "price": 26.35000000,
+    "symbol": "NEO/BUSD"
+  },
+  {
+    "price": 16.09000000,
+    "symbol": "WAVES/BUSD"
+  },
+  {
+    "price": 4.20200000,
+    "symbol": "XTZ/BUSD"
+  },
+  {
+    "price": 3.85000000,
+    "symbol": "EOSBULL/USDT"
+  },
+  {
+    "price": 3.90000000,
+    "symbol": "EOSBULL/BUSD"
+  },
+  {
+    "price": 30.21000000,
+    "symbol": "EOSBEAR/USDT"
+  },
+  {
+    "price": 29.81000000,
+    "symbol": "EOSBEAR/BUSD"
+  },
+  {
+    "price": 8.74000000,
+    "symbol": "XRPBULL/USDT"
+  },
+  {
+    "price": 8.78000000,
+    "symbol": "XRPBULL/BUSD"
+  },
+  {
+    "price": 548.55000000,
+    "symbol": "XRPBEAR/USDT"
+  },
+  {
+    "price": 547.33000000,
+    "symbol": "XRPBEAR/BUSD"
+  },
+  {
+    "price": 1.14800000,
+    "symbol": "BAT/BUSD"
+  },
+  {
+    "price": 2.40100000,
+    "symbol": "ENJ/BUSD"
+  },
+  {
+    "price": 3.47200000,
+    "symbol": "NANO/BUSD"
+  },
+  {
+    "price": 0.69290000,
+    "symbol": "ONT/BUSD"
+  },
+  {
+    "price": 0.08417000,
+    "symbol": "RVN/BUSD"
+  },
+  {
+    "price": 0.49150000,
+    "symbol": "STRAT/BUSD"
+  },
+  {
+    "price": 0.01900000,
+    "symbol": "STRAT/BNB"
+  },
+  {
+    "price": 0.49040000,
+    "symbol": "STRAT/USDT"
+  },
+  {
+    "price": 0.07210000,
+    "symbol": "AION/BUSD"
+  },
+  {
+    "price": 0.14340000,
+    "symbol": "AION/USDT"
+  },
+  {
+    "price": 0.00001575,
+    "symbol": "MBL/BNB"
+  },
+  {
+    "price": 5E-8,
+    "symbol": "MBL/BTC"
+  },
+  {
+    "price": 0.00831600,
+    "symbol": "MBL/USDT"
+  },
+  {
+    "price": 0.00059860,
+    "symbol": "COTI/BNB"
+  },
+  {
+    "price": 0.00000646,
+    "symbol": "COTI/BTC"
+  },
+  {
+    "price": 0.31520000,
+    "symbol": "COTI/USDT"
+  },
+  {
+    "price": 1.33810000,
+    "symbol": "ALGO/BUSD"
+  },
+  {
+    "price": 0.00266800,
+    "symbol": "BTT/BUSD"
+  },
+  {
+    "price": 1.83200000,
+    "symbol": "TOMO/BUSD"
+  },
+  {
+    "price": 190.40000000,
+    "symbol": "XMR/BUSD"
+  },
+  {
+    "price": 158.60000000,
+    "symbol": "ZEC/BUSD"
+  },
+  {
+    "price": 57.21000000,
+    "symbol": "BNBBULL/USDT"
+  },
+  {
+    "price": 58.37000000,
+    "symbol": "BNBBULL/BUSD"
+  },
+  {
+    "price": 58.61000000,
+    "symbol": "BNBBEAR/USDT"
+  },
+  {
+    "price": 57.21000000,
+    "symbol": "BNBBEAR/BUSD"
+  },
+  {
+    "price": 0.00067000,
+    "symbol": "STPT/BNB"
+  },
+  {
+    "price": 0.00000216,
+    "symbol": "STPT/BTC"
+  },
+  {
+    "price": 0.10547000,
+    "symbol": "STPT/USDT"
+  },
+  {
+    "price": 857014.00000000,
+    "symbol": "BTC/ZAR"
+  },
+  {
+    "price": 27850.40000000,
+    "symbol": "ETH/ZAR"
+  },
+  {
+    "price": 5000.00000000,
+    "symbol": "BNB/ZAR"
+  },
+  {
+    "price": 14.02300000,
+    "symbol": "USDT/ZAR"
+  },
+  {
+    "price": 13.88800000,
+    "symbol": "BUSD/ZAR"
+  },
+  {
+    "price": 42029197.00000000,
+    "symbol": "BTC/BKRW"
+  },
+  {
+    "price": 1277799.00000000,
+    "symbol": "ETH/BKRW"
+  },
+  {
+    "price": 44687.00000000,
+    "symbol": "BNB/BKRW"
+  },
+  {
+    "price": 0.98370000,
+    "symbol": "WTC/USDT"
+  },
+  {
+    "price": 0.11823000,
+    "symbol": "DATA/BUSD"
+  },
+  {
+    "price": 0.11820000,
+    "symbol": "DATA/USDT"
+  },
+  {
+    "price": 4.44600000,
+    "symbol": "XZC/USDT"
+  },
+  {
+    "price": 0.33980000,
+    "symbol": "SOL/BNB"
+  },
+  {
+    "price": 0.00367220,
+    "symbol": "SOL/BTC"
+  },
+  {
+    "price": 178.90000000,
+    "symbol": "SOL/USDT"
+  },
+  {
+    "price": 179.02000000,
+    "symbol": "SOL/BUSD"
+  },
+  {
+    "price": 693891182.00,
+    "symbol": "BTC/IDRT"
+  },
+  {
+    "price": 7537192.00,
+    "symbol": "BNB/IDRT"
+  },
+  {
+    "price": 14329.00,
+    "symbol": "USDT/IDRT"
+  },
+  {
+    "price": 14389.00,
+    "symbol": "BUSD/IDRT"
+  },
+  {
+    "price": 0.00001357,
+    "symbol": "CTSI/BTC"
+  },
+  {
+    "price": 0.66130000,
+    "symbol": "CTSI/USDT"
+  },
+  {
+    "price": 0.00125500,
+    "symbol": "CTSI/BNB"
+  },
+  {
+    "price": 0.66150000,
+    "symbol": "CTSI/BUSD"
+  },
+  {
+    "price": 0.00429000,
+    "symbol": "HIVE/BNB"
+  },
+  {
+    "price": 0.00002992,
+    "symbol": "HIVE/BTC"
+  },
+  {
+    "price": 1.45820000,
+    "symbol": "HIVE/USDT"
+  },
+  {
+    "price": 0.00119990,
+    "symbol": "CHR/BNB"
+  },
+  {
+    "price": 0.00001298,
+    "symbol": "CHR/BTC"
+  },
+  {
+    "price": 0.63240000,
+    "symbol": "CHR/USDT"
+  },
+  {
+    "price": 74.75500000,
+    "symbol": "BTCUP/USDT"
+  },
+  {
+    "price": 0.01178800,
+    "symbol": "BTCDOWN/USDT"
+  },
+  {
+    "price": 2.05410000,
+    "symbol": "GXS/USDT"
+  },
+  {
+    "price": 0.22810000,
+    "symbol": "ARDR/USDT"
+  },
+  {
+    "price": 0.01966100,
+    "symbol": "ERD/BUSD"
+  },
+  {
+    "price": 0.51431000,
+    "symbol": "LEND/USDT"
+  },
+  {
+    "price": 0.30960000,
+    "symbol": "HBAR/BUSD"
+  },
+  {
+    "price": 2.35400000,
+    "symbol": "MATIC/BUSD"
+  },
+  {
+    "price": 1.08400000,
+    "symbol": "WRX/BUSD"
+  },
+  {
+    "price": 0.06086000,
+    "symbol": "ZIL/BUSD"
+  },
+  {
+    "price": 0.00073720,
+    "symbol": "MDT/BNB"
+  },
+  {
+    "price": 0.00000207,
+    "symbol": "MDT/BTC"
+  },
+  {
+    "price": 0.10150000,
+    "symbol": "MDT/USDT"
+  },
+  {
+    "price": 0.00004148,
+    "symbol": "STMX/BNB"
+  },
+  {
+    "price": 4.4E-7,
+    "symbol": "STMX/BTC"
+  },
+  {
+    "price": 0.00000546,
+    "symbol": "STMX/ETH"
+  },
+  {
+    "price": 0.02186000,
+    "symbol": "STMX/USDT"
+  },
+  {
+    "price": 1.26700000,
+    "symbol": "KNC/BUSD"
+  },
+  {
+    "price": 1.26600000,
+    "symbol": "KNC/USDT"
+  },
+  {
+    "price": 13.67300000,
+    "symbol": "REP/BUSD"
+  },
+  {
+    "price": 16.82000000,
+    "symbol": "REP/USDT"
+  },
+  {
+    "price": 2.10440000,
+    "symbol": "LRC/BUSD"
+  },
+  {
+    "price": 2.10340000,
+    "symbol": "LRC/USDT"
+  },
+  {
+    "price": 0.00002275,
+    "symbol": "IQ/BNB"
+  },
+  {
+    "price": 0.01206000,
+    "symbol": "IQB/USD"
+  },
+  {
+    "price": 0.00001969,
+    "symbol": "PNT/BTC"
+  },
+  {
+    "price": 0.95950000,
+    "symbol": "PNT/USDT"
+  },
+  {
+    "price": 36776.53000000,
+    "symbol": "BTC/GBP"
+  },
+  {
+    "price": 3021.36000000,
+    "symbol": "ETH/GBP"
+  },
+  {
+    "price": 0.67440000,
+    "symbol": "XRP/GBP"
+  },
+  {
+    "price": 397.70000000,
+    "symbol": "BNB/GBP"
+  },
+  {
+    "price": 1.32600000,
+    "symbol": "GBP/BUSD"
+  },
+  {
+    "price": 0.00006610,
+    "symbol": "DGB/BNB"
+  },
+  {
+    "price": 7.2E-7,
+    "symbol": "DGB/BTC"
+  },
+  {
+    "price": 0.03487000,
+    "symbol": "DGB/BUSD"
+  },
+  {
+    "price": 1323991.00000000,
+    "symbol": "BTC/UAH"
+  },
+  {
+    "price": 27.20000000,
+    "symbol": "USDT/UAH"
+  },
+  {
+    "price": 0.00397000,
+    "symbol": "COMP/BTC"
+  },
+  {
+    "price": 5.71900000,
+    "symbol": "COMP/BNB"
+  },
+  {
+    "price": 193.80000000,
+    "symbol": "COMP/BUSD"
+  },
+  {
+    "price": 193.80000000,
+    "symbol": "COMP/USDT"
+  },
+  {
+    "price": 699552499.00,
+    "symbol": "BTC/BIDR"
+  },
+  {
+    "price": 57374645.00,
+    "symbol": "ETH/BIDR"
+  },
+  {
+    "price": 7549870.00,
+    "symbol": "BNB/BIDR"
+  },
+  {
+    "price": 14341.00,
+    "symbol": "BUSD/BIDR"
+  },
+  {
+    "price": 14350.00,
+    "symbol": "USDT/BIDR"
+  },
+  {
+    "price": 0.00084530,
+    "symbol": "BKRW/USDT"
+  },
+  {
+    "price": 0.00084550,
+    "symbol": "BKRW/BUSD"
+  },
+  {
+    "price": 0.01548000,
+    "symbol": "SCU/SDT"
+  },
+  {
+    "price": 63.00000000,
+    "symbol": "ZEN/USDT"
+  },
+  {
+    "price": 0.00003120,
+    "symbol": "SXP/BTC"
+  },
+  {
+    "price": 0.00289200,
+    "symbol": "SXP/BNB"
+  },
+  {
+    "price": 1.52100000,
+    "symbol": "SXP/BUSD"
+  },
+  {
+    "price": 0.00010890,
+    "symbol": "SNX/BTC"
+  },
+  {
+    "price": 0.01001000,
+    "symbol": "SNX/BNB"
+  },
+  {
+    "price": 5.30300000,
+    "symbol": "SNX/BUSD"
+  },
+  {
+    "price": 5.30000000,
+    "symbol": "SNX/USDT"
+  },
+  {
+    "price": 93.27800000,
+    "symbol": "ETHUP/USDT"
+  },
+  {
+    "price": 0.54310000,
+    "symbol": "ETHDOWN/USDT"
+  },
+  {
+    "price": 28.48700000,
+    "symbol": "ADAUP/USDT"
+  },
+  {
+    "price": 0.00725700,
+    "symbol": "ADADOWN/USDT"
+  },
+  {
+    "price": 0.47810000,
+    "symbol": "LINKUP/USDT"
+  },
+  {
+    "price": 0.01521000,
+    "symbol": "LINKDOWN/USDT"
+  },
+  {
+    "price": 0.00001063,
+    "symbol": "VTHO/BNB"
+  },
+  {
+    "price": 0.00071800,
+    "symbol": "VTHO/BUSD"
+  },
+  {
+    "price": 0.00561100,
+    "symbol": "VTHO/USDT"
+  },
+  {
+    "price": 16.03500000,
+    "symbol": "DCR/BUSD"
+  },
+  {
+    "price": 0.03484000,
+    "symbol": "DGB/USDT"
+  },
+  {
+    "price": 1.32600000,
+    "symbol": "GBP/USDT"
+  },
+  {
+    "price": 1.76570000,
+    "symbol": "STORJ/BUSD"
+  },
+  {
+    "price": 1.51900000,
+    "symbol": "SXP/USDT"
+  },
+  {
+    "price": 0.00166200,
+    "symbol": "IRIS/BNB"
+  },
+  {
+    "price": 0.00000177,
+    "symbol": "IRIS/BTC"
+  },
+  {
+    "price": 0.06080000,
+    "symbol": "IRIS/BUSD"
+  },
+  {
+    "price": 6.90300000,
+    "symbol": "MKR/BNB"
+  },
+  {
+    "price": 0.04963000,
+    "symbol": "MKR/BTC"
+  },
+  {
+    "price": 2417.00000000,
+    "symbol": "MKR/USDT"
+  },
+  {
+    "price": 2416.00000000,
+    "symbol": "MKR/BUSD"
+  },
+  {
+    "price": 0.04876000,
+    "symbol": "DAI/BNB"
+  },
+  {
+    "price": 0.00008966,
+    "symbol": "DAI/BTC"
+  },
+  {
+    "price": 1.01890000,
+    "symbol": "DAI/USDT"
+  },
+  {
+    "price": 1.01810000,
+    "symbol": "DAI/BUSD"
+  },
+  {
+    "price": 0.01293000,
+    "symbol": "RUNE/BNB"
+  },
+  {
+    "price": 0.00013960,
+    "symbol": "RUNE/BTC"
+  },
+  {
+    "price": 6.80100000,
+    "symbol": "RUNE/BUSD"
+  },
+  {
+    "price": 3.25300000,
+    "symbol": "MANA/BUSD"
+  },
+  {
+    "price": 0.16960000,
+    "symbol": "DOGE/BUSD"
+  },
+  {
+    "price": 0.51530000,
+    "symbol": "LEND/BUSD"
+  },
+  {
+    "price": 0.77280000,
+    "symbol": "ZRX/BUSD"
+  },
+  {
+    "price": 71.60000000,
+    "symbol": "DCR/USDT"
+  },
+  {
+    "price": 1.76560000,
+    "symbol": "STORJ/USDT"
+  },
+  {
+    "price": 319.76000000,
+    "symbol": "XRP/BKRW"
+  },
+  {
+    "price": 327.55000000,
+    "symbol": "ADA/BKRW"
+  },
+  {
+    "price": 68389.54000000,
+    "symbol": "BTC/AUD"
+  },
+  {
+    "price": 5620.38000000,
+    "symbol": "ETH/AUD"
+  },
+  {
+    "price": 0.71270000,
+    "symbol": "AUD/BUSD"
+  },
+  {
+    "price": 0.00027770,
+    "symbol": "FIO/BNB"
+  },
+  {
+    "price": 0.00000301,
+    "symbol": "FIO/BTC"
+  },
+  {
+    "price": 0.14660000,
+    "symbol": "FIO/BUSD"
+  },
+  {
+    "price": 560.53000000,
+    "symbol": "BNBUP/USDT"
+  },
+  {
+    "price": 0.08599000,
+    "symbol": "BNBDOWN/USDT"
+  },
+  {
+    "price": 0.01225000,
+    "symbol": "XTZUP/USDT"
+  },
+  {
+    "price": 2.02600000,
+    "symbol": "XTZDOWN/USDT"
+  },
+  {
+    "price": 0.00330200,
+    "symbol": "AVA/BNB"
+  },
+  {
+    "price": 0.00003566,
+    "symbol": "AVA/BTC"
+  },
+  {
+    "price": 1.73900000,
+    "symbol": "AVA/BUSD"
+  },
+  {
+    "price": 1125.00000000,
+    "symbol": "USDT/BKRW"
+  },
+  {
+    "price": 1097.18000000,
+    "symbol": "BUSD/BKRW"
+  },
+  {
+    "price": 1.17200000,
+    "symbol": "IOTA/BUSD"
+  },
+  {
+    "price": 3.25210000,
+    "symbol": "MANA/USDT"
+  },
+  {
+    "price": 1.25260000,
+    "symbol": "XRP/AUD"
+  },
+  {
+    "price": 739.00000000,
+    "symbol": "BNB/AUD"
+  },
+  {
+    "price": 0.71240000,
+    "symbol": "AUD/USDT"
+  },
+  {
+    "price": 0.42580000,
+    "symbol": "BAL/BNB"
+  },
+  {
+    "price": 0.00038600,
+    "symbol": "BAL/BTC"
+  },
+  {
+    "price": 18.81000000,
+    "symbol": "BAL/BUSD"
+  },
+  {
+    "price": 82.19000000,
+    "symbol": "YFI/BNB"
+  },
+  {
+    "price": 0.72920000,
+    "symbol": "YFI/BTC"
+  },
+  {
+    "price": 35515.00000000,
+    "symbol": "YFI/BUSD"
+  },
+  {
+    "price": 35546.19000000,
+    "symbol": "YFI/USDT"
+  },
+  {
+    "price": 0.07104000,
+    "symbol": "BLZ/BUSD"
+  },
+  {
+    "price": 0.46760000,
+    "symbol": "KMD/BUSD"
+  },
+  {
+    "price": 18.82000000,
+    "symbol": "BAL/USDT"
+  },
+  {
+    "price": 0.23280000,
+    "symbol": "BLZ/USDT"
+  },
+  {
+    "price": 0.08651000,
+    "symbol": "IRIS/USDT"
+  },
+  {
+    "price": 0.70040000,
+    "symbol": "KMD/USDT"
+  },
+  {
+    "price": 48730.49000000,
+    "symbol": "BTC/DAI"
+  },
+  {
+    "price": 4003.79000000,
+    "symbol": "ETH/DAI"
+  },
+  {
+    "price": 527.00000000,
+    "symbol": "BNB/DAI"
+  },
+  {
+    "price": 1.00030000,
+    "symbol": "USDT/DAI"
+  },
+  {
+    "price": 1.00010000,
+    "symbol": "BUSD/DAI"
+  },
+  {
+    "price": 0.00021850,
+    "symbol": "JST/BNB"
+  },
+  {
+    "price": 0.00000115,
+    "symbol": "JST/BTC"
+  },
+  {
+    "price": 0.05549000,
+    "symbol": "JST/BUSD"
+  },
+  {
+    "price": 0.05547000,
+    "symbol": "JST/USDT"
+  },
+  {
+    "price": 0.00651000,
+    "symbol": "SRM/BNB"
+  },
+  {
+    "price": 0.00007050,
+    "symbol": "SRM/BTC"
+  },
+  {
+    "price": 3.43200000,
+    "symbol": "SRM/BUSD"
+  },
+  {
+    "price": 3.42900000,
+    "symbol": "SRM/USDT"
+  },
+  {
+    "price": 0.01312000,
+    "symbol": "ANT/BNB"
+  },
+  {
+    "price": 0.00014159,
+    "symbol": "ANT/BTC"
+  },
+  {
+    "price": 6.91300000,
+    "symbol": "ANT/BUSD"
+  },
+  {
+    "price": 6.89300000,
+    "symbol": "ANT/USDT"
+  },
+  {
+    "price": 0.00687000,
+    "symbol": "CRV/BNB"
+  },
+  {
+    "price": 0.00008940,
+    "symbol": "CRV/BTC"
+  },
+  {
+    "price": 4.36000000,
+    "symbol": "CRV/BUSD"
+  },
+  {
+    "price": 4.35500000,
+    "symbol": "CRV/USDT"
+  },
+  {
+    "price": 0.00962800,
+    "symbol": "SAND/BNB"
+  },
+  {
+    "price": 0.00010410,
+    "symbol": "SAND/BTC"
+  },
+  {
+    "price": 5.07220000,
+    "symbol": "SAND/USDT"
+  },
+  {
+    "price": 5.07210000,
+    "symbol": "SAND/BUSD"
+  },
+  {
+    "price": 0.00146200,
+    "symbol": "OCEAN/BNB"
+  },
+  {
+    "price": 0.00001588,
+    "symbol": "OCEAN/BTC"
+  },
+  {
+    "price": 0.77340000,
+    "symbol": "OCEAN/BUSD"
+  },
+  {
+    "price": 0.77380000,
+    "symbol": "OCEAN/USDT"
+  },
+  {
+    "price": 0.06210000,
+    "symbol": "NMR/BNB"
+  },
+  {
+    "price": 0.00067300,
+    "symbol": "NMR/BTC"
+  },
+  {
+    "price": 32.85000000,
+    "symbol": "NMR/BUSD"
+  },
+  {
+    "price": 32.82000000,
+    "symbol": "NMR/USDT"
+  },
+  {
+    "price": 0.04750000,
+    "symbol": "DOT/BNB"
+  },
+  {
+    "price": 0.00051360,
+    "symbol": "DOT/BTC"
+  },
+  {
+    "price": 25.03000000,
+    "symbol": "DOT/BUSD"
+  },
+  {
+    "price": 25.03000000,
+    "symbol": "DOT/USDT"
+  },
+  {
+    "price": 0.16034000,
+    "symbol": "LUNA/BNB"
+  },
+  {
+    "price": 0.00173230,
+    "symbol": "LUNA/BTC"
+  },
+  {
+    "price": 84.42000000,
+    "symbol": "LUNA/BUSD"
+  },
+  {
+    "price": 84.38000000,
+    "symbol": "LUNA/USDT"
+  },
+  {
+    "price": 0.00000537,
+    "symbol": "IDEX/BTC"
+  },
+  {
+    "price": 0.26075000,
+    "symbol": "IDEX/BUSD"
+  },
+  {
+    "price": 0.00005560,
+    "symbol": "RSR/BNB"
+  },
+  {
+    "price": 6.0E-7,
+    "symbol": "RSR/BTC"
+  },
+  {
+    "price": 0.02932000,
+    "symbol": "RSR/BUSD"
+  },
+  {
+    "price": 0.02929000,
+    "symbol": "RSR/USDT"
+  },
+  {
+    "price": 3.41500000,
+    "symbol": "PAXG/BNB"
+  },
+  {
+    "price": 0.03685000,
+    "symbol": "PAXG/BTC"
+  },
+  {
+    "price": 1890.00000000,
+    "symbol": "PAXG/BUSD"
+  },
+  {
+    "price": 1797.00000000,
+    "symbol": "PAXG/USDT"
+  },
+  {
+    "price": 0.17350000,
+    "symbol": "WNXM/BNB"
+  },
+  {
+    "price": 0.00135500,
+    "symbol": "WNXM/BTC"
+  },
+  {
+    "price": 22.16500000,
+    "symbol": "WNXM/BUSD"
+  },
+  {
+    "price": 65.87000000,
+    "symbol": "WNXM/USDT"
+  },
+  {
+    "price": 0.51700000,
+    "symbol": "TRB/BNB"
+  },
+  {
+    "price": 0.00063900,
+    "symbol": "TRB/BTC"
+  },
+  {
+    "price": 31.15000000,
+    "symbol": "TRB/BUSD"
+  },
+  {
+    "price": 31.11000000,
+    "symbol": "TRB/USDT"
+  },
+  {
+    "price": 805670.00000000,
+    "symbol": "ETH/NGN"
+  },
+  {
+    "price": 357386.00,
+    "symbol": "DOT/BIDR"
+  },
+  {
+    "price": 26.75000000,
+    "symbol": "LINK/AUD"
+  },
+  {
+    "price": 2.13500000,
+    "symbol": "SXP/AUD"
+  },
+  {
+    "price": 0.00514000,
+    "symbol": "BZRX/BNB"
+  },
+  {
+    "price": 0.00000463,
+    "symbol": "BZRX/BTC"
+  },
+  {
+    "price": 0.21640000,
+    "symbol": "BZRX/BUSD"
+  },
+  {
+    "price": 0.21560000,
+    "symbol": "BZRX/USDT"
+  },
+  {
+    "price": 1.00010000,
+    "symbol": "WBTC/BTC"
+  },
+  {
+    "price": 12.15000000,
+    "symbol": "WBTC/ETH"
+  },
+  {
+    "price": 0.01035000,
+    "symbol": "SUSHI/BNB"
+  },
+  {
+    "price": 0.00011180,
+    "symbol": "SUSHI/BTC"
+  },
+  {
+    "price": 5.44900000,
+    "symbol": "SUSHI/BUSD"
+  },
+  {
+    "price": 5.44400000,
+    "symbol": "SUSHI/USDT"
+  },
+  {
+    "price": 5.89000000,
+    "symbol": "YFII/BNB"
+  },
+  {
+    "price": 0.06410000,
+    "symbol": "YFII/BTC"
+  },
+  {
+    "price": 3124.00000000,
+    "symbol": "YFII/BUSD"
+  },
+  {
+    "price": 3120.00000000,
+    "symbol": "YFII/USDT"
+  },
+  {
+    "price": 0.50630000,
+    "symbol": "KSM/BNB"
+  },
+  {
+    "price": 0.00549300,
+    "symbol": "KSM/BTC"
+  },
+  {
+    "price": 267.20000000,
+    "symbol": "KSM/BUSD"
+  },
+  {
+    "price": 267.40000000,
+    "symbol": "KSM/USDT"
+  },
+  {
+    "price": 0.46160000,
+    "symbol": "EGLD/BNB"
+  },
+  {
+    "price": 0.00499400,
+    "symbol": "EGLD/BTC"
+  },
+  {
+    "price": 243.57000000,
+    "symbol": "EGLD/BUSD"
+  },
+  {
+    "price": 243.43000000,
+    "symbol": "EGLD/USDT"
+  },
+  {
+    "price": 0.00381300,
+    "symbol": "DIA/BNB"
+  },
+  {
+    "price": 0.00002571,
+    "symbol": "DIA/BTC"
+  },
+  {
+    "price": 1.25400000,
+    "symbol": "DIA/BUSD"
+  },
+  {
+    "price": 1.25100000,
+    "symbol": "DIA/USDT"
+  },
+  {
+    "price": 6.80400000,
+    "symbol": "RUNE/USDT"
+  },
+  {
+    "price": 0.14660000,
+    "symbol": "FIO/USDT"
+  },
+  {
+    "price": 0.00018450,
+    "symbol": "UMA/BTC"
+  },
+  {
+    "price": 8.96900000,
+    "symbol": "UMA/USDT"
+  },
+  {
+    "price": 0.20030000,
+    "symbol": "EOSUP/USDT"
+  },
+  {
+    "price": 0.00039740,
+    "symbol": "EOSDOWN/USDT"
+  },
+  {
+    "price": 0.14802000,
+    "symbol": "TRXUP/USDT"
+  },
+  {
+    "price": 8.68700000,
+    "symbol": "TRXDOWN/USDT"
+  },
+  {
+    "price": 2.65700000,
+    "symbol": "XRPUP/USDT"
+  },
+  {
+    "price": 0.00082410,
+    "symbol": "XRPDOWN/USDT"
+  },
+  {
+    "price": 2.84000000,
+    "symbol": "DOTUP/USDT"
+  },
+  {
+    "price": 19.28900000,
+    "symbol": "DOTDOWN/USDT"
+  },
+  {
+    "price": 26748.00,
+    "symbol": "SRM/BIDR"
+  },
+  {
+    "price": 119.92,
+    "symbol": "ONE/BIDR"
+  },
+  {
+    "price": 263.00000000,
+    "symbol": "LINK/TRY"
+  },
+  {
+    "price": 573.00000000,
+    "symbol": "USDT/NGN"
+  },
+  {
+    "price": 0.00276400,
+    "symbol": "BEL/BNB"
+  },
+  {
+    "price": 0.00002979,
+    "symbol": "BEL/BTC"
+  },
+  {
+    "price": 1.45200000,
+    "symbol": "BEL/BUSD"
+  },
+  {
+    "price": 1.45100000,
+    "symbol": "BEL/USDT"
+  },
+  {
+    "price": 0.04865000,
+    "symbol": "WING/BNB"
+  },
+  {
+    "price": 0.00032250,
+    "symbol": "WING/BTC"
+  },
+  {
+    "price": 0.00150400,
+    "symbol": "SWRV/BNB"
+  },
+  {
+    "price": 0.56490000,
+    "symbol": "SWRV/BUSD"
+  },
+  {
+    "price": 15.73000000,
+    "symbol": "WING/BUSD"
+  },
+  {
+    "price": 15.79000000,
+    "symbol": "WING/USDT"
+  },
+  {
+    "price": 1.56200000,
+    "symbol": "LTCUP/USDT"
+  },
+  {
+    "price": 1.21270000,
+    "symbol": "LTCDOWN/USDT"
+  },
+  {
+    "price": 579.46000000,
+    "symbol": "LEND/BKRW"
+  },
+  {
+    "price": 1.35000000,
+    "symbol": "SXP/EUR"
+  },
+  {
+    "price": 0.06070000,
+    "symbol": "CREAM/BNB"
+  },
+  {
+    "price": 31.90000000,
+    "symbol": "CREAM/BUSD"
+  },
+  {
+    "price": 0.02811000,
+    "symbol": "UNI/BNB"
+  },
+  {
+    "price": 0.00030400,
+    "symbol": "UNI/BTC"
+  },
+  {
+    "price": 14.80000000,
+    "symbol": "UNI/BUSD"
+  },
+  {
+    "price": 14.82000000,
+    "symbol": "UNI/USDT"
+  },
+  {
+    "price": 3.1E-7,
+    "symbol": "NBS/BTC"
+  },
+  {
+    "price": 0.01656000,
+    "symbol": "NBS/USDT"
+  },
+  {
+    "price": 0.00000748,
+    "symbol": "OXT/BTC"
+  },
+  {
+    "price": 0.36360000,
+    "symbol": "OXT/USDT"
+  },
+  {
+    "price": 0.00071100,
+    "symbol": "SUN/BTC"
+  },
+  {
+    "price": 0.02262000,
+    "symbol": "SUN/USDT"
+  },
+  {
+    "price": 0.22479000,
+    "symbol": "AVAX/BNB"
+  },
+  {
+    "price": 0.00242940,
+    "symbol": "AVAX/BTC"
+  },
+  {
+    "price": 118.41000000,
+    "symbol": "AVAX/BUSD"
+  },
+  {
+    "price": 118.38000000,
+    "symbol": "AVAX/USDT"
+  },
+  {
+    "price": 0.00075480,
+    "symbol": "HNT/BTC"
+  },
+  {
+    "price": 36.73000000,
+    "symbol": "HNT/USDT"
+  },
+  {
+    "price": 0.00201300,
+    "symbol": "BAKE/BNB"
+  },
+  {
+    "price": 0.00594000,
+    "symbol": "BURGER/BNB"
+  },
+  {
+    "price": 21740.00,
+    "symbol": "SXP/BIDR"
+  },
+  {
+    "price": 16948.99000000,
+    "symbol": "LINK/BKRW"
+  },
+  {
+    "price": 0.00333000,
+    "symbol": "FLM/BNB"
+  },
+  {
+    "price": 0.00000705,
+    "symbol": "FLM/BTC"
+  },
+  {
+    "price": 0.34310000,
+    "symbol": "FLM/BUSD"
+  },
+  {
+    "price": 0.34340000,
+    "symbol": "FLM/USDT"
+  },
+  {
+    "price": 0.00008832,
+    "symbol": "SCRT/BTC"
+  },
+  {
+    "price": 0.00107200,
+    "symbol": "SCRT/ETH"
+  },
+  {
+    "price": 0.02254000,
+    "symbol": "CAKE/BNB"
+  },
+  {
+    "price": 11.88000000,
+    "symbol": "CAKE/BUSD"
+  },
+  {
+    "price": 0.00032410,
+    "symbol": "SPARTA/BNB"
+  },
+  {
+    "price": 0.76400000,
+    "symbol": "UNIUP/USDT"
+  },
+  {
+    "price": 3.14900000,
+    "symbol": "UNIDOWN/USDT"
+  },
+  {
+    "price": 0.00010510,
+    "symbol": "ORN/BTC"
+  },
+  {
+    "price": 5.11300000,
+    "symbol": "ORN/USDT"
+  },
+  {
+    "price": 20.71000000,
+    "symbol": "TRX/NGN"
+  },
+  {
+    "price": 21.00000000,
+    "symbol": "SXP/TRY"
+  },
+  {
+    "price": 0.00000644,
+    "symbol": "UTK/BTC"
+  },
+  {
+    "price": 0.31440000,
+    "symbol": "UTK/USDT"
+  },
+  {
+    "price": 0.02890000,
+    "symbol": "XVS/BNB"
+  },
+  {
+    "price": 0.00031260,
+    "symbol": "XVS/BTC"
+  },
+  {
+    "price": 15.21000000,
+    "symbol": "XVS/BUSD"
+  },
+  {
+    "price": 15.21000000,
+    "symbol": "XVS/USDT"
+  },
+  {
+    "price": 0.00129800,
+    "symbol": "ALPHA/BNB"
+  },
+  {
+    "price": 0.00001409,
+    "symbol": "ALPHA/BTC"
+  },
+  {
+    "price": 0.68680000,
+    "symbol": "ALPHA/BUSD"
+  },
+  {
+    "price": 0.68660000,
+    "symbol": "ALPHA/USDT"
+  },
+  {
+    "price": 0.00001577,
+    "symbol": "VIDT/BTC"
+  },
+  {
+    "price": 0.76820000,
+    "symbol": "VIDT/BUSD"
+  },
+  {
+    "price": 0.34690000,
+    "symbol": "AAVE/BNB"
+  },
+  {
+    "price": 279336.00000000,
+    "symbol": "BTC/BRL"
+  },
+  {
+    "price": 5.73600000,
+    "symbol": "USDT/BRL"
+  },
+  {
+    "price": 0.00375200,
+    "symbol": "AAVE/BTC"
+  },
+  {
+    "price": 0.04570000,
+    "symbol": "AAVE/ETH"
+  },
+  {
+    "price": 182.80000000,
+    "symbol": "AAVE/BUSD"
+  },
+  {
+    "price": 182.70000000,
+    "symbol": "AAVE/USDT"
+  },
+  {
+    "price": 164167.00000000,
+    "symbol": "AAVE/BKRW"
+  },
+  {
+    "price": 0.01670600,
+    "symbol": "NEAR/BNB"
+  },
+  {
+    "price": 0.00018031,
+    "symbol": "NEAR/BTC"
+  },
+  {
+    "price": 8.79300000,
+    "symbol": "NEAR/BUSD"
+  },
+  {
+    "price": 8.78300000,
+    "symbol": "NEAR/USDT"
+  },
+  {
+    "price": 0.17426000,
+    "symbol": "SXPUP/USDT"
+  },
+  {
+    "price": 0.08950000,
+    "symbol": "SXPDOWN/USDT"
+  },
+  {
+    "price": 13514.98000000,
+    "symbol": "DOT/BKRW"
+  },
+  {
+    "price": 1.14500000,
+    "symbol": "SXP/GBP"
+  },
+  {
+    "price": 0.06680000,
+    "symbol": "FIL/BNB"
+  },
+  {
+    "price": 0.00072200,
+    "symbol": "FIL/BTC"
+  },
+  {
+    "price": 35.14000000,
+    "symbol": "FIL/BUSD"
+  },
+  {
+    "price": 35.14000000,
+    "symbol": "FIL/USDT"
+  },
+  {
+    "price": 0.16390000,
+    "symbol": "FILUP/USDT"
+  },
+  {
+    "price": 0.00091220,
+    "symbol": "FILDOWN/USDT"
+  },
+  {
+    "price": 0.11690000,
+    "symbol": "YFIUP/USDT"
+  },
+  {
+    "price": 0.90090000,
+    "symbol": "YFIDOWN/USDT"
+  },
+  {
+    "price": 0.01511000,
+    "symbol": "INJ/BNB"
+  },
+  {
+    "price": 0.00016370,
+    "symbol": "INJ/BTC"
+  },
+  {
+    "price": 7.96600000,
+    "symbol": "INJ/BUSD"
+  },
+  {
+    "price": 7.97900000,
+    "symbol": "INJ/USDT"
+  },
+  {
+    "price": 0.00000508,
+    "symbol": "AERGO/BTC"
+  },
+  {
+    "price": 0.24810000,
+    "symbol": "AERGO/BUSD"
+  },
+  {
+    "price": 16.93000000,
+    "symbol": "LINK/EUR"
+  },
+  {
+    "price": 0.24118000,
+    "symbol": "ONE/BUSD"
+  },
+  {
+    "price": 0.00623000,
+    "symbol": "EASY/ETH"
+  },
+  {
+    "price": 0.00003086,
+    "symbol": "AUDIO/BTC"
+  },
+  {
+    "price": 1.50500000,
+    "symbol": "AUDIO/BUSD"
+  },
+  {
+    "price": 1.50300000,
+    "symbol": "AUDIO/USDT"
+  },
+  {
+    "price": 0.00331100,
+    "symbol": "CTK/BNB"
+  },
+  {
+    "price": 0.00003580,
+    "symbol": "CTK/BTC"
+  },
+  {
+    "price": 1.74600000,
+    "symbol": "CTK/BUSD"
+  },
+  {
+    "price": 1.74600000,
+    "symbol": "CTK/USDT"
+  },
+  {
+    "price": 0.07716000,
+    "symbol": "BCHUP/USDT"
+  },
+  {
+    "price": 0.21440000,
+    "symbol": "BCHDOWN/USDT"
+  },
+  {
+    "price": 0.04906000,
+    "symbol": "BOT/BTC"
+  },
+  {
+    "price": 2783.23000000,
+    "symbol": "BOT/BUSD"
+  },
+  {
+    "price": 22960.34000000,
+    "symbol": "ETH/BRL"
+  },
+  {
+    "price": 22.18000000,
+    "symbol": "DOT/EUR"
+  },
+  {
+    "price": 4.4E-7,
+    "symbol": "AKRO/BTC"
+  },
+  {
+    "price": 0.02172000,
+    "symbol": "AKRO/USDT"
+  },
+  {
+    "price": 1.55810000,
+    "symbol": "KP3R/BNB"
+  },
+  {
+    "price": 818.99000000,
+    "symbol": "KP3R/BUSD"
+  },
+  {
+    "price": 0.18310000,
+    "symbol": "AXS/BNB"
+  },
+  {
+    "price": 0.00197900,
+    "symbol": "AXS/BTC"
+  },
+  {
+    "price": 96.50000000,
+    "symbol": "AXS/BUSD"
+  },
+  {
+    "price": 96.51000000,
+    "symbol": "AXS/USDT"
+  },
+  {
+    "price": 0.00132800,
+    "symbol": "HARD/BNB"
+  },
+  {
+    "price": 0.00001437,
+    "symbol": "HARD/BTC"
+  },
+  {
+    "price": 0.69950000,
+    "symbol": "HARD/BUSD"
+  },
+  {
+    "price": 0.70010000,
+    "symbol": "HARD/USDT"
+  },
+  {
+    "price": 3021.00000000,
+    "symbol": "BNB/BRL"
+  },
+  {
+    "price": 136.60000000,
+    "symbol": "LTC/EUR"
+  },
+  {
+    "price": 1.00040000,
+    "symbol": "RENBTC/BTC"
+  },
+  {
+    "price": 16.29900000,
+    "symbol": "RENBTC/ETH"
+  },
+  {
+    "price": 0.13220000,
+    "symbol": "DNT/BUSD"
+  },
+  {
+    "price": 0.13210000,
+    "symbol": "DNT/USDT"
+  },
+  {
+    "price": 0.00000752,
+    "symbol": "SLP/ETH"
+  },
+  {
+    "price": 1.12800000,
+    "symbol": "ADA/EUR"
+  },
+  {
+    "price": 78132.00000000,
+    "symbol": "LTC/NGN"
+  },
+  {
+    "price": 0.00038420,
+    "symbol": "CVP/ETH"
+  },
+  {
+    "price": 1.53900000,
+    "symbol": "CVP/BUSD"
+  },
+  {
+    "price": 0.00002973,
+    "symbol": "STRAX/BTC"
+  },
+  {
+    "price": 0.00036150,
+    "symbol": "STRAX/ETH"
+  },
+  {
+    "price": 1.44800000,
+    "symbol": "STRAX/BUSD"
+  },
+  {
+    "price": 1.44900000,
+    "symbol": "STRAX/USDT"
+  },
+  {
+    "price": 0.00000123,
+    "symbol": "FOR/BTC"
+  },
+  {
+    "price": 0.05976000,
+    "symbol": "FOR/BUSD"
+  },
+  {
+    "price": 0.02654000,
+    "symbol": "UNFI/BNB"
+  },
+  {
+    "price": 0.00018670,
+    "symbol": "UNFI/BTC"
+  },
+  {
+    "price": 9.10100000,
+    "symbol": "UNFI/BUSD"
+  },
+  {
+    "price": 9.09700000,
+    "symbol": "UNFI/USDT"
+  },
+  {
+    "price": 0.00033040,
+    "symbol": "FRONT/ETH"
+  },
+  {
+    "price": 0.69580000,
+    "symbol": "FRONT/BUSD"
+  },
+  {
+    "price": 43.64100000,
+    "symbol": "BCHA/BUSD"
+  },
+  {
+    "price": 0.00000532,
+    "symbol": "ROSE/BTC"
+  },
+  {
+    "price": 0.25883000,
+    "symbol": "ROSE/BUSD"
+  },
+  {
+    "price": 0.25885000,
+    "symbol": "ROSE/USDT"
+  },
+  {
+    "price": 1631.10000000,
+    "symbol": "AVAX/TRY"
+  },
+  {
+    "price": 5.73300000,
+    "symbol": "BUSD/BRL"
+  },
+  {
+    "price": 1.73700000,
+    "symbol": "AVA/USDT"
+  },
+  {
+    "price": 0.71740000,
+    "symbol": "SYS/BUSD"
+  },
+  {
+    "price": 0.12730000,
+    "symbol": "XEM/USDT"
+  },
+  {
+    "price": 0.00001779,
+    "symbol": "HEGIC/ETH"
+  },
+  {
+    "price": 0.07100000,
+    "symbol": "HEGIC/BUSD"
+  },
+  {
+    "price": 0.60080000,
+    "symbol": "AAVE/UPUSDT"
+  },
+  {
+    "price": 0.00467300,
+    "symbol": "AAVE/DOWNUSDT"
+  },
+  {
+    "price": 0.02481000,
+    "symbol": "PROM/BNB"
+  },
+  {
+    "price": 13.04000000,
+    "symbol": "PROM/BUSD"
+  },
+  {
+    "price": 5.11300000,
+    "symbol": "XRP/BRL"
+  },
+  {
+    "price": 214.17000000,
+    "symbol": "XRP/NGN"
+  },
+  {
+    "price": 0.00000421,
+    "symbol": "SKL/BTC"
+  },
+  {
+    "price": 0.20530000,
+    "symbol": "SKL/BUSD"
+  },
+  {
+    "price": 0.20520000,
+    "symbol": "SKL/USDT"
+  },
+  {
+    "price": 387.00000000,
+    "symbol": "BCH/EUR"
+  },
+  {
+    "price": 31668.22000000,
+    "symbol": "YFI/EUR"
+  },
+  {
+    "price": 872.00,
+    "symbol": "ZIL/BIDR"
+  },
+  {
+    "price": 0.00002065,
+    "symbol": "SUSD/BTC"
+  },
+  {
+    "price": 0.00052700,
+    "symbol": "SUSD/ETH"
+  },
+  {
+    "price": 0.99300000,
+    "symbol": "SUSD/USDT"
+  },
+  {
+    "price": 0.06373000,
+    "symbol": "COVER/ETH"
+  },
+  {
+    "price": 193.60000000,
+    "symbol": "COVER/BUSD"
+  },
+  {
+    "price": 0.00000889,
+    "symbol": "GLM/BTC"
+  },
+  {
+    "price": 0.00010860,
+    "symbol": "GLM/ETH"
+  },
+  {
+    "price": 0.00059550,
+    "symbol": "GHST/ETH"
+  },
+  {
+    "price": 2.38600000,
+    "symbol": "GHST/BUSD"
+  },
+  {
+    "price": 0.00471400,
+    "symbol": "SUSHI/UPUSDT"
+  },
+  {
+    "price": 37.37000000,
+    "symbol": "SUSHI/DOWNUSDT"
+  },
+  {
+    "price": 0.02430000,
+    "symbol": "XLM/UPUSDT"
+  },
+  {
+    "price": 4.30400000,
+    "symbol": "XLM/DOWNUSDT"
+  },
+  {
+    "price": 109.60000000,
+    "symbol": "LINK/BRL"
+  },
+  {
+    "price": 11772.00000000,
+    "symbol": "LINK/NGN"
+  },
+  {
+    "price": 11396.30000000,
+    "symbol": "LTC/RUB"
+  },
+  {
+    "price": 1.08080000,
+    "symbol": "TRX/TRY"
+  },
+  {
+    "price": 0.23410000,
+    "symbol": "XLM/EUR"
+  },
+  {
+    "price": 0.00007020,
+    "symbol": "DF/ETH"
+  },
+  {
+    "price": 0.11700000,
+    "symbol": "DFB/USD"
+  },
+  {
+    "price": 0.00001409,
+    "symbol": "GRT/BTC"
+  },
+  {
+    "price": 0.00017200,
+    "symbol": "GRT/ETH"
+  },
+  {
+    "price": 0.68620000,
+    "symbol": "GRT/USDT"
+  },
+  {
+    "price": 0.00018040,
+    "symbol": "JUV/BTC"
+  },
+  {
+    "price": 8.77000000,
+    "symbol": "JUV/BUSD"
+  },
+  {
+    "price": 8.78000000,
+    "symbol": "JUV/USDT"
+  },
+  {
+    "price": 0.00031650,
+    "symbol": "PSG/BTC"
+  },
+  {
+    "price": 15.42000000,
+    "symbol": "PSG/BUSD"
+  },
+  {
+    "price": 15.36000000,
+    "symbol": "PSG/USDT"
+  },
+  {
+    "price": 23720.00,
+    "symbol": "BUSD/BVND"
+  },
+  {
+    "price": 23710.00,
+    "symbol": "USDT/BVND"
+  },
+  {
+    "price": 0.00004991,
+    "symbol": "1INCH/BTC"
+  },
+  {
+    "price": 2.43200000,
+    "symbol": "1INCH/USDT"
+  },
+  {
+    "price": 3.9E-7,
+    "symbol": "REEF/BTC"
+  },
+  {
+    "price": 0.01915000,
+    "symbol": "REEF/USDT"
+  },
+  {
+    "price": 0.00008180,
+    "symbol": "OG/BTC"
+  },
+  {
+    "price": 3.99400000,
+    "symbol": "OGU/SDT"
+  },
+  {
+    "price": 0.00016020,
+    "symbol": "ATM/BTC"
+  },
+  {
+    "price": 7.83000000,
+    "symbol": "ATM/USDT"
+  },
+  {
+    "price": 0.00007900,
+    "symbol": "ASR/BTC"
+  },
+  {
+    "price": 3.85300000,
+    "symbol": "ASR/USDT"
+  },
+  {
+    "price": 0.00008639,
+    "symbol": "CELO/BTC"
+  },
+  {
+    "price": 4.20500000,
+    "symbol": "CELO/USDT"
+  },
+  {
+    "price": 0.00000428,
+    "symbol": "RIF/BTC"
+  },
+  {
+    "price": 0.20850000,
+    "symbol": "RIF/USDT"
+  },
+  {
+    "price": 3.78100000,
+    "symbol": "CHZ/TRY"
+  },
+  {
+    "price": 3.63300000,
+    "symbol": "XLM/TRY"
+  },
+  {
+    "price": 14.39000000,
+    "symbol": "LINK/GBP"
+  },
+  {
+    "price": 0.60760000,
+    "symbol": "GRT/EUR"
+  },
+  {
+    "price": 0.00047910,
+    "symbol": "BTCST/BTC"
+  },
+  {
+    "price": 23.33000000,
+    "symbol": "BTCST/BUSD"
+  },
+  {
+    "price": 23.36000000,
+    "symbol": "BTCST/USDT"
+  },
+  {
+    "price": 0.00000684,
+    "symbol": "TRU/BTC"
+  },
+  {
+    "price": 0.53570000,
+    "symbol": "TRU/BUSD"
+  },
+  {
+    "price": 0.33300000,
+    "symbol": "TRU/USDT"
+  },
+  {
+    "price": 0.00306000,
+    "symbol": "DEXE/ETH"
+  },
+  {
+    "price": 12.22000000,
+    "symbol": "DEXE/BUSD"
+  },
+  {
+    "price": 2.91100000,
+    "symbol": "EOS/EUR"
+  },
+  {
+    "price": 883.10000000,
+    "symbol": "LTC/BRL"
+  },
+  {
+    "price": 1.00000000,
+    "symbol": "USDC/BUSD"
+  },
+  {
+    "price": 1.00000000,
+    "symbol": "TUSD/BUSD"
+  },
+  {
+    "price": 1.00000000,
+    "symbol": "PAX/BUSD"
+  },
+  {
+    "price": 4.1E-7,
+    "symbol": "CKB/BTC"
+  },
+  {
+    "price": 0.01967000,
+    "symbol": "CKB/BUSD"
+  },
+  {
+    "price": 0.01965000,
+    "symbol": "CKB/USDT"
+  },
+  {
+    "price": 0.00001419,
+    "symbol": "TWT/BTC"
+  },
+  {
+    "price": 0.69240000,
+    "symbol": "TWT/BUSD"
+  },
+  {
+    "price": 0.69210000,
+    "symbol": "TWT/USDT"
+  },
+  {
+    "price": 0.00010850,
+    "symbol": "FIRO/BTC"
+  },
+  {
+    "price": 0.00132100,
+    "symbol": "FIRO/ETH"
+  },
+  {
+    "price": 5.28800000,
+    "symbol": "FIRO/USDT"
+  },
+  {
+    "price": 0.92220000,
+    "symbol": "BETH/ETH"
+  },
+  {
+    "price": 0.15030000,
+    "symbol": "DOGE/EUR"
+  },
+  {
+    "price": 2.33700000,
+    "symbol": "DOGE/TRY"
+  },
+  {
+    "price": 0.23800000,
+    "symbol": "DOGE/AUD"
+  },
+  {
+    "price": 0.97200000,
+    "symbol": "DOGE/BRL"
+  },
+  {
+    "price": 10716.00000000,
+    "symbol": "DOT/NGN"
+  },
+  {
+    "price": 0.00030460,
+    "symbol": "PROS/ETH"
+  },
+  {
+    "price": 0.00005912,
+    "symbol": "LIT/BTC"
+  },
+  {
+    "price": 2.87700000,
+    "symbol": "LIT/BUSD"
+  },
+  {
+    "price": 2.87300000,
+    "symbol": "LIT/USDT"
+  },
+  {
+    "price": 56876.40000000,
+    "symbol": "BTC/VAI"
+  },
+  {
+    "price": 1.08800000,
+    "symbol": "BUSD/VAI"
+  },
+  {
+    "price": 0.00003053,
+    "symbol": "SFP/BTC"
+  },
+  {
+    "price": 1.49080000,
+    "symbol": "SFP/BUSD"
+  },
+  {
+    "price": 1.48800000,
+    "symbol": "SFP/USDT"
+  },
+  {
+    "price": 0.12790000,
+    "symbol": "DOGE/GBP"
+  },
+  {
+    "price": 344.10000000,
+    "symbol": "DOT/TRY"
+  },
+  {
+    "price": 0.00028328,
+    "symbol": "FXS/BTC"
+  },
+  {
+    "price": 13.85100000,
+    "symbol": "FXS/BUSD"
+  },
+  {
+    "price": 0.00001717,
+    "symbol": "DODO/BTC"
+  },
+  {
+    "price": 0.83700000,
+    "symbol": "DODO/BUSD"
+  },
+  {
+    "price": 0.83600000,
+    "symbol": "DODO/USDT"
+  },
+  {
+    "price": 0.00001428,
+    "symbol": "FRONT/BTC"
+  },
+  {
+    "price": 0.00029250,
+    "symbol": "EASY/BTC"
+  },
+  {
+    "price": 0.00024390,
+    "symbol": "CAKE/BTC"
+  },
+  {
+    "price": 11.89000000,
+    "symbol": "CAKE/USDT"
+  },
+  {
+    "price": 1.06100000,
+    "symbol": "BAKE/BUSD"
+  },
+  {
+    "price": 0.00016160,
+    "symbol": "UFT/ETH"
+  },
+  {
+    "price": 0.64520000,
+    "symbol": "UFT/BUSD"
+  },
+  {
+    "price": 2.43200000,
+    "symbol": "1INCH/BUSD"
+  },
+  {
+    "price": 5.29200000,
+    "symbol": "BAND/BUSD"
+  },
+  {
+    "price": 0.68510000,
+    "symbol": "GRT/BUSD"
+  },
+  {
+    "price": 0.03033000,
+    "symbol": "IOST/BUSD"
+  },
+  {
+    "price": 6.06500000,
+    "symbol": "OMG/BUSD"
+  },
+  {
+    "price": 0.01918000,
+    "symbol": "REEF/BUSD"
+  },
+  {
+    "price": 0.00010330,
+    "symbol": "ACM/BTC"
+  },
+  {
+    "price": 5.04800000,
+    "symbol": "ACM/BUSD"
+  },
+  {
+    "price": 5.05400000,
+    "symbol": "ACM/USDT"
+  },
+  {
+    "price": 0.00050920,
+    "symbol": "AUCTION/BTC"
+  },
+  {
+    "price": 24.75000000,
+    "symbol": "AUCTION/BUSD"
+  },
+  {
+    "price": 0.00000716,
+    "symbol": "PHA/BTC"
+  },
+  {
+    "price": 0.34840000,
+    "symbol": "PHA/BUSD"
+  },
+  {
+    "price": 18.83000000,
+    "symbol": "DOT/GBP"
+  },
+  {
+    "price": 17.55000000,
+    "symbol": "ADA/TRY"
+  },
+  {
+    "price": 7.29800000,
+    "symbol": "ADA/BRL"
+  },
+  {
+    "price": 0.95990000,
+    "symbol": "ADA/GBP"
+  },
+  {
+    "price": 0.00000432,
+    "symbol": "TVK/BTC"
+  },
+  {
+    "price": 0.21010000,
+    "symbol": "TVK/BUSD"
+  },
+  {
+    "price": 0.00031400,
+    "symbol": "BADGER/BTC"
+  },
+  {
+    "price": 15.18000000,
+    "symbol": "BADGER/BUSD"
+  },
+  {
+    "price": 15.21000000,
+    "symbol": "BADGER/USDT"
+  },
+  {
+    "price": 0.00002387,
+    "symbol": "FIS/BTC"
+  },
+  {
+    "price": 1.16560000,
+    "symbol": "FIS/BUSD"
+  },
+  {
+    "price": 1.16540000,
+    "symbol": "FIS/USDT"
+  },
+  {
+    "price": 143.56000000,
+    "symbol": "DOT/BRL"
+  },
+  {
+    "price": 1.79200000,
+    "symbol": "ADA/AUD"
+  },
+  {
+    "price": 0.11009000,
+    "symbol": "HOT/TRY"
+  },
+  {
+    "price": 215.83000000,
+    "symbol": "EGLD/EUR"
+  },
+  {
+    "price": 0.00000308,
+    "symbol": "OM/BTC"
+  },
+  {
+    "price": 0.15070000,
+    "symbol": "OMB/USD"
+  },
+  {
+    "price": 0.15060000,
+    "symbol": "OMU/SDT"
+  },
+  {
+    "price": 0.00000129,
+    "symbol": "POND/BTC"
+  },
+  {
+    "price": 0.06314000,
+    "symbol": "POND/BUSD"
+  },
+  {
+    "price": 0.06308000,
+    "symbol": "POND/USDT"
+  },
+  {
+    "price": 0.00012560,
+    "symbol": "DEGO/BTC"
+  },
+  {
+    "price": 6.13000000,
+    "symbol": "DEGO/BUSD"
+  },
+  {
+    "price": 6.12000000,
+    "symbol": "DEGO/USDT"
+  },
+  {
+    "price": 105.00000000,
+    "symbol": "AVAX/EUR"
+  },
+  {
+    "price": 0.03682000,
+    "symbol": "BTT/TRY"
+  },
+  {
+    "price": 1.57600000,
+    "symbol": "CHZ/BRL"
+  },
+  {
+    "price": 13.10000000,
+    "symbol": "UNI/EUR"
+  },
+  {
+    "price": 0.00025810,
+    "symbol": "ALICE/BTC"
+  },
+  {
+    "price": 12.57000000,
+    "symbol": "ALICE/BUSD"
+  },
+  {
+    "price": 12.57000000,
+    "symbol": "ALICE/USDT"
+  },
+  {
+    "price": 0.27490000,
+    "symbol": "CHZ/BUSD"
+  },
+  {
+    "price": 0.24340000,
+    "symbol": "CHZ/EUR"
+  },
+  {
+    "price": 0.20710000,
+    "symbol": "CHZ/GBP"
+  },
+  {
+    "price": 2.77700000,
+    "symbol": "BIFI/BNB"
+  },
+  {
+    "price": 1306.80000000,
+    "symbol": "BIFI/BUSD"
+  },
+  {
+    "price": 7.5E-7,
+    "symbol": "LINA/BTC"
+  },
+  {
+    "price": 0.03665000,
+    "symbol": "LINA/BUSD"
+  },
+  {
+    "price": 0.03667000,
+    "symbol": "LINA/USDT"
+  },
+  {
+    "price": 94.25000000,
+    "symbol": "ADA/RUB"
+  },
+  {
+    "price": 13.78000000,
+    "symbol": "ENJ/BRL"
+  },
+  {
+    "price": 2.12900000,
+    "symbol": "ENJ/EUR"
+  },
+  {
+    "price": 2.08560000,
+    "symbol": "MATIC/EUR"
+  },
+  {
+    "price": 362.50000000,
+    "symbol": "NEO/TRY"
+  },
+  {
+    "price": 0.00020120,
+    "symbol": "PERP/BTC"
+  },
+  {
+    "price": 9.82000000,
+    "symbol": "PERP/BUSD"
+  },
+  {
+    "price": 9.79000000,
+    "symbol": "PERP/USDT"
+  },
+  {
+    "price": 0.00000398,
+    "symbol": "RAMP/BTC"
+  },
+  {
+    "price": 0.19400000,
+    "symbol": "RAMP/BUSD"
+  },
+  {
+    "price": 0.19400000,
+    "symbol": "RAMP/USDT"
+  },
+  {
+    "price": 0.00002539,
+    "symbol": "SUPER/BTC"
+  },
+  {
+    "price": 1.23990000,
+    "symbol": "SUPER/BUSD"
+  },
+  {
+    "price": 1.23630000,
+    "symbol": "SUPER/USDT"
+  },
+  {
+    "price": 0.00000456,
+    "symbol": "CFX/BTC"
+  },
+  {
+    "price": 0.22200000,
+    "symbol": "CFX/BUSD"
+  },
+  {
+    "price": 0.22200000,
+    "symbol": "CFX/USDT"
+  },
+  {
+    "price": 1.81060000,
+    "symbol": "ENJ/GBP"
+  },
+  {
+    "price": 45.19000000,
+    "symbol": "EOS/TRY"
+  },
+  {
+    "price": 116.12000000,
+    "symbol": "LTC/GBP"
+  },
+  {
+    "price": 74.93000000,
+    "symbol": "LUNA/EUR"
+  },
+  {
+    "price": 1.15660000,
+    "symbol": "RVN/TRY"
+  },
+  {
+    "price": 3.63900000,
+    "symbol": "THETA/EUR"
+  },
+  {
+    "price": 0.01708000,
+    "symbol": "XVG/BUSD"
+  },
+  {
+    "price": 0.00000530,
+    "symbol": "EPS/BTC"
+  },
+  {
+    "price": 0.25780000,
+    "symbol": "EPS/BUSD"
+  },
+  {
+    "price": 0.25720000,
+    "symbol": "EPS/USDT"
+  },
+  {
+    "price": 0.01223000,
+    "symbol": "AUTO/BTC"
+  },
+  {
+    "price": 593.60000000,
+    "symbol": "AUTO/BUSD"
+  },
+  {
+    "price": 596.00000000,
+    "symbol": "AUTO/USDT"
+  },
+  {
+    "price": 0.00002474,
+    "symbol": "TKO/BTC"
+  },
+  {
+    "price": 17318.78,
+    "symbol": "TKO/BIDR"
+  },
+  {
+    "price": 1.20600000,
+    "symbol": "TKO/BUSD"
+  },
+  {
+    "price": 1.20500000,
+    "symbol": "TKO/USDT"
+  },
+  {
+    "price": 0.00027320,
+    "symbol": "PUNDIX/ETH"
+  },
+  {
+    "price": 1.09500000,
+    "symbol": "PUNDIX/USDT"
+  },
+  {
+    "price": 0.01531000,
+    "symbol": "BTT/BRL"
+  },
+  {
+    "price": 0.00236800,
+    "symbol": "BTT/EUR"
+  },
+  {
+    "price": 0.00708600,
+    "symbol": "HOT/EUR"
+  },
+  {
+    "price": 0.00040470,
+    "symbol": "WIN/EUR"
+  },
+  {
+    "price": 0.00000428,
+    "symbol": "TLM/BTC"
+  },
+  {
+    "price": 0.20860000,
+    "symbol": "TLM/BUSD"
+  },
+  {
+    "price": 0.20860000,
+    "symbol": "TLM/USDT"
+  },
+  {
+    "price": 0.06570300,
+    "symbol": "1INCH/UPUSDT"
+  },
+  {
+    "price": 0.00614800,
+    "symbol": "1INCH/DOWNUSDT"
+  },
+  {
+    "price": 42.51000000,
+    "symbol": "BTG/BUSD"
+  },
+  {
+    "price": 42.57000000,
+    "symbol": "BTG/USDT"
+  },
+  {
+    "price": 0.00799900,
+    "symbol": "HOT/BUSD"
+  },
+  {
+    "price": 14344.00000000,
+    "symbol": "BNB/UAH"
+  },
+  {
+    "price": 9.53400000,
+    "symbol": "ONT/TRY"
+  },
+  {
+    "price": 0.07256000,
+    "symbol": "VET/EUR"
+  },
+  {
+    "price": 0.06163000,
+    "symbol": "VET/GBP"
+  },
+  {
+    "price": 0.00262000,
+    "symbol": "WIN/BRL"
+  },
+  {
+    "price": 0.00005144,
+    "symbol": "MIR/BTC"
+  },
+  {
+    "price": 2.50400000,
+    "symbol": "MIR/BUSD"
+  },
+  {
+    "price": 2.50600000,
+    "symbol": "MIR/USDT"
+  },
+  {
+    "price": 0.00017420,
+    "symbol": "BAR/BTC"
+  },
+  {
+    "price": 8.47000000,
+    "symbol": "BAR/BUSD"
+  },
+  {
+    "price": 8.49000000,
+    "symbol": "BAR/USDT"
+  },
+  {
+    "price": 0.00019040,
+    "symbol": "FORTH/BTC"
+  },
+  {
+    "price": 9.28000000,
+    "symbol": "FORTH/BUSD"
+  },
+  {
+    "price": 9.29000000,
+    "symbol": "FORTH/USDT"
+  },
+  {
+    "price": 8.98000000,
+    "symbol": "CAKE/GBP"
+  },
+  {
+    "price": 12.53000000,
+    "symbol": "DOGE/RUB"
+  },
+  {
+    "price": 0.03750000,
+    "symbol": "HOT/BRL"
+  },
+  {
+    "price": 0.95950000,
+    "symbol": "WRX/EUR"
+  },
+  {
+    "price": 0.00006772,
+    "symbol": "EZ/BTC"
+  },
+  {
+    "price": 0.00082200,
+    "symbol": "EZ/ETH"
+  },
+  {
+    "price": 1.06100000,
+    "symbol": "BAKE/USDT"
+  },
+  {
+    "price": 3.11800000,
+    "symbol": "BURGER/BUSD"
+  },
+  {
+    "price": 3.12400000,
+    "symbol": "BURGER/USDT"
+  },
+  {
+    "price": 0.03020000,
+    "symbol": "SLP/BUSD"
+  },
+  {
+    "price": 0.03010000,
+    "symbol": "SLP/USDT"
+  },
+  {
+    "price": 0.09810000,
+    "symbol": "TRX/AUD"
+  },
+  {
+    "price": 0.06960000,
+    "symbol": "TRX/EUR"
+  },
+  {
+    "price": 1.12840000,
+    "symbol": "VET/TRY"
+  },
+  {
+    "price": 0.00003201,
+    "symbol": "SHIB/USDT"
+  },
+  {
+    "price": 0.00003203,
+    "symbol": "SHIB/BUSD"
+  },
+  {
+    "price": 0.00047500,
+    "symbol": "ICP/BTC"
+  },
+  {
+    "price": 0.04390000,
+    "symbol": "ICP/BNB"
+  },
+  {
+    "price": 23.15000000,
+    "symbol": "ICP/BUSD"
+  },
+  {
+    "price": 23.15000000,
+    "symbol": "ICP/USDT"
+  },
+  {
+    "price": 4300000.00000000,
+    "symbol": "BTC/GYEN"
+  },
+  {
+    "price": 85.00000000,
+    "symbol": "USDT/GYEN"
+  },
+  {
+    "price": 0.00002839,
+    "symbol": "SHIB/EUR"
+  },
+  {
+    "price": 0.00057730,
+    "symbol": "SHIB/RUB"
+  },
+  {
+    "price": 31.14000000,
+    "symbol": "ETC/EUR"
+  },
+  {
+    "price": 202.40000000,
+    "symbol": "ETC/BRL"
+  },
+  {
+    "price": 2434.00,
+    "symbol": "DOGE/BIDR"
+  },
+  {
+    "price": 0.00111390,
+    "symbol": "AR/BTC"
+  },
+  {
+    "price": 0.10293000,
+    "symbol": "AR/BNB"
+  },
+  {
+    "price": 54.24000000,
+    "symbol": "ARB/USD"
+  },
+  {
+    "price": 54.24000000,
+    "symbol": "ARU/SDT"
+  },
+  {
+    "price": 0.00005461,
+    "symbol": "POLS/BTC"
+  },
+  {
+    "price": 0.00504000,
+    "symbol": "POLS/BNB"
+  },
+  {
+    "price": 2.66400000,
+    "symbol": "POLS/BUSD"
+  },
+  {
+    "price": 2.66200000,
+    "symbol": "POLS/USDT"
+  },
+  {
+    "price": 0.00000749,
+    "symbol": "MDX/BTC"
+  },
+  {
+    "price": 0.00069500,
+    "symbol": "MDX/BNB"
+  },
+  {
+    "price": 0.36600000,
+    "symbol": "MDX/BUSD"
+  },
+  {
+    "price": 0.36600000,
+    "symbol": "MDX/USDT"
+  },
+  {
+    "price": 0.02011000,
+    "symbol": "MASK/BNB"
+  },
+  {
+    "price": 10.66300000,
+    "symbol": "MASK/BUSD"
+  },
+  {
+    "price": 10.63000000,
+    "symbol": "MASK/USDT"
+  },
+  {
+    "price": 0.00071370,
+    "symbol": "LPT/BTC"
+  },
+  {
+    "price": 0.06566000,
+    "symbol": "LPT/BNB"
+  },
+  {
+    "price": 34.78000000,
+    "symbol": "LPT/BUSD"
+  },
+  {
+    "price": 34.80000000,
+    "symbol": "LPT/USDT"
+  },
+  {
+    "price": 108901.00000000,
+    "symbol": "ETH/UAH"
+  },
+  {
+    "price": 13.47500000,
+    "symbol": "MATIC/BRL"
+  },
+  {
+    "price": 158.63000000,
+    "symbol": "SOL/EUR"
+  },
+  {
+    "price": 0.00018354,
+    "symbol": "SHIB/BRL"
+  },
+  {
+    "price": 0.00000388,
+    "symbol": "AGIX/BTC"
+  },
+  {
+    "price": 20.56000000,
+    "symbol": "ICP/EUR"
+  },
+  {
+    "price": 1.76350000,
+    "symbol": "MATIC/GBP"
+  },
+  {
+    "price": 0.00044104,
+    "symbol": "SHIB/TRY"
+  },
+  {
+    "price": 33757.00,
+    "symbol": "MATIC/BIDR"
+  },
+  {
+    "price": 173.75000000,
+    "symbol": "MATIC/RUB"
+  },
+  {
+    "price": 0.00001504,
+    "symbol": "NU/BTC"
+  },
+  {
+    "price": 0.00138980,
+    "symbol": "NU/BNB"
+  },
+  {
+    "price": 0.73170000,
+    "symbol": "NUB/USD"
+  },
+  {
+    "price": 0.73170000,
+    "symbol": "NUU/SDT"
+  },
+  {
+    "price": 0.01710000,
+    "symbol": "XVG/USDT"
+  },
+  {
+    "price": 2.91800000,
+    "symbol": "RLC/BUSD"
+  },
+  {
+    "price": 0.07320000,
+    "symbol": "CELR/BUSD"
+  },
+  {
+    "price": 7.84000000,
+    "symbol": "ATM/BUSD"
+  },
+  {
+    "price": 63.01000000,
+    "symbol": "ZEN/BUSD"
+  },
+  {
+    "price": 1.42920000,
+    "symbol": "FTM/BUSD"
+  },
+  {
+    "price": 4.10600000,
+    "symbol": "THETA/BUSD"
+  },
+  {
+    "price": 0.00045710,
+    "symbol": "WIN/BUSD"
+  },
+  {
+    "price": 3.54300000,
+    "symbol": "KAVA/BUSD"
+  },
+  {
+    "price": 0.12740000,
+    "symbol": "XEM/BUSD"
+  },
+  {
+    "price": 0.00001266,
+    "symbol": "ATA/BTC"
+  },
+  {
+    "price": 0.00116700,
+    "symbol": "ATA/BNB"
+  },
+  {
+    "price": 0.61550000,
+    "symbol": "ATA/BUSD"
+  },
+  {
+    "price": 0.61540000,
+    "symbol": "ATA/USDT"
+  },
+  {
+    "price": 0.00018950,
+    "symbol": "GTC/BTC"
+  },
+  {
+    "price": 0.01860000,
+    "symbol": "GTC/BNB"
+  },
+  {
+    "price": 9.24400000,
+    "symbol": "GTC/BUSD"
+  },
+  {
+    "price": 9.23300000,
+    "symbol": "GTC/USDT"
+  },
+  {
+    "price": 0.00080570,
+    "symbol": "TORN/BTC"
+  },
+  {
+    "price": 0.07401000,
+    "symbol": "TORN/BNB"
+  },
+  {
+    "price": 39.09000000,
+    "symbol": "TORN/BUSD"
+  },
+  {
+    "price": 39.08000000,
+    "symbol": "TORN/USDT"
+  },
+  {
+    "price": 32.44300000,
+    "symbol": "MATIC/TRY"
+  },
+  {
+    "price": 26.54000000,
+    "symbol": "ETC/GBP"
+  },
+  {
+    "price": 134.74000000,
+    "symbol": "SOL/GBP"
+  },
+  {
+    "price": 0.00002178,
+    "symbol": "BAKE/BTC"
+  },
+  {
+    "price": 0.31480000,
+    "symbol": "COTI/BUSD"
+  },
+  {
+    "price": 0.00001252,
+    "symbol": "KEEP/BTC"
+  },
+  {
+    "price": 0.00115820,
+    "symbol": "KEEP/BNB"
+  },
+  {
+    "price": 0.61150000,
+    "symbol": "KEEP/BUSD"
+  },
+  {
+    "price": 0.60900000,
+    "symbol": "KEEP/USDT"
+  },
+  {
+    "price": 2465.20000000,
+    "symbol": "SOL/TRY"
+  },
+  {
+    "price": 5.12800000,
+    "symbol": "RUNE/GBP"
+  },
+  {
+    "price": 1025.90000000,
+    "symbol": "SOL/BRL"
+  },
+  {
+    "price": 0.01550000,
+    "symbol": "SCB/USD"
+  },
+  {
+    "price": 0.63260000,
+    "symbol": "CHR/BUSD"
+  },
+  {
+    "price": 0.02185000,
+    "symbol": "STMX/BUSD"
+  },
+  {
+    "price": 36.67000000,
+    "symbol": "HNT/BUSD"
+  },
+  {
+    "price": 42.02000000,
+    "symbol": "FTT/BUSD"
+  },
+  {
+    "price": 0.06751000,
+    "symbol": "DOCK/BUSD"
+  },
+  {
+    "price": 18289.00,
+    "symbol": "ADA/BIDR"
+  },
+  {
+    "price": 0.01825000,
+    "symbol": "ERN/BNB"
+  },
+  {
+    "price": 9.65000000,
+    "symbol": "ERN/BUSD"
+  },
+  {
+    "price": 9.62700000,
+    "symbol": "ERN/USDT"
+  },
+  {
+    "price": 0.00002619,
+    "symbol": "KLAY/BTC"
+  },
+  {
+    "price": 0.00242800,
+    "symbol": "KLAY/BNB"
+  },
+  {
+    "price": 1.27900000,
+    "symbol": "KLAY/BUSD"
+  },
+  {
+    "price": 1.27900000,
+    "symbol": "KLAY/USDT"
+  },
+  {
+    "price": 6.03700000,
+    "symbol": "RUNE/EUR"
+  },
+  {
+    "price": 3.30200000,
+    "symbol": "MATIC/AUD"
+  },
+  {
+    "price": 1840.00000000,
+    "symbol": "DOT/RUB"
+  },
+  {
+    "price": 0.31460000,
+    "symbol": "UTK/BUSD"
+  },
+  {
+    "price": 0.12442000,
+    "symbol": "IOTX/BUSD"
+  },
+  {
+    "price": 0.34930000,
+    "symbol": "PHA/USDT"
+  },
+  {
+    "price": 13247.00000000,
+    "symbol": "SOL/RUB"
+  },
+  {
+    "price": 17.40400000,
+    "symbol": "RUNE/AUD"
+  },
+  {
+    "price": 27.24000000,
+    "symbol": "BUSD/UAH"
+  },
+  {
+    "price": 0.00031500,
+    "symbol": "BOND/BTC"
+  },
+  {
+    "price": 0.02969000,
+    "symbol": "BOND/BNB"
+  },
+  {
+    "price": 15.35000000,
+    "symbol": "BOND/BUSD"
+  },
+  {
+    "price": 15.35000000,
+    "symbol": "BOND/USDT"
+  },
+  {
+    "price": 0.00168900,
+    "symbol": "MLN/BTC"
+  },
+  {
+    "price": 0.15580000,
+    "symbol": "MLN/BNB"
+  },
+  {
+    "price": 82.30000000,
+    "symbol": "MLN/BUSD"
+  },
+  {
+    "price": 82.30000000,
+    "symbol": "MLN/USDT"
+  },
+  {
+    "price": 9.45000000,
+    "symbol": "GRT/TRY"
+  },
+  {
+    "price": 68.07000000,
+    "symbol": "CAKE/BRL"
+  },
+  {
+    "price": 4589.00000000,
+    "symbol": "ICP/RUB"
+  },
+  {
+    "price": 35.01000000,
+    "symbol": "DOT/AUD"
+  },
+  {
+    "price": 1792.00000000,
+    "symbol": "AAVE/BRL"
+  },
+  {
+    "price": 6.55500000,
+    "symbol": "EOS/AUD"
+  },
+  {
+    "price": 12.25000000,
+    "symbol": "DEXE/USDT"
+  },
+  {
+    "price": 0.35130000,
+    "symbol": "LTO/BUSD"
+  },
+  {
+    "price": 0.56260000,
+    "symbol": "ADX/BUSD"
+  },
+  {
+    "price": 0.00490400,
+    "symbol": "QUICK/BTC"
+  },
+  {
+    "price": 0.45400000,
+    "symbol": "QUICK/BNB"
+  },
+  {
+    "price": 239.00000000,
+    "symbol": "QUICK/BUSD"
+  },
+  {
+    "price": 1.99900000,
+    "symbol": "C98/USDT"
+  },
+  {
+    "price": 1.99900000,
+    "symbol": "C98/BUSD"
+  },
+  {
+    "price": 0.00378900,
+    "symbol": "C98/BNB"
+  },
+  {
+    "price": 0.00004100,
+    "symbol": "C98/BTC"
+  },
+  {
+    "price": 0.00001583,
+    "symbol": "CLV/BTC"
+  },
+  {
+    "price": 0.00147100,
+    "symbol": "CLV/BNB"
+  },
+  {
+    "price": 0.77200000,
+    "symbol": "CLV/BUSD"
+  },
+  {
+    "price": 0.77200000,
+    "symbol": "CLV/USDT"
+  },
+  {
+    "price": 0.00362800,
+    "symbol": "QNT/BTC"
+  },
+  {
+    "price": 0.33590000,
+    "symbol": "QNT/BNB"
+  },
+  {
+    "price": 176.60000000,
+    "symbol": "QNT/BUSD"
+  },
+  {
+    "price": 176.60000000,
+    "symbol": "QNT/USDT"
+  },
+  {
+    "price": 0.00017060,
+    "symbol": "FLOW/BTC"
+  },
+  {
+    "price": 0.01579000,
+    "symbol": "FLOW/BNB"
+  },
+  {
+    "price": 8.31000000,
+    "symbol": "FLOW/BUSD"
+  },
+  {
+    "price": 8.30000000,
+    "symbol": "FLOW/USDT"
+  },
+  {
+    "price": 0.00010841,
+    "symbol": "XEC/BUSD"
+  },
+  {
+    "price": 553.20000000,
+    "symbol": "AXS/BRL"
+  },
+  {
+    "price": 135.28000000,
+    "symbol": "AXS/AUD"
+  },
+  {
+    "price": 0.21030000,
+    "symbol": "TVK/USDT"
+  },
+  {
+    "price": 0.00006570,
+    "symbol": "MINA/BTC"
+  },
+  {
+    "price": 0.00605300,
+    "symbol": "MINA/BNB"
+  },
+  {
+    "price": 3.19300000,
+    "symbol": "MINA/BUSD"
+  },
+  {
+    "price": 3.19600000,
+    "symbol": "MINA/USDT"
+  },
+  {
+    "price": 0.01367000,
+    "symbol": "RAY/BNB"
+  },
+  {
+    "price": 7.20000000,
+    "symbol": "RAY/BUSD"
+  },
+  {
+    "price": 7.20000000,
+    "symbol": "RAY/USDT"
+  },
+  {
+    "price": 0.00193100,
+    "symbol": "FARM/BTC"
+  },
+  {
+    "price": 0.18040000,
+    "symbol": "FARM/BNB"
+  },
+  {
+    "price": 93.90000000,
+    "symbol": "FARM/BUSD"
+  },
+  {
+    "price": 93.80000000,
+    "symbol": "FARM/USDT"
+  },
+  {
+    "price": 0.00001164,
+    "symbol": "ALPACA/BTC"
+  },
+  {
+    "price": 0.00107700,
+    "symbol": "ALPACA/BNB"
+  },
+  {
+    "price": 0.56760000,
+    "symbol": "ALPACA/BUSD"
+  },
+  {
+    "price": 0.56750000,
+    "symbol": "ALPACA/USDT"
+  },
+  {
+    "price": 2.87600000,
+    "symbol": "TLM/TRY"
+  },
+  {
+    "price": 239.40000000,
+    "symbol": "QUICK/USDT"
+  },
+  {
+    "price": 5.11700000,
+    "symbol": "ORN/BUSD"
+  },
+  {
+    "price": 0.00010495,
+    "symbol": "MBOX/BTC"
+  },
+  {
+    "price": 0.00971400,
+    "symbol": "MBOX/BNB"
+  },
+  {
+    "price": 5.10100000,
+    "symbol": "MBOX/BUSD"
+  },
+  {
+    "price": 5.10500000,
+    "symbol": "MBOX/USDT"
+  },
+  {
+    "price": 0.00006248,
+    "symbol": "VGX/BTC"
+  },
+  {
+    "price": 0.00076200,
+    "symbol": "VGX/ETH"
+  },
+  {
+    "price": 0.05975000,
+    "symbol": "FOR/USDT"
+  },
+  {
+    "price": 0.36720000,
+    "symbol": "REQ/USDT"
+  },
+  {
+    "price": 2.38600000,
+    "symbol": "GHST/USDT"
+  },
+  {
+    "price": 24.47000000,
+    "symbol": "TRU/RUB"
+  },
+  {
+    "price": 6.67000000,
+    "symbol": "FIS/BRL"
+  },
+  {
+    "price": 0.45150000,
+    "symbol": "WAXP/USDT"
+  },
+  {
+    "price": 0.45180000,
+    "symbol": "WAXP/BUSD"
+  },
+  {
+    "price": 0.00085860,
+    "symbol": "WAXP/BNB"
+  },
+  {
+    "price": 0.00000928,
+    "symbol": "WAXP/BTC"
+  },
+  {
+    "price": 0.00001899,
+    "symbol": "TRIBE/BTC"
+  },
+  {
+    "price": 0.00175200,
+    "symbol": "TRIBE/BNB"
+  },
+  {
+    "price": 0.92430000,
+    "symbol": "TRIBE/BUSD"
+  },
+  {
+    "price": 0.92590000,
+    "symbol": "TRIBE/USDT"
+  },
+  {
+    "price": 452.80000000,
+    "symbol": "GNO/USDT"
+  },
+  {
+    "price": 453.30000000,
+    "symbol": "GNO/BUSD"
+  },
+  {
+    "price": 0.86140000,
+    "symbol": "GNO/BNB"
+  },
+  {
+    "price": 0.00931400,
+    "symbol": "GNO/BTC"
+  },
+  {
+    "price": 1.34420000,
+    "symbol": "ARPA/TRY"
+  },
+  {
+    "price": 0.00026750,
+    "symbol": "PROM/BTC"
+  },
+  {
+    "price": 2.12700000,
+    "symbol": "MTL/BUSD"
+  },
+  {
+    "price": 0.62440000,
+    "symbol": "OGN/BUSD"
+  },
+  {
+    "price": 0.00010831,
+    "symbol": "XEC/USDT"
+  },
+  {
+    "price": 11.44000000,
+    "symbol": "C98/BRL"
+  },
+  {
+    "price": 251.53000000,
+    "symbol": "SOL/AUD"
+  },
+  {
+    "price": 78399.00,
+    "symbol": "SUSHI/BIDR"
+  },
+  {
+    "price": 12800.00,
+    "symbol": "XRP/BIDR"
+  },
+  {
+    "price": 0.50190000,
+    "symbol": "POLY/BUSD"
+  },
+  {
+    "price": 0.36980000,
+    "symbol": "ELF/USDT"
+  },
+  {
+    "price": 7.54900000,
+    "symbol": "DYDX/USDT"
+  },
+  {
+    "price": 7.54500000,
+    "symbol": "DYDX/BUSD"
+  },
+  {
+    "price": 0.01429400,
+    "symbol": "DYDX/BNB"
+  },
+  {
+    "price": 0.00015495,
+    "symbol": "DYDX/BTC"
+  },
+  {
+    "price": 0.36870000,
+    "symbol": "ELF/BUSD"
+  },
+  {
+    "price": 0.50120000,
+    "symbol": "POLY/USDT"
+  },
+  {
+    "price": 0.26092000,
+    "symbol": "IDEX/USDT"
+  },
+  {
+    "price": 0.76630000,
+    "symbol": "VIDT/USDT"
+  },
+  {
+    "price": 2563194.00,
+    "symbol": "SOL/BIDR"
+  },
+  {
+    "price": 1388264.00,
+    "symbol": "AXS/BIDR"
+  },
+  {
+    "price": 48673.82000000,
+    "symbol": "BTC/USDP"
+  },
+  {
+    "price": 3995.49000000,
+    "symbol": "ETH/USDP"
+  },
+  {
+    "price": 526.31000000,
+    "symbol": "BNB/USDP"
+  },
+  {
+    "price": 1.00000000,
+    "symbol": "USDP/BUSD"
+  },
+  {
+    "price": 0.99970000,
+    "symbol": "USDP/USDT"
+  },
+  {
+    "price": 0.44223000,
+    "symbol": "GALA/USDT"
+  },
+  {
+    "price": 0.44202000,
+    "symbol": "GALA/BUSD"
+  },
+  {
+    "price": 0.00083952,
+    "symbol": "GALA/BNB"
+  },
+  {
+    "price": 0.00000907,
+    "symbol": "GALA/BTC"
+  },
+  {
+    "price": 20500.00,
+    "symbol": "FTM/BIDR"
+  },
+  {
+    "price": 20095.00,
+    "symbol": "ALGO/BIDR"
+  },
+  {
+    "price": 25.61000000,
+    "symbol": "CAKE/AUD"
+  },
+  {
+    "price": 373.60000000,
+    "symbol": "KSM/AUD"
+  },
+  {
+    "price": 1171.69000000,
+    "symbol": "WAVES/RUB"
+  },
+  {
+    "price": 0.02264000,
+    "symbol": "SUN/BUSD"
+  },
+  {
+    "price": 1105.90000000,
+    "symbol": "ILV/USDT"
+  },
+  {
+    "price": 1105.50000000,
+    "symbol": "ILV/BUSD"
+  },
+  {
+    "price": 2.10600000,
+    "symbol": "ILV/BNB"
+  },
+  {
+    "price": 0.02274000,
+    "symbol": "ILV/BTC"
+  },
+  {
+    "price": 0.53180000,
+    "symbol": "REN/BUSD"
+  },
+  {
+    "price": 5.16400000,
+    "symbol": "YGG/USDT"
+  },
+  {
+    "price": 5.17400000,
+    "symbol": "YGG/BUSD"
+  },
+  {
+    "price": 0.00982000,
+    "symbol": "YGG/BNB"
+  },
+  {
+    "price": 0.00010610,
+    "symbol": "YGG/BTC"
+  },
+  {
+    "price": 2.09800000,
+    "symbol": "STX/BUSD"
+  },
+  {
+    "price": 0.71910000,
+    "symbol": "SYS/USDT"
+  },
+  {
+    "price": 0.11750000,
+    "symbol": "DFU/SDT"
+  },
+  {
+    "price": 178.98000000,
+    "symbol": "SOL/USDC"
+  },
+  {
+    "price": 7.23500000,
+    "symbol": "ARPA/RUB"
+  },
+  {
+    "price": 4173.00000000,
+    "symbol": "LTC/UAH"
+  },
+  {
+    "price": 0.53520000,
+    "symbol": "FET/BUSD"
+  },
+  {
+    "price": 0.09777000,
+    "symbol": "ARPA/BUSD"
+  },
+  {
+    "price": 2.35800000,
+    "symbol": "LSK/BUSD"
+  },
+  {
+    "price": 1699364.00,
+    "symbol": "AVAX/BIDR"
+  },
+  {
+    "price": 179480.00,
+    "symbol": "ALICE/BIDR"
+  },
+  {
+    "price": 4.67000000,
+    "symbol": "FIDA/USDT"
+  },
+  {
+    "price": 4.67600000,
+    "symbol": "FIDA/BUSD"
+  },
+  {
+    "price": 0.00884000,
+    "symbol": "FIDA/BNB"
+  },
+  {
+    "price": 0.00009580,
+    "symbol": "FIDA/BTC"
+  },
+  {
+    "price": 0.00344000,
+    "symbol": "DENT/BUSD"
+  },
+  {
+    "price": 0.69600000,
+    "symbol": "FRONT/USDT"
+  },
+  {
+    "price": 1.54100000,
+    "symbol": "CVP/USDT"
+  },
+  {
+    "price": 0.00003095,
+    "symbol": "AGLD/BTC"
+  },
+  {
+    "price": 0.00286400,
+    "symbol": "AGLD/BNB"
+  },
+  {
+    "price": 1.50800000,
+    "symbol": "AGLD/BUSD"
+  },
+  {
+    "price": 1.50800000,
+    "symbol": "AGLD/USDT"
+  },
+  {
+    "price": 0.00019990,
+    "symbol": "RAD/BTC"
+  },
+  {
+    "price": 0.01852000,
+    "symbol": "RAD/BNB"
+  },
+  {
+    "price": 9.74800000,
+    "symbol": "RAD/BUSD"
+  },
+  {
+    "price": 9.73200000,
+    "symbol": "RAD/USDT"
+  },
+  {
+    "price": 34.47000000,
+    "symbol": "UNI/AUD"
+  },
+  {
+    "price": 1.45480000,
+    "symbol": "HIVE/BUSD"
+  },
+  {
+    "price": 0.10563000,
+    "symbol": "STPT/BUSD"
+  },
+  {
+    "price": 0.00001299,
+    "symbol": "BETA/BTC"
+  },
+  {
+    "price": 0.00121110,
+    "symbol": "BETA/BNB"
+  },
+  {
+    "price": 0.63386000,
+    "symbol": "BETA/BUSD"
+  },
+  {
+    "price": 0.63406000,
+    "symbol": "BETA/USDT"
+  },
+  {
+    "price": 0.00004491,
+    "symbol": "SHIB/AUD"
+  },
+  {
+    "price": 0.00002247,
+    "symbol": "RARE/BTC"
+  },
+  {
+    "price": 0.00207800,
+    "symbol": "RARE/BNB"
+  },
+  {
+    "price": 1.09600000,
+    "symbol": "RARE/BUSD"
+  },
+  {
+    "price": 1.09500000,
+    "symbol": "RARE/USDT"
+  },
+  {
+    "price": 679.10000000,
+    "symbol": "AVAX/BRL"
+  },
+  {
+    "price": 166.09000000,
+    "symbol": "AVAX/AUD"
+  },
+  {
+    "price": 118.36000000,
+    "symbol": "LUNA/AUD"
+  },
+  {
+    "price": 0.01021700,
+    "symbol": "TROY/BUSD"
+  },
+  {
+    "price": 0.02409000,
+    "symbol": "AXS/ETH"
+  },
+  {
+    "price": 0.00035670,
+    "symbol": "FTM/ETH"
+  },
+  {
+    "price": 0.04470000,
+    "symbol": "SOL/ETH"
+  },
+  {
+    "price": 0.00016770,
+    "symbol": "SSV/BTC"
+  },
+  {
+    "price": 0.00204300,
+    "symbol": "SSV/ETH"
+  },
+  {
+    "price": 68.97700000,
+    "symbol": "LAZIO/TRY"
+  },
+  {
+    "price": 4.45750000,
+    "symbol": "LAZIO/EUR"
+  },
+  {
+    "price": 0.00010263,
+    "symbol": "LAZIO/BTC"
+  },
+  {
+    "price": 5.00630000,
+    "symbol": "LAZIO/USDT"
+  },
+  {
+    "price": 0.00003790,
+    "symbol": "CHESS/BTC"
+  },
+  {
+    "price": 0.00350200,
+    "symbol": "CHESS/BNB"
+  },
+  {
+    "price": 1.84800000,
+    "symbol": "CHESS/BUSD"
+  },
+  {
+    "price": 1.84600000,
+    "symbol": "CHESS/USDT"
+  },
+  {
+    "price": 2.00890000,
+    "symbol": "FTM/AUD"
+  },
+  {
+    "price": 8.19000000,
+    "symbol": "FTM/BRL"
+  },
+  {
+    "price": 4.28600000,
+    "symbol": "SCRT/BUSD"
+  },
+  {
+    "price": 0.56190000,
+    "symbol": "ADX/USDT"
+  },
+  {
+    "price": 24.72000000,
+    "symbol": "AUCTION/USDT"
+  },
+  {
+    "price": 4.20700000,
+    "symbol": "CELO/BUSD"
+  },
+  {
+    "price": 105.40000000,
+    "symbol": "FTM/RUB"
+  },
+  {
+    "price": 1.02300000,
+    "symbol": "NU/AUD"
+  },
+  {
+    "price": 54.29000000,
+    "symbol": "NU/RUB"
+  },
+  {
+    "price": 0.26420000,
+    "symbol": "REEF/TRY"
+  },
+  {
+    "price": 275.20,
+    "symbol": "REEF/BIDR"
+  },
+  {
+    "price": 0.00018880,
+    "symbol": "SHIB/DOGE"
+  },
+  {
+    "price": 2.24000000,
+    "symbol": "DAR/USDT"
+  },
+  {
+    "price": 2.23997000,
+    "symbol": "DAR/BUSD"
+  },
+  {
+    "price": 0.00424675,
+    "symbol": "DAR/BNB"
+  },
+  {
+    "price": 0.00004596,
+    "symbol": "DAR/BTC"
+  },
+  {
+    "price": 0.00151000,
+    "symbol": "BNX/BTC"
+  },
+  {
+    "price": 0.14020000,
+    "symbol": "BNX/BNB"
+  },
+  {
+    "price": 73.50000000,
+    "symbol": "BNX/BUSD"
+  },
+  {
+    "price": 73.40000000,
+    "symbol": "BNX/USDT"
+  },
+  {
+    "price": 22.76000000,
+    "symbol": "RGT/USDT"
+  },
+  {
+    "price": 0.00046900,
+    "symbol": "RGT/BTC"
+  },
+  {
+    "price": 22.79000000,
+    "symbol": "RGT/BUSD"
+  },
+  {
+    "price": 0.04350000,
+    "symbol": "RGT/BNB"
+  },
+  {
+    "price": 5.01170000,
+    "symbol": "LAZIO/BUSD"
+  },
+  {
+    "price": 0.36430000,
+    "symbol": "OXT/BUSD"
+  },
+  {
+    "price": 44.84000000,
+    "symbol": "MANA/TRY"
+  },
+  {
+    "price": 100.40000000,
+    "symbol": "ALGO/RUB"
+  },
+  {
+    "price": 0.00086400,
+    "symbol": "SHIB/UAH"
+  },
+  {
+    "price": 1207478.00,
+    "symbol": "LUNA/BIDR"
+  },
+  {
+    "price": 0.71270000,
+    "symbol": "AUD/USDC"
+  },
+  {
+    "price": 0.00379000,
+    "symbol": "MOVR/BTC"
+  },
+  {
+    "price": 0.35080000,
+    "symbol": "MOVR/BNB"
+  },
+  {
+    "price": 184.20000000,
+    "symbol": "MOVR/BUSD"
+  },
+  {
+    "price": 184.50000000,
+    "symbol": "MOVR/USDT"
+  },
+  {
+    "price": 0.00020430,
+    "symbol": "CITY/BTC"
+  },
+  {
+    "price": 0.01898000,
+    "symbol": "CITY/BNB"
+  },
+  {
+    "price": 9.93000000,
+    "symbol": "CITY/BUSD"
+  },
+  {
+    "price": 9.97000000,
+    "symbol": "CITY/USDT"
+  },
+  {
+    "price": 0.00084610,
+    "symbol": "ENS/BTC"
+  },
+  {
+    "price": 0.07814000,
+    "symbol": "ENS/BNB"
+  },
+  {
+    "price": 41.20000000,
+    "symbol": "ENS/BUSD"
+  },
+  {
+    "price": 41.20000000,
+    "symbol": "ENS/USDT"
+  },
+  {
+    "price": 0.00126650,
+    "symbol": "SAND/ETH"
+  },
+  {
+    "price": 0.00623700,
+    "symbol": "DOT/ETH"
+  },
+  {
+    "price": 0.00058820,
+    "symbol": "MATIC/ETH"
+  },
+  {
+    "price": 0.10250000,
+    "symbol": "ANKR/BUSD"
+  },
+  {
+    "price": 69.98000000,
+    "symbol": "SAND/TRY"
+  },
+  {
+    "price": 18.65000000,
+    "symbol": "MANA/BRL"
+  },
+  {
+    "price": 818.50000000,
+    "symbol": "KP3R/USDT"
+  },
+  {
+    "price": 0.15080000,
+    "symbol": "QIU/SDT"
+  },
+  {
+    "price": 0.15060000,
+    "symbol": "QIB/USD"
+  },
+  {
+    "price": 0.00028620,
+    "symbol": "QI/BNB"
+  },
+  {
+    "price": 0.00000309,
+    "symbol": "QI/BTC"
+  },
+  {
+    "price": 0.00006569,
+    "symbol": "PORTO/BTC"
+  },
+  {
+    "price": 3.20010000,
+    "symbol": "PORTO/USDT"
+  },
+  {
+    "price": 44.19000000,
+    "symbol": "PORTO/TRY"
+  },
+  {
+    "price": 2.82140000,
+    "symbol": "PORTO/EUR"
+  },
+  {
+    "price": 0.44120000,
+    "symbol": "POWR/USDT"
+  },
+  {
+    "price": 0.44180000,
+    "symbol": "POWR/BUSD"
+  },
+  {
+    "price": 0.02959000,
+    "symbol": "AVAX/ETH"
+  },
+  {
+    "price": 0.41590000,
+    "symbol": "SLP/TRY"
+  },
+  {
+    "price": 16.26000000,
+    "symbol": "FIS/TRY"
+  },
+  {
+    "price": 28.99000000,
+    "symbol": "LRC/TRY"
+  },
+  {
+    "price": 0.00015770,
+    "symbol": "CHR/ETH"
+  },
+  {
+    "price": 16763.00,
+    "symbol": "FIS/BIDR"
+  },
+  {
+    "price": 3.04600000,
+    "symbol": "VGX/USDT"
+  },
+  {
+    "price": 0.00011013,
+    "symbol": "GALA/ETH"
+  },
+  {
+    "price": 0.07940000,
+    "symbol": "JASMY/USDT"
+  },
+  {
+    "price": 0.07950000,
+    "symbol": "JASMY/BUSD"
+  },
+  {
+    "price": 0.00015160,
+    "symbol": "JASMY/BNB"
+  },
+  {
+    "price": 0.00000163,
+    "symbol": "JASMY/BTC"
+  },
+  {
+    "price": 9.9E-7,
+    "symbol": "AMP/BTC"
+  },
+  {
+    "price": 0.00009140,
+    "symbol": "AMP/BNB"
+  },
+  {
+    "price": 0.04817000,
+    "symbol": "AMP/BUSD"
+  },
+  {
+    "price": 0.04813000,
+    "symbol": "AMP/USDT"
+  },
+  {
+    "price": 0.00002834,
+    "symbol": "PLA/BTC"
+  },
+  {
+    "price": 0.00261200,
+    "symbol": "PLA/BNB"
+  },
+  {
+    "price": 1.38200000,
+    "symbol": "PLA/BUSD"
+  },
+  {
+    "price": 1.38000000,
+    "symbol": "PLA/USDT"
+  },
+  {
+    "price": 0.00037180,
+    "symbol": "PYR/BTC"
+  },
+  {
+    "price": 18.16000000,
+    "symbol": "PYR/BUSD"
+  },
+  {
+    "price": 18.11000000,
+    "symbol": "PYR/USDT"
+  },
+  {
+    "price": 0.00009980,
+    "symbol": "RNDR/BTC"
+  },
+  {
+    "price": 4.86300000,
+    "symbol": "RNDR/USDT"
+  },
+  {
+    "price": 4.85100000,
+    "symbol": "RNDR/BUSD"
+  },
+  {
+    "price": 0.00382100,
+    "symbol": "ALCX/BTC"
+  },
+  {
+    "price": 186.00000000,
+    "symbol": "ALCX/BUSD"
+  },
+  {
+    "price": 186.00000000,
+    "symbol": "ALCX/USDT"
+  },
+  {
+    "price": 0.00007598,
+    "symbol": "SANTOS/BTC"
+  },
+  {
+    "price": 3.70600000,
+    "symbol": "SANTOS/USDT"
+  },
+  {
+    "price": 21.20000000,
+    "symbol": "SANTOS/BRL"
+  },
+  {
+    "price": 51.05000000,
+    "symbol": "SANTOS/TRY"
+  },
+  {
+    "price": 0.00013210,
+    "symbol": "MC/BTC"
+  },
+  {
+    "price": 6.44000000,
+    "symbol": "MCB/USD"
+  },
+  {
+    "price": 6.44000000,
+    "symbol": "MCU/SDT"
+  },
+  {
+    "price": 19.99000000,
+    "symbol": "BEL/TRY"
+  },
+  {
+    "price": 2.41830000,
+    "symbol": "COCOS/BUSD"
+  },
+  {
+    "price": 0.04740000,
+    "symbol": "DENT/TRY"
+  },
+  {
+    "price": 33.15000000,
+    "symbol": "ENJ/TRY"
+  },
+  {
+    "price": 1944.00000000,
+    "symbol": "NEO/RUB"
+  },
+  {
+    "price": 7.09440000,
+    "symbol": "SAND/AUD"
+  },
+  {
+    "price": 434.50,
+    "symbol": "SLP/BIDR"
+  },
+  {
+    "price": 0.00044470,
+    "symbol": "ANY/BTC"
+  },
+  {
+    "price": 21.61000000,
+    "symbol": "ANY/BUSD"
+  },
+  {
+    "price": 21.64000000,
+    "symbol": "ANY/USDT"
+  },
+  {
+    "price": 0.00007870,
+    "symbol": "BICO/BTC"
+  },
+  {
+    "price": 3.82900000,
+    "symbol": "BICO/BUSD"
+  },
+  {
+    "price": 3.82900000,
+    "symbol": "BICO/USDT"
+  },
+  {
+    "price": 0.00003301,
+    "symbol": "FLUX/BTC"
+  },
+  {
+    "price": 1.60500000,
+    "symbol": "FLUX/BUSD"
+  },
+  {
+    "price": 1.60500000,
+    "symbol": "FLUX/USDT"
+  },
+  {
+    "price": 173.00000000,
+    "symbol": "ALICE/TRY"
+  },
+  {
+    "price": 13.86500000,
+    "symbol": "FXS/USDT"
+  },
+  {
+    "price": 2.53000000,
+    "symbol": "GALA/BRL"
+  },
+  {
+    "price": 6.08000000,
+    "symbol": "GALA/TRY"
+  },
+  {
+    "price": 1163.10000000,
+    "symbol": "LUNA/TRY"
+  },
+  {
+    "price": 0.36730000,
+    "symbol": "REQ/BUSD"
+  },
+  {
+    "price": 29.06000000,
+    "symbol": "SAND/BRL"
+  },
+  {
+    "price": 46586.00,
+    "symbol": "MANA/BIDR"
+  },
+  {
+    "price": 72502.00,
+    "symbol": "SAND/BIDR"
+  },
+  {
+    "price": 0.00006022,
+    "symbol": "VOXEL/BTC"
+  },
+  {
+    "price": 0.00557570,
+    "symbol": "VOXEL/BNB"
+  },
+  {
+    "price": 2.93440000,
+    "symbol": "VOXEL/BUSD"
+  },
+  {
+    "price": 2.93500000,
+    "symbol": "VOXEL/USDT"
+  },
+  {
+    "price": 0.02573000,
+    "symbol": "COS/BUSD"
+  },
+  {
+    "price": 0.42660000,
+    "symbol": "CTXC/BUSD"
+  },
+  {
+    "price": 19.67000000,
+    "symbol": "FTM/TRY"
+  },
+  {
+    "price": 0.00617500,
+    "symbol": "MANA/BNB"
+  },
+  {
+    "price": 44.05000000,
+    "symbol": "MINA/TRY"
+  },
+  {
+    "price": 56.70000000,
+    "symbol": "XTZ/TRY"
+  },
+  {
+    "price": 0.00026000,
+    "symbol": "HIGH/BTC"
+  },
+  {
+    "price": 12.67000000,
+    "symbol": "HIGH/BUSD"
+  },
+  {
+    "price": 12.68000000,
+    "symbol": "HIGH/USDT"
+  }
+]

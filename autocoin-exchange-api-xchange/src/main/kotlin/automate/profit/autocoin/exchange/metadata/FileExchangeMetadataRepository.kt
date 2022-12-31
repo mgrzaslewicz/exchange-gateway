@@ -31,14 +31,22 @@ private val exchangeMetadataModule = SimpleModule().apply {
 
 fun exchangeMetadataFromJson(json: String): ExchangeMetadata = metadataObjectMapper.readValue(json, ExchangeMetadata::class.java)
 
+data class ExchangeMetadataResult(
+    val exchangeMetadata: ExchangeMetadata? = null,
+    val exception: Exception? = null
+) {
+    fun hasMetadata() = exchangeMetadata != null
+    fun hasException() = exception != null
+}
+
 internal val metadataObjectMapper = jacksonObjectMapper()
-        .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).apply {
-            registerModule(exchangeMetadataModule)
-        }
+    .configure(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS, true).apply {
+        registerModule(exchangeMetadataModule)
+    }
 
 class FileExchangeMetadataRepository(
-        private val metadataDirectory: File,
-        private val currentTimeMillis: () -> Long = System::currentTimeMillis
+    private val metadataDirectory: File,
+    private val currentTimeMillis: () -> Long = System::currentTimeMillis
 ) {
     companion object : KLogging()
 
@@ -73,31 +81,40 @@ class FileExchangeMetadataRepository(
         }
     }
 
-    fun getLatestExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadata? {
+    private fun getLatestMetadataFileName(exchangeDirectory: File, exchangeName: String): String? {
+        return exchangeDirectory
+            .list()!!
+            .filter {
+                !it.contains("-xchange")
+                        && it.contains(exchangeName)
+                        && it.endsWith(".json")
+            }.maxBy { getNumberFromName(it) }
+    }
+
+    fun getLatestExchangeMetadata(supportedExchange: SupportedExchange): ExchangeMetadataResult {
         val exchangeDirectory = getOrCreateDirectory(supportedExchange)
         updateLock.lock()
-        val latestMetadataFileName = exchangeDirectory
-                .list()
-                .filter {
-                    !it.contains("-xchange")
-                            && it.contains(supportedExchange.exchangeName)
-                            && it.endsWith(".json")
-                }
-                .sortedByDescending { getNumberFromName(it) }.firstOrNull()
+        val latestMetadataFileName = getLatestMetadataFileName(exchangeDirectory, supportedExchange.exchangeName)
         updateLock.unlock()
         return if (latestMetadataFileName != null) {
-            logger.info { "[$supportedExchange] Found metadata file $latestMetadataFileName" }
             val latestMetadataFile = exchangeDirectory.resolve(latestMetadataFileName)
-            return exchangeMetadataFromJson(latestMetadataFile.readText())
-        } else null
+            logger.info { "[$supportedExchange] Found metadata file ${latestMetadataFile.absolutePath}" }
+            return try {
+                ExchangeMetadataResult(
+                    exchangeMetadata = exchangeMetadataFromJson(latestMetadataFile.readText())
+                )
+            } catch (e: Exception) {
+                ExchangeMetadataResult(exception = e)
+            }
+        } else ExchangeMetadataResult()
     }
 
     fun getLatestXchangeMetadataFile(supportedExchange: SupportedExchange): File? {
         val exchangeDirectory = getOrCreateDirectory(supportedExchange)
         val latestMetadataFileName = exchangeDirectory
-                .list()
-                .filter { it.contains("${supportedExchange.exchangeName}-xchange") }
-                .sortedByDescending { getNumberFromName(it) }.firstOrNull()
+            .list()
+            .filter { it.contains("${supportedExchange.exchangeName}-xchange") }
+            .maxBy { getNumberFromName(it) }
         return if (latestMetadataFileName != null) {
             logger.info { "[$supportedExchange] Found xchange metadata file $latestMetadataFileName" }
             exchangeDirectory.resolve(latestMetadataFileName)
