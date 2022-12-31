@@ -1,16 +1,23 @@
 package automate.profit.autocoin.exchange
 
+/**
+ * After adding new exchange remember to update:
+ * ExchangeMetadataFetcher
+ * SupportedExchangeToXchangeClass
+ */
 enum class SupportedExchange(val exchangeName: String) {
+    BIBOX("bibox"),
     BINANCE("binance"),
     BITBAY("bitbay"),
     BITMEX("bitmex"),
     BITSTAMP("bitstamp"),
     BITTREX("bittrex"),
-    //CRYPTOPIA("cryptopia"), // exchange does not exist anymore
+    BITZ("bitz"), // requires key for reading ticker
     GATEIO("gateio"),
     KRAKEN("kraken"),
     KUCOIN("kucoin"),
     POLONIEX("poloniex"),
+    TRADEOGRE("tradeogre"),
     YOBIT("yobit");
 
     companion object {
