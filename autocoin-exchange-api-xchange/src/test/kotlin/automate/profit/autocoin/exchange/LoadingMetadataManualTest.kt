@@ -37,7 +37,7 @@ class LoadingMetadataManualTest {
     fun createExchangesUsingRemoteInit(): Map<SupportedExchange, ExchangeMetaData> {
         logger.info("Creating exchanges using remote init")
         val exchangesWithImplementedRemoteInit = SupportedExchange.values().filter { supportedExchange ->
-            supportedExchange.exchangeClass.java.declaredMethods.any { it.name == "remoteInit" }
+            supportedExchange.toXchangeClass().java.declaredMethods.any { it.name == "remoteInit" }
         }
         val exchangesWithNoImplementedRemoteInit = SupportedExchange.values().toList() - exchangesWithImplementedRemoteInit
         logger.info("Exchanges that have remoteInit implemented: $exchangesWithImplementedRemoteInit")
@@ -50,7 +50,7 @@ class LoadingMetadataManualTest {
                 .sortedBy { it.exchangeName }
                 .mapNotNull {
                     try {
-                        val exchangeSpec = ExchangeSpecification(it.exchangeClass.java)
+                        val exchangeSpec = ExchangeSpecification(it.toXchangeClass().java)
                         if (metadataFile != null) {
                             exchangeSpec.metaDataJsonFileOverride = metadataFile.absolutePath
                         }
