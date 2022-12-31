@@ -9,7 +9,7 @@ import automate.profit.autocoin.exchange.order.ExchangeOrderType.ASK
 import automate.profit.autocoin.exchange.order.ExchangeOrderType.BID
 import automate.profit.autocoin.exchange.order.toXchangeLimitOrder
 import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeTradeService
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.whenever
 import mu.KLogging
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.Before

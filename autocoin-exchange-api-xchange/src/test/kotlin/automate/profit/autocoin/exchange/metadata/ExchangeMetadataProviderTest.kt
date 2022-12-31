@@ -1,10 +1,7 @@
 package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before

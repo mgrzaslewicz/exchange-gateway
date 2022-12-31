@@ -122,7 +122,7 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.nhaarman</groupId>
+            <groupId>com.nhaarman.mockitokotlin2</groupId>
             <artifactId>mockito-kotlin</artifactId>
             <scope>test</scope>
         </dependency>
@@ -147,7 +147,6 @@
                     <compilerPlugins>
                         <plugin>spring</plugin>
                     </compilerPlugins>
-                    <jvmTarget>1.8</jvmTarget>
                 </configuration>
                 <executions>
                     <execution>

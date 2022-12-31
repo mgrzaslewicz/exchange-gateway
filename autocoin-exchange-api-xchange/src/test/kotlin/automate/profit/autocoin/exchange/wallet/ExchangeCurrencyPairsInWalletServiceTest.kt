@@ -6,8 +6,7 @@ import automate.profit.autocoin.exchange.metadata.CurrencyMetadata
 import automate.profit.autocoin.exchange.metadata.CurrencyPairMetadata
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadata
 import automate.profit.autocoin.exchange.metadata.ExchangeMetadataService
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.*
 import mu.KLogging
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
