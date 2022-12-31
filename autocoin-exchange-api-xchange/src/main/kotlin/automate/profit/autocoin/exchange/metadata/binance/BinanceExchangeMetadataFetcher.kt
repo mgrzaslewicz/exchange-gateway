@@ -90,8 +90,8 @@ class BinanceExchangeMetadataFetcher(
                     currencyPairsMap[currencyPair] = CurrencyPairMetadata(
                         amountScale = amountPrecision,
                         priceScale = pairPrecision,
-                        minimumAmount = minQty.orMin(),
-                        maximumAmount = maxQty.orMax(),
+                        minimumAmount = minQty.orDefaultMin(),
+                        maximumAmount = maxQty.orDefaultMax(),
                         minimumOrderValue = getMinimumOrderValue(currencyPair),
                         maximumPriceMultiplierUp = 1.2.toBigDecimal(),
                         maximumPriceMultiplierDown = 0.8.toBigDecimal(),
@@ -102,10 +102,14 @@ class BinanceExchangeMetadataFetcher(
                         ) ?: defaultTransactionFeeRanges
                     )
                     currenciesMap[pair.base.currencyCode] = CurrencyMetadata(
-                        scale = basePrecision
+                        scale = basePrecision,
+                        withdrawalFee = binanceMetadata.currencies[pair.base]?.withdrawalFee,
+                        minWithdrawalAmount = binanceMetadata.currencies[pair.base]?.withdrawalFee
                     )
                     currenciesMap[pair.counter.currencyCode] = CurrencyMetadata(
-                        scale = counterPrecision
+                        scale = counterPrecision,
+                        withdrawalFee = binanceMetadata.currencies[pair.counter]?.withdrawalFee,
+                        minWithdrawalAmount = binanceMetadata.currencies[pair.counter]?.withdrawalFee
                     )
                 }
             }

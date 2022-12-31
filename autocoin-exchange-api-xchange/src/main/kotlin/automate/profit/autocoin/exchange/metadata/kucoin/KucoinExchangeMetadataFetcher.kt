@@ -31,7 +31,7 @@ class KucoinExchangeMetadataFetcher(
         xchangeSpecificationApiKeyAssigner.assignKeys(SupportedExchange.KUCOIN, exchangeSpec, apiKey)
         preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val xchangeExchange = exchangeFactory.createExchange(exchangeSpec)
-        val xchangeMetadata = xchangeExchange.exchangeMetaData
+        val xchangeKucoinMetadata = xchangeExchange.exchangeMetaData
         val kucoinMarketDataService = xchangeExchange.marketDataService as KucoinMarketDataService
         val kucoinSymbols = kucoinMarketDataService.kucoinSymbols
 
@@ -59,19 +59,26 @@ class KucoinExchangeMetadataFetcher(
             currencyPairsMap[currencyPair] = CurrencyPairMetadata(
                 amountScale = amountScale,
                 priceScale = priceScale,
-                minimumAmount = minSize.orMin(),
-                maximumAmount = maxSize.orMax(),
+                minimumAmount = minSize.orDefaultMin(),
+                maximumAmount = maxSize.orDefaultMax(),
                 minimumOrderValue = BigDecimal.ZERO, // not present in kucoin api
                 maximumPriceMultiplierUp = 1.2.toBigDecimal(), // not present in kucoin api
                 maximumPriceMultiplierDown = 0.8.toBigDecimal(), // not present in kucoin api
                 buyFeeMultiplier = BigDecimal("0.001"), // 0.1% https://www.kucoin.com/news/en-fee
-                transactionFeeRanges = xchangeMetadata.currencyPairs[xchangeCurrencyPair]?.getTransactionFeeRanges() ?: TransactionFeeRanges()
+                transactionFeeRanges = xchangeKucoinMetadata.currencyPairs[xchangeCurrencyPair]?.getTransactionFeeRanges() ?: TransactionFeeRanges()
             )
             currenciesMap[xchangeCurrencyPair.base.currencyCode] = CurrencyMetadata(
-                scale = DEFAULT_SCALE
+                scale = DEFAULT_SCALE,
+                withdrawalFee = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.base]?.withdrawalFee ?: throw error("No withdrawalFee for currency ${xchangeCurrencyPair.base}"),
+                minWithdrawalAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.base]?.minWithdrawalAmount
+                    ?: throw error("No minWithdrawalAmount for currency ${xchangeCurrencyPair.base}")
+
             )
             currenciesMap[xchangeCurrencyPair.counter.currencyCode] = CurrencyMetadata(
-                scale = DEFAULT_SCALE
+                scale = DEFAULT_SCALE,
+                withdrawalFee = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.counter]?.withdrawalFee ?: throw error("No withdrawalFee for currency ${xchangeCurrencyPair.counter}"),
+                minWithdrawalAmount = xchangeKucoinMetadata.currencies[xchangeCurrencyPair.counter]?.minWithdrawalAmount
+                    ?: throw error("No minWithdrawalAmount for currency ${xchangeCurrencyPair.counter}")
             )
         }
         if (apiKey == null) {
