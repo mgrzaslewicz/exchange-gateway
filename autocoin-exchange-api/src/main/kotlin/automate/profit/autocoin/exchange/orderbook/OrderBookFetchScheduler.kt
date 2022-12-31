@@ -25,7 +25,7 @@ class DefaultOrderBookFetchScheduler(
     private val scheduledFetchers = ConcurrentHashMap<SupportedExchange, ScheduledFuture<*>>()
 
     override fun onLastListenerDeregistered(exchange: SupportedExchange) {
-        if (scheduledFetchers.contains(exchange)) {
+        if (scheduledFetchers.containsKey(exchange)) {
             val scheduledFetcher = scheduledFetchers.getValue(exchange)
             scheduledFetcher.cancel(false)
             scheduledFetchers.remove(exchange)
@@ -33,7 +33,7 @@ class DefaultOrderBookFetchScheduler(
     }
 
     override fun onFirstListenerRegistered(exchange: SupportedExchange) {
-        if (!scheduledFetchers.contains(exchange)) {
+        if (!scheduledFetchers.containsKey(exchange)) {
             val exchangeFrequency = allowedExchangeFetchFrequency.getValue(exchange)
             val scheduledFetcher = scheduledExecutorService.scheduleAtFixedRate({
                 orderBookListeners.iterateOverEachExchangeAndAllCurrencyPairs(this)
@@ -62,7 +62,7 @@ class DefaultOrderBookFetchScheduler(
 
     private fun getOrderBook(exchange: SupportedExchange, currencyPair: CurrencyPair): OrderBook? {
         return try {
-            exchangeOrderBookService.getOrderBook(exchange.name, currencyPair)
+            exchangeOrderBookService.getOrderBook(exchange.exchangeName, currencyPair)
         } catch (e: Exception) {
             logger.error { "[$exchange-$currencyPair]Error getting order book: ${e.message} (${e.stackTrace[0]})" }
             null

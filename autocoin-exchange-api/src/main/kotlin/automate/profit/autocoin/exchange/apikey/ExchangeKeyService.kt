@@ -10,15 +10,15 @@ data class ExchangeKeyDto(
 )
 
 interface ExchangeKeyService {
- /**
-  * Returns exchange keys of user that has session/token
-  */
- fun getExchangeKeys(): List<ExchangeKeyDto>
+    /**
+     * Returns exchange keys of user that has session/token
+     */
+    fun getExchangeKeys(): List<ExchangeKeyDto>
 
- /**
-  * Returns exchange keys of exchangeUser that belongs to user that has session/token
-  */
- fun getExchangeKeys(exchangeUserId: String): List<ExchangeKeyDto>
+    /**
+     * Returns exchange keys of exchangeUser that belongs to user that has session/token
+     */
+    fun getExchangeKeys(exchangeUserId: String): List<ExchangeKeyDto>
 
- fun getExchangeKey(exchangeUserId: String, exchangeId: String): ExchangeKeyDto?
+    fun getExchangeKey(exchangeUserId: String, exchangeId: String): ExchangeKeyDto?
 }

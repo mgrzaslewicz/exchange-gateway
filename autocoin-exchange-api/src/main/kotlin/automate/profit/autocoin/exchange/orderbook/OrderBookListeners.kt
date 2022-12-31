@@ -32,11 +32,13 @@ class DefaultOrderBookListeners(private val executorService: ExecutorService) : 
         var isFirstListenerWithGivenExchangeAdded = false
         val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair.computeIfAbsent(exchange) {
             val map = ConcurrentHashMap<CurrencyPair, MutableSet<OrderBookListener>>()
-            map[currencyPair] = CopyOnWriteArraySet()
             isFirstListenerWithGivenExchangeAdded = true // avoid triggering registration listener to iterate over collection that is just being changed
             map
         }
-        val isListenerAdded = listenersByCurrencyPair[currencyPair]!!.add(listener)
+        val isListenerAdded = listenersByCurrencyPair.computeIfAbsent(currencyPair) {
+            CopyOnWriteArraySet()
+        }.add(listener)
+
         if (isFirstListenerWithGivenExchangeAdded) {
             orderBookRegistrationListeners.forEach {
                 it.onFirstListenerRegistered(exchange)

@@ -44,8 +44,8 @@ class DefaultTickerListenerRegistrar(
 
     override fun fetchTickersAndNotifyListeners() {
         currencyPairListeners.keys.map { currencyPair ->
-                    executorService.submit { fetchTickerAndNotifyListeners(currencyPair) }
-                }.also { logger.info { "Waiting for all currencies at $exchangeName..." } }
+            executorService.submit { fetchTickerAndNotifyListeners(currencyPair) }
+        }.also { logger.info { "Waiting for all currencies at $exchangeName..." } }
                 .forEach { it.get() }
         logger.info { "All currencies done at $exchangeName." }
     }

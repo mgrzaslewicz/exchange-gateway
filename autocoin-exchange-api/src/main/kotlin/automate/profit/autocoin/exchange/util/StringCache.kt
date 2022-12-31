@@ -18,6 +18,6 @@ open class StringCache {
 
 }
 
-object ExchangeCache: StringCache()
+object ExchangeCache : StringCache()
 
-object CurrencyCache: StringCache()
+object CurrencyCache : StringCache()
