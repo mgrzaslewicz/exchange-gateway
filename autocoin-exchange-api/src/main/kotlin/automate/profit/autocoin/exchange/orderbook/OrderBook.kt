@@ -16,7 +16,9 @@ data class OrderBookAveragePrice(
 
 data class OrderBook(
         val buyOrders: List<OrderBookExchangeOrder>,
-        val sellOrders: List<OrderBookExchangeOrder>
+        val sellOrders: List<OrderBookExchangeOrder>,
+        val receivedAtMillis: Long,
+        val exchangeTimestampMillis: Long?
 ) {
 
     fun deepEquals(other: OrderBook): Boolean {

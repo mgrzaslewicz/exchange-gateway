@@ -12,5 +12,6 @@ data class OrderResponseDto(
         val orderedAmount: Double,
         val filledAmount: Double?,
         val price: Double,
-        val timestamp: Long? // epoch millis
+        val receivedAtMillis: Long,
+        val exchangeTimestampMillis: Long?
 )
