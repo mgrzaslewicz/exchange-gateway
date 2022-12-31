@@ -65,12 +65,16 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
 
     override fun getOpenOrdersForAllExchangeKeys(currencyPairs: List<CurrencyPair>): List<ExchangeOpenOrders> {
         val openOrders = mutableListOf<ExchangeOpenOrders>()
+        // use exchangeService and exchangeKeyService before creating new threads to avoid problems with scoped beans in spring
+        val exchangeKeysGroupedByExchangeId = getExchangeKeysGroupedByExchangeId()
+        val exchangeId2Name = exchangeKeysGroupedByExchangeId.keys.map {
+            it to exchangeService.getExchangeNameById(it)
+        }.toMap()
         runBlocking {
-            val exchangeKeysGroupedByExchangeId = getExchangeKeysGroupedByExchangeId()
             exchangeKeysGroupedByExchangeId.forEach { exchangeWithKeys ->
                 val exchangeId = exchangeWithKeys.key
                 val exchangeKeysWithTheSameExchange = exchangeWithKeys.value
-                val exchangeName = exchangeService.getExchangeNameById(exchangeId)
+                val exchangeName = exchangeId2Name.getValue(exchangeId)
                 val exchangeKeysWithTheSameExchangeByUser = exchangeKeysWithTheSameExchange.groupBy { it.exchangeUserId }
                 exchangeKeysWithTheSameExchangeByUser.forEach { exchangeUserId, exchangeKeys ->
                     launch(Dispatchers.IO) {
@@ -113,7 +117,7 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
             YOBIT -> { // API allows only requesting open orders per single market
                 logger.debug("Requesting open orders at exchange $exchangeName for ${currencyPairs.size} markets")
                 exchangeCurrencyPairsInWallet
-                        .generateFromWalletIfGivenEmpty(exchangeName, exchangeKey.exchangeUserId, currencyPairs)
+                        .generateFromWalletIfGivenEmpty(exchangeName, exchangeKey, currencyPairs)
                         .flatMap { getOpenOrdersFromExchangeForMarket(exchangeName, tradeService, it) }
             }
             BINANCE,

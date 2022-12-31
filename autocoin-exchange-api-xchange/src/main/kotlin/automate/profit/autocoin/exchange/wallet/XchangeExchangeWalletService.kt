@@ -10,21 +10,37 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import mu.KLogging
-import java.math.BigDecimal
 
 class XchangeExchangeWalletService(private val exchangeService: ExchangeService,
                                    private val exchangeKeyService: ExchangeKeyService,
                                    private val userExchangeServicesFactory: UserExchangeServicesFactory) : ExchangeWalletService {
+
     companion object : KLogging()
+
+    fun getCurrencyBalances(exchangeName: String, exchangeKey: ExchangeKeyDto): List<CurrencyBalance> {
+        val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeKey)
+        return userExchangeWalletService.getCurrencyBalances()
+    }
 
     override fun getCurrencyBalances(exchangeName: String, exchangeUserId: String): List<CurrencyBalance> {
         val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeUserId)
         return userExchangeWalletService.getCurrencyBalances()
     }
 
+
     override fun getCurrencyBalance(exchangeName: String, exchangeUserId: String, currencyCode: String): CurrencyBalance {
         val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeUserId)
         return userExchangeWalletService.getCurrencyBalance(currencyCode)
+    }
+
+    fun getCurrencyBalance(exchangeName: String, exchangeKey: ExchangeKeyDto, currencyCode: String): CurrencyBalance {
+        val userExchangeWalletService = getUserExchangeWalletService(exchangeName, exchangeKey)
+        return userExchangeWalletService.getCurrencyBalance(currencyCode)
+    }
+
+    private fun getUserExchangeWalletService(exchangeName: String, exchangeKey: ExchangeKeyDto): UserExchangeWalletService {
+        return userExchangeServicesFactory.createWalletService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName, exchangeKey.exchangeSpecificKeyParameters)
+
     }
 
     private fun getUserExchangeWalletService(exchangeName: String, exchangeUserId: String): UserExchangeWalletService {
@@ -35,8 +51,7 @@ class XchangeExchangeWalletService(private val exchangeService: ExchangeService,
 
     }
 
-    override fun getCurrencyBalancesForEveryExchange(exchangeUserId: String): Map<ExchangeWithErrorMessage, List<CurrencyBalance>> {
-        val exchangeKeysGroupedByExchange = exchangeKeyService.getExchangeKeys(exchangeUserId).groupBy { it.exchangeId }
+    fun getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchange: Map<String, List<ExchangeKeyDto>>): Map<ExchangeWithErrorMessage, List<CurrencyBalance>> {
         val result = mutableMapOf<ExchangeWithErrorMessage, List<CurrencyBalance>>()
         runBlocking {
             exchangeKeysGroupedByExchange.forEach {
@@ -52,6 +67,11 @@ class XchangeExchangeWalletService(private val exchangeService: ExchangeService,
             }
         }
         return result
+    }
+
+    override fun getCurrencyBalancesForEveryExchange(exchangeUserId: String): Map<ExchangeWithErrorMessage, List<CurrencyBalance>> {
+        val exchangeKeysGroupedByExchange = exchangeKeyService.getExchangeKeys(exchangeUserId).groupBy { it.exchangeId }
+        return getCurrencyBalancesForEveryExchange(exchangeKeysGroupedByExchange)
     }
 
     private fun getAccountBalancesFor(exchangeName: String, exchangeKeys: List<ExchangeKeyDto>): List<CurrencyBalance> {
