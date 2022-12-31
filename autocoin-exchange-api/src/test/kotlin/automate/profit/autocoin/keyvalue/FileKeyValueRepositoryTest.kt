@@ -1,6 +1,6 @@
 package automate.profit.autocoin.keyvalue
 
-import automate.profit.autocoin.exchange.time.QueueClock
+import automate.profit.autocoin.exchange.clock.QueueClock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -70,7 +70,7 @@ class FileKeyValueRepositoryTest {
 
     @Test
     fun shouldKeepLastNVersions() {
-        val tested = FileKeyValueRepository(clock = QueueClock(listOf(1L, 2L, 3L, 4L)), fileExtension = ".json")
+        val tested = FileKeyValueRepository(clock = QueueClock.of(1, 2, 3, 4), fileExtension = ".json")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value1")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value2")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value3")
@@ -86,7 +86,7 @@ class FileKeyValueRepositoryTest {
 
     @Test
     fun shouldNotRemoveOtherKeysWhenKeepLastNVersions() {
-        val tested = FileKeyValueRepository(clock = QueueClock(listOf(1L, 2L, 3L)), fileExtension = ".json")
+        val tested = FileKeyValueRepository(clock = QueueClock.of(1, 2, 3), fileExtension = ".json")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value1")
         tested.saveNewVersion(directory = tempFolder, key = "test", "value2")
         tested.saveNewVersion(directory = tempFolder, key = "test2", "value3")
