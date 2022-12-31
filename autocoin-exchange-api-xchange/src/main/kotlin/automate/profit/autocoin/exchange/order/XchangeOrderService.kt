@@ -100,7 +100,7 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
     private fun getOpenOrdersFromExchange(currencyPairs: List<CurrencyPair>, exchangeName: String, exchangeKeyDtos: List<ExchangeKeyDto>): List<ExchangeOrder> {
         val openOrders = mutableListOf<ExchangeOrder>()
         exchangeKeyDtos.forEach {
-            val tradeService = userExchangeServicesFactory.createTradeService(exchangeName, it.apiKey, it.secretKey, it.userName)
+            val tradeService = userExchangeServicesFactory.createTradeService(exchangeName, it.apiKey, it.secretKey, it.userName, it.exchangeSpecificKeyParameters)
             openOrders += getOpenOrdersFromExchange(it, tradeService, currencyPairs)
         }
         return openOrders
@@ -152,7 +152,7 @@ class XchangeOrderService(private val exchangeService: ExchangeService,
         val exchangeId = exchangeService.getExchangeIdByName(exchangeName)
         val exchangeKey = exchangeKeyService.getExchangeKey(exchangeUserId, exchangeId)
                 ?: throw IllegalArgumentException("Exchange key for Exchange(name=$exchangeName,id=$exchangeId) and exchangeUserId=$exchangeUserId not found")
-        return userExchangeServicesFactory.createTradeService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName)
+        return userExchangeServicesFactory.createTradeService(exchangeName, exchangeKey.apiKey, exchangeKey.secretKey, exchangeKey.userName, exchangeKey.exchangeSpecificKeyParameters)
     }
 
     override fun placeLimitBuyOrder(exchangeName: String, exchangeUserId: String, baseCurrencyCode: String, counterCurrencyCode: String, buyPrice: BigDecimal, amount: BigDecimal): ExchangeOrder {

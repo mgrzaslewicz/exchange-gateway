@@ -2,10 +2,7 @@ package automate.profit.autocoin.exchange
 
 import automate.profit.autocoin.exchange.SupportedExchange.BINANCE
 import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
-import automate.profit.autocoin.exchange.peruser.UserExchangeServicesFactory
-import automate.profit.autocoin.exchange.peruser.XchangeFactory
-import automate.profit.autocoin.exchange.peruser.XchangeMetadataFile
-import automate.profit.autocoin.exchange.peruser.XchangeUserExchangeServicesFactory
+import automate.profit.autocoin.exchange.peruser.*
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.spy
 import com.nhaarman.mockito_kotlin.times
@@ -23,7 +20,7 @@ class XchangeUserExchangeServicesFactoryTest {
     @Before
     fun setup() {
         xchangeFactory = spy(XchangeFactory())
-        userExchangeServicesFactory = XchangeUserExchangeServicesFactory(xchangeFactory, XchangeMetadataFile())
+        userExchangeServicesFactory = XchangeUserExchangeServicesFactory(xchangeFactory, XchangeMetadataFile(), ExchangeSpecificationVerifier())
     }
 
     @Test
@@ -73,8 +70,8 @@ class XchangeUserExchangeServicesFactoryTest {
     @Test
     fun shouldUseCachedXchangeFactoryWhenUsingKeys() {
         // when
-        userExchangeServicesFactory.createTradeService(BITTREX.exchangeName, "public-key", "secret-key", null)
-        userExchangeServicesFactory.createTradeService(BITTREX.exchangeName, "public-key", "secret-key", null)
+        userExchangeServicesFactory.createTradeService(BITTREX.exchangeName, "public-key", "secret-key", null, emptyMap())
+        userExchangeServicesFactory.createTradeService(BITTREX.exchangeName, "public-key", "secret-key", null, emptyMap())
         // then
         verify(xchangeFactory, times(1)).createExchange(any())
     }
