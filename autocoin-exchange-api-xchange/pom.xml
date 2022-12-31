@@ -65,6 +65,11 @@
         </dependency>
         <dependency>
             <groupId>org.knowm.xchange</groupId>
+            <artifactId>xchange-hitbtc</artifactId>
+            <version>${xchange.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.knowm.xchange</groupId>
             <artifactId>xchange-kucoin</artifactId>
             <version>${xchange.version}</version>
         </dependency>

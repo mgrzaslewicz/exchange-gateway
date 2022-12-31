@@ -279,7 +279,9 @@ class KucoinExchangeMetadataFetcher : ExchangeMetadataFetcher {
 
 }
 
-class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedExchange, private val preventFromLoadingStaticJsonFile: Boolean = true) : ExchangeMetadataFetcher {
+class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedExchange,
+                                     private val preventFromLoadingStaticJsonFile: Boolean = true,
+                                     private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap()) : ExchangeMetadataFetcher {
     override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
         if (preventFromLoadingStaticJsonFile) {
@@ -297,9 +299,13 @@ class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedEx
                     it.value != null
                 }
                 .map {
-                    val currencyPair = it.key.toCurrencyPair()
+                    val currencyPairBeforeRename = it.key.toCurrencyPair()
+                    val currencyPair = currencyPairRename.getOrDefault(currencyPairBeforeRename, currencyPairBeforeRename)
+                    if (currencyPair != currencyPairBeforeRename) {
+                        logger.warn { "$supportedExchange-$currencyPairBeforeRename renamed to $currencyPair" }
+                    }
                     if (it.value.priceScale == null) {
-                        logger.warn { "supportedExchange-${it.key} priceScale is not provided" }
+                        logger.warn { "$supportedExchange-${it.key} priceScale is not provided" }
                     }
                     currencyPair to CurrencyPairMetadata(
                             amountScale = it.value.priceScale ?: DEFAULT_SCALE,
@@ -333,7 +339,11 @@ val overridenExchangeMetadataFetchers = listOf(
         BinanceExchangeMetadataFetcher(),
         KucoinExchangeMetadataFetcher(),
         DefaultExchangeMetadataFetcher(BITBAY, preventFromLoadingStaticJsonFile = false),
-        DefaultExchangeMetadataFetcher(GEMINI, preventFromLoadingStaticJsonFile = false)
+        DefaultExchangeMetadataFetcher(GEMINI, preventFromLoadingStaticJsonFile = false),
+        DefaultExchangeMetadataFetcher(HITBTC, currencyPairRename = mapOf(
+                CurrencyPair.of("REP/USD") to CurrencyPair.of("REP/USDT"),
+                CurrencyPair.of("XRP/USD") to CurrencyPair.of("XRP/USDT")
+        ))
 )
 
 val defaultExchangeMetadataFetchers = (SupportedExchange.values().toSet() - overridenExchangeMetadataFetchers.map { it.supportedExchange }.toSet())
