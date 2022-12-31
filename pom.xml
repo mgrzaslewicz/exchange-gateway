@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>automate.profit</groupId>
-    <artifactId>autocoin-exchange-engine</artifactId>
+    <groupId>com.autocoin</groupId>
+    <artifactId>exchange-gateway</artifactId>
     <version>3.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -17,10 +18,10 @@
     </properties>
 
     <modules>
-        <module>autocoin-exchange-spi</module>
-        <module>autocoin-exchange-api</module>
-        <module>autocoin-exchange-dto</module>
-        <module>autocoin-exchange-api-xchange</module>
+        <module>exchange-gateway-spi</module>
+        <module>exchange-gateway-api</module>
+        <module>exchange-gateway-dto</module>
+        <module>exchange-gateway-api-xchange</module>
     </modules>
 
     <scm>
