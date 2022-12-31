@@ -13,7 +13,7 @@
         <project.reporting.outputEAutocoinExchangesTesncoding>UTF-8</project.reporting.outputEAutocoinExchangesTesncoding>
         <java.version>14</java.version>
         <junit.version>5.6.0</junit.version>
-        <kotlin.version>1.7.0-RC</kotlin.version>
+        <kotlin.version>1.7.0</kotlin.version>
     </properties>
 
     <modules>
@@ -89,26 +89,36 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.35</version>
+                <version>1.7.36</version>
                 <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlinx</groupId>
                 <artifactId>kotlinx-coroutines-core</artifactId>
-                <version>1.6.0</version>
+                <version>1.6.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-kotlin</artifactId>
+                <version>2.13.3</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>31.1-jre</version>
             </dependency>
 
             <!-- Testing -->
             <dependency>
                 <groupId>org.assertj</groupId>
                 <artifactId>assertj-core</artifactId>
-                <version>3.21.0</version>
+                <version>3.22.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-test-junit5</artifactId>
-                <version>1.6.0</version>
+                <version>1.7.0</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -139,13 +149,13 @@
             <dependency>
                 <groupId>net.bytebuddy</groupId>
                 <artifactId>byte-buddy</artifactId>
-                <version>1.10.8</version>
+                <version>1.12.10</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
-                <version>4.0.0</version>
+                <version>4.5.1</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
