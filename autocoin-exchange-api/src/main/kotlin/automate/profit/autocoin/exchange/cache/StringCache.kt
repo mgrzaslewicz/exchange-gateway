@@ -13,3 +13,5 @@ open class StringCache : Cache<String, String>() {
 object ExchangeCache : StringCache()
 
 object CurrencyStringCache : StringCache()
+
+object ExchangeWithCurrencyPairStringCache : StringCache()

@@ -1,6 +1,7 @@
 package automate.profit.autocoin.exchange.ticker
 
 import automate.profit.autocoin.exchange.SupportedExchange
+import automate.profit.autocoin.exchange.cache.ExchangeWithCurrencyPairStringCache
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
 import java.time.Duration
@@ -76,7 +77,7 @@ class DefaultSynchronousTickerFetchScheduler(
     }
 
     private fun isNew(possiblyNewTicker: Ticker, exchange: SupportedExchange, currencyPair: CurrencyPair): Boolean {
-        val key = exchange.exchangeName + currencyPair
+        val key = ExchangeWithCurrencyPairStringCache.get(exchange.exchangeName + currencyPair)
         val isNew = when (val lastTicker = lastTicker[key]) {
             null -> true
             else -> possiblyNewTicker != lastTicker

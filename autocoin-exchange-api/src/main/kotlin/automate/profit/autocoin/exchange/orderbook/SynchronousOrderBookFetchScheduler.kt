@@ -1,6 +1,7 @@
 package automate.profit.autocoin.exchange.orderbook
 
 import automate.profit.autocoin.exchange.SupportedExchange
+import automate.profit.autocoin.exchange.cache.ExchangeWithCurrencyPairStringCache
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import mu.KLogging
 import java.time.Duration
@@ -26,7 +27,7 @@ class DefaultSynchronousOrderBookFetchScheduler(
 
     override fun onListenerDeregistered(exchange: SupportedExchange, currencyPair: CurrencyPair) {
     }
-   
+
     override fun onLastListenerDeregistered(exchange: SupportedExchange) {
         if (scheduledFetchers.containsKey(exchange)) {
             val scheduledFetcher = scheduledFetchers.getValue(exchange)
@@ -79,10 +80,10 @@ class DefaultSynchronousOrderBookFetchScheduler(
     }
 
     private fun isNew(possiblyNewOrderBook: OrderBook, exchange: SupportedExchange, currencyPair: CurrencyPair): Boolean {
-        val key = exchange.exchangeName + currencyPair
+        val key = ExchangeWithCurrencyPairStringCache.get(exchange.exchangeName + currencyPair)
         val isNew = when (val lastOrderBook = lastOrderBook[key]) {
             null -> true
-            else -> possiblyNewOrderBook != lastOrderBook
+            else -> !possiblyNewOrderBook.deepEquals(lastOrderBook)
         }
         if (isNew) this.lastOrderBook[key] = possiblyNewOrderBook
         return isNew
