@@ -6,8 +6,8 @@ import kotlinx.coroutines.runBlocking
 
 
 interface TickerListenerRegistrars {
-    fun registerTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean
-    fun removeTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean
+    fun registerTickerListener(tickerListener: TickerListener): Boolean
+    fun removeTickerListener(tickerListener: TickerListener): Boolean
     fun <T : TickerListener> getListenersOfClassList(clazz: Class<T>): List<T>
     fun fetchTickersAndNotifyListeners()
 }
@@ -39,11 +39,11 @@ class DefaultTickerListenerRegistrars(
     private fun checkNoDuplicates(tickerListenerRegistrarList: List<TickerListenerRegistrar>) {
         val uniqueCount = tickerListenerRegistrarList.groupingBy { it.exchangeName }.eachCount()
         val duplicates = uniqueCount.filter { it.value > 1 }
-        if (duplicates.isNotEmpty()) throw IllegalArgumentException("Configuration is invalid. There are duplicates: $duplicates")
+        require(duplicates.isEmpty()) { "Configuration is invalid. There are duplicates: $duplicates" }
     }
 
-    override fun registerTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean {
-        return getTickerListenerRegistrar(exchangeName).registerTickerListener(tickerListener)
+    override fun registerTickerListener(tickerListener: TickerListener): Boolean {
+        return getTickerListenerRegistrar(tickerListener.exchange()).registerTickerListener(tickerListener)
     }
 
     private fun getTickerListenerRegistrar(supportedExchange: SupportedExchange): TickerListenerRegistrar {
@@ -52,8 +52,8 @@ class DefaultTickerListenerRegistrars(
         }
     }
 
-    override fun removeTickerListener(exchangeName: SupportedExchange, tickerListener: TickerListener): Boolean {
-        return getTickerListenerRegistrar(exchangeName).removeTickerListener(tickerListener)
+    override fun removeTickerListener(tickerListener: TickerListener): Boolean {
+        return getTickerListenerRegistrar(tickerListener.exchange()).removeTickerListener(tickerListener)
     }
 
     override fun <T : TickerListener> getListenersOfClassList(clazz: Class<T>): List<T> {

@@ -1,6 +1,7 @@
 package automate.profit.autocoin.exchange
 
-import automate.profit.autocoin.exchange.SupportedExchange.*
+import automate.profit.autocoin.exchange.SupportedExchange.BITBAY
+import automate.profit.autocoin.exchange.SupportedExchange.BITTREX
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.ticker.*
 import com.nhaarman.mockitokotlin2.*
@@ -10,9 +11,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
 
-class TestTickerListener(private val currencyPair: CurrencyPair) : TickerListener {
+class TestTickerListener(private val currencyPair: CurrencyPair, private val supportedExchange: SupportedExchange) : TickerListener {
     override fun onTicker(ticker: Ticker) {}
     override fun currencyPair() = currencyPair
+    override fun exchange() = supportedExchange
 }
 
 
@@ -37,9 +39,9 @@ class TickerListenerRegistrarsTest {
     @Test
     fun shouldRegisterTickerListener() {
         // given
-        val listener = TestTickerListener(btcLtc)
+        val listener = TestTickerListener(btcLtc, BITTREX)
         // when
-        tickerListenerRegistrars.registerTickerListener(BITTREX, listener)
+        tickerListenerRegistrars.registerTickerListener(listener)
         // then
         verify(bittrexTickerListenerRegistrar).registerTickerListener(listener)
         verify(bitbayTickerListenerRegistrar, times(0)).registerTickerListener(listener)
@@ -48,13 +50,13 @@ class TickerListenerRegistrarsTest {
     @Test
     fun shouldRegisterTickerListenerWhenCreatingTickerListenerRegistrarOnTheFly() {
         // given
-        val listener = TestTickerListener(btcLtc)
+        val listener = TestTickerListener(btcLtc, BITTREX)
         val tickerListenerRegistrarProvider = mock<TickerListenerRegistrarProvider>().apply {
             whenever(this.createTickerListenerRegistrar(BITTREX)).thenReturn(bittrexTickerListenerRegistrar)
         }
         tickerListenerRegistrars = DefaultTickerListenerRegistrars(emptyList(), tickerListenerRegistrarProvider)
         // when
-        tickerListenerRegistrars.registerTickerListener(BITTREX, listener)
+        tickerListenerRegistrars.registerTickerListener(listener)
         // then
         verify(bittrexTickerListenerRegistrar).registerTickerListener(listener)
     }
@@ -63,8 +65,8 @@ class TickerListenerRegistrarsTest {
     fun shouldGetListenersOfClass() {
         // given
         tickerListenerRegistrars = DefaultTickerListenerRegistrars(tickerListenerRegistrarList, mock())
-        val listener = TestTickerListener(btcLtc)
-        tickerListenerRegistrars.registerTickerListener(BITTREX, listener)
+        val listener = TestTickerListener(btcLtc, BITTREX)
+        tickerListenerRegistrars.registerTickerListener(listener)
         // when
         val listeners = tickerListenerRegistrars.getListenersOfClassList(TestTickerListener::class.java)
         // then
@@ -74,10 +76,10 @@ class TickerListenerRegistrarsTest {
     @Test
     fun shouldRemoveRegisteredTickerListener() {
         // given
-        val listener = TestTickerListener(btcLtc)
-        tickerListenerRegistrars.registerTickerListener(BITTREX, listener)
+        val listener = TestTickerListener(btcLtc, BITTREX)
+        tickerListenerRegistrars.registerTickerListener(listener)
         // when
-        tickerListenerRegistrars.removeTickerListener(BITTREX, listener)
+        tickerListenerRegistrars.removeTickerListener(listener)
         // then
         verify(bittrexTickerListenerRegistrar).removeTickerListener(listener)
     }
