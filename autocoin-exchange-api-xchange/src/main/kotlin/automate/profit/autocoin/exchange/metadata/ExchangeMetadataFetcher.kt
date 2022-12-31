@@ -2,6 +2,7 @@ package automate.profit.autocoin.exchange.metadata
 
 import automate.profit.autocoin.exchange.SupportedExchange
 import automate.profit.autocoin.exchange.SupportedExchange.*
+import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.currency.CurrencyPair
 import automate.profit.autocoin.exchange.metadata.binance.BinanceExchangeMetadataFetcher
@@ -10,13 +11,13 @@ import automate.profit.autocoin.exchange.metadata.kucoin.KucoinExchangeMetadataF
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
 import automate.profit.autocoin.exchange.toXchangeJavaClass
 import mu.KotlinLogging
+import java.io.File
+import java.math.BigDecimal
 import org.knowm.xchange.ExchangeFactory as XchangeExchangeFactory
 import org.knowm.xchange.ExchangeSpecification as XchangeExchangeSpecification
 import org.knowm.xchange.currency.Currency as XchangeCurrency
 import org.knowm.xchange.dto.meta.CurrencyMetaData as XchangeCurrencyMetaData
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData as XchangeCurrencyPairMetaData
-import java.io.File
-import java.math.BigDecimal
 
 class XchangeMetadataJson(val json: String)
 
@@ -32,13 +33,6 @@ internal val DEFAULT_SCALE = 8
 
 internal fun numberOfDecimals(value: String): Int {
     return BigDecimal(value).stripTrailingZeros().scale()
-}
-
-internal fun XchangeExchangeSpecification.setApiKey(apiKey: ExchangeApiKey?) {
-    if (apiKey != null) {
-        this.apiKey = apiKey.publicKey
-        this.secretKey = apiKey.secretKey
-    }
 }
 
 private val emptyXchangeMetadataFile = """
@@ -100,12 +94,13 @@ class DefaultExchangeMetadataFetcher(
     override val supportedExchange: SupportedExchange,
     private val exchangeFactory: XchangeExchangeFactory,
     private val preventFromLoadingDefaultXchangeMetadata: Boolean = true,
+    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner,
     private val currencyPairRename: Map<CurrencyPair, CurrencyPair> = emptyMap()
 ) : ExchangeMetadataFetcher {
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = XchangeExchangeSpecification(supportedExchange.toXchangeJavaClass())
-        exchangeSpec.setApiKey(apiKey)
+        xchangeSpecificationApiKeyAssigner.assignKeys(supportedExchange, exchangeSpec, apiKey)
         if (preventFromLoadingDefaultXchangeMetadata) {
             preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         }
@@ -157,30 +152,79 @@ class DefaultExchangeMetadataFetcher(
     }
 }
 
-fun overridenExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory) = listOf(
-    BittrexExchangeMetadataFetcher(exchangeFactory),
-    BinanceExchangeMetadataFetcher(exchangeFactory),
-    KucoinExchangeMetadataFetcher(exchangeFactory),
-    DefaultExchangeMetadataFetcher(supportedExchange = BITBAY, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
-    DefaultExchangeMetadataFetcher(supportedExchange = BITSTAMP, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
-    DefaultExchangeMetadataFetcher(supportedExchange = COINDEAL, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
-    DefaultExchangeMetadataFetcher(supportedExchange = GEMINI, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
-    DefaultExchangeMetadataFetcher(supportedExchange = IDEX, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
+fun overridenExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner) = listOf(
+    BittrexExchangeMetadataFetcher(
+        exchangeFactory = exchangeFactory,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
+    BinanceExchangeMetadataFetcher(
+        exchangeFactory = exchangeFactory,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
+    KucoinExchangeMetadataFetcher(
+        exchangeFactory = exchangeFactory,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
+    DefaultExchangeMetadataFetcher(
+        supportedExchange = BITBAY,
+        exchangeFactory = exchangeFactory,
+        preventFromLoadingDefaultXchangeMetadata = false,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
+    DefaultExchangeMetadataFetcher(
+        supportedExchange = BITSTAMP,
+        exchangeFactory = exchangeFactory,
+        preventFromLoadingDefaultXchangeMetadata = false,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
+    DefaultExchangeMetadataFetcher(
+        supportedExchange = COINDEAL,
+        exchangeFactory = exchangeFactory,
+        preventFromLoadingDefaultXchangeMetadata = false,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
+    DefaultExchangeMetadataFetcher(
+        supportedExchange = GEMINI,
+        exchangeFactory = exchangeFactory,
+        preventFromLoadingDefaultXchangeMetadata = false,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
+    DefaultExchangeMetadataFetcher(
+        supportedExchange = IDEX,
+        exchangeFactory = exchangeFactory,
+        preventFromLoadingDefaultXchangeMetadata = false,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
     DefaultExchangeMetadataFetcher(
         exchangeFactory = exchangeFactory,
         supportedExchange = HITBTC, currencyPairRename = mapOf(
             CurrencyPair.of("REP/USD") to CurrencyPair.of("REP/USDT"),
             CurrencyPair.of("XRP/USD") to CurrencyPair.of("XRP/USDT")
-        )
+        ),
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
     ),
-    DefaultExchangeMetadataFetcher(LUNO, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false),
-    DefaultExchangeMetadataFetcher(POLONIEX, exchangeFactory = exchangeFactory, preventFromLoadingDefaultXchangeMetadata = false)
+    DefaultExchangeMetadataFetcher(
+        supportedExchange = LUNO,
+        exchangeFactory = exchangeFactory,
+        preventFromLoadingDefaultXchangeMetadata = false,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    ),
+    DefaultExchangeMetadataFetcher(
+        supportedExchange = POLONIEX,
+        exchangeFactory = exchangeFactory,
+        preventFromLoadingDefaultXchangeMetadata = false,
+        xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+    )
 )
 
-fun defaultExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory) =
-    (SupportedExchange.values().toSet() - overridenExchangeMetadataFetchers(exchangeFactory)
+fun defaultExchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner) =
+    (SupportedExchange.values().toSet() - overridenExchangeMetadataFetchers(exchangeFactory, xchangeSpecificationApiKeyAssigner)
         .map { it.supportedExchange }.toSet())
-        .map { DefaultExchangeMetadataFetcher(supportedExchange = it, exchangeFactory = exchangeFactory) }
+        .map { DefaultExchangeMetadataFetcher(
+            supportedExchange = it,
+            exchangeFactory = exchangeFactory,
+            xchangeSpecificationApiKeyAssigner = xchangeSpecificationApiKeyAssigner
+        ) }
 
-fun exchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory = XchangeExchangeFactory.INSTANCE) =
-    overridenExchangeMetadataFetchers(exchangeFactory) + defaultExchangeMetadataFetchers(exchangeFactory)
+fun exchangeMetadataFetchers(exchangeFactory: XchangeExchangeFactory, xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner) =
+    overridenExchangeMetadataFetchers(exchangeFactory, xchangeSpecificationApiKeyAssigner) + defaultExchangeMetadataFetchers(exchangeFactory, xchangeSpecificationApiKeyAssigner)

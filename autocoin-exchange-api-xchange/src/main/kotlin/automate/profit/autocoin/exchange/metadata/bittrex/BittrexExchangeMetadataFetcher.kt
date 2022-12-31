@@ -1,6 +1,7 @@
 package automate.profit.autocoin.exchange.metadata.bittrex
 
 import automate.profit.autocoin.exchange.SupportedExchange
+import automate.profit.autocoin.exchange.XchangeSpecificationApiKeyAssigner
 import automate.profit.autocoin.exchange.apikey.ExchangeApiKey
 import automate.profit.autocoin.exchange.metadata.*
 import automate.profit.autocoin.exchange.peruser.toCurrencyPair
@@ -20,7 +21,8 @@ import java.math.RoundingMode
 class BittrexExchangeMetadataFetcher(
     private val exchangeFactory: ExchangeFactory,
     private val bittrexSymbolsProvider: (Exchange) -> List<BittrexSymbol> = { exchange -> (exchange.marketDataService as BittrexMarketDataServiceRaw).bittrexSymbols },
-    private val xchangeMetadataProvider: (Exchange) -> ExchangeMetaData = { exchange -> exchange.exchangeMetaData }
+    private val xchangeMetadataProvider: (Exchange) -> ExchangeMetaData = { exchange -> exchange.exchangeMetaData },
+    private val xchangeSpecificationApiKeyAssigner: XchangeSpecificationApiKeyAssigner
 ) : ExchangeMetadataFetcher {
     private val logger = KotlinLogging.logger {}
 
@@ -28,7 +30,7 @@ class BittrexExchangeMetadataFetcher(
 
     override fun fetchExchangeMetadata(apiKey: ExchangeApiKey?): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeJavaClass())
-        exchangeSpec.setApiKey(apiKey)
+        xchangeSpecificationApiKeyAssigner.assignKeys(SupportedExchange.BITTREX, exchangeSpec, apiKey)
         preventFromLoadingDefaultXchangeMetadata(exchangeSpec)
         val exchange = exchangeFactory.createExchange(exchangeSpec)
         val bittrexSymbols = bittrexSymbolsProvider(exchange)

@@ -72,7 +72,7 @@ class FileExchangeMetadataRepository(
         val newXchangeMetadataFile = exchangeDirectory.resolve(newXchangeMetadataFileName)
         updateLock.lock()
         try {
-            logger.info { "[$supportedExchange] Writing metadata to file ${newMetadataFile.absolutePath}" }
+            logger.info { "[$supportedExchange] Writing acutocoin metadata to file ${newMetadataFile.absolutePath}" }
             newMetadataFile.writeText(exchangeMetadata.asJson())
             logger.info { "[$supportedExchange] Writing xchange metadata to file ${newXchangeMetadataFile.absolutePath}" }
             newXchangeMetadataFile.writeText(xchangeMetadataJson.json)
