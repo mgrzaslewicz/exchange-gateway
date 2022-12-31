@@ -15,6 +15,8 @@ import org.knowm.xchange.currency.Currency
 import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 import org.knowm.xchange.dto.meta.CurrencyMetaData
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData
+import org.knowm.xchange.kucoin.KucoinAdapters
+import org.knowm.xchange.kucoin.KucoinMarketDataService
 import java.io.File
 import java.math.BigDecimal
 import java.math.BigDecimal.ROUND_HALF_UP
@@ -30,6 +32,10 @@ private val logger = KotlinLogging.logger {}
 private fun BigDecimal?.orMin() = this ?: 0.00000001.toBigDecimal()
 private fun BigDecimal?.orMax() = this ?: BigDecimal.valueOf(Long.MAX_VALUE)
 private val DEFAULT_SCALE = 8
+
+private fun numberOfDecimals(value: String): Int {
+    return BigDecimal(value).stripTrailingZeros().scale()
+}
 
 private val emptyXchangeMetadataFile = """
 {
@@ -128,9 +134,6 @@ class BinanceExchangeMetadataFetcher : ExchangeMetadataFetcher {
 
     private val logger = KotlinLogging.logger {}
 
-    private fun numberOfDecimals(value: String): Int {
-        return BigDecimal(value).stripTrailingZeros().scale()
-    }
 
     override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
@@ -234,33 +237,43 @@ class KucoinExchangeMetadataFetcher : ExchangeMetadataFetcher {
         val exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
         val xchangeMetadata = exchange.exchangeMetaData
         val xchangeMetadataJson = xchangeMetadata.toJSONString()
+        val kucoinSymbols = (exchange.marketDataService as KucoinMarketDataService).kucoinSymbols
+
+        val currencyPairsMap = mutableMapOf<CurrencyPair, CurrencyPairMetadata>()
+        val currenciesMap = mutableMapOf<String, CurrencyMetadata>()
+        kucoinSymbols.forEach { symbol ->
+
+            val pair = KucoinAdapters.adaptCurrencyPair(symbol.getSymbol())
+
+            val minSize = symbol.baseMinSize
+            val maxSize = symbol.baseMaxSize
+            val priceScale = symbol.priceIncrement.stripTrailingZeros().scale()
+
+            val amountScale = symbol.quoteIncrement.stripTrailingZeros().scale()
+            val currencyPair = pair.toCurrencyPair()
+
+            currencyPairsMap[currencyPair] = CurrencyPairMetadata(
+                    amountScale = amountScale,
+                    priceScale = priceScale,
+                    minimumAmount = minSize.orMin(),
+                    maximumAmount = maxSize.orMax(),
+                    minimumOrderValue = BigDecimal.ZERO, // not present in kucoin api
+                    maximumPriceMultiplierUp = 1.2.toBigDecimal(), // not present in kucoin api
+                    maximumPriceMultiplierDown = 0.8.toBigDecimal(), // not present in kucoin api
+                    buyFeeMultiplier = BigDecimal.ZERO // not present in kucoin api
+            )
+            currenciesMap[pair.base.currencyCode] = CurrencyMetadata(
+                    scale = DEFAULT_SCALE
+            )
+            currenciesMap[pair.counter.currencyCode] = CurrencyMetadata(
+                    scale = DEFAULT_SCALE
+            )
+        }
         val exchangeMetadata = ExchangeMetadata(
-                currencyPairMetadata = xchangeMetadata.currencyPairs
-                        .filter {
-                            if (it.value == null) {
-                                logger.warn { "$supportedExchange-${it.key} no currency pair in metadata, skipping" }
-                            }
-                            it.value != null
-                        }
-                        .map {
-                            val currencyPair = it.key.toCurrencyPair()
-                            currencyPair to CurrencyPairMetadata(
-                                    amountScale = it.value.priceScale,
-                                    priceScale = it.value.priceScale,
-                                    minimumAmount = it.value.minimumAmount.orMin(),
-                                    maximumAmount = it.value.maximumAmount.orMax(),
-                                    minimumOrderValue = BigDecimal.ZERO,
-                                    maximumPriceMultiplierUp = 10.toBigDecimal(),
-                                    maximumPriceMultiplierDown = 0.1.toBigDecimal(),
-                                    buyFeeMultiplier = BigDecimal.ZERO
-                            )
-                        }.toMap(),
-                currencyMetadata = exchange.exchangeMetaData.currencies.map {
-                    it.key.currencyCode to CurrencyMetadata(
-                            scale = getScaleOrDefault(supportedExchange, it.key, it.value)
-                    )
-                }.toMap()
+                currencyPairMetadata = currencyPairsMap,
+                currencyMetadata = currenciesMap.toMap()
         )
+
         return Pair(XchangeMetadataJson(xchangeMetadataJson), exchangeMetadata)
     }
 
