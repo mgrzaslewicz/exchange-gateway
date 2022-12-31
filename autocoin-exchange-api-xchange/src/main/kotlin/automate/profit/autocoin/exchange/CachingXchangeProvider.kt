@@ -36,8 +36,9 @@ class CachingXchangeProvider(
             logger.debug { "Using cached exchange for key $keyTruncated" }
         } else {
             logger.info { "[$supportedExchange] Creating exchange for key '$keyTruncated' and userName '${exchangeSpec.userName}'" }
-             //Metadata is provided by ExchangeMetadataService so don't fetch it each time
-            exchangeSpec.isShouldLoadRemoteMetaData = false
+            // TODO when it needs to be more effective, prevent from remote init each time and change provide json file
+            // It will need ExchangeMetadataService modification
+            exchangeSpec.isShouldLoadRemoteMetaData = true
             val xchange = xchangeFactoryWrapper.createExchange(exchangeSpec)
             xchangesCache[cacheKey] = xchange
         }
