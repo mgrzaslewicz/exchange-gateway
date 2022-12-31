@@ -28,8 +28,11 @@ class ExchangeMetadataRefresher(
             try {
                 val (xchangeMetadataJson, freshExchangeMetadata) = fetchersMap.getValue(supportedExchange).fetchExchangeMetadata()
                 exchangeMetadataRepository.saveExchangeMetadata(supportedExchange, freshExchangeMetadata, xchangeMetadataJson)
-            } catch (e: Exception) {
-                logger.error(e) { "Error metadata refresh for $supportedExchange" }
+            } catch(e: Exception) {
+                logger.error(e) { "Exception during metadata refresh for $supportedExchange" }
+            }
+            catch (e: Throwable/* catch runtime class errors too */) {
+                logger.error(e) { "Error during metadata refresh for $supportedExchange" }
             }
         }
     }

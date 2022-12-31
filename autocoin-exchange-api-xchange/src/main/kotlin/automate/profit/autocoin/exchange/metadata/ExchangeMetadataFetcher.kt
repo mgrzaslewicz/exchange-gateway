@@ -279,10 +279,12 @@ class KucoinExchangeMetadataFetcher : ExchangeMetadataFetcher {
 
 }
 
-class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedExchange) : ExchangeMetadataFetcher {
+class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedExchange, private val preventFromLoadingStaticJsonFile: Boolean = true) : ExchangeMetadataFetcher {
     override fun fetchExchangeMetadata(): Pair<XchangeMetadataJson, ExchangeMetadata> {
         val exchangeSpec = ExchangeSpecification(supportedExchange.toXchangeClass().java)
-        preventFromLoadingStaticJsonFile(exchangeSpec)
+        if (preventFromLoadingStaticJsonFile) {
+            preventFromLoadingStaticJsonFile(exchangeSpec)
+        }
         val exchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpec)
         val xchangeMetadata = exchange.exchangeMetaData
         val xchangeMetadataJson = xchangeMetadata.toJSONString()
@@ -326,21 +328,14 @@ class DefaultExchangeMetadataFetcher(override val supportedExchange: SupportedEx
     }
 }
 
-val defaultExchangeMetadataFetchers = listOf(
-        DefaultExchangeMetadataFetcher(BIBOX),
-        DefaultExchangeMetadataFetcher(BITBAY),
-        DefaultExchangeMetadataFetcher(BITMEX),
-        DefaultExchangeMetadataFetcher(BITSTAMP),
-        DefaultExchangeMetadataFetcher(BITZ),
-        DefaultExchangeMetadataFetcher(GATEIO),
-        DefaultExchangeMetadataFetcher(KRAKEN),
-        DefaultExchangeMetadataFetcher(POLONIEX),
-        DefaultExchangeMetadataFetcher(TRADEOGRE),
-        DefaultExchangeMetadataFetcher(YOBIT)
-)
-
-val exchangeMetadataFetchers = listOf(
+val overridenExchangeMetadataFetchers = listOf(
         BittrexExchangeMetadataFetcher(),
         BinanceExchangeMetadataFetcher(),
-        KucoinExchangeMetadataFetcher()
-) + defaultExchangeMetadataFetchers
+        KucoinExchangeMetadataFetcher(),
+        DefaultExchangeMetadataFetcher(GEMINI, preventFromLoadingStaticJsonFile = false)
+)
+
+val defaultExchangeMetadataFetchers = (SupportedExchange.values().toSet() - overridenExchangeMetadataFetchers.map { it.supportedExchange }.toSet())
+        .map { DefaultExchangeMetadataFetcher(it) }
+
+val exchangeMetadataFetchers = overridenExchangeMetadataFetchers + defaultExchangeMetadataFetchers
