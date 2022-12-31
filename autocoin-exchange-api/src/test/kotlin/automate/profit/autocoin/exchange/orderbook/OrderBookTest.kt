@@ -1194,7 +1194,7 @@ class OrderBookTest {
                     type = ExchangeOrderType.valueOf(it.get("type").textValue()),
                     orderedAmount = BigDecimal(it.get("orderedAmount").doubleValue()),
                     price = BigDecimal(it.get("price").textValue()),
-                    currencyPair = CurrencyPair(base = it.get("baseCurrency").textValue(), counter = it.get("counterCurrency").textValue()),
+                    currencyPair = CurrencyPair.of(base = it.get("baseCurrency").textValue(), counter = it.get("counterCurrency").textValue()),
                     timestamp = null
             )
         }

@@ -14,6 +14,6 @@ data class CancelOrderRequestDto(
     fun toExchangeCancelOrderParams() = ExchangeCancelOrderParams(
             orderId = orderId,
             orderType = ExchangeOrderType.valueOf(orderType),
-            currencyPair = CurrencyPair.invoke(currencyPair.baseCurrencyCode, currencyPair.counterCurrencyCode)
+            currencyPair = CurrencyPair.of(currencyPair.baseCurrencyCode, currencyPair.counterCurrencyCode)
     )
 }

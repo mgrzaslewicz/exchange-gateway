@@ -20,7 +20,7 @@ data class OrderBookExchangeOrderDto(
             type = type,
             orderedAmount = orderedAmount.toBigDecimal(),
             price = BigDecimal(price),
-            currencyPair = CurrencyPair(baseCurrency, counterCurrency),
+            currencyPair = CurrencyPair.of(baseCurrency, counterCurrency),
             timestamp = if (timestamp != null) Instant.ofEpochMilli(timestamp) else null
     )
 }
