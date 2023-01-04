@@ -18,7 +18,7 @@ import java.math.BigDecimal
 
 
 class OrderBookTest {
-    private val objectMapper = ObjectMapper().registerModule(KotlinModule())
+    private val objectMapper = ObjectMapper().registerModule(KotlinModule.Builder().build())
     private val currencyPair = CurrencyPair.of("currencyX/currencyY")
     private val timestampDoesNotMatter = System.currentTimeMillis()
 

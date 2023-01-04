@@ -1,6 +1,7 @@
 package com.autocoin.exchangegateway.dto.exchange.wallet
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyBalance
+import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyBalance as SpiCurrencyBalance
 import com.autocoin.exchangegateway.dto.SerializableToJson
 import com.autocoin.exchangegateway.dto.appendMapWithNullableValues
 
@@ -37,7 +38,7 @@ data class CurrencyBalanceDto(
 
 }
 
-fun CurrencyBalance.toDto() = CurrencyBalanceDto(
+fun SpiCurrencyBalance.toDto() = CurrencyBalanceDto(
     currencyCode = this.currencyCode,
     amountAvailable = this.amountAvailable.toPlainString(),
     totalAmount = this.totalAmount.toPlainString(),

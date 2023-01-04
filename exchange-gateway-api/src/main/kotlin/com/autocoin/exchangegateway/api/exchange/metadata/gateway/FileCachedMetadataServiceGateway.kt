@@ -1,8 +1,10 @@
-package com.autocoin.exchangegateway.api.exchange.metadata
+package com.autocoin.exchangegateway.api.exchange.metadata.gateway
 
+import com.autocoin.exchangegateway.api.exchange.metadata.repository.ExchangeMetadataResult
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKey
 import com.autocoin.exchangegateway.spi.exchange.metadata.gateway.MetadataServiceGateway
+import com.autocoin.exchangegateway.spi.keyvalue.KeyValueRepository
 import mu.KLogging
 import java.util.function.Supplier
 import com.autocoin.exchangegateway.spi.exchange.metadata.ExchangeMetadata as SpiExchangeMetadata
@@ -12,7 +14,7 @@ import com.autocoin.exchangegateway.spi.exchange.metadata.ExchangeMetadata as Sp
  */
 class FileCachedMetadataServiceGateway(
     private val decorated: MetadataServiceGateway,
-    private val exchangeMetadataRepository: ExchangeMetadataRepository,
+    private val metadataRepository: KeyValueRepository<SpiExchangeMetadata, String, SpiExchangeMetadata>,
 ) : MetadataServiceGateway {
 
     companion object : KLogging()
@@ -29,12 +31,11 @@ class FileCachedMetadataServiceGateway(
         apiKey: Supplier<ApiKey>?,
     ): SpiExchangeMetadata {
         logger.debug { "[$exchangeName] Getting exchange metadata" }
-        val result = exchangeMetadataRepository.getLatestExchangeMetadata(exchangeName)
-        return if (result.hasMetadata()) {
-            result.exchangeMetadata!!
+        val result = metadataRepository.getLatestVersion(exchangeName.value)
+        return if (result != null) {
+            result
         }
         else {
-            logGettingMetadataError(result)
             logger.info { "[$exchangeName] Fetching exchange metadata" }
             return fetchAndSaveExchangeMetadata(
                 exchangeName = exchangeName,
@@ -51,7 +52,7 @@ class FileCachedMetadataServiceGateway(
             exchangeName = exchangeName,
             apiKey = apiKey,
         )
-        exchangeMetadataRepository.saveExchangeMetadata(exchangeName, freshExchangeMetadata)
+        metadataRepository.saveNewVersion(exchangeName.value, freshExchangeMetadata)
         return freshExchangeMetadata
     }
 
