@@ -2,7 +2,6 @@ package com.autocoin.exchangegateway.dto.exchange.metadata
 
 import com.autocoin.exchangegateway.api.exchange.metadata.CurrencyPairMetadata
 import com.autocoin.exchangegateway.api.exchange.metadata.FeeRanges
-import com.autocoin.exchangegateway.dto.SerializableToJson
 import com.autocoin.exchangegateway.spi.exchange.metadata.CurrencyPairMetadata as SpiCurrencyPairMetadata
 
 data class CurrencyPairMetadataDto(
@@ -15,7 +14,7 @@ data class CurrencyPairMetadataDto(
     val maximumPriceMultiplierDown: String,
     val buyFeeMultiplier: String,
     val transactionFeeRanges: FeeRangesDto,
-) : SerializableToJson {
+) {
     fun toCurrencyPairMetadata() = CurrencyPairMetadata(
         amountScale = amountScale,
         priceScale = priceScale,
@@ -31,27 +30,6 @@ data class CurrencyPairMetadataDto(
         ),
     )
 
-    override fun appendJson(builder: StringBuilder) = builder
-        .append("{")
-        .append("\"amountScale\":")
-        .append(amountScale)
-        .append(",\"priceScale\":")
-        .append(priceScale)
-        .append(",\"minimumAmount\":\"")
-        .append(minimumAmount)
-        .append("\",\"maximumAmount\":\"")
-        .append(maximumAmount)
-        .append("\",\"minimumOrderValue\":\"")
-        .append(minimumOrderValue)
-        .append("\",\"maximumPriceMultiplierUp\":\"")
-        .append(maximumPriceMultiplierUp)
-        .append("\",\"maximumPriceMultiplierDown\":\"")
-        .append(maximumPriceMultiplierDown)
-        .append("\",\"buyFeeMultiplier\":\"")
-        .append(buyFeeMultiplier)
-        .append("\",\"transactionFeeRanges\":")
-        .append(transactionFeeRanges.toJson())
-        .append("}")
 }
 
 fun SpiCurrencyPairMetadata.toDto() = CurrencyPairMetadataDto(

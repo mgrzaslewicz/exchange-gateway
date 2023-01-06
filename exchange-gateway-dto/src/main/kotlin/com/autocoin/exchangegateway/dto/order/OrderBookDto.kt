@@ -2,8 +2,6 @@ package com.autocoin.exchangegateway.dto.order
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.orderbook.OrderBook
-import com.autocoin.exchangegateway.dto.SerializableToJson
-import com.autocoin.exchangegateway.dto.appendNullable
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderBook as SpiOrderBook
 
@@ -21,7 +19,7 @@ data class OrderBookDto(
     val exchangeTimestampMillis: Long?,
 
     val errorMessage: String? = null,
-) : SerializableToJson {
+) {
     fun toOrderBook(): SpiOrderBook = OrderBook(
         exchangeName = ExchangeName(exchangeName),
         buyOrders = buyOrders.map { it.toOrderInOrderBook() },
@@ -31,21 +29,6 @@ data class OrderBookDto(
         currencyPair = CurrencyPair.of(currencyPair),
     )
 
-    override fun appendJson(builder: StringBuilder) = builder
-        .append("{")
-        .append("\"exchangeName\":\"$exchangeName\",")
-        .append("\"currencyPair\":\"$currencyPair\",")
-        .append("\"buyOrders\":[")
-        .append(buyOrders.joinToString(",") { it.toJson() })
-        .append("],")
-        .append("\"sellOrders\":[")
-        .append(sellOrders.joinToString(",") { it.toJson() })
-        .append("],")
-        .append("\"receivedAtMillis\":$receivedAtMillis,")
-        .append("\"exchangeTimestampMillis\":$exchangeTimestampMillis,")
-        .append("\"errorMessage\":")
-        .appendNullable(errorMessage)
-        .append("}")
 }
 
 fun OrderBook.toDto() =

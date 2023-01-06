@@ -2,7 +2,6 @@ package com.autocoin.exchangegateway.dto.exchange.order
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.orderbook.OrderInOrderBook
-import com.autocoin.exchangegateway.dto.TestObjectMapper
 import com.autocoin.exchangegateway.dto.order.toDto
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
@@ -27,16 +26,6 @@ class OrderInOrderBookDtoTest {
         val fromDto = dto.toOrderInOrderBook()
         // then
         assertThat(fromDto).isEqualTo(orderInOrderBook)
-    }
-
-    @Test
-    fun shouldSerializeToJson() {
-        // given
-        val objectMapper = TestObjectMapper().createObjectMapper()
-        // when
-        val json = dto.toJson()
-        // then
-        assertThat(json).isEqualTo(objectMapper.writeValueAsString(dto))
     }
 
 }

@@ -2,7 +2,6 @@ package com.autocoin.exchangegateway.dto.order
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.orderbook.OrderInOrderBook
-import com.autocoin.exchangegateway.dto.SerializableToJson
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderInOrderBook as SpiOrderInOrderBook
@@ -16,7 +15,7 @@ data class OrderInOrderBookDto(
     val counterCurrency: String,
     val receivedAtMillis: Long,
     val exchangeTimestampMillis: Long?,
-) : SerializableToJson {
+) {
     fun toOrderInOrderBook() = OrderInOrderBook(
         exchangeName = ExchangeName(exchangeName),
         side = OrderSide.valueOf(side),
@@ -27,17 +26,6 @@ data class OrderInOrderBookDto(
         exchangeTimestampMillis = exchangeTimestampMillis,
     )
 
-    override fun appendJson(builder: StringBuilder) = builder
-        .append("{")
-        .append("\"exchangeName\":\"$exchangeName\",")
-        .append("\"side\":\"$side\",")
-        .append("\"orderedAmount\":\"$orderedAmount\",")
-        .append("\"price\":\"$price\",")
-        .append("\"baseCurrency\":\"$baseCurrency\",")
-        .append("\"counterCurrency\":\"$counterCurrency\",")
-        .append("\"receivedAtMillis\":$receivedAtMillis,")
-        .append("\"exchangeTimestampMillis\":$exchangeTimestampMillis")
-        .append("}")
 }
 
 fun SpiOrderInOrderBook.toDto() = OrderInOrderBookDto(

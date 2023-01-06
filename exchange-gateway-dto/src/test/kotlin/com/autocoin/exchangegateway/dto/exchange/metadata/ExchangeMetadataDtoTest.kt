@@ -5,7 +5,6 @@ import com.autocoin.exchangegateway.api.exchange.metadata.CurrencyPairMetadata
 import com.autocoin.exchangegateway.api.exchange.metadata.ExchangeMetadata
 import com.autocoin.exchangegateway.api.exchange.metadata.FeeRange
 import com.autocoin.exchangegateway.api.exchange.metadata.FeeRanges
-import com.autocoin.exchangegateway.dto.TestObjectMapper
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -56,16 +55,6 @@ class ExchangeMetadataDtoTest {
         val fromDto = dto.toExchangeMetadata()
         // then
         assertThat(fromDto).isEqualTo(exchangeMetadata)
-    }
-
-    @Test
-    fun shouldSerializeToJson() {
-        // given
-        val objectMapper = TestObjectMapper().createObjectMapper()
-        // when
-        val json = dto.toJson()
-        // then
-        assertThat(json).isEqualTo(objectMapper.writeValueAsString(dto))
     }
 
 }
