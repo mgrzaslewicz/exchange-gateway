@@ -25,7 +25,6 @@ class OpenOrdersDtoTest {
         exchangeOrderId = "1-2-3",
     )
     private val openOrders = OpenOrders(
-        exchangeName = ExchangeName("exchange1"),
         exchangeUserId = "user1",
         openOrders = listOf(order1),
         errorMessage = null,
