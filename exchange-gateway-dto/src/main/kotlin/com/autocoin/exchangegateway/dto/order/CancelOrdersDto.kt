@@ -4,7 +4,7 @@ import com.autocoin.exchangegateway.dto.SerializableToJson
 
 
 data class CancelOrdersDto(
-    val orders: List<CancelOrderDto>,
+    val orders: List<CanceledOrderDto>,
 ) : SerializableToJson {
 
     override fun appendJson(builder: StringBuilder) = builder
