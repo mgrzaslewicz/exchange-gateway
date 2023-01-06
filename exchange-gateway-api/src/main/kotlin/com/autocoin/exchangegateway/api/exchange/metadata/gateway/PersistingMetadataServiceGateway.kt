@@ -1,39 +1,38 @@
 package com.autocoin.exchangegateway.api.exchange.metadata.gateway
 
-import com.autocoin.exchangegateway.api.exchange.metadata.repository.ExchangeMetadataResult
+import com.autocoin.exchangegateway.api.keyvalue.LatestVersion
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
-import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKey
+import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.metadata.gateway.MetadataServiceGateway
 import com.autocoin.exchangegateway.spi.keyvalue.KeyValueRepository
 import mu.KLogging
-import java.util.function.Supplier
 import com.autocoin.exchangegateway.spi.exchange.metadata.ExchangeMetadata as SpiExchangeMetadata
 
 /**
  * Will fetch and save metadata if there is none for given exchange yet
  */
-class FileCachedMetadataServiceGateway(
-    private val decorated: MetadataServiceGateway,
-    private val metadataRepository: KeyValueRepository<SpiExchangeMetadata, String, SpiExchangeMetadata>,
-) : MetadataServiceGateway {
+class PersistingMetadataServiceGateway<T>(
+    private val decorated: MetadataServiceGateway<T>,
+    private val metadataRepository: KeyValueRepository<LatestVersion<SpiExchangeMetadata>, ExchangeName, SpiExchangeMetadata>,
+) : MetadataServiceGateway<T> {
 
     companion object : KLogging()
 
     override fun getMetadata(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
     ): SpiExchangeMetadata {
         return getAndSaveExchangeMetadata(exchangeName, apiKey)
     }
 
     private fun getAndSaveExchangeMetadata(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
     ): SpiExchangeMetadata {
         logger.debug { "[$exchangeName] Getting exchange metadata" }
-        val result = metadataRepository.getLatestVersion(exchangeName.value)
+        val result = metadataRepository.getLatestVersion(exchangeName)
         return if (result != null) {
-            result
+            result.value
         }
         else {
             logger.info { "[$exchangeName] Fetching exchange metadata" }
@@ -46,30 +45,14 @@ class FileCachedMetadataServiceGateway(
 
     private fun fetchAndSaveExchangeMetadata(
         exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
     ): SpiExchangeMetadata {
         val freshExchangeMetadata = decorated.getMetadata(
             exchangeName = exchangeName,
             apiKey = apiKey,
         )
-        metadataRepository.saveNewVersion(exchangeName.value, freshExchangeMetadata)
+        metadataRepository.saveNewVersion(exchangeName, freshExchangeMetadata)
         return freshExchangeMetadata
     }
 
-    private fun logGettingMetadataError(exchangeMetadataResult: ExchangeMetadataResult) {
-        if (exchangeMetadataResult.hasException()) {
-            logger.error(exchangeMetadataResult.exception) { "Exception during loading metadata from storage" }
-        }
-    }
-
-    override fun refreshMetadata(
-        exchangeName: ExchangeName,
-        apiKey: Supplier<ApiKey>?,
-    ) {
-        logger.info { "[$exchangeName] Refreshing exchange metadata" }
-        fetchAndSaveExchangeMetadata(
-            exchangeName = exchangeName,
-            apiKey = apiKey,
-        )
-    }
 }

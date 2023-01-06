@@ -80,7 +80,10 @@ class XchangeAuthorizedTickerServiceFactory<T>(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
     ): AuthorizedTickerService<T> {
-        val xchange = xchangeProvider(exchangeName = exchangeName, apiKey = apiKey)
+        val xchange = xchangeProvider(
+            exchangeName = exchangeName,
+            apiKey = apiKey,
+        )
         return XchangeAuthorizedTickerService(
             exchangeName = exchangeName,
             apiKey = apiKey,

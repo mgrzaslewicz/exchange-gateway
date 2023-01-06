@@ -44,7 +44,7 @@ class ExchangeMetadataDtoTest {
         currencyMetadata = mapOf(
 
         ),
-        debugWarnings = listOf(
+        warnings = listOf(
             "Requires API keys to get ticker",
         ),
     )

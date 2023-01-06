@@ -1,5 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook.authorized
 
+import com.autocoin.exchangegateway.api.exchange.currency.defaultCurrencyPairToXchange
+import com.autocoin.exchangegateway.api.exchange.currency.defaultXchangeCurrencyPairTransformer
 import com.autocoin.exchangegateway.api.exchange.order.defaultXchangeTypeToOrderSide
 import com.autocoin.exchangegateway.api.exchange.orderbook.OrderBook
 import com.autocoin.exchangegateway.api.exchange.orderbook.XchangeLimitOrderToOrderInOrderBookTransformer
@@ -24,8 +26,8 @@ class XchangeAuthorizedOrderBookService<T>(
     override val apiKey: ApiKeySupplier<T>,
     val delegate: MarketDataService,
     private val clock: Clock,
-    private val xchangeCurrencyPairTransformer: Function<XchangeCurrencyPair, CurrencyPair> = com.autocoin.exchangegateway.api.exchange.currency.defaultXchangeCurrencyPairTransformer,
-    private val currencyPairToXchange: Function<CurrencyPair, XchangeCurrencyPair> = com.autocoin.exchangegateway.api.exchange.currency.defaultCurrencyPairToXchange,
+    private val xchangeCurrencyPairTransformer: Function<XchangeCurrencyPair, CurrencyPair> = defaultXchangeCurrencyPairTransformer,
+    private val currencyPairToXchange: Function<CurrencyPair, XchangeCurrencyPair> = defaultCurrencyPairToXchange,
     private val xchangeOrderBookTransformer: XchangeOrderBookTransformer = defaultXchangeOrderBookTransformer,
     private val xchangeTypeToOrderSide: Function<XchangeOrder.OrderType, OrderSide> = defaultXchangeTypeToOrderSide,
     private val xchangeLimitOrderToOrderInOrderBookTransformer: XchangeLimitOrderToOrderInOrderBookTransformer = defaultXchangeLimitOrderToOrderInOrderBookTransformer,

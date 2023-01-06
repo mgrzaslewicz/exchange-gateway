@@ -14,7 +14,10 @@ class XchangeAuthorizedWalletServiceFactory<T>(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
     ): AuthorizedWalletService<T> {
-        val xchange = xchangeProvider(exchangeName = exchangeName, apiKey = apiKey)
+        val xchange = xchangeProvider(
+            exchangeName = exchangeName,
+            apiKey = apiKey,
+        )
         return XchangeAuthorizedWalletService(
             exchangeName = exchangeName,
             apiKey = apiKey,

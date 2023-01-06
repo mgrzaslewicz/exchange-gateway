@@ -1,12 +1,13 @@
-package com.autocoin.exchangegateway.spi.exchange.metadata.service
+package com.autocoin.exchangegateway.spi.exchange.metadata.service.authorized
 
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 
-interface MetadataServiceFactory<T> {
-    fun createMetadataService(
+interface AuthorizedMetadataServiceFactory<T> {
+
+    fun createAuthorizeMetadataService(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
-    ): MetadataService<T>
+    ): AuthorizedMetadataService<T>
 
 }
