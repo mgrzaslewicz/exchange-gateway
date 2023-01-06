@@ -1,23 +1,22 @@
 package com.autocoin.exchangegateway.spi.exchange.ratelimiter
 
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
-import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKey
-import java.util.function.Supplier
+import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 
 
 interface RateLimitedEndpoint
 
-interface ExchangeRateLimiterGateway {
+interface ExchangeRateLimiterGateway<T> {
     fun acquirePermit(
         exchangeName: ExchangeName,
         rateLimitedEndpoint: RateLimitedEndpoint,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
     )
 
     fun tryAcquirePermit(
         exchangeName: ExchangeName,
         rateLimitedEndpoint: RateLimitedEndpoint,
-        apiKey: Supplier<ApiKey>?,
+        apiKey: ApiKeySupplier<T>,
     ): Boolean
 }
 

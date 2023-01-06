@@ -65,8 +65,6 @@ class DefaultXchangeProvider<T>(
     private val exchangeNameToXchangeClass: Function<ExchangeName, Class<out Exchange>> = defaultExchangeNameToXchangeClass,
 ) : XchangeProvider<T> {
     companion object {
-
-
         val defaultExchangeNameToXchangeClassMap: Map<ExchangeName, Class<out Exchange>> = mapOf(
             bibox to BiboxExchange::class.java,
             binance to BinanceExchange::class.java,
@@ -113,8 +111,7 @@ class DefaultXchangeProvider<T>(
                 apiKeySupplier = apiKey.supplier!!,
             )
         }
-        // TODO when it needs to be more effective, prevent from remote init each time and change provide json file
-        // It will need ExchangeMetadataService modification
+        // TODO provide a way to configure the exchange
         exchangeSpec.isShouldLoadRemoteMetaData = true
         val xchange = xchangeInstanceProvider(exchangeSpec)
         return xchange

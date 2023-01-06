@@ -26,9 +26,15 @@ class CachingXchangeProvider<T, K>(
         exchangeName: ExchangeName,
         apiKey: ApiKeySupplier<T>,
     ): XchangeExchange {
-        val cacheKey = apiKeyToCacheKey(exchangeName = exchangeName, apiKey = apiKey)
+        val cacheKey = apiKeyToCacheKey(
+            exchangeName = exchangeName,
+            apiKey = apiKey,
+        )
         return cache.computeIfAbsent(cacheKey) {
-            decorated(exchangeName, apiKey)
+            decorated(
+                exchangeName = exchangeName,
+                apiKey = apiKey,
+            )
         }
     }
 }

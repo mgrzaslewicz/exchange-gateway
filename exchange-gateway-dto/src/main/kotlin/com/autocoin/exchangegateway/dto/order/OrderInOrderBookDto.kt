@@ -2,6 +2,7 @@ package com.autocoin.exchangegateway.dto.order
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.orderbook.OrderInOrderBook
+import com.autocoin.exchangegateway.dto.SerializableToJson
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderInOrderBook as SpiOrderInOrderBook
@@ -15,7 +16,7 @@ data class OrderInOrderBookDto(
     val counterCurrency: String,
     val receivedAtMillis: Long,
     val exchangeTimestampMillis: Long?,
-) : com.autocoin.exchangegateway.dto.SerializableToJson {
+) : SerializableToJson {
     fun toOrderInOrderBook() = OrderInOrderBook(
         exchangeName = ExchangeName(exchangeName),
         side = OrderSide.valueOf(side),

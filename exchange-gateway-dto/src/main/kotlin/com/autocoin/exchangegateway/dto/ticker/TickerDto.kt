@@ -2,6 +2,7 @@ package com.autocoin.exchangegateway.dto.ticker
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.ticker.Ticker
+import com.autocoin.exchangegateway.dto.SerializableToJson
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker as SpiTicker
 
@@ -14,7 +15,7 @@ data class TickerDto(
     val counterCurrency24hVolume: String,
     val receivedAtMillis: Long,
     val exchangeTimestampMillis: Long?,
-) : com.autocoin.exchangegateway.dto.SerializableToJson {
+) : SerializableToJson {
     fun toTicker(): SpiTicker = Ticker(
         exchangeName = ExchangeName(exchange),
         currencyPair = CurrencyPair.of(currencyPair),
