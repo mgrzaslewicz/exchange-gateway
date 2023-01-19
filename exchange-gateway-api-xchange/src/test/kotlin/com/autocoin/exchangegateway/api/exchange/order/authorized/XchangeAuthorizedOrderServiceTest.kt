@@ -1,5 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.order.authorized
 
+import com.autocoin.exchangegateway.api.exchange.apikey.ApiKey
+import com.autocoin.exchangegateway.api.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.currency.defaultCurrencyPairToXchange
 import com.autocoin.exchangegateway.api.exchange.order.Order
@@ -97,10 +99,10 @@ class XchangeAuthorizedOrderServiceTest {
             clock = Clock.systemDefaultZone(),
         ).createAuthorizedOrderService(
             kucoin,
-            apiKey = com.autocoin.exchangegateway.api.exchange.ApiKeySupplier(
+            apiKey = ApiKeySupplier(
                 id = "1-2-3",
                 supplier = {
-                    com.autocoin.exchangegateway.api.exchange.ApiKey(
+                    ApiKey(
                         publicKey = "public-key",
                         secretKey = "secret-key",
                     )

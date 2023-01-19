@@ -1,5 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange
 
+import com.autocoin.exchangegateway.api.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.api.exchange.xchange.ApiKeyToCacheKeyProvider
 import com.autocoin.exchangegateway.api.exchange.xchange.CachingXchangeProvider
 import com.autocoin.exchangegateway.api.exchange.xchange.DefaultXchangeProvider

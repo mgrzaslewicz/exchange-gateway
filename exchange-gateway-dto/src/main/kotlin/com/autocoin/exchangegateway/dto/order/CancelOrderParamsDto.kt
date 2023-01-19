@@ -10,12 +10,15 @@ data class CancelOrderParamsDto(
     val exchangeName: String,
     val orderId: String,
     val orderSide: String,
-    val currencyPair: CurrencyPairDto,
+    /**
+     * base/counter format
+     */
+    val currencyPair: String,
 ) {
     fun toCancelOrderParams() = CancelOrderParams(
         orderId = orderId,
         orderSide = OrderSide.valueOf(orderSide),
         exchangeName = ExchangeName(exchangeName),
-        currencyPair = CurrencyPair.of(currencyPair.base, currencyPair.counter),
+        currencyPair = CurrencyPair.of(currencyPair)
     )
 }

@@ -1,5 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.ticker
 
+import com.autocoin.exchangegateway.api.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.currency.ExchangeWithCurrencyPairStringCache
@@ -22,7 +23,7 @@ interface SynchronousTickerFetchScheduler<T> : TickerRegistrationListener {
 class DefaultSynchronousTickerFetchScheduler<T>(
     private val allowedExchangeFetchFrequency: Map<ExchangeName, Duration>,
     private val tickerService: SpiTickerService<T>,
-    private val apiKeys: Map<ExchangeName, com.autocoin.exchangegateway.api.exchange.ApiKeySupplier<T>>,
+    private val apiKeys: Map<ExchangeName, ApiKeySupplier<T>>,
     private val tickerListeners: TickerListeners,
     /** Not 100% sure if separate threads are needed here in the same way as for fetching order books.
      * However, it proved to work well there so using it here too.*/

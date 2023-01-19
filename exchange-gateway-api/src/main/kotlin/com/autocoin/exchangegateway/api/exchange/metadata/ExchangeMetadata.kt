@@ -9,7 +9,7 @@ import com.autocoin.exchangegateway.spi.exchange.metadata.ExchangeMetadata as Sp
 
 data class ExchangeMetadata(
     override val exchange: ExchangeName,
-    override val currencyPairMetadata: Map<out CurrencyPair, SpiCurrencyPairMetadata>,
+    override val currencyPairMetadata: Map<CurrencyPair, SpiCurrencyPairMetadata>,
     override val currencyMetadata: Map<String, SpiCurrencyMetadata>,
     override val warnings: List<String>,
 ) : SpiExchangeMetadata {

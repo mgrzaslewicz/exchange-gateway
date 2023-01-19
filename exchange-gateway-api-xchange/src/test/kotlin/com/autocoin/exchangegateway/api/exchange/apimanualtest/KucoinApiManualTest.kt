@@ -1,5 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.apimanualtest
 
+import com.autocoin.exchangegateway.api.exchange.apikey.ApiKey
 import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.kucoin
 import com.autocoin.exchangegateway.api.exchange.xchange.XchangeApiKeyVerifierGateway
 import com.autocoin.exchangegateway.api.exchange.xchange.XchangeSpecificationApiKeyAssigner
@@ -10,7 +11,7 @@ import java.lang.System.getenv
 
 fun main() {
     val exchangeSpecification = ExchangeSpecification(KucoinExchange::class.java)
-    val apiKey = com.autocoin.exchangegateway.api.exchange.ApiKey(
+    val apiKey = ApiKey(
         publicKey = getenv("PUBLIC_KEY"),
         secretKey = getenv("SECRET_KEY"),
         exchangeSpecificKeyParameters = mapOf("passphrase" to getenv("PASSPHRASE")),
