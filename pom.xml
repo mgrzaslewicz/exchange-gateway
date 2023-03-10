@@ -25,9 +25,9 @@
     </modules>
 
     <scm>
-        <connection>scm:git:git://bitbucket.org:autocointrader/autocoin-exchange-engine.git</connection>
-        <developerConnection>scm:git:git@bitbucket.org:autocointrader/autocoin-exchange-engine.git</developerConnection>
-        <url>https://bitbucket.org/autocointrader/autocoin-exchange-engine</url>
+        <connection>scm:git:git@github.com:mgrzaslewicz/exchange-gateway.git</connection>
+        <developerConnection>scm:git:git@github.com:mgrzaslewicz/exchange-gateway.git</developerConnection>
+        <url>https://github.com/mgrzaslewicz/exchange-gateway</url>
         <tag>HEAD</tag>
     </scm>
 
