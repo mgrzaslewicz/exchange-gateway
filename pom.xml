@@ -34,13 +34,11 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.github.danielflower.mavenplugins</groupId>
-                <artifactId>multi-module-maven-release-plugin</artifactId>
-                <version>3.2.3</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.0-M6</version>
                 <configuration>
-                    <releaseGoals>
-                        <releaseGoal>install</releaseGoal>
-                    </releaseGoals>
+                    <goals>install</goals>
                 </configuration>
             </plugin>
             <plugin>
