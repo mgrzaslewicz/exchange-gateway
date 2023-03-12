@@ -28,7 +28,7 @@
         <connection>scm:git:git@github.com:mgrzaslewicz/exchange-gateway.git</connection>
         <developerConnection>scm:git:git@github.com:mgrzaslewicz/exchange-gateway.git</developerConnection>
         <url>https://github.com/mgrzaslewicz/exchange-gateway</url>
-        <tag>HEAD</tag>
+        <tag>exchange-gateway-3.0.0</tag>
     </scm>
 
     <build>
