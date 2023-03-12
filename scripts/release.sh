@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
-
-(cd ../ && mvn release:prepare release:perform -P local-release --batch-mode -DignoreSnapshots=true)
+DO_NOT_PROMPT_FOR_ANY_VALUE=--batch-mode
+(cd ../ && mvn release:prepare release:perform $DO_NOT_PROMPT_FOR_ANY_VALUE)

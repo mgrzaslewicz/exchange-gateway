@@ -50,25 +50,6 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>local-release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>3.0.0-M6</version>
-                        <configuration>
-                            <goals>install
-                            </goals> <!-- This will call 'install' instead of 'deploy' allowing to use the plugin without aritfact store (e.g. nexus) -->
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
     <dependencyManagement>
         <dependencies>
             <!-- Kotlin -->
