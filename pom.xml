@@ -39,6 +39,7 @@
                 <version>3.0.0-M6</version>
                 <configuration>
                     <goals>install</goals>
+                    <tagNameFormat>exchange-gateway-@{project.version}</tagNameFormat>
                 </configuration>
             </plugin>
             <plugin>
