@@ -28,3 +28,6 @@ nbdist/
 tickers/
 local-env.properties
 /local-env.properties
+
+pom.xml.releaseBackup
+release.properties
