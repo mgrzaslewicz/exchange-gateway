@@ -3,6 +3,7 @@ package com.autocoin.exchangegateway.api.exchange.wallet.service.authorized
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyBalance
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
+import com.autocoin.exchangegateway.spi.exchange.wallet.WithdrawResult
 import com.autocoin.exchangegateway.spi.exchange.wallet.service.authorized.AuthorizedWalletService
 import org.knowm.xchange.currency.Currency
 import org.knowm.xchange.dto.account.Wallet
@@ -49,9 +50,19 @@ class XchangeAuthorizedWalletService<T>(
         val wallets = accountInfo.wallets
         return if (wallets.size > 1) {
             wallets.getValue(expectedTradingWalletNameWhenMultipleExist)
-        }
-        else {
+        } else {
             accountInfo.wallet
+        }
+    }
+
+    override fun withdraw(
+        currencyCode: String,
+        amount: BigDecimal,
+        address: String,
+    ): WithdrawResult {
+        val transactionId = delegate.withdrawFunds(Currency(currencyCode), amount, address)
+        return object : WithdrawResult {
+            override val transactionId = transactionId
         }
     }
 }

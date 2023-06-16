@@ -3,6 +3,8 @@ package com.autocoin.exchangegateway.spi.exchange.wallet.service
 import com.autocoin.exchangegateway.spi.exchange.ExchangeName
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyBalance
+import com.autocoin.exchangegateway.spi.exchange.wallet.WithdrawResult
+import java.math.BigDecimal
 
 interface WalletService<T> {
     val exchangeName: ExchangeName
@@ -13,6 +15,13 @@ interface WalletService<T> {
     ): CurrencyBalance
 
     fun getCurrencyBalances(apiKey: ApiKeySupplier<T>): List<CurrencyBalance>
+
+    fun withdraw(
+        apiKey: ApiKeySupplier<T>,
+        currencyCode: String,
+        amount: BigDecimal,
+        address: String,
+    ): WithdrawResult
 
 }
 
