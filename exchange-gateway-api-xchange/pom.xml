@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>exchange-gateway-api-xchange</artifactId>
-    <version>3.1.1-SNAPSHOT</version>
+    <version>3.2.0</version>
     <packaging>jar</packaging>
 
     <name>exchange-gateway-api-xchange</name>
@@ -11,7 +11,7 @@
     <parent>
         <groupId>com.autocoin</groupId>
         <artifactId>exchange-gateway</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.2.0</version>
     </parent>
 
     <properties>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.autocoin</groupId>
             <artifactId>exchange-gateway-api</artifactId>
-            <version>3.1.1-SNAPSHOT</version>
+            <version>3.2.0</version>
         </dependency>
         <!-- Kotlin -->
         <dependency>
