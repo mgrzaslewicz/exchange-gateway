@@ -4,7 +4,7 @@
 
     <groupId>com.autocoin</groupId>
     <artifactId>exchange-gateway</artifactId>
-    <version>3.3.1-SNAPSHOT</version>
+    <version>3.4.0</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -27,7 +27,7 @@
         <connection>scm:git:git@github.com:mgrzaslewicz/exchange-gateway.git</connection>
         <developerConnection>scm:git:git@github.com:mgrzaslewicz/exchange-gateway.git</developerConnection>
         <url>https://github.com/mgrzaslewicz/exchange-gateway</url>
-        <tag>HEAD</tag>
+        <tag>3.4.0</tag>
     </scm>
 
     <build>
