@@ -1,4 +1,4 @@
-package com.autocoin.exchangegateway.spi.exchange.ratelimiter
+package com.autocoin.exchangegateway.spi.ratelimiter
 
 enum class RateLimiterBehavior {
     NO_RATE_LIMIT,

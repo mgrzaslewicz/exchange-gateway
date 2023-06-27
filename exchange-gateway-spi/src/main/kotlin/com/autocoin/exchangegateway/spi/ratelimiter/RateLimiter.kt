@@ -1,4 +1,4 @@
-package com.autocoin.exchangegateway.spi.exchange.ratelimiter
+package com.autocoin.exchangegateway.spi.ratelimiter
 
 interface RateLimiter {
     /**
