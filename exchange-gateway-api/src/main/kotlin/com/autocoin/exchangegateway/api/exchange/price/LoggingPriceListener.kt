@@ -1,4 +1,4 @@
-package com.autocoin.exchangegateway.api.price
+package com.autocoin.exchangegateway.api.exchange.price
 
 import com.autocoin.exchangegateway.spi.exchange.price.PriceListener
 import mu.KLogging

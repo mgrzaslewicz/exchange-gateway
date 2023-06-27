@@ -1,4 +1,4 @@
-package com.autocoin.exchangegateway.api.price
+package com.autocoin.exchangegateway.api.exchange.price
 
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import java.math.BigDecimal
