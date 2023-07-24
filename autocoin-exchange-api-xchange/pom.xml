@@ -15,7 +15,7 @@
     </parent>
 
     <properties>
-        <xchange.version>5.0.14-SNAPSHOT</xchange.version>
+        <xchange.version>5.0.14</xchange.version>
     </properties>
 
     <dependencies>
