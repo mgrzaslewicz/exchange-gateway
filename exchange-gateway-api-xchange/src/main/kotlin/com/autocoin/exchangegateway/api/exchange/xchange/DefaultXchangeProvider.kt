@@ -8,7 +8,6 @@ import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion
 import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.bitso
 import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.bitstamp
 import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.bittrex
-import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.bleutrade
 import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.cexio
 import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.coinbasepro
 import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.coindeal
@@ -40,7 +39,6 @@ import org.knowm.xchange.bitmex.BitmexExchange
 import org.knowm.xchange.bitso.BitsoExchange
 import org.knowm.xchange.bitstamp.BitstampExchange
 import org.knowm.xchange.bittrex.BittrexExchange
-import org.knowm.xchange.bleutrade.BleutradeExchange
 import org.knowm.xchange.cexio.CexIOExchange
 import org.knowm.xchange.coinbasepro.CoinbaseProExchange
 import org.knowm.xchange.coindeal.CoindealExchange
@@ -74,7 +72,6 @@ class DefaultXchangeProvider<T>(
             bitso to BitsoExchange::class.java,
             bitstamp to BitstampExchange::class.java,
             bittrex to BittrexExchange::class.java,
-            bleutrade to BleutradeExchange::class.java,
             cexio to CexIOExchange::class.java,
             coinbasepro to CoinbaseProExchange::class.java,
             coindeal to CoindealExchange::class.java,

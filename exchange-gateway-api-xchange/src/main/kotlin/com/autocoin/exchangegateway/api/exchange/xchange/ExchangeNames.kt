@@ -11,7 +11,6 @@ class ExchangeNames {
         val bitso = com.autocoin.exchangegateway.spi.exchange.ExchangeName("bitso")
         val bitstamp = com.autocoin.exchangegateway.spi.exchange.ExchangeName("bitstamp")
         val bittrex = com.autocoin.exchangegateway.spi.exchange.ExchangeName("bittrex")
-        val bleutrade = com.autocoin.exchangegateway.spi.exchange.ExchangeName("bleutrade")
         val cexio = com.autocoin.exchangegateway.spi.exchange.ExchangeName("cexio")
         val coinbasepro = com.autocoin.exchangegateway.spi.exchange.ExchangeName("coinbasepro")
         val coindeal = com.autocoin.exchangegateway.spi.exchange.ExchangeName("coindeal")
