@@ -12,7 +12,6 @@ import org.knowm.xchange.bitmex.BitmexExchange
 import org.knowm.xchange.bitso.BitsoExchange
 import org.knowm.xchange.bitstamp.BitstampExchange
 import org.knowm.xchange.bittrex.BittrexExchange
-import org.knowm.xchange.bleutrade.BleutradeExchange
 import org.knowm.xchange.cexio.CexIOExchange
 import org.knowm.xchange.coinbasepro.CoinbaseProExchange
 import org.knowm.xchange.coindeal.CoindealExchange
@@ -39,7 +38,6 @@ fun SupportedExchange.toXchangeJavaClass(): Class<out Exchange> {
         BITSO -> BitsoExchange::class.java
         BITSTAMP -> BitstampExchange::class.java
         BITTREX -> BittrexExchange::class.java
-        BLEUTRADE -> BleutradeExchange::class.java
         CEXIO -> CexIOExchange::class.java
         COINBASEPRO -> CoinbaseProExchange::class.java
         COINDEAL -> CoindealExchange::class.java

@@ -9,7 +9,6 @@ enum class SupportedExchange(val exchangeName: String, val comments: List<String
     BITSO("bitso", comments = listOf("Needs update in xchange library to use v3 api")),
     BITSTAMP("bitstamp"),
     BITTREX("bittrex"),
-    BLEUTRADE("bleutrade"),
     CEXIO("cexio"),
     COINBASEPRO("coinbasepro"),
     COINDEAL("coindeal", comments = listOf("CoindealMarketDataService.getTicker not implemented yet")),

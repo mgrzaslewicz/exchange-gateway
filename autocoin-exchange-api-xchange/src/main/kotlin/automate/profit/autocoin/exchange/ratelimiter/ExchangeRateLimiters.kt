@@ -32,7 +32,6 @@ class ExchangeRateLimiters(
     private val exchangesWithUnknownRateLimitsSoUsingDefault = setOf(
         BIBOX, // Could not find anything
         BITBAY,
-        BLEUTRADE,
         TRADEOGRE, // https://tradeogre.com/help/api - nothing about rate limits
         YOBIT
     )
@@ -56,9 +55,6 @@ class ExchangeRateLimiters(
 
         // https://bittrex.github.io/api/v3#topic-Best-Practices
         BITTREX to RateLimit(60L, Duration.of(1L, MINUTES)),
-
-        // Could not find anything
-        // SupportedExchange.BLEUTRADE to
 
         // https://www.reddit.com/r/cexio/comments/8og8up/api_rate_limits/
         CEXIO to RateLimit(600L, Duration.of(10L, MINUTES)),
