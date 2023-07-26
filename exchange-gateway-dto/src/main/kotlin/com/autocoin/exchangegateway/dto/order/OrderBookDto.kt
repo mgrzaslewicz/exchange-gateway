@@ -31,7 +31,7 @@ data class OrderBookDto(
 
 }
 
-fun OrderBook.toDto() =
+fun SpiOrderBook.toDto() =
     OrderBookDto(
         exchangeName = exchangeName.value,
         currencyPair = currencyPair.toString(),
