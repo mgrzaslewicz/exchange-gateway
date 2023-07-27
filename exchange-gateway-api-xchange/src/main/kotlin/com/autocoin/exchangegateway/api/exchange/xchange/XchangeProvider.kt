@@ -1,15 +1,15 @@
 package com.autocoin.exchangegateway.api.exchange.xchange
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
-import org.knowm.xchange.Exchange
+import org.knowm.xchange.Exchange as XchangeExchange
 
 
 interface XchangeProvider<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
-    ): Exchange
+    ): XchangeExchange
 }
 
 

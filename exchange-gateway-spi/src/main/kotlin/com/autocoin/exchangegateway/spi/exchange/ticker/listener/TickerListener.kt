@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.spi.exchange.ticker.listener
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker
 
@@ -8,7 +8,7 @@ import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker
 interface TickerListener {
 
     fun onTicker(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
         ticker: Ticker,
     )
@@ -18,7 +18,7 @@ interface TickerListener {
      * @param ticker might be the same that was already fetched from exchange or none
      */
     fun onNoNewTicker(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
         ticker: Ticker?,
     ) {

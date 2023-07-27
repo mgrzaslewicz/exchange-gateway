@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.spi.exchange.order.service
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
@@ -9,7 +9,7 @@ import com.autocoin.exchangegateway.spi.exchange.order.service.authorized.Author
 import java.math.BigDecimal
 
 class OrderServiceUsingAuthorizedOrderService<T>(
-    override val exchangeName: ExchangeName,
+    override val exchange: Exchange,
     private val authorizedOrderServiceFactory: AuthorizedOrderServiceFactory<T>,
 ) : OrderService<T> {
     override fun cancelOrder(
@@ -17,7 +17,7 @@ class OrderServiceUsingAuthorizedOrderService<T>(
         cancelOrderParams: CancelOrderParams,
     ): Boolean {
         return authorizedOrderServiceFactory
-            .createAuthorizedOrderService(apiKey = apiKey, exchangeName = exchangeName)
+            .createAuthorizedOrderService(apiKey = apiKey, exchange = exchange)
             .cancelOrder(cancelOrderParams)
     }
 
@@ -28,7 +28,7 @@ class OrderServiceUsingAuthorizedOrderService<T>(
         currentPrice: BigDecimal,
     ): Order {
         return authorizedOrderServiceFactory
-            .createAuthorizedOrderService(apiKey = apiKey, exchangeName = exchangeName)
+            .createAuthorizedOrderService(apiKey = apiKey, exchange = exchange)
             .placeMarketBuyOrderWithCounterCurrencyAmount(
                 currencyPair = currencyPair,
                 counterCurrencyAmount = counterCurrencyAmount,
@@ -43,7 +43,7 @@ class OrderServiceUsingAuthorizedOrderService<T>(
         currentPrice: BigDecimal,
     ): Order {
         return authorizedOrderServiceFactory
-            .createAuthorizedOrderService(apiKey = apiKey, exchangeName = exchangeName)
+            .createAuthorizedOrderService(apiKey = apiKey, exchange = exchange)
             .placeMarketBuyOrderWithBaseCurrencyAmount(
                 currencyPair = currencyPair,
                 baseCurrencyAmount = baseCurrencyAmount,
@@ -58,7 +58,7 @@ class OrderServiceUsingAuthorizedOrderService<T>(
         currentPrice: BigDecimal,
     ): Order {
         return authorizedOrderServiceFactory
-            .createAuthorizedOrderService(apiKey = apiKey, exchangeName = exchangeName)
+            .createAuthorizedOrderService(apiKey = apiKey, exchange = exchange)
             .placeMarketSellOrderWithCounterCurrencyAmount(
                 currencyPair = currencyPair,
                 counterCurrencyAmount = counterCurrencyAmount,
@@ -73,7 +73,7 @@ class OrderServiceUsingAuthorizedOrderService<T>(
         currentPrice: BigDecimal,
     ): Order {
         return authorizedOrderServiceFactory
-            .createAuthorizedOrderService(apiKey = apiKey, exchangeName = exchangeName)
+            .createAuthorizedOrderService(apiKey = apiKey, exchange = exchange)
             .placeMarketSellOrderWithBaseCurrencyAmount(
                 currencyPair = currencyPair,
                 baseCurrencyAmount = baseCurrencyAmount,
@@ -88,7 +88,7 @@ class OrderServiceUsingAuthorizedOrderService<T>(
         amount: BigDecimal,
     ): Order {
         return authorizedOrderServiceFactory
-            .createAuthorizedOrderService(apiKey = apiKey, exchangeName = exchangeName)
+            .createAuthorizedOrderService(apiKey = apiKey, exchange = exchange)
             .placeLimitBuyOrder(
                 currencyPair = currencyPair,
                 buyPrice = buyPrice,
@@ -103,7 +103,7 @@ class OrderServiceUsingAuthorizedOrderService<T>(
         amount: BigDecimal,
     ): Order {
         return authorizedOrderServiceFactory
-            .createAuthorizedOrderService(apiKey = apiKey, exchangeName = exchangeName)
+            .createAuthorizedOrderService(apiKey = apiKey, exchange = exchange)
             .placeLimitSellOrder(
                 currencyPair = currencyPair,
                 sellPrice = sellPrice,
@@ -113,7 +113,7 @@ class OrderServiceUsingAuthorizedOrderService<T>(
 
     override fun getOpenOrders(apiKey: ApiKeySupplier<T>): List<Order> {
         return authorizedOrderServiceFactory
-            .createAuthorizedOrderService(apiKey = apiKey, exchangeName = exchangeName)
+            .createAuthorizedOrderService(apiKey = apiKey, exchange = exchange)
             .getOpenOrders()
     }
 
@@ -124,7 +124,7 @@ class OrderServiceUsingAuthorizedOrderService<T>(
         return authorizedOrderServiceFactory
             .createAuthorizedOrderService(
                 apiKey = apiKey,
-                exchangeName = exchangeName,
+                exchange = exchange,
             )
             .getOpenOrders(currencyPair = currencyPair)
     }

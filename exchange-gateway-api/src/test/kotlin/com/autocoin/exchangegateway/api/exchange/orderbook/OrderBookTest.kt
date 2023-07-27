@@ -1,6 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide.BID_BUY
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -27,18 +28,26 @@ class OrderBookTest {
 
     private val xtzBtcCurrencyPair = CurrencyPair.of("XTZ/BTC")
 
+    private val exchange1 = object : Exchange {
+        override val exchangeName = "exchange2"
+    }
+    private val exchange2 = object : Exchange {
+        override val exchangeName = "exchange2"
+    }
+
+
     /**
      * real order book snapshot taken from exchange
      */
     private val realOrderBook1 = OrderBook(
         receivedAtMillis = timestampDoesNotMatter,
         exchangeTimestampMillis = null,
-        exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+        exchange = exchange1,
         currencyPair = trxBtcCurrencyPair,
         sellOrders = emptyList(),
         buyOrders = listOf(
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("319351.7968"),
                 price = BigDecimal("0.00000196"),
@@ -46,7 +55,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("280513.5493"),
                 price = BigDecimal("0.00000195"),
@@ -54,7 +63,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("705084.6506"),
                 price = BigDecimal("0.00000194"),
@@ -62,7 +71,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("42232.9603"),
                 price = BigDecimal("0.00000193"),
@@ -70,7 +79,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("117945.6236"),
                 price = BigDecimal("0.00000192"),
@@ -78,7 +87,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("3765.7738"),
                 price = BigDecimal("0.00000191"),
@@ -86,7 +95,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("28618.863"),
                 price = BigDecimal("0.0000019"),
@@ -94,7 +103,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("10387.9906"),
                 price = BigDecimal("0.00000189"),
@@ -102,7 +111,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("627.7139"),
                 price = BigDecimal("0.00000188"),
@@ -110,7 +119,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("16050.7139"),
                 price = BigDecimal("0.00000187"),
@@ -118,7 +127,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("10400.2043"),
                 price = BigDecimal("0.00000186"),
@@ -126,7 +135,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("4365.5091"),
                 price = BigDecimal("0.00000185"),
@@ -134,7 +143,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("5690.3322"),
                 price = BigDecimal("0.00000184"),
@@ -142,7 +151,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1665.0538"),
                 price = BigDecimal("0.00000183"),
@@ -150,7 +159,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("597.4002"),
                 price = BigDecimal("0.00000182"),
@@ -158,7 +167,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("3277.15"),
                 price = BigDecimal("0.00000181"),
@@ -166,7 +175,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("24428.9424"),
                 price = BigDecimal("0.0000018"),
@@ -174,7 +183,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1219.7978"),
                 price = BigDecimal("0.00000179"),
@@ -182,7 +191,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1811.329"),
                 price = BigDecimal("0.00000178"),
@@ -190,7 +199,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("70812.9665"),
                 price = BigDecimal("0.00000177"),
@@ -198,7 +207,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("75.6863"),
                 price = BigDecimal("0.00000176"),
@@ -206,7 +215,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1792.0558"),
                 price = BigDecimal("0.00000175"),
@@ -214,7 +223,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("11984.6863"),
                 price = BigDecimal("0.00000174"),
@@ -222,7 +231,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("752.6664"),
                 price = BigDecimal("0.00000173"),
@@ -230,7 +239,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("107.6506"),
                 price = BigDecimal("0.00000172"),
@@ -238,7 +247,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("4055.8807"),
                 price = BigDecimal("0.00000171"),
@@ -246,7 +255,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("154.9801"),
                 price = BigDecimal("0.0000017"),
@@ -254,7 +263,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("475.6874"),
                 price = BigDecimal("0.00000169"),
@@ -262,7 +271,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("25.6874"),
                 price = BigDecimal("0.00000168"),
@@ -270,7 +279,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("544.0586"),
                 price = BigDecimal("0.00000167"),
@@ -278,7 +287,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("25.6874"),
                 price = BigDecimal("0.00000166"),
@@ -286,7 +295,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("25.6874"),
                 price = BigDecimal("0.00000165"),
@@ -294,7 +303,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("117.003"),
                 price = BigDecimal("0.00000164"),
@@ -302,7 +311,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("25.6874"),
                 price = BigDecimal("0.00000163"),
@@ -310,7 +319,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("56.1179"),
                 price = BigDecimal("0.00000162"),
@@ -318,7 +327,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("505.6874"),
                 price = BigDecimal("0.00000161"),
@@ -326,7 +335,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("35.6874"),
                 price = BigDecimal("0.0000016"),
@@ -334,7 +343,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("3170.3414"),
                 price = BigDecimal("0.00000159"),
@@ -342,7 +351,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("55.6874"),
                 price = BigDecimal("0.00000158"),
@@ -350,7 +359,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("2803.6874"),
                 price = BigDecimal("0.00000157"),
@@ -358,7 +367,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("543.3797"),
                 price = BigDecimal("0.00000156"),
@@ -366,7 +375,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("25.6874"),
                 price = BigDecimal("0.00000155"),
@@ -374,7 +383,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("174.0874"),
                 price = BigDecimal("0.00000154"),
@@ -382,7 +391,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("25.6874"),
                 price = BigDecimal("0.00000153"),
@@ -390,7 +399,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("25.6874"),
                 price = BigDecimal("0.00000152"),
@@ -398,7 +407,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("525.6874"),
                 price = BigDecimal("0.00000151"),
@@ -406,7 +415,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("3724.1542"),
                 price = BigDecimal("0.0000015"),
@@ -414,7 +423,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("25.6874"),
                 price = BigDecimal("0.00000149"),
@@ -422,7 +431,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("7.2604"),
                 price = BigDecimal("0.00000148"),
@@ -430,7 +439,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1367.8046"),
                 price = BigDecimal("0.00000147"),
@@ -438,7 +447,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("857.2604"),
                 price = BigDecimal("0.00000146"),
@@ -446,7 +455,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("7000.0"),
                 price = BigDecimal("0.00000145"),
@@ -454,7 +463,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("14.427"),
                 price = BigDecimal("0.00000144"),
@@ -462,7 +471,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1139.837"),
                 price = BigDecimal("0.00000143"),
@@ -470,7 +479,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1000.0"),
                 price = BigDecimal("0.00000142"),
@@ -478,7 +487,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("10.0"),
                 price = BigDecimal("0.0000014"),
@@ -486,7 +495,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("9163.1704"),
                 price = BigDecimal("0.00000138"),
@@ -494,7 +503,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1992.3311"),
                 price = BigDecimal("0.00000136"),
@@ -502,7 +511,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("2324.4232"),
                 price = BigDecimal("0.00000135"),
@@ -510,7 +519,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1001.2"),
                 price = BigDecimal("0.00000134"),
@@ -518,7 +527,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("10.1484"),
                 price = BigDecimal("0.00000132"),
@@ -526,7 +535,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("32.1"),
                 price = BigDecimal("0.0000013"),
@@ -534,7 +543,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("111.0"),
                 price = BigDecimal("0.00000127"),
@@ -542,7 +551,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("6.9484"),
                 price = BigDecimal("0.00000126"),
@@ -550,7 +559,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("835.0689"),
                 price = BigDecimal("0.00000125"),
@@ -558,7 +567,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("969.4977"),
                 price = BigDecimal("0.00000122"),
@@ -566,7 +575,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1505.4708"),
                 price = BigDecimal("0.0000012"),
@@ -574,7 +583,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("630.0"),
                 price = BigDecimal("0.00000118"),
@@ -582,7 +591,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("2863.9086"),
                 price = BigDecimal("0.00000114"),
@@ -590,7 +599,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("3217.9679"),
                 price = BigDecimal("0.00000111"),
@@ -598,7 +607,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("373.787"),
                 price = BigDecimal("0.00000108"),
@@ -606,7 +615,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("200000.0"),
                 price = BigDecimal("0.00000106"),
@@ -614,7 +623,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("200.0"),
                 price = BigDecimal("0.00000105"),
@@ -622,7 +631,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("2.7132"),
                 price = BigDecimal("0.00000102"),
@@ -630,7 +639,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("38849.67"),
                 price = BigDecimal("0.000001"),
@@ -638,7 +647,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("3000.0"),
                 price = BigDecimal("0.00000099"),
@@ -646,7 +655,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("2.1391"),
                 price = BigDecimal("0.00000097"),
@@ -654,7 +663,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("200.0"),
                 price = BigDecimal("0.00000092"),
@@ -662,7 +671,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1.7087"),
                 price = BigDecimal("0.00000091"),
@@ -670,7 +679,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1000.0"),
                 price = BigDecimal("0.0000009"),
@@ -678,7 +687,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("54.3175"),
                 price = BigDecimal("0.00000085"),
@@ -686,7 +695,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("200.0"),
                 price = BigDecimal("0.00000083"),
@@ -694,7 +703,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1.1075"),
                 price = BigDecimal("0.00000079"),
@@ -702,7 +711,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("178.0"),
                 price = BigDecimal("0.00000078"),
@@ -710,7 +719,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1.7945"),
                 price = BigDecimal("0.00000073"),
@@ -718,7 +727,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1.9532"),
                 price = BigDecimal("0.00000067"),
@@ -726,7 +735,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("5000.0"),
                 price = BigDecimal("0.0000006"),
@@ -734,7 +743,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("52378.5293"),
                 price = BigDecimal("0.00000051"),
@@ -742,7 +751,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("127654.968"),
                 price = BigDecimal("0.0000005"),
@@ -750,7 +759,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("10500.0"),
                 price = BigDecimal("0.0000004"),
@@ -758,7 +767,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("10000.0"),
                 price = BigDecimal("0.00000033"),
@@ -766,7 +775,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("202.0703"),
                 price = BigDecimal("0.00000032"),
@@ -774,7 +783,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("12000.0"),
                 price = BigDecimal("0.00000027"),
@@ -782,7 +791,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("4417.5652"),
                 price = BigDecimal("0.00000023"),
@@ -790,7 +799,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("15000.0"),
                 price = BigDecimal("0.00000022"),
@@ -798,7 +807,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("51400.0"),
                 price = BigDecimal("0.0000002"),
@@ -806,7 +815,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("11362.8258"),
                 price = BigDecimal("0.00000019"),
@@ -814,7 +823,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("18710.2342"),
                 price = BigDecimal("0.00000018"),
@@ -822,7 +831,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("6628.5797"),
                 price = BigDecimal("0.00000015"),
@@ -830,7 +839,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+                exchange = exchange1,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1806.5681"),
                 price = BigDecimal("0.00000011"),
@@ -846,12 +855,12 @@ class OrderBookTest {
     private val realOrderBook2 = OrderBook(
         receivedAtMillis = timestampDoesNotMatter,
         exchangeTimestampMillis = null,
-        exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange1"),
+        exchange = exchange1,
         currencyPair = trxBtcCurrencyPair,
         sellOrders = emptyList(),
         buyOrders = listOf(
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("155.742"),
                 price = BigDecimal("0.00023049"),
@@ -859,7 +868,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("302.10567656"),
                 price = BigDecimal("0.00023048"),
@@ -867,7 +876,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1000.0"),
                 price = BigDecimal("0.00023039"),
@@ -875,7 +884,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("267.64"),
                 price = BigDecimal("0.00023035"),
@@ -883,7 +892,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("632.0"),
                 price = BigDecimal("0.00023015"),
@@ -891,7 +900,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("119.9109"),
                 price = BigDecimal("0.00023004"),
@@ -899,7 +908,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("335.0146"),
                 price = BigDecimal("0.00022894"),
@@ -907,7 +916,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("6117.0"),
                 price = BigDecimal("0.00022893"),
@@ -915,7 +924,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("477.0"),
                 price = BigDecimal("0.00022891"),
@@ -923,7 +932,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1228.0723365"),
                 price = BigDecimal("0.00022839"),
@@ -931,7 +940,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("2478.0"),
                 price = BigDecimal("0.00022725"),
@@ -939,7 +948,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("128.515"),
                 price = BigDecimal("0.000225"),
@@ -947,7 +956,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1290.0"),
                 price = BigDecimal("0.00022499"),
@@ -955,7 +964,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("1245.0"),
                 price = BigDecimal("0.00022442"),
@@ -963,7 +972,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("66.0"),
                 price = BigDecimal("0.00022272"),
@@ -971,7 +980,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("250.0"),
                 price = BigDecimal("0.00022056"),
@@ -979,7 +988,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("93.139"),
                 price = BigDecimal("0.0002201"),
@@ -987,7 +996,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("4858.0"),
                 price = BigDecimal("0.00022"),
@@ -995,7 +1004,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("250.0"),
                 price = BigDecimal("0.00021056"),
@@ -1003,7 +1012,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("83.246"),
                 price = BigDecimal("0.00020241"),
@@ -1011,7 +1020,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("15.0"),
                 price = BigDecimal("0.00020142"),
@@ -1019,7 +1028,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("81.0"),
                 price = BigDecimal("0.00020042"),
@@ -1027,7 +1036,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("61.999"),
                 price = BigDecimal("0.0002"),
@@ -1035,7 +1044,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("130.208"),
                 price = BigDecimal("0.000192"),
@@ -1043,7 +1052,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("500.0"),
                 price = BigDecimal("0.00019156"),
@@ -1051,7 +1060,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("199.346"),
                 price = BigDecimal("0.00018985"),
@@ -1059,7 +1068,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("2494.065"),
                 price = BigDecimal("0.00018924"),
@@ -1067,7 +1076,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("901.587"),
                 price = BigDecimal("0.000189"),
@@ -1075,7 +1084,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("2.871"),
                 price = BigDecimal("0.0001851"),
@@ -1083,7 +1092,7 @@ class OrderBookTest {
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             ),
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("realExchange2"),
+                exchange = exchange2,
                 side = BID_BUY,
                 orderedAmount = BigDecimal("40233.691"),
                 price = BigDecimal("0.000185"),
@@ -1092,9 +1101,13 @@ class OrderBookTest {
             ),
         ),
     )
+    private val exchangeA = object : Exchange {
+        override val exchangeName = "exchangeA"
+    }
+
     private val sampleBuyOrders = listOf(
         OrderInOrderBook(
-            exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("exchangeA"),
+            exchange = exchangeA,
             side = BID_BUY,
             orderedAmount = 10.toBigDecimal(),
             price = 1.5.toBigDecimal(),
@@ -1102,7 +1115,7 @@ class OrderBookTest {
             receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
         ),
         OrderInOrderBook(
-            exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("exchangeA"),
+            exchange = exchangeA,
             side = BID_BUY,
             orderedAmount = 15.toBigDecimal(),
             price = 1.45.toBigDecimal(),
@@ -1110,7 +1123,7 @@ class OrderBookTest {
             receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
         ),
         OrderInOrderBook(
-            exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("exchangeA"),
+            exchange = exchangeA,
             side = BID_BUY,
             orderedAmount = 30.toBigDecimal(),
             price = 1.40.toBigDecimal(),
@@ -1118,7 +1131,7 @@ class OrderBookTest {
             receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
         ),
         OrderInOrderBook(
-            exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName("exchangeA"),
+            exchange = exchangeA,
             side = BID_BUY,
             orderedAmount = 20.toBigDecimal(),
             price = 1.37.toBigDecimal(),
@@ -1155,7 +1168,7 @@ class OrderBookTest {
         amount: BigDecimal,
     ) {
         val orderBook = OrderBook(
-            exchangeName = sampleBuyOrders.first().exchangeName,
+            exchange = sampleBuyOrders.first().exchange,
             currencyPair = sampleBuyOrders.first().currencyPair,
             buyOrders = sampleBuyOrders, sellOrders = emptyList(),
             receivedAtMillis = timestampDoesNotMatter,
@@ -1185,7 +1198,7 @@ class OrderBookTest {
         usdAmount: BigDecimal,
     ) {
         val orderBook = OrderBook(
-            exchangeName = sampleBuyOrders.first().exchangeName,
+            exchange = sampleBuyOrders.first().exchange,
             currencyPair = sampleBuyOrders.first().currencyPair,
             buyOrders = sampleBuyOrders, sellOrders = emptyList(),
             receivedAtMillis = timestampDoesNotMatter,
@@ -1217,16 +1230,21 @@ class OrderBookTest {
         val buyOrdersJsonArray = json.get("buyOrders") as ArrayNode
         val buyOrders = buyOrdersJsonArray.map {
             OrderInOrderBook(
-                exchangeName = com.autocoin.exchangegateway.spi.exchange.ExchangeName(it.get("exchangeName").textValue()),
+                exchange = object : Exchange {
+                    override val exchangeName = it.get("exchangeName").textValue()
+                },
                 side = OrderSide.valueOf(it.get("side").textValue()),
                 orderedAmount = BigDecimal(it.get("orderedAmount").doubleValue()),
                 price = BigDecimal(it.get("price").textValue()),
-                currencyPair = CurrencyPair.of(base = it.get("baseCurrency").textValue(), counter = it.get("counterCurrency").textValue()),
+                currencyPair = CurrencyPair.of(
+                    base = it.get("baseCurrency").textValue(),
+                    counter = it.get("counterCurrency").textValue(),
+                ),
                 receivedAtMillis = timestampDoesNotMatter, exchangeTimestampMillis = null,
             )
         }
         val orderBook = OrderBook(
-            exchangeName = buyOrders.first().exchangeName,
+            exchange = buyOrders.first().exchange,
             currencyPair = buyOrders.first().currencyPair,
             buyOrders = buyOrders, sellOrders = emptyList(),
             receivedAtMillis = timestampDoesNotMatter,

@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.spi.exchange.order.gateway
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
@@ -11,13 +11,13 @@ import java.math.BigDecimal
 interface OrderServiceGateway<T> {
 
     fun cancelOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         cancelOrderParams: CancelOrderParams,
     ): Boolean
 
     fun placeMarketBuyOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
@@ -25,7 +25,7 @@ interface OrderServiceGateway<T> {
     ): Order
 
     fun placeMarketBuyOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
@@ -33,7 +33,7 @@ interface OrderServiceGateway<T> {
     ): Order
 
     fun placeMarketSellOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
@@ -41,7 +41,7 @@ interface OrderServiceGateway<T> {
     ): Order
 
     fun placeMarketSellOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
@@ -49,7 +49,7 @@ interface OrderServiceGateway<T> {
     ): Order
 
     fun placeLimitBuyOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         buyPrice: BigDecimal,
@@ -57,7 +57,7 @@ interface OrderServiceGateway<T> {
     ): Order
 
     fun placeLimitSellOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         sellPrice: BigDecimal,
@@ -65,12 +65,12 @@ interface OrderServiceGateway<T> {
     ): Order
 
     fun getOpenOrders(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): List<Order>
 
     fun getOpenOrders(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): List<Order>

@@ -2,7 +2,7 @@ package com.autocoin.exchangegateway.dto.order
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.order.Order
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.ExchangeProvider
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import com.autocoin.exchangegateway.spi.exchange.order.OrderStatus
 import com.autocoin.exchangegateway.spi.exchange.order.Order as SpiOrder
@@ -20,9 +20,9 @@ data class OrderDto(
     val receivedAtMillis: Long,
     val exchangeTimestampMillis: Long?,
 ) {
-    fun toOrder(): SpiOrder {
+    fun toOrder(exchangeProvider: ExchangeProvider): SpiOrder {
         return Order(
-            exchangeName = ExchangeName(exchangeName),
+            exchange = exchangeProvider.getExchange(exchangeName),
             exchangeOrderId = exchangeOrderId,
             side = OrderSide.valueOf(side),
             orderedAmount = orderedAmount.toBigDecimal(),
@@ -39,7 +39,7 @@ data class OrderDto(
 
 fun SpiOrder.toDto(): OrderDto {
     return OrderDto(
-        exchangeName = exchangeName.value,
+        exchangeName = exchange.exchangeName,
         exchangeOrderId = exchangeOrderId,
         baseCurrencyCode = currencyPair.base,
         counterCurrencyCode = currencyPair.counter,

@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import org.knowm.xchange.currency.CurrencyPair
 import org.knowm.xchange.dto.Order
@@ -11,13 +11,13 @@ import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair as SpiCur
 val defaultXchangeLimitOrderToOrderInOrderBookTransformer: XchangeLimitOrderToOrderInOrderBookTransformer = object : XchangeLimitOrderToOrderInOrderBookTransformer {
     override operator fun invoke(
         xchangeLimitOrder: LimitOrder,
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         receivedAtMillis: Long,
         xchangeOrderTypeTransformer: Function<Order.OrderType, OrderSide>,
         xchangeCurrencyPairTransformer: Function<CurrencyPair, SpiCurrencyPair>,
     ): OrderInOrderBook {
         return OrderInOrderBook(
-            exchangeName = exchangeName,
+            exchange = exchange,
             side = xchangeOrderTypeTransformer.apply(xchangeLimitOrder.type),
             orderedAmount = xchangeLimitOrder.originalAmount,
             price = xchangeLimitOrder.averagePrice ?: xchangeLimitOrder.limitPrice,

@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import com.autocoin.exchangegateway.spi.exchange.orderbook.gateway.OrderBookServiceGateway
@@ -14,16 +14,16 @@ import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderBook as SpiOrder
  */
 class RandomOrderBookServiceGateway(private val clock: Clock) : OrderBookServiceGateway {
     override fun getOrderBook(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
     ): SpiOrderBook {
         return OrderBook(
-            exchangeName = exchangeName,
+            exchange = exchange,
             currencyPair = currencyPair,
             buyOrders =
             (1..100).map {
                 OrderInOrderBook(
-                    exchangeName = exchangeName,
+                    exchange= exchange,
                     side = OrderSide.BID_BUY,
                     price = BigDecimal(Math.random()).abs().setScale(8, RoundingMode.HALF_EVEN),
                     currencyPair = currencyPair,
@@ -34,7 +34,7 @@ class RandomOrderBookServiceGateway(private val clock: Clock) : OrderBookService
             },
             sellOrders = (1..100).map {
                 OrderInOrderBook(
-                    exchangeName = exchangeName,
+                    exchange= exchange,
                     side = OrderSide.ASK_SELL,
                     price = BigDecimal(Math.random()).abs().setScale(8, RoundingMode.HALF_EVEN),
                     currencyPair = currencyPair,

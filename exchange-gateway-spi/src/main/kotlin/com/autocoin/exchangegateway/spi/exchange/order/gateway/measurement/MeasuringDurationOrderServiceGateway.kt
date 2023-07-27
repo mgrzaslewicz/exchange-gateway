@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.spi.exchange.order.gateway.measurement
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
@@ -12,7 +12,7 @@ import kotlin.system.measureTimeMillis
 
 interface OnCancelOrderMeasured<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         cancelOrderParams: CancelOrderParams,
         result: Boolean,
@@ -22,7 +22,7 @@ interface OnCancelOrderMeasured<T> {
 
 interface OnPlaceLimitBuyOrderMeasured<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         buyPrice: BigDecimal,
@@ -34,7 +34,7 @@ interface OnPlaceLimitBuyOrderMeasured<T> {
 
 interface OnPlaceMarketBuyOrderWithCounterCurrencyAmount<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
@@ -46,7 +46,7 @@ interface OnPlaceMarketBuyOrderWithCounterCurrencyAmount<T> {
 
 interface OnPlaceMarketBuyOrderWithBaseCurrencyAmount<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
@@ -58,7 +58,7 @@ interface OnPlaceMarketBuyOrderWithBaseCurrencyAmount<T> {
 
 interface OnPlaceMarketSellOrderWithCounterCurrencyAmount<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
@@ -70,7 +70,7 @@ interface OnPlaceMarketSellOrderWithCounterCurrencyAmount<T> {
 
 interface OnPlaceMarketSellOrderWithBaseCurrencyAmount<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
@@ -83,7 +83,7 @@ interface OnPlaceMarketSellOrderWithBaseCurrencyAmount<T> {
 
 interface OnPlaceLimitSellOrder<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         sellPrice: BigDecimal,
@@ -95,7 +95,7 @@ interface OnPlaceLimitSellOrder<T> {
 
 interface OnGetOpenOrders<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         result: List<Order>,
         duration: Duration,
@@ -104,7 +104,7 @@ interface OnGetOpenOrders<T> {
 
 interface OnGetOpenOrdersWithCurrencyPair<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         result: List<Order>,
@@ -127,7 +127,7 @@ class MeasuringDurationOrderServiceGateway<T>(
 ) : OrderServiceGateway<T> {
 
     override fun cancelOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         cancelOrderParams: CancelOrderParams,
     ): Boolean {
@@ -135,7 +135,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.cancelOrder(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     cancelOrderParams = cancelOrderParams,
                 )
@@ -143,7 +143,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         )
         onCancelOrderMeasuredHandlers.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 cancelOrderParams = cancelOrderParams,
                 result = result,
@@ -154,7 +154,7 @@ class MeasuringDurationOrderServiceGateway<T>(
     }
 
     override fun placeMarketBuyOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
@@ -164,7 +164,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.placeMarketBuyOrderWithCounterCurrencyAmount(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     currencyPair = currencyPair,
                     counterCurrencyAmount = counterCurrencyAmount,
@@ -174,7 +174,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         )
         onPlaceMarketBuyOrderWithCounterCurrencyAmountHandlers.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 currencyPair = currencyPair,
                 counterCurrencyAmount = counterCurrencyAmount,
@@ -187,7 +187,7 @@ class MeasuringDurationOrderServiceGateway<T>(
     }
 
     override fun placeMarketBuyOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
@@ -197,7 +197,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.placeMarketBuyOrderWithBaseCurrencyAmount(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     currencyPair = currencyPair,
                     baseCurrencyAmount = baseCurrencyAmount,
@@ -207,7 +207,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         )
         onPlaceMarketBuyOrderWithBaseCurrencyAmountHandlers.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 currencyPair = currencyPair,
                 baseCurrencyAmount = baseCurrencyAmount,
@@ -220,7 +220,7 @@ class MeasuringDurationOrderServiceGateway<T>(
     }
 
     override fun placeMarketSellOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
@@ -230,7 +230,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.placeMarketSellOrderWithCounterCurrencyAmount(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     currencyPair = currencyPair,
                     counterCurrencyAmount = counterCurrencyAmount,
@@ -240,7 +240,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         )
         onPlaceMarketSellOrderWithCounterCurrencyAmount.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 currencyPair = currencyPair,
                 counterCurrencyAmount = counterCurrencyAmount,
@@ -253,7 +253,7 @@ class MeasuringDurationOrderServiceGateway<T>(
     }
 
     override fun placeMarketSellOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
@@ -263,7 +263,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.placeMarketSellOrderWithBaseCurrencyAmount(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     currencyPair = currencyPair,
                     baseCurrencyAmount = baseCurrencyAmount,
@@ -273,7 +273,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         )
         onPlaceMarketSellOrderWithBaseCurrencyAmount.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 currencyPair = currencyPair,
                 baseCurrencyAmount = baseCurrencyAmount,
@@ -286,7 +286,7 @@ class MeasuringDurationOrderServiceGateway<T>(
     }
 
     override fun placeLimitBuyOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         buyPrice: BigDecimal,
@@ -296,7 +296,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.placeLimitBuyOrder(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     currencyPair = currencyPair,
                     buyPrice = buyPrice,
@@ -306,7 +306,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         )
         onPlaceLimitBuyOrderMeasured.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 currencyPair = currencyPair,
                 buyPrice = buyPrice,
@@ -319,7 +319,7 @@ class MeasuringDurationOrderServiceGateway<T>(
     }
 
     override fun placeLimitSellOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         sellPrice: BigDecimal,
@@ -329,7 +329,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.placeLimitSellOrder(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     currencyPair = currencyPair,
                     sellPrice = sellPrice,
@@ -339,7 +339,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         )
         onPlaceLimitSellOrderMeasured.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 currencyPair = currencyPair,
                 sellPrice = sellPrice,
@@ -352,21 +352,21 @@ class MeasuringDurationOrderServiceGateway<T>(
     }
 
     override fun getOpenOrders(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): List<Order> {
         val result: List<Order>
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.getOpenOrders(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                 )
             },
         )
         onGetOpenOrdersMeasured.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 result = result,
                 duration = duration,
@@ -376,7 +376,7 @@ class MeasuringDurationOrderServiceGateway<T>(
     }
 
     override fun getOpenOrders(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): List<Order> {
@@ -384,7 +384,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.getOpenOrders(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     currencyPair = currencyPair,
                 )
@@ -392,7 +392,7 @@ class MeasuringDurationOrderServiceGateway<T>(
         )
         onGetOpenOrdersWithCurrencyPairMeasured.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 currencyPair = currencyPair,
                 result = result,

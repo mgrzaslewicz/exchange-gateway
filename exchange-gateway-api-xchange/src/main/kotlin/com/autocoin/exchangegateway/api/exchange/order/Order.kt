@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.order
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import com.autocoin.exchangegateway.spi.exchange.order.OrderStatus
 import org.knowm.xchange.dto.trade.LimitOrder
@@ -29,12 +29,12 @@ val defaultXchangeTypeToOrderSide: Function<XchangeOrder.OrderType, OrderSide> =
 
 val defaultXchangeLimitOrderToOrderTransformer = object : XchangeLimitOrderToOrderTransformer {
     override fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         xchangeLimitOrder: LimitOrder,
         receivedAtMillis: Long,
     ): Order {
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             exchangeOrderId = xchangeLimitOrder.id,
             side = defaultXchangeTypeToOrderSide.apply(xchangeLimitOrder.type),
             orderedAmount = xchangeLimitOrder.originalAmount,

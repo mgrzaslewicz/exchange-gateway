@@ -1,28 +1,28 @@
 package com.autocoin.exchangegateway.spi.exchange.ticker.gateway
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker
 import com.autocoin.exchangegateway.spi.exchange.ticker.service.TickerService
 
 class DelegateTickerServiceGateway<T>(
-    private val tickerServiceGateways: Map<ExchangeName, TickerService<T>>,
+    private val tickerServiceGateways: Map<Exchange, TickerService<T>>,
 ) : TickerServiceGateway<T> {
 
     override fun getTicker(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): Ticker {
-        return tickerServiceGateways.getValue(exchangeName).getTicker(
+        return tickerServiceGateways.getValue(exchange).getTicker(
             apiKey = apiKey,
             currencyPair = currencyPair,
         )
     }
 
     override fun getTickers(
-        exchangeName: ExchangeName,
+        exchangeName: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPairs: Collection<CurrencyPair>,
     ): List<Ticker> {

@@ -2,7 +2,7 @@ package com.autocoin.exchangegateway.dto.ticker
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.ticker.Ticker
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.ExchangeProvider
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker as SpiTicker
 
 data class TickerDto(
@@ -15,8 +15,8 @@ data class TickerDto(
     val receivedAtMillis: Long,
     val exchangeTimestampMillis: Long?,
 ) {
-    fun toTicker(): SpiTicker = Ticker(
-        exchangeName = ExchangeName(exchange),
+    fun toTicker(exchangeProvider: ExchangeProvider): SpiTicker = Ticker(
+        exchange = exchangeProvider.getExchange(exchange),
         currencyPair = CurrencyPair.of(currencyPair),
         ask = ask.toBigDecimal(),
         bid = bid.toBigDecimal(),
@@ -29,7 +29,7 @@ data class TickerDto(
 }
 
 fun SpiTicker.toDto() = TickerDto(
-    exchange = exchangeName.value,
+    exchange = exchange.exchangeName,
     currencyPair = currencyPair.toString(),
     ask = ask.toPlainString(),
     bid = bid.toPlainString(),

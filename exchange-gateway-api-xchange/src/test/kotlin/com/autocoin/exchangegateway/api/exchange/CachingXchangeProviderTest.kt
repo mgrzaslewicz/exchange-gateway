@@ -1,26 +1,19 @@
 package com.autocoin.exchangegateway.api.exchange
 
 import com.autocoin.exchangegateway.api.exchange.apikey.ApiKeySupplier
-import com.autocoin.exchangegateway.api.exchange.xchange.ApiKeyToCacheKeyProvider
-import com.autocoin.exchangegateway.api.exchange.xchange.CachingXchangeProvider
-import com.autocoin.exchangegateway.api.exchange.xchange.DefaultXchangeProvider
-import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.binance
-import com.autocoin.exchangegateway.api.exchange.xchange.XchangeApiKeyVerifierGateway
-import com.autocoin.exchangegateway.api.exchange.xchange.XchangeInstanceProvider
-import com.autocoin.exchangegateway.api.exchange.xchange.XchangeInstanceWrapper
-import com.autocoin.exchangegateway.api.exchange.xchange.XchangeSpecificationApiKeyAssigner
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.api.exchange.xchange.*
+import com.autocoin.exchangegateway.api.exchange.xchange.SupportedXchangeExchange.binance
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.knowm.xchange.Exchange
 import org.knowm.xchange.ExchangeSpecification
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier as SpiApiKeySupplier
+import org.knowm.xchange.Exchange as XchangeExchange
 
 class CachingXchangeProviderTest {
     private lateinit var tested: CachingXchangeProvider<String, String>
     private lateinit var countingXchangeInstanceWrapper: CountingXchangeInstanceWrapper
-    private val exchangeName = ExchangeName("exchange1")
 
     @BeforeEach
     fun setup() {
@@ -30,7 +23,7 @@ class CachingXchangeProviderTest {
         tested = CachingXchangeProvider(
             apiKeyToCacheKey = object : ApiKeyToCacheKeyProvider<String, String> {
                 override fun invoke(
-                    exchangeName: ExchangeName,
+                    exchange: Exchange,
                     apiKey: SpiApiKeySupplier<String>,
                 ): String {
                     return apiKey.id
@@ -47,7 +40,7 @@ class CachingXchangeProviderTest {
 
     private class CountingXchangeInstanceWrapper(private val decorated: XchangeInstanceProvider) : XchangeInstanceProvider {
         var invokeCount = 0
-        override operator fun invoke(exchangeSpecification: ExchangeSpecification): Exchange {
+        override operator fun invoke(exchangeSpecification: ExchangeSpecification): XchangeExchange {
             invokeCount++
             return decorated(exchangeSpecification)
         }
@@ -56,8 +49,8 @@ class CachingXchangeProviderTest {
     @Test
     fun shouldUseCachedXchangeInstance() {
         // when
-        tested.invoke(exchangeName = binance, apiKey = ApiKeySupplier(id = "1", supplier = null))
-        tested.invoke(exchangeName = binance, apiKey = ApiKeySupplier(id = "1", supplier = null))
+        tested.invoke(exchange = binance, apiKey = ApiKeySupplier(id = "1", supplier = null))
+        tested.invoke(exchange = binance, apiKey = ApiKeySupplier(id = "1", supplier = null))
         // then
         assertThat(countingXchangeInstanceWrapper.invokeCount).isEqualTo(1)
     }
@@ -65,8 +58,8 @@ class CachingXchangeProviderTest {
     @Test
     fun shouldNotUseCachedXchangeInstance() {
         // when
-        tested.invoke(exchangeName = binance, apiKey = ApiKeySupplier(id = "1", supplier = null))
-        tested.invoke(exchangeName = binance, apiKey = ApiKeySupplier(id = "2", supplier = null))
+        tested.invoke(exchange = binance, apiKey = ApiKeySupplier(id = "1", supplier = null))
+        tested.invoke(exchange = binance, apiKey = ApiKeySupplier(id = "2", supplier = null))
         // then
         assertThat(countingXchangeInstanceWrapper.invokeCount).isEqualTo(2)
     }

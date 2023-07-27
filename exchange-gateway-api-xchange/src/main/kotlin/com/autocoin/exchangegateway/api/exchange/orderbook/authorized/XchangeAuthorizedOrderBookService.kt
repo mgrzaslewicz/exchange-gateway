@@ -7,7 +7,7 @@ import com.autocoin.exchangegateway.api.exchange.orderbook.OrderBook
 import com.autocoin.exchangegateway.api.exchange.orderbook.XchangeLimitOrderToOrderInOrderBookTransformer
 import com.autocoin.exchangegateway.api.exchange.orderbook.XchangeOrderBookTransformer
 import com.autocoin.exchangegateway.api.exchange.orderbook.defaultXchangeLimitOrderToOrderInOrderBookTransformer
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
@@ -22,7 +22,7 @@ import org.knowm.xchange.dto.marketdata.OrderBook as XchangeOrderBook
 
 
 class XchangeAuthorizedOrderBookService<T>(
-    override val exchangeName: ExchangeName,
+    override val exchange: Exchange,
     override val apiKey: ApiKeySupplier<T>,
     val delegate: MarketDataService,
     private val clock: Clock,
@@ -38,20 +38,20 @@ class XchangeAuthorizedOrderBookService<T>(
             override operator fun invoke(
                 xchangeOrderBook: XchangeOrderBook,
                 receivedAtMillis: Long,
-                exchangeName: ExchangeName,
+                exchange: Exchange,
                 currencyPair: CurrencyPair,
                 xchangeLimitOrderToOrderInOrderBookTransformer: XchangeLimitOrderToOrderInOrderBookTransformer,
                 xchangeOrderTypeTransformer: Function<XchangeOrder.OrderType, OrderSide>,
                 xchangeCurrencyPairTransformer: Function<XchangeCurrencyPair, CurrencyPair>,
             ): SpiOrderBook {
                 return OrderBook(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     currencyPair = currencyPair,
                     buyOrders = xchangeOrderBook.bids.map {
                         xchangeLimitOrderToOrderInOrderBookTransformer(
                             xchangeLimitOrder = it,
                             receivedAtMillis = receivedAtMillis,
-                            exchangeName = exchangeName,
+                            exchange = exchange,
                             xchangeCurrencyPairTransformer = xchangeCurrencyPairTransformer,
                             xchangeOrderTypeTransformer = xchangeOrderTypeTransformer,
                         )
@@ -60,7 +60,7 @@ class XchangeAuthorizedOrderBookService<T>(
                         xchangeLimitOrderToOrderInOrderBookTransformer(
                             xchangeLimitOrder = it,
                             receivedAtMillis = receivedAtMillis,
-                            exchangeName = exchangeName,
+                            exchange = exchange,
                             xchangeCurrencyPairTransformer = xchangeCurrencyPairTransformer,
                             xchangeOrderTypeTransformer = xchangeOrderTypeTransformer,
                         )
@@ -77,7 +77,7 @@ class XchangeAuthorizedOrderBookService<T>(
         return xchangeOrderBookTransformer(
             xchangeOrderBook = xchangeOrderBook,
             receivedAtMillis = clock.millis(),
-            exchangeName = exchangeName,
+            exchange = exchange,
             currencyPair = currencyPair,
             xchangeLimitOrderToOrderInOrderBookTransformer = xchangeLimitOrderToOrderInOrderBookTransformer,
             xchangeOrderTypeTransformer = xchangeTypeToOrderSide,

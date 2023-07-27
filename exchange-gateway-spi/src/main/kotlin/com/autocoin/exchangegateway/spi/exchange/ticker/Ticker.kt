@@ -1,11 +1,11 @@
 package com.autocoin.exchangegateway.spi.exchange.ticker
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 
 interface Ticker {
-    val exchangeName: ExchangeName
+    val exchange: Exchange
     val currencyPair: CurrencyPair
     val ask: BigDecimal
     val bid: BigDecimal

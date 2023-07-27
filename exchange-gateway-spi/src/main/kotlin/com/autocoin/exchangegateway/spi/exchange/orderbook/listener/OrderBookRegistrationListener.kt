@@ -1,18 +1,18 @@
 package com.autocoin.exchangegateway.spi.exchange.orderbook.listener
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 
 interface OrderBookRegistrationListener {
-    fun onLastListenerDeregistered(exchangeName: ExchangeName)
+    fun onLastListenerDeregistered(exchange: Exchange)
     fun onListenerDeregistered(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
     )
 
-    fun onFirstListenerRegistered(exchangeName: ExchangeName)
+    fun onFirstListenerRegistered(exchange: Exchange)
     fun onListenerRegistered(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
     )
 }

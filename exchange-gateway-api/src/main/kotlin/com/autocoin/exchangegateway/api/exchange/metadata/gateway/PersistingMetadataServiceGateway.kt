@@ -1,7 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.metadata.gateway
 
 import com.autocoin.exchangegateway.api.keyvalue.LatestVersion
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.metadata.gateway.MetadataServiceGateway
 import com.autocoin.exchangegateway.spi.keyvalue.KeyValueRepository
@@ -13,45 +13,45 @@ import com.autocoin.exchangegateway.spi.exchange.metadata.ExchangeMetadata as Sp
  */
 class PersistingMetadataServiceGateway<T>(
     private val decorated: MetadataServiceGateway<T>,
-    private val metadataRepository: KeyValueRepository<LatestVersion<SpiExchangeMetadata>, ExchangeName, SpiExchangeMetadata>,
+    private val metadataRepository: KeyValueRepository<LatestVersion<SpiExchangeMetadata>, Exchange, SpiExchangeMetadata>,
 ) : MetadataServiceGateway<T> {
 
     companion object : KLogging()
 
     override fun getMetadata(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): SpiExchangeMetadata {
-        return getAndSaveExchangeMetadata(exchangeName, apiKey)
+        return getAndSaveExchangeMetadata(exchange, apiKey)
     }
 
     private fun getAndSaveExchangeMetadata(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): SpiExchangeMetadata {
-        logger.debug { "[$exchangeName] Getting exchange metadata" }
-        val result = metadataRepository.getLatestVersion(exchangeName)
+        logger.debug { "[$exchange] Getting exchange metadata" }
+        val result = metadataRepository.getLatestVersion(exchange)
         return if (result != null) {
             result.value
         }
         else {
-            logger.info { "[$exchangeName] Fetching exchange metadata" }
+            logger.info { "[$exchange] Fetching exchange metadata" }
             return fetchAndSaveExchangeMetadata(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
             )
         }
     }
 
     private fun fetchAndSaveExchangeMetadata(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): SpiExchangeMetadata {
         val freshExchangeMetadata = decorated.getMetadata(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
         )
-        metadataRepository.saveNewVersion(exchangeName, freshExchangeMetadata)
+        metadataRepository.saveNewVersion(exchange, freshExchangeMetadata)
         return freshExchangeMetadata
     }
 

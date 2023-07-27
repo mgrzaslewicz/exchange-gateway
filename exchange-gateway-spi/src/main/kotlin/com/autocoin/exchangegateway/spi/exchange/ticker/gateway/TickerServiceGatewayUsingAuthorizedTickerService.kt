@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.spi.exchange.ticker.gateway
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker
@@ -11,23 +11,23 @@ class TickerServiceGatewayUsingAuthorizedTickerService<T>(
 ) : TickerServiceGateway<T> {
 
     override fun getTicker(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): Ticker {
         return authorizedTickerServiceFactory.createAuthorizedTickerService(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
         ).getTicker(currencyPair = currencyPair)
     }
 
     override fun getTickers(
-        exchangeName: ExchangeName,
+        exchangeName: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPairs: Collection<CurrencyPair>,
     ): List<Ticker> {
         return authorizedTickerServiceFactory.createAuthorizedTickerService(
-            exchangeName = exchangeName,
+            exchange = exchangeName,
             apiKey = apiKey,
         ).getTickers(currencyPairs = currencyPairs)
     }

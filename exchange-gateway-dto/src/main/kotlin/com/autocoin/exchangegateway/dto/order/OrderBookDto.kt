@@ -2,7 +2,7 @@ package com.autocoin.exchangegateway.dto.order
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.orderbook.OrderBook
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.ExchangeProvider
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderBook as SpiOrderBook
 
 
@@ -20,10 +20,10 @@ data class OrderBookDto(
 
     val errorMessage: String? = null,
 ) {
-    fun toOrderBook(): SpiOrderBook = OrderBook(
-        exchangeName = ExchangeName(exchangeName),
-        buyOrders = buyOrders.map { it.toOrderInOrderBook() },
-        sellOrders = sellOrders.map { it.toOrderInOrderBook() },
+    fun toOrderBook(exchangeProvider: ExchangeProvider): SpiOrderBook = OrderBook(
+        exchange = exchangeProvider.getExchange(exchangeName),
+        buyOrders = buyOrders.map { it.toOrderInOrderBook(exchangeProvider) },
+        sellOrders = sellOrders.map { it.toOrderInOrderBook(exchangeProvider) },
         receivedAtMillis = receivedAtMillis,
         exchangeTimestampMillis = exchangeTimestampMillis,
         currencyPair = CurrencyPair.of(currencyPair),
@@ -33,7 +33,7 @@ data class OrderBookDto(
 
 fun SpiOrderBook.toDto() =
     OrderBookDto(
-        exchangeName = exchangeName.value,
+        exchangeName = exchange.exchangeName,
         currencyPair = currencyPair.toString(),
         buyOrders = buyOrders
             .sortedByDescending { it.price }

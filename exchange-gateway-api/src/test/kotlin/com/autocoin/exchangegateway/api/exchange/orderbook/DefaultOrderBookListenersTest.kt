@@ -1,6 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.orderbook.listener.OrderBookListener
 import com.autocoin.exchangegateway.spi.exchange.orderbook.listener.OrderBookListeners
 import com.autocoin.exchangegateway.spi.exchange.orderbook.listener.OrderBookRegistrationListener
@@ -15,11 +16,15 @@ import org.mockito.junit.jupiter.MockitoExtension
 @ExtendWith(MockitoExtension::class)
 class DefaultOrderBookListenersTest {
     private lateinit var tested: OrderBookListeners
-    private val currencyPair_AB = CurrencyPair.of("A/B")
-    private val currencyPair_CD = CurrencyPair.of("C/D")
+    private val currencyPairAB = CurrencyPair.of("A/B")
+    private val currencyPairCD = CurrencyPair.of("C/D")
     private val orderBookListener = mock<OrderBookListener>()
-    private val bittrex = com.autocoin.exchangegateway.spi.exchange.ExchangeName("bittrex")
-    private val binance = com.autocoin.exchangegateway.spi.exchange.ExchangeName("binance")
+    private val exchange1 = object : Exchange {
+        override val exchangeName = "exchange1"
+    }
+    private val exchange2 = object : Exchange {
+        override val exchangeName = "exchange2"
+    }
 
     @BeforeEach
     fun setup() {
@@ -29,17 +34,17 @@ class DefaultOrderBookListenersTest {
     @Test
     fun shouldAddOrderBookListenersForDifferentExchanges() {
         // when
-        tested.addOrderBookListener(bittrex, currencyPair_AB, orderBookListener)
-        tested.addOrderBookListener(binance, currencyPair_CD, orderBookListener)
+        tested.addOrderBookListener(exchange1, currencyPairAB, orderBookListener)
+        tested.addOrderBookListener(exchange2, currencyPairCD, orderBookListener)
         // then
-        assertThat(tested.getOrderBookListeners(bittrex)).isEqualTo(
+        assertThat(tested.getOrderBookListeners(exchange1)).isEqualTo(
             mapOf(
-                currencyPair_AB to setOf(orderBookListener),
+                currencyPairAB to setOf(orderBookListener),
             ),
         )
-        assertThat(tested.getOrderBookListeners(binance)).isEqualTo(
+        assertThat(tested.getOrderBookListeners(exchange2)).isEqualTo(
             mapOf(
-                currencyPair_CD to setOf(orderBookListener),
+                currencyPairCD to setOf(orderBookListener),
             ),
         )
     }
@@ -47,13 +52,13 @@ class DefaultOrderBookListenersTest {
     @Test
     fun shouldAddOrderBookListenersForTheSameExchanges() {
         // when
-        tested.addOrderBookListener(bittrex, currencyPair_AB, orderBookListener)
-        tested.addOrderBookListener(bittrex, currencyPair_CD, orderBookListener)
+        tested.addOrderBookListener(exchange1, currencyPairAB, orderBookListener)
+        tested.addOrderBookListener(exchange1, currencyPairCD, orderBookListener)
         // then
-        assertThat(tested.getOrderBookListeners(bittrex)).isEqualTo(
+        assertThat(tested.getOrderBookListeners(exchange1)).isEqualTo(
             mapOf(
-                currencyPair_AB to setOf(orderBookListener),
-                currencyPair_CD to setOf(orderBookListener),
+                currencyPairAB to setOf(orderBookListener),
+                currencyPairCD to setOf(orderBookListener),
             ),
         )
     }
@@ -61,14 +66,14 @@ class DefaultOrderBookListenersTest {
     @Test
     fun shouldRemoveOrderBookListeners() {
         // when
-        tested.addOrderBookListener(bittrex, currencyPair_AB, orderBookListener)
-        tested.addOrderBookListener(binance, currencyPair_CD, orderBookListener)
-        tested.removeOrderBookListener(bittrex, currencyPair_AB, orderBookListener)
+        tested.addOrderBookListener(exchange1, currencyPairAB, orderBookListener)
+        tested.addOrderBookListener(exchange2, currencyPairCD, orderBookListener)
+        tested.removeOrderBookListener(exchange1, currencyPairAB, orderBookListener)
         // then
-        assertThat(tested.getOrderBookListeners(bittrex)).isEmpty()
-        assertThat(tested.getOrderBookListeners(binance)).isEqualTo(
+        assertThat(tested.getOrderBookListeners(exchange1)).isEmpty()
+        assertThat(tested.getOrderBookListeners(exchange2)).isEqualTo(
             mapOf(
-                currencyPair_CD to setOf(orderBookListener),
+                currencyPairCD to setOf(orderBookListener),
             ),
         )
     }
@@ -79,9 +84,9 @@ class DefaultOrderBookListenersTest {
         val registrationListener = mock<OrderBookRegistrationListener>()
         tested.addOrderBookRegistrationListener(registrationListener)
         // when
-        tested.addOrderBookListener(binance, currencyPair_AB, orderBookListener)
+        tested.addOrderBookListener(exchange2, currencyPairAB, orderBookListener)
         // then
-        verify(registrationListener).onFirstListenerRegistered(binance)
+        verify(registrationListener).onFirstListenerRegistered(exchange2)
     }
 
     @Test
@@ -90,10 +95,10 @@ class DefaultOrderBookListenersTest {
         val registrationListener = mock<OrderBookRegistrationListener>()
         tested.addOrderBookRegistrationListener(registrationListener)
         // when
-        tested.addOrderBookListener(binance, currencyPair_AB, orderBookListener)
-        tested.removeOrderBookListener(binance, currencyPair_AB, orderBookListener)
+        tested.addOrderBookListener(exchange2, currencyPairAB, orderBookListener)
+        tested.removeOrderBookListener(exchange2, currencyPairAB, orderBookListener)
         // then
-        verify(registrationListener).onLastListenerDeregistered(binance)
+        verify(registrationListener).onLastListenerDeregistered(exchange2)
 
     }
 

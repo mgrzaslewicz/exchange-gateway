@@ -4,7 +4,7 @@ import com.autocoin.exchangegateway.api.exchange.ticker.Ticker
 import com.autocoin.exchangegateway.api.exchange.ticker.XchangeTickerTransformer
 import com.autocoin.exchangegateway.api.exchange.ticker.XchangeTickerTransformerWithCurrencyPair
 import com.autocoin.exchangegateway.api.exchange.xchange.XchangeProvider
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.ticker.service.authorized.AuthorizedTickerService
 import com.autocoin.exchangegateway.spi.exchange.ticker.service.authorized.AuthorizedTickerServiceFactory
@@ -30,13 +30,13 @@ class XchangeAuthorizedTickerServiceFactory<T>(
 
         val defaultXchangeTickerTransformerWithCurrencyPairFix: XchangeTickerTransformerWithCurrencyPair = object : XchangeTickerTransformerWithCurrencyPair {
             override operator fun invoke(
-                exchangeName: ExchangeName,
+                exchange: Exchange,
                 currencyPair: SpiCurrencyPair,
                 xchangeTicker: XchangeTicker,
                 receivedAtMillis: Long,
             ): SpiTicker {
                 return Ticker(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     currencyPair = currencyPair,
                     ask = xchangeTicker.ask,
                     bid = xchangeTicker.bid,
@@ -58,12 +58,12 @@ class XchangeAuthorizedTickerServiceFactory<T>(
         fun defaultXchangeTickerTransformer(xchangeCurrencyPairTransformer: Function<XchangeCurrencyPair, SpiCurrencyPair>): XchangeTickerTransformer =
             object : XchangeTickerTransformer {
                 override operator fun invoke(
-                    exchangeName: ExchangeName,
+                    exchange: Exchange,
                     xchangeTicker: XchangeTicker,
                     receivedAtMillis: Long,
                 ): SpiTicker {
                     return Ticker(
-                        exchangeName = exchangeName,
+                        exchange = exchange,
                         currencyPair = xchangeCurrencyPairTransformer.apply(xchangeTicker.currencyPair),
                         ask = xchangeTicker.ask,
                         bid = xchangeTicker.bid,
@@ -77,15 +77,15 @@ class XchangeAuthorizedTickerServiceFactory<T>(
     }
 
     override fun createAuthorizedTickerService(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): AuthorizedTickerService<T> {
         val xchange = xchangeProvider(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
         )
         return XchangeAuthorizedTickerService(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             delegate = xchange.marketDataService,
             currencyPairToXchange = currencyPairToXchange,

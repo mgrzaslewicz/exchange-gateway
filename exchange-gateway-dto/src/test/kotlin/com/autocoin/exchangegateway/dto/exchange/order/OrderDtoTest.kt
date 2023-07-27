@@ -3,15 +3,19 @@ package com.autocoin.exchangegateway.dto.exchange.order
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.order.Order
 import com.autocoin.exchangegateway.dto.order.toDto
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import com.autocoin.exchangegateway.spi.exchange.order.OrderStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class OrderDtoTest {
+    private val exchange = object : Exchange {
+        override val exchangeName = "exchange"
+    }
+
     private val order = Order(
-        exchangeName = ExchangeName("exchange1"),
+        exchange = exchange,
         side = OrderSide.BID_BUY,
         currencyPair = CurrencyPair.of("BTC/USDT"),
         orderedAmount = 45.678.toBigDecimal(),
@@ -28,7 +32,7 @@ class OrderDtoTest {
         // given
         val dto = order.toDto()
         // when
-        val orderFromDto = dto.toOrder()
+        val orderFromDto = dto.toOrder { exchange }
         // then
         assertThat(orderFromDto).isEqualTo(order)
     }

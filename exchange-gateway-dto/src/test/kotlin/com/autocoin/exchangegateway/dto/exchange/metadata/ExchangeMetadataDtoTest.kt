@@ -5,13 +5,16 @@ import com.autocoin.exchangegateway.api.exchange.metadata.CurrencyPairMetadata
 import com.autocoin.exchangegateway.api.exchange.metadata.ExchangeMetadata
 import com.autocoin.exchangegateway.api.exchange.metadata.FeeRange
 import com.autocoin.exchangegateway.api.exchange.metadata.FeeRanges
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class ExchangeMetadataDtoTest {
+    private val exchange = object : Exchange {
+        override val exchangeName = "exchange1"
+    }
     private val exchangeMetadata = ExchangeMetadata(
-        exchange = ExchangeName("exchange1"),
+        exchange = exchange,
         currencyPairMetadata = mapOf(
             CurrencyPair.of("A/B") to CurrencyPairMetadata(
                 amountScale = 2,
@@ -52,7 +55,7 @@ class ExchangeMetadataDtoTest {
     @Test
     fun shouldConvertToDtoAndBack() {
         // when
-        val fromDto = dto.toExchangeMetadata()
+        val fromDto = dto.toExchangeMetadata { exchange }
         // then
         assertThat(fromDto).isEqualTo(exchangeMetadata)
     }

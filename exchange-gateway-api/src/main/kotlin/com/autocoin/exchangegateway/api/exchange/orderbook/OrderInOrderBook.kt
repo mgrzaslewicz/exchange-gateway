@@ -1,8 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
-import com.autocoin.exchangegateway.spi.exchange.currency.ExchangeCache
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import java.math.BigDecimal
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderInOrderBook as SpiOrderInOrderBook
@@ -14,7 +13,7 @@ import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderInOrderBook as S
  * https://stackoverflow.com/a/49561916
  */
 data class OrderInOrderBook private constructor(
-    override val exchangeName: ExchangeName,
+    override val exchange: Exchange,
     override val side: OrderSide,
     override val orderedAmount: BigDecimal,
     override val price: BigDecimal,
@@ -25,7 +24,7 @@ data class OrderInOrderBook private constructor(
 
     companion object {
         operator fun invoke(
-            exchangeName: ExchangeName,
+            exchange: Exchange,
             side: OrderSide,
             orderedAmount: BigDecimal,
             price: BigDecimal,
@@ -34,7 +33,7 @@ data class OrderInOrderBook private constructor(
             exchangeTimestampMillis: Long?,
         ): OrderInOrderBook {
             return OrderInOrderBook(
-                exchangeName = ExchangeCache.get(exchangeName),
+                exchange = exchange,
                 side = side,
                 orderedAmount = orderedAmount,
                 price = price,

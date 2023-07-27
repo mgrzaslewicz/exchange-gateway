@@ -1,6 +1,7 @@
 package com.autocoin.exchangegateway.dto.order
 
 import com.autocoin.exchangegateway.api.exchange.order.OpenOrders
+import com.autocoin.exchangegateway.spi.exchange.ExchangeProvider
 import com.autocoin.exchangegateway.spi.exchange.order.OpenOrders as SpiOpenOrders
 
 data class OpenOrdersDto(
@@ -8,9 +9,9 @@ data class OpenOrdersDto(
     val openOrders: List<OrderDto>,
     val errorMessage: String?,
 ) {
-    fun toOpenOrders() = OpenOrders(
+    fun toOpenOrders(exchangeProvider: ExchangeProvider) = OpenOrders(
         exchangeUserId = exchangeUserId,
-        openOrders = openOrders.map { it.toOrder() },
+        openOrders = openOrders.map { it.toOrder(exchangeProvider) },
         errorMessage = errorMessage,
     )
 

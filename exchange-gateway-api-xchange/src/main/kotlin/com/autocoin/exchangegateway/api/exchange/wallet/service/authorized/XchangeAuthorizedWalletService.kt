@@ -1,7 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.wallet.service.authorized
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyBalance
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.wallet.WithdrawResult
 import com.autocoin.exchangegateway.spi.exchange.wallet.service.authorized.AuthorizedWalletService
@@ -12,7 +12,7 @@ import java.math.BigDecimal
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyBalance as SpiCurrencyBalance
 
 class XchangeAuthorizedWalletService<T>(
-    override val exchangeName: ExchangeName,
+    override val exchange: Exchange,
     override val apiKey: ApiKeySupplier<T>,
     val delegate: AccountService,
     private val expectedTradingWalletNameWhenMultipleExist: String,

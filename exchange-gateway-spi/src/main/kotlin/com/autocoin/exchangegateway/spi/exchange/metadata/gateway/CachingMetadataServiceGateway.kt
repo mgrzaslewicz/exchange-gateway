@@ -1,35 +1,35 @@
 package com.autocoin.exchangegateway.spi.exchange.metadata.gateway
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.metadata.ExchangeMetadata
 import java.util.concurrent.ConcurrentHashMap
 
 class CachingMetadataServiceGateway<T>(private val decorated: MetadataServiceGateway<T>) : MetadataServiceGateway<T> {
-    private val locks = ConcurrentHashMap<ExchangeName, Any>()
-    private val cache = ConcurrentHashMap<ExchangeName, ExchangeMetadata>()
+    private val locks = ConcurrentHashMap<Exchange, Any>()
+    private val cache = ConcurrentHashMap<Exchange, ExchangeMetadata>()
 
     fun refreshMetadata(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ) {
-        synchronized(locks.computeIfAbsent(exchangeName) { Any() }) {
-            cache.remove(exchangeName)
+        synchronized(locks.computeIfAbsent(exchange) { Any() }) {
+            cache.remove(exchange)
             getMetadata(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
             )
         }
     }
 
     override fun getMetadata(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): ExchangeMetadata {
-        synchronized(locks.computeIfAbsent(exchangeName) { Any() }) {
-            return cache.computeIfAbsent(exchangeName) {
+        synchronized(locks.computeIfAbsent(exchange) { Any() }) {
+            return cache.computeIfAbsent(exchange) {
                 decorated.getMetadata(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                 )
             }

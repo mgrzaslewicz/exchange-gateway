@@ -4,15 +4,14 @@ import com.autocoin.exchangegateway.api.exchange.currency.defaultXchangeCurrency
 import com.autocoin.exchangegateway.api.exchange.metadata.CurrencyMetadata
 import com.autocoin.exchangegateway.api.exchange.metadata.CurrencyPairMetadata
 import com.autocoin.exchangegateway.api.exchange.metadata.ExchangeMetadata
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.metadata.service.authorized.AuthorizedMetadataService
-import org.knowm.xchange.Exchange
 import org.knowm.xchange.currency.CurrencyPair
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData
 import org.knowm.xchange.dto.meta.ExchangeMetaData
 import java.util.function.Function
-
+import org.knowm.xchange.Exchange as XchangeExchange
 
 
 /**
@@ -29,14 +28,14 @@ import java.util.function.Function
  * currencyWithdrawalEnabled
  */
 class XchangeAuthorizedMetadataService<T>(
-    override val exchangeName: ExchangeName,
+    override val exchange: Exchange,
     override val apiKey: ApiKeySupplier<T>,
-    val delegate: Exchange,
+    val delegate: XchangeExchange,
     val metadataTransformers: List<ExchangeMetadataTransformer> = listOf(),
     private val xchangeCurrencyPairTransformer: Function<CurrencyPair, com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair> = defaultXchangeCurrencyPairTransformer,
 ) : AuthorizedMetadataService<T> {
     override fun getMetadata(): ExchangeMetadata {
-        val result = ExchangeMetadata.Builder(exchange = exchangeName)
+        val result = ExchangeMetadata.Builder(exchange = exchange)
         val xchangeMetadata = delegate.exchangeMetaData
         val currencyPairsMetadata = getCurrencyPairsMetadata(xchangeMetadata)
         val currenciesMetadata = getCurrenciesMetadata(xchangeMetadata)

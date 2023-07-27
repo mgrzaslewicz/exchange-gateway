@@ -1,12 +1,12 @@
 package com.autocoin.exchangegateway.spi.exchange.wallet.service.authorized
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 
 interface AuthorizedWalletServiceFactory<T> {
 
     fun createAuthorizedWalletService(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): AuthorizedWalletService<T>
 

@@ -6,9 +6,9 @@ import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.currency.defaultCurrencyPairToXchange
 import com.autocoin.exchangegateway.api.exchange.order.Order
 import com.autocoin.exchangegateway.api.exchange.order.service.authorized.XchangeAuthorizedOrderServiceFactory
-import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.kucoin
+import com.autocoin.exchangegateway.api.exchange.xchange.SupportedXchangeExchange.kucoin
 import com.autocoin.exchangegateway.api.exchange.xchange.XchangeProvider
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import com.autocoin.exchangegateway.spi.exchange.order.OrderStatus.*
 import com.autocoin.exchangegateway.spi.exchange.order.service.authorized.AuthorizedOrderService
@@ -19,7 +19,6 @@ import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.knowm.xchange.Exchange
 import org.knowm.xchange.dto.trade.LimitOrder
 import org.knowm.xchange.dto.trade.OpenOrders
 import org.knowm.xchange.service.trade.TradeService
@@ -31,6 +30,7 @@ import java.math.BigDecimal
 import java.time.Clock
 import java.util.*
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier as SpiApiKeySupplier
+import org.knowm.xchange.Exchange as XchangeExchange
 import org.knowm.xchange.dto.Order as XchangeOrder
 
 @ExtendWith(MockitoExtension::class)
@@ -49,7 +49,7 @@ class XchangeAuthorizedOrderServiceTest {
     private val limitPriceBigDecimal = BigDecimal.ONE
 
     private val openBuyOrder1 = Order(
-        exchangeName = kucoin,
+        exchange = kucoin,
         exchangeOrderId = buyOrderId1,
         side = OrderSide.BID_BUY,
         orderedAmount = BigDecimal(5.5),
@@ -61,7 +61,7 @@ class XchangeAuthorizedOrderServiceTest {
     )
 
     private val openBuyOrder2 = Order(
-        exchangeName = kucoin,
+        exchange = kucoin,
         exchangeOrderId = buyOrderId2,
         side = OrderSide.BID_BUY,
         orderedAmount = BigDecimal(5.5),
@@ -73,7 +73,7 @@ class XchangeAuthorizedOrderServiceTest {
     )
 
     private val openSellOrder1 = Order(
-        exchangeName = kucoin,
+        exchange = kucoin,
         exchangeOrderId = sellOrderId1,
         side = OrderSide.ASK_SELL,
         orderedAmount = BigDecimal(45.5),
@@ -89,10 +89,10 @@ class XchangeAuthorizedOrderServiceTest {
         tested = XchangeAuthorizedOrderServiceFactory(
             xchangeProvider = object : XchangeProvider<String> {
                 override operator fun invoke(
-                    exchangeName: ExchangeName,
+                    exchange: Exchange,
                     apiKey: SpiApiKeySupplier<String>,
-                ): Exchange {
-                    return mock<Exchange>().apply { whenever(tradeService).thenReturn(wrappedTradeService) }
+                ): XchangeExchange {
+                    return mock<XchangeExchange>().apply { whenever(tradeService).thenReturn(wrappedTradeService) }
                 }
 
             },

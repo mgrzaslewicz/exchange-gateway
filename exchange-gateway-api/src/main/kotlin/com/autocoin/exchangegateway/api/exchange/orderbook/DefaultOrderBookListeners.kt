@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.orderbook.listener.OrderBookListener
 import com.autocoin.exchangegateway.spi.exchange.orderbook.listener.OrderBookListeners
@@ -12,16 +12,16 @@ import java.util.concurrent.CopyOnWriteArraySet
 class DefaultOrderBookListeners : OrderBookListeners {
 
     private val listenersByExchangeAndCurrencyPair =
-        ConcurrentHashMap<ExchangeName, ConcurrentHashMap<CurrencyPair, MutableSet<OrderBookListener>>>()
+        ConcurrentHashMap<Exchange, ConcurrentHashMap<CurrencyPair, MutableSet<OrderBookListener>>>()
     private val orderBookRegistrationListeners = mutableListOf<OrderBookRegistrationListener>()
 
     override fun addOrderBookListener(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
         listener: OrderBookListener,
     ): Boolean {
         var isFirstListenerWithGivenExchangeAdded = false
-        val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair.computeIfAbsent(exchangeName) {
+        val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair.computeIfAbsent(exchange) {
             val map = ConcurrentHashMap<CurrencyPair, MutableSet<OrderBookListener>>()
             isFirstListenerWithGivenExchangeAdded = true // avoid triggering registration listener to iterate over collection that is just being changed
             map
@@ -32,23 +32,23 @@ class DefaultOrderBookListeners : OrderBookListeners {
 
         if (isFirstListenerWithGivenExchangeAdded) {
             orderBookRegistrationListeners.forEach {
-                it.onFirstListenerRegistered(exchangeName)
+                it.onFirstListenerRegistered(exchange)
             }
         }
         orderBookRegistrationListeners.forEach {
-            it.onListenerRegistered(exchangeName, currencyPair)
+            it.onListenerRegistered(exchange, currencyPair)
         }
         return isListenerAdded
     }
 
     override fun removeOrderBookListener(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
         listener: OrderBookListener,
     ): Boolean {
         var isLastListenerWithGivenExchangeRemoved = false
         var isRemoved = false
-        val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair[exchangeName]
+        val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair[exchange]
         if (listenersByCurrencyPair != null) {
             val orderBookListeners = listenersByCurrencyPair[currencyPair]
             if (orderBookListeners != null && orderBookListeners.isNotEmpty()) {
@@ -57,7 +57,7 @@ class DefaultOrderBookListeners : OrderBookListeners {
                     if (orderBookListeners.isEmpty()) {
                         listenersByCurrencyPair.remove(currencyPair)
                         if (listenersByCurrencyPair.isEmpty()) {
-                            listenersByExchangeAndCurrencyPair.remove(exchangeName)
+                            listenersByExchangeAndCurrencyPair.remove(exchange)
                             isLastListenerWithGivenExchangeRemoved = true
                         }
                     }
@@ -65,11 +65,11 @@ class DefaultOrderBookListeners : OrderBookListeners {
             }
         }
         orderBookRegistrationListeners.forEach {
-            it.onListenerDeregistered(exchangeName, currencyPair)
+            it.onListenerDeregistered(exchange, currencyPair)
         }
         if (isLastListenerWithGivenExchangeRemoved) {
             orderBookRegistrationListeners.forEach {
-                it.onLastListenerDeregistered(exchangeName)
+                it.onLastListenerDeregistered(exchange)
             }
         }
         return isRemoved
@@ -83,8 +83,8 @@ class DefaultOrderBookListeners : OrderBookListeners {
         orderBookRegistrationListeners.remove(orderBookRegistrationListener)
     }
 
-    override fun getOrderBookListeners(exchangeName: ExchangeName): Map<CurrencyPair, Set<OrderBookListener>> {
-        return listenersByExchangeAndCurrencyPair.getOrElse(exchangeName) { emptyMap() }
+    override fun getOrderBookListeners(exchange: Exchange): Map<CurrencyPair, Set<OrderBookListener>> {
+        return listenersByExchangeAndCurrencyPair.getOrElse(exchange) { emptyMap() }
     }
 
 }

@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.order
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
@@ -15,7 +15,7 @@ import com.autocoin.exchangegateway.spi.exchange.order.Order as SpiOrder
 class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway<T> {
 
     override fun cancelOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         cancelOrderParams: CancelOrderParams,
     ): Boolean {
@@ -23,18 +23,18 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     }
 
     override fun getOpenOrders(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): List<SpiOrder> = emptyList()
 
     override fun getOpenOrders(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): List<SpiOrder> = emptyList()
 
     override fun placeLimitSellOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: SpiCurrencyPair,
         sellPrice: BigDecimal,
@@ -42,12 +42,12 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     ): SpiOrder {
         val currentTimeMillis = clock.millis()
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             status = OrderStatus.NEW,
             currencyPair = currencyPair,
             filledAmount = BigDecimal.ZERO,
             orderedAmount = amount,
-            exchangeOrderId = "$exchangeName-demo-$currentTimeMillis",
+            exchangeOrderId = "$exchange-demo-$currentTimeMillis",
             price = sellPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,
@@ -56,7 +56,7 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     }
 
     override fun placeLimitBuyOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: SpiCurrencyPair,
         buyPrice: BigDecimal,
@@ -64,12 +64,12 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     ): SpiOrder {
         val currentTimeMillis = clock.millis()
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             status = OrderStatus.NEW,
             currencyPair = currencyPair,
             filledAmount = BigDecimal.ZERO,
             orderedAmount = amount,
-            exchangeOrderId = "$exchangeName-demo-${System.currentTimeMillis()}",
+            exchangeOrderId = "$exchange-demo-${System.currentTimeMillis()}",
             price = buyPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,
@@ -78,7 +78,7 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     }
 
     override fun placeMarketBuyOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
@@ -86,12 +86,12 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     ): SpiOrder {
         val currentTimeMillis = clock.millis()
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             status = OrderStatus.NEW,
             currencyPair = currencyPair,
             filledAmount = BigDecimal.ZERO,
             orderedAmount = counterCurrencyAmount.div(currentPrice),
-            exchangeOrderId = "$exchangeName-demo-market-buy-order-${System.currentTimeMillis()}",
+            exchangeOrderId = "$exchange-demo-market-buy-order-${System.currentTimeMillis()}",
             price = currentPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,
@@ -100,7 +100,7 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     }
 
     override fun placeMarketBuyOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
@@ -108,12 +108,12 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     ): SpiOrder {
         val currentTimeMillis = clock.millis()
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             status = OrderStatus.NEW,
             currencyPair = currencyPair,
             filledAmount = BigDecimal.ZERO,
             orderedAmount = baseCurrencyAmount,
-            exchangeOrderId = "$exchangeName-demo-market-buy-order-${System.currentTimeMillis()}",
+            exchangeOrderId = "$exchange-demo-market-buy-order-${System.currentTimeMillis()}",
             price = currentPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,
@@ -122,7 +122,7 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     }
 
     override fun placeMarketSellOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
@@ -130,12 +130,12 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     ): SpiOrder {
         val currentTimeMillis = clock.millis()
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             status = OrderStatus.NEW,
             currencyPair = currencyPair,
             filledAmount = BigDecimal.ZERO,
             orderedAmount = counterCurrencyAmount.div(currentPrice),
-            exchangeOrderId = "$exchangeName-demo-market-sell-order-${System.currentTimeMillis()}",
+            exchangeOrderId = "$exchange-demo-market-sell-order-${System.currentTimeMillis()}",
             price = currentPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,
@@ -144,7 +144,7 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     }
 
     override fun placeMarketSellOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
@@ -152,12 +152,12 @@ class DemoOrderServiceGateway<T>(private val clock: Clock) : OrderServiceGateway
     ): SpiOrder {
         val currentTimeMillis = clock.millis()
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             status = OrderStatus.NEW,
             currencyPair = currencyPair,
             filledAmount = BigDecimal.ZERO,
             orderedAmount = baseCurrencyAmount,
-            exchangeOrderId = "$exchangeName-demo-market-sell-order-${System.currentTimeMillis()}",
+            exchangeOrderId = "$exchange-demo-market-sell-order-${System.currentTimeMillis()}",
             price = currentPrice,
             receivedAtMillis = currentTimeMillis,
             exchangeTimestampMillis = null,

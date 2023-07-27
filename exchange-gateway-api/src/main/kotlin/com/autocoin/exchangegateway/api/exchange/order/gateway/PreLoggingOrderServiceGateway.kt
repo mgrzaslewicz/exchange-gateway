@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.order.gateway
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
@@ -15,28 +15,28 @@ class PreLoggingOrderServiceGateway<T>(
     companion object : KLogging()
 
     override fun cancelOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         cancelOrderParams: CancelOrderParams,
     ): Boolean {
-        logger.info { "[${exchangeName.value}] Going to cancelOrder apiKey.id=${apiKey.id}, cancelOrderParams=$cancelOrderParams" }
+        logger.info { "[${exchange.exchangeName}] Going to cancelOrder apiKey.id=${apiKey.id}, cancelOrderParams=$cancelOrderParams" }
         return decorated.cancelOrder(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             cancelOrderParams = cancelOrderParams,
         )
     }
 
     override fun placeLimitBuyOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         buyPrice: BigDecimal,
         amount: BigDecimal,
     ): Order {
-        logger.info { "[${exchangeName.value}] Going to placeLimitBuyOrder apiKey.id=${apiKey.id}, currencyPair=$currencyPair, buyPrice=${buyPrice.toPlainString()}, amount=${amount.toPlainString()}" }
+        logger.info { "[${exchange.exchangeName}] Going to placeLimitBuyOrder apiKey.id=${apiKey.id}, currencyPair=$currencyPair, buyPrice=${buyPrice.toPlainString()}, amount=${amount.toPlainString()}" }
         return decorated.placeLimitBuyOrder(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             currencyPair = currencyPair,
             buyPrice = buyPrice,
@@ -45,15 +45,15 @@ class PreLoggingOrderServiceGateway<T>(
     }
 
     override fun placeMarketBuyOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        logger.info { "[${exchangeName.value}] Going to placeLimitBuyOrder apiKey.id=${apiKey.id}, currencyPair=$currencyPair, currentPrice=${currentPrice.toPlainString()}" }
+        logger.info { "[${exchange.exchangeName}] Going to placeLimitBuyOrder apiKey.id=${apiKey.id}, currencyPair=$currencyPair, currentPrice=${currentPrice.toPlainString()}" }
         return decorated.placeMarketBuyOrderWithCounterCurrencyAmount(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             currencyPair = currencyPair,
             counterCurrencyAmount = counterCurrencyAmount,
@@ -62,15 +62,15 @@ class PreLoggingOrderServiceGateway<T>(
     }
 
     override fun placeLimitSellOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         sellPrice: BigDecimal,
         amount: BigDecimal,
     ): Order {
-        logger.info { "[${exchangeName.value}] Going to placeLimitSellOrder apiKey.id=${apiKey.id}, currencyPair=$currencyPair, sellPrice=${sellPrice.toPlainString()}, amount=${amount.toPlainString()}" }
+        logger.info { "[${exchange.exchangeName}] Going to placeLimitSellOrder apiKey.id=${apiKey.id}, currencyPair=$currencyPair, sellPrice=${sellPrice.toPlainString()}, amount=${amount.toPlainString()}" }
         return decorated.placeLimitSellOrder(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             currencyPair = currencyPair,
             sellPrice = sellPrice,
@@ -79,15 +79,15 @@ class PreLoggingOrderServiceGateway<T>(
     }
 
     override fun placeMarketSellOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        logger.info { "[${exchangeName.value}] Going to placeMarketSellOrderWithBaseCurrencyAmount apiKey.id=${apiKey.id}, currencyPair=$currencyPair, currentPrice=${currentPrice.toPlainString()}" }
+        logger.info { "[${exchange.exchangeName}] Going to placeMarketSellOrderWithBaseCurrencyAmount apiKey.id=${apiKey.id}, currencyPair=$currencyPair, currentPrice=${currentPrice.toPlainString()}" }
         return decorated.placeMarketSellOrderWithBaseCurrencyAmount(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             currencyPair = currencyPair,
             baseCurrencyAmount = baseCurrencyAmount,
@@ -96,15 +96,15 @@ class PreLoggingOrderServiceGateway<T>(
     }
 
     override fun placeMarketSellOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        logger.info { "[${exchangeName.value}] Going to placeMarketSellOrderWithCounterCurrencyAmount apiKey.id=${apiKey.id}, currencyPair=$currencyPair, currentPrice=${currentPrice.toPlainString()}" }
+        logger.info { "[${exchange.exchangeName}] Going to placeMarketSellOrderWithCounterCurrencyAmount apiKey.id=${apiKey.id}, currencyPair=$currencyPair, currentPrice=${currentPrice.toPlainString()}" }
         return decorated.placeMarketSellOrderWithCounterCurrencyAmount(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             currencyPair = currencyPair,
             counterCurrencyAmount = counterCurrencyAmount,
@@ -113,15 +113,15 @@ class PreLoggingOrderServiceGateway<T>(
     }
 
     override fun placeMarketBuyOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        logger.info { "[$exchangeName] Going to placeMarketBuyOrderWithBaseCurrencyAmount apiKey.id=${apiKey.id}, currencyPair=$currencyPair, $baseCurrencyAmount=${baseCurrencyAmount.toPlainString()}, $currentPrice=${currentPrice.toPlainString()}" }
+        logger.info { "[$exchange] Going to placeMarketBuyOrderWithBaseCurrencyAmount apiKey.id=${apiKey.id}, currencyPair=$currencyPair, $baseCurrencyAmount=${baseCurrencyAmount.toPlainString()}, $currentPrice=${currentPrice.toPlainString()}" }
         return decorated.placeMarketBuyOrderWithBaseCurrencyAmount(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             currencyPair = currencyPair,
             baseCurrencyAmount = baseCurrencyAmount,
@@ -129,22 +129,22 @@ class PreLoggingOrderServiceGateway<T>(
         )
     }
 
-    override fun getOpenOrders(exchangeName: ExchangeName, apiKey: ApiKeySupplier<T>): List<Order> {
-        logger.info { "[${exchangeName.value}] Going to getOpenOrders exchangeName=$exchangeName, apiKey.id=${apiKey.id}" }
+    override fun getOpenOrders(exchange: Exchange, apiKey: ApiKeySupplier<T>): List<Order> {
+        logger.info { "[${exchange.exchangeName}] Going to getOpenOrders exchangeName=$exchange, apiKey.id=${apiKey.id}" }
         return decorated.getOpenOrders(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
         )
     }
 
     override fun getOpenOrders(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): List<Order> {
-        logger.info { "[$exchangeName] Going to getOpenOrders apiKey.id=${apiKey.id}, currencyPair=$currencyPair" }
+        logger.info { "[$exchange] Going to getOpenOrders apiKey.id=${apiKey.id}, currencyPair=$currencyPair" }
         return decorated.getOpenOrders(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             currencyPair = currencyPair,
         )

@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.spi.exchange.wallet.gateway.measurement
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyBalance
 import com.autocoin.exchangegateway.spi.exchange.wallet.WithdrawResult
@@ -11,7 +11,7 @@ import kotlin.system.measureTimeMillis
 
 interface OnGetCurrencyBalanceMeasured<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyCode: String,
         duration: Duration,
@@ -20,7 +20,7 @@ interface OnGetCurrencyBalanceMeasured<T> {
 
 interface OnGetCurrencyBalancesMeasured<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         duration: Duration,
     )
@@ -28,7 +28,7 @@ interface OnGetCurrencyBalancesMeasured<T> {
 
 interface OnWithdrawMeasured<T> {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyCode: String,
         amount: BigDecimal,
@@ -45,7 +45,7 @@ class MeasuringDurationWalletServiceGateway<T>(
 ) : WalletServiceGateway<T> {
 
     override fun getCurrencyBalance(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyCode: String,
     ): CurrencyBalance {
@@ -53,7 +53,7 @@ class MeasuringDurationWalletServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.getCurrencyBalance(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     currencyCode = currencyCode,
                 )
@@ -61,7 +61,7 @@ class MeasuringDurationWalletServiceGateway<T>(
         )
         onGetCurrencyBalanceMeasuredHandlers.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 currencyCode = currencyCode,
                 duration = duration,
@@ -71,21 +71,21 @@ class MeasuringDurationWalletServiceGateway<T>(
     }
 
     override fun getCurrencyBalances(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): List<CurrencyBalance> {
         val result: List<CurrencyBalance>
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.getCurrencyBalances(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                 )
             },
         )
         onGetCurrencyBalancesMeasuredHandlers.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 duration = duration,
             )
@@ -94,7 +94,7 @@ class MeasuringDurationWalletServiceGateway<T>(
     }
 
     override fun withdraw(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyCode: String,
         amount: BigDecimal,
@@ -104,7 +104,7 @@ class MeasuringDurationWalletServiceGateway<T>(
         val duration = Duration.ofMillis(
             measureTimeMillis {
                 result = decorated.withdraw(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     apiKey = apiKey,
                     currencyCode = currencyCode,
                     amount = amount,
@@ -114,7 +114,7 @@ class MeasuringDurationWalletServiceGateway<T>(
         )
         onWithdrawMeasuredHandlers.forEach {
             it(
-                exchangeName = exchangeName,
+                exchange = exchange,
                 apiKey = apiKey,
                 currencyCode = currencyCode,
                 amount = amount,

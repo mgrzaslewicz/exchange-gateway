@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.order.gateway
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
@@ -19,13 +19,13 @@ class AddingDelayOrderServiceGateway<T>(
     companion object : KLogging()
 
     override fun cancelOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         cancelOrderParams: CancelOrderParams,
     ): Boolean {
         nonThreadBlockingSleep(delay)
         return decorated.cancelOrder(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             cancelOrderParams = cancelOrderParams,
         )
@@ -41,7 +41,7 @@ class AddingDelayOrderServiceGateway<T>(
     }
 
     override fun placeLimitBuyOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         buyPrice: BigDecimal,
@@ -49,7 +49,7 @@ class AddingDelayOrderServiceGateway<T>(
     ): Order {
         nonThreadBlockingSleep(delay)
         return decorated.placeLimitBuyOrder(
-            exchangeName = exchangeName,
+            exchange = exchange,
             apiKey = apiKey,
             currencyPair = currencyPair,
             buyPrice = buyPrice,

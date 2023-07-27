@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.spi.exchange.order
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 
@@ -19,7 +19,7 @@ enum class OrderStatus {
 }
 
 interface Order {
-    val exchangeName: ExchangeName
+    val exchange: Exchange
     val exchangeOrderId: String
     val side: OrderSide
     val orderedAmount: BigDecimal

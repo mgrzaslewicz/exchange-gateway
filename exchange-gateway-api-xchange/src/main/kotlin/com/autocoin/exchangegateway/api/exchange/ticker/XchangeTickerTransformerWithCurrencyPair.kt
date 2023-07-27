@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.ticker
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker as SpiTicker
 import org.knowm.xchange.dto.marketdata.Ticker as XchangeTicker
@@ -13,7 +13,7 @@ import org.knowm.xchange.dto.marketdata.Ticker as XchangeTicker
  */
 interface XchangeTickerTransformerWithCurrencyPair {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
         xchangeTicker: XchangeTicker,
         receivedAtMillis: Long,
@@ -22,7 +22,7 @@ interface XchangeTickerTransformerWithCurrencyPair {
 
 interface XchangeTickerTransformer {
     operator fun invoke(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         xchangeTicker: XchangeTicker,
         receivedAtMillis: Long,
     ): SpiTicker

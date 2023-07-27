@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.ticker
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.ticker.listener.TickerListener
 import com.autocoin.exchangegateway.spi.exchange.ticker.listener.TickerListeners
@@ -12,16 +12,16 @@ import java.util.concurrent.CopyOnWriteArraySet
 class DefaultTickerListeners : TickerListeners {
 
     private val listenersByExchangeAndCurrencyPair =
-        ConcurrentHashMap<ExchangeName, ConcurrentHashMap<CurrencyPair, MutableSet<TickerListener>>>()
+        ConcurrentHashMap<Exchange, ConcurrentHashMap<CurrencyPair, MutableSet<TickerListener>>>()
     private val tickerRegistrationListeners = mutableListOf<TickerRegistrationListener>()
 
     override fun addTickerListener(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
         listener: TickerListener,
     ): Boolean {
         var isFirstListenerWithGivenExchangeAdded = false
-        val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair.computeIfAbsent(exchangeName) {
+        val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair.computeIfAbsent(exchange) {
             val map = ConcurrentHashMap<CurrencyPair, MutableSet<TickerListener>>()
             isFirstListenerWithGivenExchangeAdded = true // avoid triggering registration listener to iterate over collection that is just being changed
             map
@@ -32,23 +32,23 @@ class DefaultTickerListeners : TickerListeners {
 
         if (isFirstListenerWithGivenExchangeAdded) {
             tickerRegistrationListeners.forEach {
-                it.onFirstListenerRegistered(exchangeName)
+                it.onFirstListenerRegistered(exchange)
             }
         }
         tickerRegistrationListeners.forEach {
-            it.onListenerRegistered(exchangeName, currencyPair)
+            it.onListenerRegistered(exchange, currencyPair)
         }
         return isListenerAdded
     }
 
     override fun removeTickerListener(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
         listener: TickerListener,
     ): Boolean {
         var isLastListenerWithGivenExchangeRemoved = false
         var isRemoved = false
-        val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair[exchangeName]
+        val listenersByCurrencyPair = listenersByExchangeAndCurrencyPair[exchange]
         if (listenersByCurrencyPair != null) {
             val tickerListeners = listenersByCurrencyPair[currencyPair]
             if (tickerListeners != null && tickerListeners.isNotEmpty()) {
@@ -57,7 +57,7 @@ class DefaultTickerListeners : TickerListeners {
                     if (tickerListeners.isEmpty()) {
                         listenersByCurrencyPair.remove(currencyPair)
                         if (listenersByCurrencyPair.isEmpty()) {
-                            listenersByExchangeAndCurrencyPair.remove(exchangeName)
+                            listenersByExchangeAndCurrencyPair.remove(exchange)
                             isLastListenerWithGivenExchangeRemoved = true
                         }
                     }
@@ -65,11 +65,11 @@ class DefaultTickerListeners : TickerListeners {
             }
         }
         tickerRegistrationListeners.forEach {
-            it.onListenerDeregistered(exchangeName, currencyPair)
+            it.onListenerDeregistered(exchange, currencyPair)
         }
         if (isLastListenerWithGivenExchangeRemoved) {
             tickerRegistrationListeners.forEach {
-                it.onLastListenerDeregistered(exchangeName)
+                it.onLastListenerDeregistered(exchange)
             }
         }
         return isRemoved
@@ -83,8 +83,8 @@ class DefaultTickerListeners : TickerListeners {
         tickerRegistrationListeners.remove(tickerRegistrationListener)
     }
 
-    override fun getTickerListeners(exchangeName: ExchangeName): Map<CurrencyPair, Set<TickerListener>> {
-        return listenersByExchangeAndCurrencyPair.getOrElse(exchangeName) { mapOf() }
+    override fun getTickerListeners(exchange: Exchange): Map<CurrencyPair, Set<TickerListener>> {
+        return listenersByExchangeAndCurrencyPair.getOrElse(exchange) { mapOf() }
     }
 
 }

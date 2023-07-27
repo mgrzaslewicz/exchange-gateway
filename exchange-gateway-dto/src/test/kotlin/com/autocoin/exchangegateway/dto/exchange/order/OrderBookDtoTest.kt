@@ -4,14 +4,17 @@ import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.api.exchange.orderbook.OrderBook
 import com.autocoin.exchangegateway.api.exchange.orderbook.OrderInOrderBook
 import com.autocoin.exchangegateway.dto.order.toDto
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class OrderBookDtoTest {
+    private val exchange = object : Exchange {
+        override val exchangeName = "test"
+    }
     private val orderInOrderBook = OrderInOrderBook(
-        exchangeName = ExchangeName("exchange1"),
+        exchange = exchange,
         side = OrderSide.BID_BUY,
         orderedAmount = 45.678.toBigDecimal(),
         price = 12.0.toBigDecimal(),
@@ -20,7 +23,7 @@ class OrderBookDtoTest {
         exchangeTimestampMillis = null,
     )
     private val orderBook = OrderBook(
-        exchangeName = ExchangeName("exchange1"),
+        exchange = exchange,
         currencyPair = CurrencyPair.of("BTC/USDT"),
         buyOrders = listOf(orderInOrderBook),
         sellOrders = listOf(orderInOrderBook.copy(side = OrderSide.ASK_SELL)),
@@ -32,7 +35,7 @@ class OrderBookDtoTest {
     @Test
     fun shouldConvertToDtoAndBack() {
         // when
-        val fromDto = dto.toOrderBook()
+        val fromDto = dto.toOrderBook { exchange }
         // then
         assertThat(fromDto).isEqualTo(orderBook)
     }

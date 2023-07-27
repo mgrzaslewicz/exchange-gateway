@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.spi.exchange.order.gateway
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
@@ -10,13 +10,13 @@ import java.math.BigDecimal
 import java.util.*
 
 class DelegateOrderServiceGateway<T>(
-    private val orderServiceByExchange: Map<ExchangeName, OrderService<T>>,
+    private val orderServiceByExchange: Map<Exchange, OrderService<T>>,
 ) : OrderServiceGateway<T> {
     class Builder<T> {
-        private val orderServiceByExchange = mutableMapOf<ExchangeName, OrderService<T>>()
+        private val orderServiceByExchange = mutableMapOf<Exchange, OrderService<T>>()
 
         fun withOrderService(orderService: OrderService<T>): Builder<T> {
-            orderServiceByExchange[orderService.exchangeName] = orderService
+            orderServiceByExchange[orderService.exchange] = orderService
             return this
         }
 
@@ -26,24 +26,24 @@ class DelegateOrderServiceGateway<T>(
     }
 
     override fun cancelOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         cancelOrderParams: CancelOrderParams,
     ): Boolean {
-        return orderServiceByExchange.getValue(exchangeName).cancelOrder(
+        return orderServiceByExchange.getValue(exchange).cancelOrder(
             apiKey,
             cancelOrderParams,
         )
     }
 
     override fun placeMarketBuyOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        return orderServiceByExchange.getValue(exchangeName)
+        return orderServiceByExchange.getValue(exchange)
             .placeMarketBuyOrderWithCounterCurrencyAmount(
                 apiKey = apiKey,
                 currencyPair = currencyPair,
@@ -53,13 +53,13 @@ class DelegateOrderServiceGateway<T>(
     }
 
     override fun placeMarketBuyOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        return orderServiceByExchange.getValue(exchangeName)
+        return orderServiceByExchange.getValue(exchange)
             .placeMarketBuyOrderWithBaseCurrencyAmount(
                 apiKey = apiKey,
                 currencyPair = currencyPair,
@@ -69,13 +69,13 @@ class DelegateOrderServiceGateway<T>(
     }
 
     override fun placeMarketSellOrderWithCounterCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         counterCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        return orderServiceByExchange.getValue(exchangeName)
+        return orderServiceByExchange.getValue(exchange)
             .placeMarketSellOrderWithCounterCurrencyAmount(
                 apiKey = apiKey,
                 currencyPair = currencyPair,
@@ -85,13 +85,13 @@ class DelegateOrderServiceGateway<T>(
     }
 
     override fun placeMarketSellOrderWithBaseCurrencyAmount(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        return orderServiceByExchange.getValue(exchangeName)
+        return orderServiceByExchange.getValue(exchange)
             .placeMarketSellOrderWithBaseCurrencyAmount(
                 apiKey = apiKey,
                 currencyPair = currencyPair,
@@ -101,13 +101,13 @@ class DelegateOrderServiceGateway<T>(
     }
 
     override fun placeLimitBuyOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         buyPrice: BigDecimal,
         amount: BigDecimal,
     ): Order {
-        return orderServiceByExchange.getValue(exchangeName)
+        return orderServiceByExchange.getValue(exchange)
             .placeLimitBuyOrder(
                 apiKey = apiKey,
                 currencyPair = currencyPair,
@@ -117,13 +117,13 @@ class DelegateOrderServiceGateway<T>(
     }
 
     override fun placeLimitSellOrder(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
         sellPrice: BigDecimal,
         amount: BigDecimal,
     ): Order {
-        return orderServiceByExchange.getValue(exchangeName)
+        return orderServiceByExchange.getValue(exchange)
             .placeLimitSellOrder(
                 apiKey = apiKey,
                 currencyPair = currencyPair,
@@ -133,21 +133,21 @@ class DelegateOrderServiceGateway<T>(
     }
 
     override fun getOpenOrders(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): List<Order> {
-        return orderServiceByExchange.getValue(exchangeName)
+        return orderServiceByExchange.getValue(exchange)
             .getOpenOrders(
                 apiKey = apiKey,
             )
     }
 
     override fun getOpenOrders(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
         currencyPair: CurrencyPair,
     ): List<Order> {
-        return orderServiceByExchange.getValue(exchangeName)
+        return orderServiceByExchange.getValue(exchange)
             .getOpenOrders(
                 apiKey = apiKey,
                 currencyPair = currencyPair,

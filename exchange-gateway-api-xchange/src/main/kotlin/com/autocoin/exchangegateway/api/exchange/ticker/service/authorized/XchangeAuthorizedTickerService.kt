@@ -2,7 +2,7 @@ package com.autocoin.exchangegateway.api.exchange.ticker.service.authorized
 
 import com.autocoin.exchangegateway.api.exchange.ticker.XchangeTickerTransformer
 import com.autocoin.exchangegateway.api.exchange.ticker.XchangeTickerTransformerWithCurrencyPair
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker
@@ -16,7 +16,7 @@ import java.util.function.Function
 import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 
 class XchangeAuthorizedTickerService<T>(
-    override val exchangeName: ExchangeName,
+    override val exchange: Exchange,
     override val apiKey: ApiKeySupplier<T>,
     val delegate: MarketDataService,
     private val currencyPairToXchange: Function<CurrencyPair, XchangeCurrencyPair>,
@@ -31,7 +31,7 @@ class XchangeAuthorizedTickerService<T>(
             val xchangeCurrencyPair = currencyPairToXchange.apply(currencyPair)
             delegate.getTicker(xchangeCurrencyPair).let {
                 xchangeTickerTransformerWithCurrencyPair(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     currencyPair = currencyPair,
                     xchangeTicker = it,
                     receivedAtMillis = clock.millis(),
@@ -47,7 +47,7 @@ class XchangeAuthorizedTickerService<T>(
         return delegate.getTickers(currencyPairsParam)
             .map {
                 xchangeTickerTransformer(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     xchangeTicker = it,
                     receivedAtMillis = clock.millis(),
                 )

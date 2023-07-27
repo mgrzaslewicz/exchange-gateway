@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.currency.ExchangeWithCurrencyPairStringCache
 import com.autocoin.exchangegateway.spi.exchange.orderbook.gateway.OrderBookServiceGateway
@@ -15,32 +15,32 @@ import java.util.concurrent.Future
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderBook as SpiOrderBook
 
 interface SynchronousOrderBookFetchScheduler : OrderBookRegistrationListener {
-    fun fetchOrderBooksThenNotifyListeners(exchangeName: ExchangeName)
+    fun fetchOrderBooksThenNotifyListeners(exchange: Exchange)
 }
 
 class DefaultSynchronousOrderBookFetchScheduler(
     private val orderBookServiceGateway: OrderBookServiceGateway,
     private val orderBookListeners: OrderBookListeners,
     /** Avoid using shared threads between never-ending jobs. When used fixed thread pool with the size of SupportedExchange.values().size it caused unnecessary delays and fetching was under rate limit*/
-    private val executorService: Map<ExchangeName, ExecutorService>,
+    private val executorService: Map<Exchange, ExecutorService>,
     private val logger: KLogger = KotlinLogging.logger {},
     private val getOrderBookFrequentErrorLogFunction: (messageFunction: () -> String) -> Unit = { messageFunction -> logger.error(messageFunction) },
 ) : SynchronousOrderBookFetchScheduler {
 
     private val lastOrderBooks = ConcurrentHashMap<String, SoftReference<SpiOrderBook>>()
-    private val runningFetchers = ConcurrentHashMap<ExchangeName, Future<*>>()
+    private val runningFetchers = ConcurrentHashMap<Exchange, Future<*>>()
 
     override fun onListenerDeregistered(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
     ) {
     }
 
-    override fun onLastListenerDeregistered(exchangeName: ExchangeName) {
-        if (runningFetchers.containsKey(exchangeName)) {
-            val scheduledFetcher = runningFetchers.getValue(exchangeName)
+    override fun onLastListenerDeregistered(exchange: Exchange) {
+        if (runningFetchers.containsKey(exchange)) {
+            val scheduledFetcher = runningFetchers.getValue(exchange)
             scheduledFetcher.cancel(false)
-            runningFetchers.remove(exchangeName)
+            runningFetchers.remove(exchange)
         }
     }
 
@@ -48,46 +48,46 @@ class DefaultSynchronousOrderBookFetchScheduler(
      * Current synchronous fetcher implementation has to do nothing on currency pair registration as it fetches all currency pairs from exchange at one go
      */
     override fun onListenerRegistered(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
     ) {
     }
 
-    override fun onFirstListenerRegistered(exchangeName: ExchangeName) {
-        if (!runningFetchers.containsKey(exchangeName)) {
-            val fetcher = executorService.getValue(exchangeName).submit {
+    override fun onFirstListenerRegistered(exchange: Exchange) {
+        if (!runningFetchers.containsKey(exchange)) {
+            val fetcher = executorService.getValue(exchange).submit {
                 while (!Thread.currentThread().isInterrupted) {
-                    fetchOrderBooksThenNotifyListeners(exchangeName)
+                    fetchOrderBooksThenNotifyListeners(exchange)
                 }
             }
-            runningFetchers[exchangeName] = fetcher
+            runningFetchers[exchange] = fetcher
         }
     }
 
-    override fun fetchOrderBooksThenNotifyListeners(exchangeName: ExchangeName) {
-        orderBookListeners.getOrderBookListeners(exchangeName).forEach { (currencyPair, orderBookListeners) ->
-            val orderBook = getOrderBook(exchangeName, currencyPair)
-            if (orderBook != null && isNew(orderBook, exchangeName, currencyPair)) {
+    override fun fetchOrderBooksThenNotifyListeners(exchange: Exchange) {
+        orderBookListeners.getOrderBookListeners(exchange).forEach { (currencyPair, orderBookListeners) ->
+            val orderBook = getOrderBook(exchange, currencyPair)
+            if (orderBook != null && isNew(orderBook, exchange, currencyPair)) {
                 orderBookListeners.forEach {
-                    it.onOrderBook(exchangeName, currencyPair, orderBook)
+                    it.onOrderBook(exchange, currencyPair, orderBook)
                 }
             }
             else {
                 orderBookListeners.forEach {
-                    it.onNoNewOrderBook(exchangeName, currencyPair, orderBook)
+                    it.onNoNewOrderBook(exchange, currencyPair, orderBook)
                 }
             }
         }
     }
 
     private fun getOrderBook(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
     ): SpiOrderBook? {
         return try {
-            orderBookServiceGateway.getOrderBook(exchangeName, currencyPair)
+            orderBookServiceGateway.getOrderBook(exchange, currencyPair)
         } catch (e: Exception) {
-            getOrderBookFrequentErrorLogFunction { "[$exchangeName-$currencyPair] Error getting order book: ${e.message} (${e.stackTrace[0]})" }
+            getOrderBookFrequentErrorLogFunction { "[$exchange-$currencyPair] Error getting order book: ${e.message} (${e.stackTrace[0]})" }
             null
         }
     }
@@ -98,10 +98,10 @@ class DefaultSynchronousOrderBookFetchScheduler(
      */
     private fun isNew(
         possiblyNewOrderBook: SpiOrderBook,
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
     ): Boolean {
-        val key = ExchangeWithCurrencyPairStringCache.get(exchangeName.value + currencyPair)
+        val key = ExchangeWithCurrencyPairStringCache.get(exchange.exchangeName + currencyPair)
         val isNew = when (val lastOrderBook = lastOrderBooks[key]?.get()) {
             null -> true
             else -> !possiblyNewOrderBook.deepEquals(lastOrderBook)

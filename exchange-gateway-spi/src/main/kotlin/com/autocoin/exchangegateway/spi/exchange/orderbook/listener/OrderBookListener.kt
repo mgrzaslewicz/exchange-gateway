@@ -1,13 +1,13 @@
 package com.autocoin.exchangegateway.spi.exchange.orderbook.listener
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderBook
 
 interface OrderBookListener {
 
     fun onOrderBook(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
         orderBook: OrderBook,
     )
@@ -17,7 +17,7 @@ interface OrderBookListener {
      * @param orderBook might be the same that was already fetched from exchange or none
      */
     fun onNoNewOrderBook(
-        exchange: ExchangeName,
+        exchange: Exchange,
         currencyPair: CurrencyPair,
         orderBook: OrderBook?,
     ) {

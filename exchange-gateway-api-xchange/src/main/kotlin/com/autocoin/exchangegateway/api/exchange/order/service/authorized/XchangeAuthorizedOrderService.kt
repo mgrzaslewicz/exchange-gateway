@@ -2,7 +2,7 @@ package com.autocoin.exchangegateway.api.exchange.order.service.authorized
 
 import com.autocoin.exchangegateway.api.exchange.order.Order
 import com.autocoin.exchangegateway.api.exchange.order.XchangeLimitOrderToOrderTransformer
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
@@ -21,7 +21,7 @@ import org.knowm.xchange.service.trade.params.CancelOrderParams as XchangeCancel
 
 
 class XchangeAuthorizedOrderService<T>(
-    override val exchangeName: ExchangeName,
+    override val exchange: Exchange,
     override val apiKey: ApiKeySupplier<T>,
     val delegate: XchangeTradeService,
     private val cancelOrderParamsToXchangeParams: Function<CancelOrderParams, XchangeCancelOrderParams>,
@@ -48,16 +48,17 @@ class XchangeAuthorizedOrderService<T>(
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        val marketBuyOrder = MarketOrder.Builder(org.knowm.xchange.dto.Order.OrderType.BID, currencyPairToXchange.apply(currencyPair))
-            .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
-            .originalAmount(baseCurrencyAmount)
-            .build()
+        val marketBuyOrder =
+            MarketOrder.Builder(org.knowm.xchange.dto.Order.OrderType.BID, currencyPairToXchange.apply(currencyPair))
+                .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
+                .originalAmount(baseCurrencyAmount)
+                .build()
 
         val orderId = delegate.placeMarketOrder(marketBuyOrder)
         val receivedAtMillis = clock.millis()
 
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             exchangeOrderId = orderId,
             side = OrderSide.BID_BUY,
             orderedAmount = baseCurrencyAmount,
@@ -83,16 +84,17 @@ class XchangeAuthorizedOrderService<T>(
         baseCurrencyAmount: BigDecimal,
         currentPrice: BigDecimal,
     ): Order {
-        val marketSellOrder = MarketOrder.Builder(org.knowm.xchange.dto.Order.OrderType.ASK, currencyPairToXchange.apply(currencyPair))
-            .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
-            .originalAmount(baseCurrencyAmount)
-            .build()
+        val marketSellOrder =
+            MarketOrder.Builder(org.knowm.xchange.dto.Order.OrderType.ASK, currencyPairToXchange.apply(currencyPair))
+                .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
+                .originalAmount(baseCurrencyAmount)
+                .build()
 
         val orderId = delegate.placeMarketOrder(marketSellOrder)
         val receivedAtMillis = clock.millis()
 
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             exchangeOrderId = orderId,
             side = OrderSide.ASK_SELL,
             orderedAmount = baseCurrencyAmount,
@@ -111,7 +113,7 @@ class XchangeAuthorizedOrderService<T>(
             .filterIsInstance<LimitOrder>()
             .map {
                 xchangeLimitOrderToOrderTransformer(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     xchangeLimitOrder = it,
                     receivedAtMillis = clock.millis(),
                 )
@@ -125,7 +127,7 @@ class XchangeAuthorizedOrderService<T>(
             .filterIsInstance<LimitOrder>()
             .map {
                 xchangeLimitOrderToOrderTransformer(
-                    exchangeName = exchangeName,
+                    exchange = exchange,
                     xchangeLimitOrder = it,
                     receivedAtMillis = clock.millis(),
                 )
@@ -137,16 +139,17 @@ class XchangeAuthorizedOrderService<T>(
         buyPrice: BigDecimal,
         amount: BigDecimal,
     ): Order {
-        val limitBuyOrder = LimitOrder.Builder(org.knowm.xchange.dto.Order.OrderType.BID, currencyPairToXchange.apply(currencyPair))
-            .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
-            .limitPrice(buyPrice)
-            .originalAmount(amount)
-            .build()
+        val limitBuyOrder =
+            LimitOrder.Builder(org.knowm.xchange.dto.Order.OrderType.BID, currencyPairToXchange.apply(currencyPair))
+                .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
+                .limitPrice(buyPrice)
+                .originalAmount(amount)
+                .build()
         val orderId = delegate.placeLimitOrder(limitBuyOrder)
         val receivedAtMillis = clock.millis()
 
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             exchangeOrderId = orderId,
             side = OrderSide.BID_BUY,
             orderedAmount = amount,
@@ -164,16 +167,17 @@ class XchangeAuthorizedOrderService<T>(
         sellPrice: BigDecimal,
         amount: BigDecimal,
     ): Order {
-        val limitSellOrder = LimitOrder.Builder(org.knowm.xchange.dto.Order.OrderType.ASK, currencyPairToXchange.apply(currencyPair))
-            .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
-            .limitPrice(sellPrice)
-            .originalAmount(amount)
-            .build()
+        val limitSellOrder =
+            LimitOrder.Builder(org.knowm.xchange.dto.Order.OrderType.ASK, currencyPairToXchange.apply(currencyPair))
+                .orderStatus(org.knowm.xchange.dto.Order.OrderStatus.NEW)
+                .limitPrice(sellPrice)
+                .originalAmount(amount)
+                .build()
         val orderId = delegate.placeLimitOrder(limitSellOrder)
         val receivedAtMillis = clock.millis()
 
         return Order(
-            exchangeName = exchangeName,
+            exchange = exchange,
             exchangeOrderId = orderId,
             side = OrderSide.ASK_SELL,
             orderedAmount = amount,

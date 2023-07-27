@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.spi.exchange.order.service
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
@@ -8,7 +8,7 @@ import com.autocoin.exchangegateway.spi.exchange.order.Order
 import java.math.BigDecimal
 
 interface OrderService<T> {
-    val exchangeName: ExchangeName
+    val exchange: Exchange
     fun cancelOrder(
         apiKey: ApiKeySupplier<T>,
         cancelOrderParams: CancelOrderParams,

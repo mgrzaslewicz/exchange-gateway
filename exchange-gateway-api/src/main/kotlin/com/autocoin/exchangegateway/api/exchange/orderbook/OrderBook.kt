@@ -1,6 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 import java.math.RoundingMode.HALF_EVEN
@@ -9,7 +9,7 @@ import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderBookAveragePrice
 
 
 data class OrderBook(
-    override val exchangeName: ExchangeName,
+    override val exchange: Exchange,
     override val currencyPair: CurrencyPair,
     override val buyOrders: List<OrderInOrderBook>,
     override val sellOrders: List<OrderInOrderBook>,

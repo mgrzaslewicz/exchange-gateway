@@ -1,12 +1,12 @@
 package com.autocoin.exchangegateway.spi.exchange.orderbook
 
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import java.math.BigDecimal
 
 interface OrderInOrderBook {
-    val exchangeName: ExchangeName
+    val exchange: Exchange
     val side: OrderSide
     val orderedAmount: BigDecimal
     val price: BigDecimal

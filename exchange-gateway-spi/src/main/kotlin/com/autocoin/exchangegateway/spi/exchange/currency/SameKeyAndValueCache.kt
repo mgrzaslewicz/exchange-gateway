@@ -10,8 +10,6 @@ open class SameKeyAndValueCache<T> : Cache<T, T>() {
     fun get(key: T) = super.get(key) { key }
 }
 
-object ExchangeCache : SameKeyAndValueCache<com.autocoin.exchangegateway.spi.exchange.ExchangeName>()
-
 object CurrencyStringCache : SameKeyAndValueCache<String>()
 
 object ExchangeWithCurrencyPairStringCache : SameKeyAndValueCache<String>()

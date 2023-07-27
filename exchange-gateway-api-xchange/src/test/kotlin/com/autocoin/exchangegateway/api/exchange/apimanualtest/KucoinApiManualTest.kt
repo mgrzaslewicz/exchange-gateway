@@ -1,7 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.apimanualtest
 
 import com.autocoin.exchangegateway.api.exchange.apikey.ApiKey
-import com.autocoin.exchangegateway.api.exchange.xchange.ExchangeNames.Companion.kucoin
+import com.autocoin.exchangegateway.api.exchange.xchange.SupportedXchangeExchange.kucoin
 import com.autocoin.exchangegateway.api.exchange.xchange.XchangeApiKeyVerifierGateway
 import com.autocoin.exchangegateway.api.exchange.xchange.XchangeSpecificationApiKeyAssigner
 import org.knowm.xchange.ExchangeFactory
@@ -17,7 +17,7 @@ fun main() {
         exchangeSpecificKeyParameters = mapOf("passphrase" to getenv("PASSPHRASE")),
     )
     XchangeSpecificationApiKeyAssigner(apiKeyVerifierGateway = XchangeApiKeyVerifierGateway())
-        .assignKeys(exchangeName = kucoin, exchangeSpecification = exchangeSpecification, apiKeySupplier = { apiKey })
+        .assignKeys(exchange = kucoin, exchangeSpecification = exchangeSpecification, apiKeySupplier = { apiKey })
     val kucoinExchange = ExchangeFactory.INSTANCE.createExchange(exchangeSpecification) as KucoinExchange
     val accounts = kucoinExchange.accountService.kucoinAccounts
 //    val tradeFees = kucoinExchange.marketDataService.getKucoinTradeFee("1EARTH-USDT") // expected to be OK

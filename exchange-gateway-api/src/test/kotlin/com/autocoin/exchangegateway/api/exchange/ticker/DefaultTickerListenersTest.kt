@@ -1,7 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.ticker
 
 import com.autocoin.exchangegateway.api.exchange.currency.CurrencyPair
-import com.autocoin.exchangegateway.spi.exchange.ExchangeName
+import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.ticker.listener.TickerListener
 import com.autocoin.exchangegateway.spi.exchange.ticker.listener.TickerListeners
 import com.autocoin.exchangegateway.spi.exchange.ticker.listener.TickerRegistrationListener
@@ -17,7 +17,7 @@ import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker as SpiTicker
 
 class TestTickerListener : TickerListener {
     override fun onTicker(
-        exchangeName: ExchangeName,
+        exchange: Exchange,
         currencyPair: SpiCurrencyPair,
         ticker: SpiTicker,
     ) {
@@ -28,11 +28,15 @@ class TestTickerListener : TickerListener {
 @ExtendWith(MockitoExtension::class)
 class DefaultTickerListenersTest {
     private lateinit var tested: TickerListeners
-    private val currencyPair_AB = CurrencyPair.of("A/B")
-    private val currencyPair_CD = CurrencyPair.of("C/D")
+    private val currencyPairAB = CurrencyPair.of("A/B")
+    private val currencyPairCD = CurrencyPair.of("C/D")
     private val tickerListener = TestTickerListener()
-    private val bittrex = ExchangeName("bittrex")
-    private val binance = ExchangeName("binance")
+    private val exchangeA = object : Exchange {
+        override val exchangeName = "a"
+    }
+    private val exchangeB = object : Exchange {
+        override val exchangeName = "b"
+    }
 
     @BeforeEach
     fun setup() {
@@ -42,17 +46,17 @@ class DefaultTickerListenersTest {
     @Test
     fun shouldAddTickerListenersForDifferentExchanges() {
         // when
-        tested.addTickerListener(bittrex, currencyPair_AB, tickerListener)
-        tested.addTickerListener(binance, currencyPair_CD, tickerListener)
+        tested.addTickerListener(exchangeA, currencyPairAB, tickerListener)
+        tested.addTickerListener(exchangeB, currencyPairCD, tickerListener)
         // then
-        assertThat(tested.getTickerListeners(bittrex)).isEqualTo(
+        assertThat(tested.getTickerListeners(exchangeA)).isEqualTo(
             mapOf(
-                currencyPair_AB to setOf(tickerListener),
+                currencyPairAB to setOf(tickerListener),
             ),
         )
-        assertThat(tested.getTickerListeners(binance)).isEqualTo(
+        assertThat(tested.getTickerListeners(exchangeB)).isEqualTo(
             mapOf(
-                currencyPair_CD to setOf(tickerListener),
+                currencyPairCD to setOf(tickerListener),
             ),
         )
     }
@@ -60,13 +64,13 @@ class DefaultTickerListenersTest {
     @Test
     fun shouldAddTickerListenersForTheSameExchanges() {
         // when
-        tested.addTickerListener(bittrex, currencyPair_AB, tickerListener)
-        tested.addTickerListener(bittrex, currencyPair_CD, tickerListener)
+        tested.addTickerListener(exchangeA, currencyPairAB, tickerListener)
+        tested.addTickerListener(exchangeA, currencyPairCD, tickerListener)
         // then
-        assertThat(tested.getTickerListeners(bittrex)).isEqualTo(
+        assertThat(tested.getTickerListeners(exchangeA)).isEqualTo(
             mapOf(
-                currencyPair_AB to setOf(tickerListener),
-                currencyPair_CD to setOf(tickerListener),
+                currencyPairAB to setOf(tickerListener),
+                currencyPairCD to setOf(tickerListener),
             ),
         )
     }
@@ -74,14 +78,14 @@ class DefaultTickerListenersTest {
     @Test
     fun shouldRemoveTickerListeners() {
         // when
-        tested.addTickerListener(bittrex, currencyPair_AB, tickerListener)
-        tested.addTickerListener(binance, currencyPair_CD, tickerListener)
-        tested.removeTickerListener(bittrex, currencyPair_AB, tickerListener)
+        tested.addTickerListener(exchangeA, currencyPairAB, tickerListener)
+        tested.addTickerListener(exchangeB, currencyPairCD, tickerListener)
+        tested.removeTickerListener(exchangeA, currencyPairAB, tickerListener)
         // then
-        assertThat(tested.getTickerListeners(bittrex)).isEqualTo(emptyMap<CurrencyPair, Set<TickerListener>>())
-        assertThat(tested.getTickerListeners(binance)).isEqualTo(
+        assertThat(tested.getTickerListeners(exchangeA)).isEqualTo(emptyMap<CurrencyPair, Set<TickerListener>>())
+        assertThat(tested.getTickerListeners(exchangeB)).isEqualTo(
             mapOf(
-                currencyPair_CD to setOf(tickerListener),
+                currencyPairCD to setOf(tickerListener),
             ),
         )
     }
@@ -92,9 +96,9 @@ class DefaultTickerListenersTest {
         val registrationListener = mock<TickerRegistrationListener>()
         tested.addTickerRegistrationListener(registrationListener)
         // when
-        tested.addTickerListener(binance, currencyPair_AB, tickerListener)
+        tested.addTickerListener(exchangeB, currencyPairAB, tickerListener)
         // then
-        verify(registrationListener).onFirstListenerRegistered(binance)
+        verify(registrationListener).onFirstListenerRegistered(exchangeB)
     }
 
     @Test
@@ -103,10 +107,10 @@ class DefaultTickerListenersTest {
         val registrationListener = mock<TickerRegistrationListener>()
         tested.addTickerRegistrationListener(registrationListener)
         // when
-        tested.addTickerListener(binance, currencyPair_AB, tickerListener)
-        tested.removeTickerListener(binance, currencyPair_AB, tickerListener)
+        tested.addTickerListener(exchangeB, currencyPairAB, tickerListener)
+        tested.removeTickerListener(exchangeB, currencyPairAB, tickerListener)
         // then
-        verify(registrationListener).onLastListenerDeregistered(binance)
+        verify(registrationListener).onLastListenerDeregistered(exchangeB)
     }
 
 }
