@@ -12,19 +12,19 @@ import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.OrderSide
 import com.autocoin.exchangegateway.spi.exchange.orderbook.service.authorized.AuthorizedOrderBookService
-import org.knowm.xchange.service.marketdata.MarketDataService
 import java.time.Clock
 import java.util.function.Function
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderBook as SpiOrderBook
 import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 import org.knowm.xchange.dto.Order as XchangeOrder
 import org.knowm.xchange.dto.marketdata.OrderBook as XchangeOrderBook
+import org.knowm.xchange.service.marketdata.MarketDataService as XchangeMarketDataService
 
 
 class XchangeAuthorizedOrderBookService<T>(
     override val exchange: Exchange,
     override val apiKey: ApiKeySupplier<T>,
-    val delegate: MarketDataService,
+    val delegate: XchangeMarketDataService,
     private val clock: Clock,
     private val xchangeCurrencyPairTransformer: Function<XchangeCurrencyPair, CurrencyPair> = defaultXchangeCurrencyPairTransformer,
     private val currencyPairToXchange: Function<CurrencyPair, XchangeCurrencyPair> = defaultCurrencyPairToXchange,

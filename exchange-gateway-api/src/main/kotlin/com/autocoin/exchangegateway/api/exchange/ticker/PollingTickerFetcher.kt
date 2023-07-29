@@ -14,21 +14,22 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker as SpiTicker
-import com.autocoin.exchangegateway.spi.exchange.ticker.gateway.TickerServiceGateway as SpiTickerService
+import com.autocoin.exchangegateway.spi.exchange.ticker.gateway.TickerServiceGateway
 
-interface SynchronousTickerFetchScheduler<T> : TickerRegistrationListener {
+interface PollingTickerFetcher<T> : TickerRegistrationListener {
     fun fetchTickersThenNotifyListeners(exchange: Exchange)
 }
 
-class DefaultSynchronousTickerFetchScheduler<T>(
+class DefaultPollingTickerFetcher<T>(
+    // TODO remove it and use rate limited implementation of ticker service gateway instead
     private val allowedExchangeFetchFrequency: Map<Exchange, Duration>,
-    private val tickerService: SpiTickerService<T>,
+    private val tickerServiceGateway: TickerServiceGateway<T>,
     private val apiKeys: Map<Exchange, ApiKeySupplier<T>>,
     private val tickerListeners: TickerListeners,
     /** Not 100% sure if separate threads are needed here in the same way as for fetching order books.
      * However, it proved to work well there so using it here too.*/
     private val executorService: Map<Exchange, ScheduledExecutorService>,
-) : SynchronousTickerFetchScheduler<T> {
+) : PollingTickerFetcher<T> {
     companion object : KLogging()
 
     private val lastTickers = mutableMapOf<String, SoftReference<SpiTicker>>()
@@ -91,7 +92,7 @@ class DefaultSynchronousTickerFetchScheduler<T>(
         currencyPair: CurrencyPair,
     ): SpiTicker? {
         return try {
-            tickerService.getTicker(
+            tickerServiceGateway.getTicker(
                 exchange = exchange,
                 apiKey = apiKeys.getValue(exchange),
                 currencyPair = currencyPair,

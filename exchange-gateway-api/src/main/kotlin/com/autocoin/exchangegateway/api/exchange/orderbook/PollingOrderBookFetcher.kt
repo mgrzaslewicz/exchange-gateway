@@ -15,11 +15,11 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderBook as SpiOrderBook
 
-interface SynchronousOrderBookFetchScheduler<T> : OrderBookRegistrationListener {
+interface PollingOrderBookFetcher<T> : OrderBookRegistrationListener {
     fun fetchOrderBooksThenNotifyListeners(exchange: Exchange)
 }
 
-class DefaultSynchronousOrderBookFetchScheduler<T>(
+class DefaultPollingOrderBookFetcher<T>(
     private val orderBookServiceGateway: OrderBookServiceGateway<T>,
     private val orderBookListeners: OrderBookListeners,
     private val apiKeys: Map<Exchange, ApiKeySupplier<T>>,
@@ -34,7 +34,7 @@ class DefaultSynchronousOrderBookFetchScheduler<T>(
             messageFunction,
         )
     },
-) : SynchronousOrderBookFetchScheduler<T> {
+) : PollingOrderBookFetcher<T> {
 
     private val lastOrderBooks = ConcurrentHashMap<String, SoftReference<SpiOrderBook>>()
     private val runningFetchers = ConcurrentHashMap<Exchange, Future<*>>()
