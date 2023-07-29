@@ -1,7 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
-import com.autocoin.exchangegateway.api.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.Exchange
+import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeyProvider
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.currency.ExchangeWithCurrencyPairStringCache
 import com.autocoin.exchangegateway.spi.exchange.orderbook.gateway.OrderBookServiceGateway
@@ -19,10 +19,10 @@ interface PollingOrderBookFetcher<T> : OrderBookRegistrationListener {
     fun fetchOrderBooksThenNotifyListeners(exchange: Exchange)
 }
 
-class DefaultPollingOrderBookFetcher<T>(
-    private val orderBookServiceGateway: OrderBookServiceGateway<T>,
+class DefaultPollingOrderBookFetcher(
+    private val orderBookServiceGateway: OrderBookServiceGateway<Exchange>,
     private val orderBookListeners: OrderBookListeners,
-    private val apiKeys: Map<Exchange, ApiKeySupplier<T>>,
+    private val apiKeyProvider: ApiKeyProvider<Exchange>,
     /** Avoid using shared threads between never-ending jobs.
      * When used fixed thread pool with the size of SupportedExchange.values().size,
      * it caused unnecessary delays and fetching was under rate limit
@@ -34,7 +34,7 @@ class DefaultPollingOrderBookFetcher<T>(
             messageFunction,
         )
     },
-) : PollingOrderBookFetcher<T> {
+) : PollingOrderBookFetcher<Exchange> {
 
     private val lastOrderBooks = ConcurrentHashMap<String, SoftReference<SpiOrderBook>>()
     private val runningFetchers = ConcurrentHashMap<Exchange, Future<*>>()
@@ -97,7 +97,7 @@ class DefaultPollingOrderBookFetcher<T>(
             orderBookServiceGateway.getOrderBook(
                 exchange = exchange,
                 currencyPair = currencyPair,
-                apiKey = apiKeys.getValue(exchange),
+                apiKey = apiKeyProvider.getApiKey(exchange),
             )
         } catch (e: Exception) {
             getOrderBookFrequentErrorLogFunction { "[$exchange-$currencyPair] Error getting order book: ${e.message} (${e.stackTrace[0]})" }

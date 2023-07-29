@@ -1,9 +1,10 @@
 package com.autocoin.exchangegateway.api.exchange.ticker
 
-import com.autocoin.exchangegateway.api.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.Exchange
+import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeyProvider
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.currency.ExchangeWithCurrencyPairStringCache
+import com.autocoin.exchangegateway.spi.exchange.ticker.gateway.TickerServiceGateway
 import com.autocoin.exchangegateway.spi.exchange.ticker.listener.TickerListeners
 import com.autocoin.exchangegateway.spi.exchange.ticker.listener.TickerRegistrationListener
 import mu.KLogging
@@ -14,22 +15,21 @@ import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker as SpiTicker
-import com.autocoin.exchangegateway.spi.exchange.ticker.gateway.TickerServiceGateway
 
 interface PollingTickerFetcher<T> : TickerRegistrationListener {
     fun fetchTickersThenNotifyListeners(exchange: Exchange)
 }
 
-class DefaultPollingTickerFetcher<T>(
+class DefaultPollingTickerFetcher(
     // TODO remove it and use rate limited implementation of ticker service gateway instead
     private val allowedExchangeFetchFrequency: Map<Exchange, Duration>,
-    private val tickerServiceGateway: TickerServiceGateway<T>,
-    private val apiKeys: Map<Exchange, ApiKeySupplier<T>>,
+    private val tickerServiceGateway: TickerServiceGateway<Exchange>,
+    private val apiKeyProvider: ApiKeyProvider<Exchange>,
     private val tickerListeners: TickerListeners,
     /** Not 100% sure if separate threads are needed here in the same way as for fetching order books.
      * However, it proved to work well there so using it here too.*/
     private val executorService: Map<Exchange, ScheduledExecutorService>,
-) : PollingTickerFetcher<T> {
+) : PollingTickerFetcher<Exchange> {
     companion object : KLogging()
 
     private val lastTickers = mutableMapOf<String, SoftReference<SpiTicker>>()
@@ -94,7 +94,7 @@ class DefaultPollingTickerFetcher<T>(
         return try {
             tickerServiceGateway.getTicker(
                 exchange = exchange,
-                apiKey = apiKeys.getValue(exchange),
+                apiKey = apiKeyProvider.getApiKey(exchange),
                 currencyPair = currencyPair,
             )
         } catch (e: Exception) {
