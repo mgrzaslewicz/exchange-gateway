@@ -7,7 +7,7 @@ import com.autocoin.exchangegateway.spi.exchange.wallet.WithdrawResult
 import com.autocoin.exchangegateway.spi.exchange.wallet.service.authorized.AuthorizedWalletServiceFactory
 import java.math.BigDecimal
 
-class WalletServiceGatewayUsingAuthorizedWalletService<T>(
+class AuthorizingWalletServiceGateway<T>(
     private val authorizedWalletServiceFactory: AuthorizedWalletServiceFactory<T>,
 ) : WalletServiceGateway<T> {
     override fun getCurrencyBalance(

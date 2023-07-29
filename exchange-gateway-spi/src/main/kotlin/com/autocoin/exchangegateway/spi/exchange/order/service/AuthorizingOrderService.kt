@@ -8,7 +8,7 @@ import com.autocoin.exchangegateway.spi.exchange.order.Order
 import com.autocoin.exchangegateway.spi.exchange.order.service.authorized.AuthorizedOrderServiceFactory
 import java.math.BigDecimal
 
-class OrderServiceUsingAuthorizedOrderService<T>(
+class AuthorizingOrderService<T>(
     override val exchange: Exchange,
     private val authorizedOrderServiceFactory: AuthorizedOrderServiceFactory<T>,
 ) : OrderService<T> {

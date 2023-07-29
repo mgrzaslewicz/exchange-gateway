@@ -6,7 +6,7 @@ import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.ticker.Ticker
 import com.autocoin.exchangegateway.spi.exchange.ticker.service.authorized.AuthorizedTickerServiceFactory
 
-class TickerServiceGatewayUsingAuthorizedTickerService<T>(
+class AuthorizingTickerServiceGateway<T>(
     private val authorizedTickerServiceFactory: AuthorizedTickerServiceFactory<T>,
 ) : TickerServiceGateway<T> {
 
