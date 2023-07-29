@@ -1,11 +1,12 @@
 package com.autocoin.exchangegateway.spi.exchange.order.service.authorized
 
+import com.autocoin.exchangegateway.spi.exchange.AuthorizedService
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.order.CancelOrderParams
 import com.autocoin.exchangegateway.spi.exchange.order.Order
 import java.math.BigDecimal
 
-interface AuthorizedOrderService<T> : com.autocoin.exchangegateway.spi.exchange.AuthorizedService<T> {
+interface AuthorizedOrderService<T> : AuthorizedService<T> {
 
     fun cancelOrder(cancelOrderParams: CancelOrderParams): Boolean
 

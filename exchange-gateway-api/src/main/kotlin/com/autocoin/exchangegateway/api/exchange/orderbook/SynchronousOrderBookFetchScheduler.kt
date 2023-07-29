@@ -1,5 +1,6 @@
 package com.autocoin.exchangegateway.api.exchange.orderbook
 
+import com.autocoin.exchangegateway.api.exchange.apikey.ApiKeySupplier
 import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.currency.ExchangeWithCurrencyPairStringCache
@@ -14,18 +15,26 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
 import com.autocoin.exchangegateway.spi.exchange.orderbook.OrderBook as SpiOrderBook
 
-interface SynchronousOrderBookFetchScheduler : OrderBookRegistrationListener {
+interface SynchronousOrderBookFetchScheduler<T> : OrderBookRegistrationListener {
     fun fetchOrderBooksThenNotifyListeners(exchange: Exchange)
 }
 
-class DefaultSynchronousOrderBookFetchScheduler(
-    private val orderBookServiceGateway: OrderBookServiceGateway,
+class DefaultSynchronousOrderBookFetchScheduler<T>(
+    private val orderBookServiceGateway: OrderBookServiceGateway<T>,
     private val orderBookListeners: OrderBookListeners,
-    /** Avoid using shared threads between never-ending jobs. When used fixed thread pool with the size of SupportedExchange.values().size it caused unnecessary delays and fetching was under rate limit*/
+    private val apiKeys: Map<Exchange, ApiKeySupplier<T>>,
+    /** Avoid using shared threads between never-ending jobs.
+     * When used fixed thread pool with the size of SupportedExchange.values().size,
+     * it caused unnecessary delays and fetching was under rate limit
+     */
     private val executorService: Map<Exchange, ExecutorService>,
     private val logger: KLogger = KotlinLogging.logger {},
-    private val getOrderBookFrequentErrorLogFunction: (messageFunction: () -> String) -> Unit = { messageFunction -> logger.error(messageFunction) },
-) : SynchronousOrderBookFetchScheduler {
+    private val getOrderBookFrequentErrorLogFunction: (messageFunction: () -> String) -> Unit = { messageFunction ->
+        logger.error(
+            messageFunction,
+        )
+    },
+) : SynchronousOrderBookFetchScheduler<T> {
 
     private val lastOrderBooks = ConcurrentHashMap<String, SoftReference<SpiOrderBook>>()
     private val runningFetchers = ConcurrentHashMap<Exchange, Future<*>>()
@@ -85,7 +94,11 @@ class DefaultSynchronousOrderBookFetchScheduler(
         currencyPair: CurrencyPair,
     ): SpiOrderBook? {
         return try {
-            orderBookServiceGateway.getOrderBook(exchange, currencyPair)
+            orderBookServiceGateway.getOrderBook(
+                exchange = exchange,
+                currencyPair = currencyPair,
+                apiKey = apiKeys.getValue(exchange),
+            )
         } catch (e: Exception) {
             getOrderBookFrequentErrorLogFunction { "[$exchange-$currencyPair] Error getting order book: ${e.message} (${e.stackTrace[0]})" }
             null
