@@ -7,4 +7,6 @@ interface AuthorizedMetadataServiceGateway {
     fun getMetadata(
         exchange: Exchange,
     ): ExchangeMetadata
+
+    fun getAllExchangesMetadata(): Map<Exchange, ExchangeMetadata>
 }
