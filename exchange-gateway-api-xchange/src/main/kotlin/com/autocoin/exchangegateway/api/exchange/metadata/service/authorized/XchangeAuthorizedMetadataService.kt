@@ -6,12 +6,13 @@ import com.autocoin.exchangegateway.api.exchange.metadata.CurrencyPairMetadata
 import com.autocoin.exchangegateway.api.exchange.metadata.ExchangeMetadata
 import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
+import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import com.autocoin.exchangegateway.spi.exchange.metadata.service.authorized.AuthorizedMetadataService
-import org.knowm.xchange.currency.CurrencyPair
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData
 import org.knowm.xchange.dto.meta.ExchangeMetaData
 import java.util.function.Function
 import org.knowm.xchange.Exchange as XchangeExchange
+import org.knowm.xchange.currency.CurrencyPair as XchangeCurrencyPair
 
 
 /**
@@ -32,7 +33,7 @@ class XchangeAuthorizedMetadataService<T>(
     override val apiKey: ApiKeySupplier<T>,
     val delegate: XchangeExchange,
     val metadataTransformers: List<ExchangeMetadataTransformer> = listOf(),
-    private val xchangeCurrencyPairTransformer: Function<CurrencyPair, com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair> = defaultXchangeCurrencyPairTransformer,
+    private val xchangeCurrencyPairTransformer: Function<XchangeCurrencyPair, CurrencyPair> = defaultXchangeCurrencyPairTransformer,
 ) : AuthorizedMetadataService<T> {
     override fun getMetadata(): ExchangeMetadata {
         val result = ExchangeMetadata.Builder(exchange = exchange)
@@ -61,7 +62,7 @@ class XchangeAuthorizedMetadataService<T>(
     private fun getCurrencyPairsMetadata(xchangeMetadata: ExchangeMetaData) = xchangeMetadata.currencyPairs
         .map { (xchangeCurrencyPair, xchangeCurrencyPairMetadata: CurrencyPairMetaData?) ->
             val currencyPair = xchangeCurrencyPairTransformer.apply(xchangeCurrencyPair)
-            currencyPair to CurrencyPairMetadata.Builder(currencyPair = currencyPair)
+            currencyPair to CurrencyPairMetadata.Builder()
                 .amountScale(xchangeCurrencyPairMetadata?.baseScale)
                 .priceScale(xchangeCurrencyPairMetadata?.priceScale)
                 .minimumAmount(xchangeCurrencyPairMetadata?.minimumAmount)

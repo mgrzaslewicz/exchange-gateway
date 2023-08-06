@@ -13,7 +13,7 @@ class AuthorizingMetadataServiceGateway<T>(
         apiKey: ApiKeySupplier<T>,
     ): ExchangeMetadata {
         return authorizedMetadataServiceFactory
-            .createAuthorizeMetadataService(
+            .createAuthorizedMetadataService(
                 exchange = exchange,
                 apiKey = apiKey,
             )

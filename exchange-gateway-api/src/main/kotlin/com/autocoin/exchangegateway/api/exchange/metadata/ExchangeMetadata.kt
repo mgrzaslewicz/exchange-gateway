@@ -1,5 +1,7 @@
 package com.autocoin.exchangegateway.api.exchange.metadata
 
+import com.autocoin.exchangegateway.api.exchange.metadata.CurrencyMetadata.Companion.toBuilder
+import com.autocoin.exchangegateway.api.exchange.metadata.CurrencyPairMetadata.Companion.toBuilder
 import com.autocoin.exchangegateway.spi.exchange.Exchange
 import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import java.util.*
@@ -31,4 +33,9 @@ data class ExchangeMetadata(
             warnings = Collections.unmodifiableList(debugWarnings),
         )
     }
+
+    fun toBuilder() = Builder(exchange = exchange)
+        .withCurrencyPairMetadata(currencyPairMetadata.mapValues { it.value.toBuilder() })
+        .withCurrencyMetadata(currencyMetadata.mapValues { it.value.toBuilder() })
+        .apply { debugWarnings.addAll(warnings) }
 }

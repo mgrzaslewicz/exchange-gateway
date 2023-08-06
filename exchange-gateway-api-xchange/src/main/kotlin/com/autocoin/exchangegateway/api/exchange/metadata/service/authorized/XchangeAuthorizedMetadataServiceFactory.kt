@@ -9,7 +9,7 @@ import com.autocoin.exchangegateway.spi.exchange.metadata.service.authorized.Aut
 class XchangeAuthorizedMetadataServiceFactory<T>(
     private val xchangeProvider: XchangeProvider<T>,
 ) : AuthorizedMetadataServiceFactory<T> {
-    override fun createAuthorizeMetadataService(
+    override fun createAuthorizedMetadataService(
         exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): AuthorizedMetadataService<T> {

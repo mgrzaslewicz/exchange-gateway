@@ -5,7 +5,7 @@ import com.autocoin.exchangegateway.spi.exchange.apikey.ApiKeySupplier
 
 interface AuthorizedMetadataServiceFactory<T> {
 
-    fun createAuthorizeMetadataService(
+    fun createAuthorizedMetadataService(
         exchange: Exchange,
         apiKey: ApiKeySupplier<T>,
     ): AuthorizedMetadataService<T>

@@ -1,6 +1,5 @@
 package com.autocoin.exchangegateway.api.exchange.metadata
 
-import com.autocoin.exchangegateway.spi.exchange.currency.CurrencyPair
 import java.math.BigDecimal
 import com.autocoin.exchangegateway.spi.exchange.metadata.CurrencyPairMetadata as SpiCurrencyPairMetadata
 import com.autocoin.exchangegateway.spi.exchange.metadata.FeeRanges as SpiFeeRanges
@@ -21,9 +20,7 @@ data class CurrencyPairMetadata(
     override val transactionFeeRanges: SpiFeeRanges,
 ) : SpiCurrencyPairMetadata {
 
-    class Builder(
-        var currencyPair: CurrencyPair,
-    ) {
+    class Builder {
         private var amountScale: Int? = null
         private var priceScale: Int? = null
         private var minimumAmount: BigDecimal? = null
@@ -32,9 +29,8 @@ data class CurrencyPairMetadata(
         private var maximumPriceMultiplierUp: BigDecimal? = null
         private var maximumPriceMultiplierDown: BigDecimal? = null
         private var buyFeeMultiplier: BigDecimal? = null
-        private var transactionFeeRanges: FeeRanges = FeeRanges()
+        private var transactionFeeRanges: SpiFeeRanges = FeeRanges()
 
-        fun currencyPair(currencyPair: CurrencyPair) = apply { this.currencyPair = currencyPair }
         fun amountScale(amountScale: Int?) = apply { this.amountScale = amountScale }
         fun defaultAmountScaleIfNotSet(defaultAmountScale: Int) = apply {
             if (amountScale == null) {
@@ -70,14 +66,18 @@ data class CurrencyPairMetadata(
             }
         }
 
-        fun maximumPriceMultiplierUp(maximumPriceMultiplierUp: BigDecimal?) = apply { this.maximumPriceMultiplierUp = maximumPriceMultiplierUp }
+        fun maximumPriceMultiplierUp(maximumPriceMultiplierUp: BigDecimal?) =
+            apply { this.maximumPriceMultiplierUp = maximumPriceMultiplierUp }
+
         fun defaultMaximumPriceMultiplierUpIfNotSet(defaultMaximumPriceMultiplierUp: BigDecimal) = apply {
             if (maximumPriceMultiplierUp == null) {
                 maximumPriceMultiplierUp = defaultMaximumPriceMultiplierUp
             }
         }
 
-        fun maximumPriceMultiplierDown(maximumPriceMultiplierDown: BigDecimal?) = apply { this.maximumPriceMultiplierDown = maximumPriceMultiplierDown }
+        fun maximumPriceMultiplierDown(maximumPriceMultiplierDown: BigDecimal?) =
+            apply { this.maximumPriceMultiplierDown = maximumPriceMultiplierDown }
+
         fun defaultMaximumPriceMultiplierDownIfNotSet(defaultMaximumPriceMultiplierDown: BigDecimal) = apply {
             if (maximumPriceMultiplierDown == null) {
                 maximumPriceMultiplierDown = defaultMaximumPriceMultiplierDown
@@ -91,7 +91,8 @@ data class CurrencyPairMetadata(
             }
         }
 
-        fun transactionFeeRanges(transactionFeeRanges: FeeRanges) = apply { this.transactionFeeRanges = transactionFeeRanges }
+        fun transactionFeeRanges(transactionFeeRanges: SpiFeeRanges) =
+            apply { this.transactionFeeRanges = transactionFeeRanges }
 
         fun build() = CurrencyPairMetadata(
             amountScale = amountScale ?: throw IllegalStateException("amountScale is not set"),
@@ -99,10 +100,36 @@ data class CurrencyPairMetadata(
             minimumAmount = minimumAmount ?: throw IllegalStateException("minimumAmount is not set"),
             maximumAmount = maximumAmount ?: throw IllegalStateException("maximumAmount is not set"),
             minimumOrderValue = minimumOrderValue ?: throw IllegalStateException("minimumOrderValue is not set"),
-            maximumPriceMultiplierUp = maximumPriceMultiplierUp ?: throw IllegalStateException("maximumPriceMultiplierUp is not set"),
-            maximumPriceMultiplierDown = maximumPriceMultiplierDown ?: throw IllegalStateException("maximumPriceMultiplierDown is not set"),
+            maximumPriceMultiplierUp = maximumPriceMultiplierUp
+                ?: throw IllegalStateException("maximumPriceMultiplierUp is not set"),
+            maximumPriceMultiplierDown = maximumPriceMultiplierDown
+                ?: throw IllegalStateException("maximumPriceMultiplierDown is not set"),
             buyFeeMultiplier = buyFeeMultiplier ?: throw IllegalStateException("buyFeeMultiplier is not set"),
             transactionFeeRanges = transactionFeeRanges,
         )
+    }
+
+    fun toBuilder() = Builder()
+        .amountScale(amountScale)
+        .priceScale(priceScale)
+        .minimumAmount(minimumAmount)
+        .maximumAmount(maximumAmount)
+        .minimumOrderValue(minimumOrderValue)
+        .maximumPriceMultiplierUp(maximumPriceMultiplierUp)
+        .maximumPriceMultiplierDown(maximumPriceMultiplierDown)
+        .buyFeeMultiplier(buyFeeMultiplier)
+        .transactionFeeRanges(transactionFeeRanges)
+
+    companion object {
+        fun SpiCurrencyPairMetadata.toBuilder() = Builder()
+            .amountScale(amountScale)
+            .priceScale(priceScale)
+            .minimumAmount(minimumAmount)
+            .maximumAmount(maximumAmount)
+            .minimumOrderValue(minimumOrderValue)
+            .maximumPriceMultiplierUp(maximumPriceMultiplierUp)
+            .maximumPriceMultiplierDown(maximumPriceMultiplierDown)
+            .buyFeeMultiplier(buyFeeMultiplier)
+            .transactionFeeRanges(transactionFeeRanges)
     }
 }
